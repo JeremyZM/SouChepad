@@ -13,6 +13,7 @@
 #import "UserReservationM.h"
 #import "NSObject+MJKeyValue.h"
 #import "CommunListM.h"
+#import "MyMessageM.h"
 
 @implementation HttpManager
 
@@ -117,6 +118,28 @@
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         fail([error localizedDescription]);
     } reload:YES needHud:YES hudEnabled:NO];
+    return op;
+}
+
+#pragma mark - 我的消息
++ (MKNetworkOperation *)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    MKNetworkOperation *op = [[HttpService sharedService]
+                              requestWithApi:@"pages/sellManageAction/getSellHint.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+                                  DLog(@"%@",[obj responseJSON]);
+                                  
+                                  NSDictionary *dataDic = [obj responseJSON];
+                                  NSArray *array = [dataDic objectForKey:@"baseHint"];
+                                  NSMutableArray *arrayM = [NSMutableArray arrayWithCapacity:array.count];
+                                  for (NSDictionary *dic in array) {
+                                      MyMessageM *myMessage = [[MyMessageM alloc] init];
+                                      [myMessage setKeyValues:dic];
+                                      [arrayM addObject:myMessage];
+                                  }
+                                  success(arrayM);
+                              } fail:^(MKNetworkOperation *obj, NSError *error) {
+                                  fail([error localizedDescription]);
+                              } reload:YES needHud:YES hudEnabled:NO];
     return op;
 }
 

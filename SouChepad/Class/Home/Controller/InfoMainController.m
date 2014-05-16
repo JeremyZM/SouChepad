@@ -62,6 +62,7 @@
     [self addChildViewController:customPIM];
     
     IntentionCarsController *intentionCarsVC = [[IntentionCarsController alloc] init];
+    intentionCarsVC.isNew = self.isNew;
     intentionCarsVC.userReserM = self.userInfoM;
     [self addChildViewController:intentionCarsVC];
     

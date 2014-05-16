@@ -16,6 +16,7 @@
 #import "UserReservationM.h"
 //#import "UsertoStore.h"
 #import "ProgressHUD.h"
+#import "SearchVC.h"
 
 @interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UISearchBarDelegate>
 {
@@ -123,6 +124,8 @@ static NSString *CellIdentifier = @"cellID";
     
 }
 
+
+
 - (void)addTableView
 {
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStylePlain];
@@ -178,6 +181,15 @@ static NSString *CellIdentifier = @"cellID";
     [backView removeFromSuperview];
 }
 
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    SearchVC *searchVC = [[SearchVC alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController *seNav = [[UINavigationController alloc] initWithRootViewController:searchVC];
+//    [self.navigationController pushViewController:searchVC animated:YES];
+    [self presentViewController:seNav animated:YES completion:nil];
+    return NO;
+}
 
 #pragma mark - 显示popo
 - (void)showpopoview:(UIButton *)button

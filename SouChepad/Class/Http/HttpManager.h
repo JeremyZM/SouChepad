@@ -33,6 +33,9 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 意向车辆
 + (MKNetworkOperation *)requestUserIntentionWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 我的消息
++ (MKNetworkOperation *)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
 // 上传图片，成功后返回dictionary
 + (MKNetworkOperation*)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;
 @end

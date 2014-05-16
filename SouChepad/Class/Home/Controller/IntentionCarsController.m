@@ -26,12 +26,16 @@ static NSString *seconCellID = @"seconCell";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
- 
-    [HttpManager requestUserIntentionWithParamDic:@{@"userId":self.userReserM.crmUserId} Success:^(id obj) {
-    
-    } fail:^(id obj) {
+    if (self.isNew) {
         
-    }];
+    }else {
+        [HttpManager requestUserIntentionWithParamDic:@{@"userId":self.userReserM.crmUserId} Success:^(id obj) {
+            
+        } fail:^(id obj) {
+            
+        }];
+    }
+    
     
 }
 

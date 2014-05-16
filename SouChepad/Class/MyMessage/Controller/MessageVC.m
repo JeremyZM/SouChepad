@@ -1,25 +1,27 @@
 //
-//  SearchCarViewController.m
+//  MessageVC.m
 //  SouChepad
 //
-//  Created by 张艳东 on 14-4-27.
+//  Created by 张艳东 on 14-5-14.
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import "SearchCarViewController.h"
+#import "MessageVC.h"
+#import "MasterTableViewController.h"
+#import "DetailViewController.h"
 
-@interface SearchCarViewController ()
+@interface MessageVC ()
 
 @end
 
-@implementation SearchCarViewController
-
+@implementation MessageVC
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor orangeColor]];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning

@@ -35,14 +35,18 @@
     // 1.我的客户
     [self addOneTabTitle:@"我的客户" icon:@"" selectedIcon:@"" index:0];
     
-    // 2.我的车辆
-    [self addOneTabTitle:@"我的车辆" icon:@"" selectedIcon:@"" index:1];
     
-    // 3.工具
-    [self addOneTabTitle:@"工具" icon:@"" selectedIcon:@"" index:2];
+    // 2.我的消息
+    [self addOneTabTitle:@"我的消息" icon:@"" selectedIcon:@"" index:1];
     
-    // 4.设置
-    [self addOneTabTitle:@"设置" icon:@"" selectedIcon:@"" index:3];
+    // 3.我的车辆
+    [self addOneTabTitle:@"我的车辆" icon:@"" selectedIcon:@"" index:2];
+    
+    // 4.工具
+    [self addOneTabTitle:@"工具" icon:@"" selectedIcon:@"" index:3];
+    
+    // 5.设置
+    [self addOneTabTitle:@"设置" icon:@"" selectedIcon:@"" index:4];
     
 
 }

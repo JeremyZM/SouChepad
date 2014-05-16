@@ -12,4 +12,5 @@
 
 @interface IntentionCarsController : UIViewController
 @property (nonatomic, strong) UserReservationM *userReserM;
+@property (nonatomic, assign) BOOL isNew;
 @end

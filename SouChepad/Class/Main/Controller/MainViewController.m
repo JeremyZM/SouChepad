@@ -12,6 +12,10 @@
 #import "SettingViewController.h"
 #import "ToolViewController.h"
 #import "SCDock.h"
+#import "MyMessageController.h"
+#import "MessageVC.h"
+#import "MasterTableViewController.h"
+#import "DetailViewController.h"
 
 
 @interface MainViewController () <SCDockDelegate>
@@ -79,10 +83,26 @@
     [_contentView addSubview:homeNav.view];
     
     
+    // 我的消息
+//    MyMessageController *messageVC = [[MyMessageController alloc] init];
+//    [self addChildViewController:messageVC];
+//    UINavigationController *messageNav = [[UINavigationController alloc] initWithRootViewController:messageVC];
+    
+    
+    UISplitViewController *messageNav = [[UISplitViewController alloc] init];
+    MasterTableViewController *masterCtrl = [[MasterTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    DetailViewController *detailCtrl = [[DetailViewController alloc] init];
+    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:masterCtrl];
+    UINavigationController *detailNav = [[UINavigationController alloc] initWithRootViewController:detailCtrl];
+    [messageNav setViewControllers:@[masterNav,detailNav]];
+    [self addChildViewController:messageNav];
+    
     // 我的车辆
     MyCarsViewController *myCarsVC = [[MyCarsViewController alloc] init];
     UINavigationController *myCarsNav = [[UINavigationController alloc] initWithRootViewController:myCarsVC];
     [self addChildViewController:myCarsNav];
+    
     
     // 工具
     ToolViewController *toolVC = [[ToolViewController alloc] init];

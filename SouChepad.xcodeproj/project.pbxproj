@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B2459BB2192379A200C3D28B /* SearchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB1192379A200C3D28B /* SearchVC.m */; };
+		B2459BB41924970C00C3D28B /* Empty.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2459BB31924970C00C3D28B /* Empty.xib */; };
+		B2459BB71924A75800C3D28B /* LimitSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB61924A75800C3D28B /* LimitSearchView.m */; };
+		B2459BBA1924AAF200C3D28B /* SearchHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB91924AAF200C3D28B /* SearchHeadView.m */; };
 		B24D56C01917597600D756A5 /* FZInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56BF1917597600D756A5 /* FZInfoView.m */; };
 		B24D56C319176F7400D756A5 /* JBInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56C219176F7400D756A5 /* JBInfoView.m */; };
 		B24D56C619178B4100D756A5 /* FZPopoTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56C519178B4100D756A5 /* FZPopoTableController.m */; };
@@ -33,6 +37,11 @@
 		B2542398190E646D00874878 /* CustomerListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2542396190E646D00874878 /* CustomerListCell.xib */; };
 		B254239D190E651B00874878 /* ChangeTimePopoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B254239A190E651B00874878 /* ChangeTimePopoVC.m */; };
 		B254239E190E651B00874878 /* PopoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B254239C190E651B00874878 /* PopoTableViewController.m */; };
+		B29335401921C9D300499F31 /* MyMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = B293353F1921C9D300499F31 /* MyMessageController.m */; };
+		B29335431921DEE300499F31 /* MyMessageM.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335421921DEE300499F31 /* MyMessageM.m */; };
+		B29335461922FD7500499F31 /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335451922FD7500499F31 /* MessageVC.m */; };
+		B29335491922FDBE00499F31 /* MasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335481922FDBE00499F31 /* MasterTableViewController.m */; };
+		B293354C1922FDDF00499F31 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B293354B1922FDDF00499F31 /* DetailViewController.m */; };
 		B2A78837191885E500AE55BC /* FuZhuInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A78836191885E500AE55BC /* FuZhuInfoView.m */; };
 		B2A7883D191A173000AE55BC /* CommListController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A7883C191A173000AE55BC /* CommListController.m */; };
 		B2A78840191A270D00AE55BC /* CommunListM.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A7883F191A270D00AE55BC /* CommunListM.m */; };
@@ -100,6 +109,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B2459BB0192379A200C3D28B /* SearchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchVC.h; sourceTree = "<group>"; };
+		B2459BB1192379A200C3D28B /* SearchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchVC.m; sourceTree = "<group>"; };
+		B2459BB31924970C00C3D28B /* Empty.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Empty.xib; sourceTree = "<group>"; };
+		B2459BB51924A75800C3D28B /* LimitSearchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitSearchView.h; sourceTree = "<group>"; };
+		B2459BB61924A75800C3D28B /* LimitSearchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitSearchView.m; sourceTree = "<group>"; };
+		B2459BB81924AAF200C3D28B /* SearchHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchHeadView.h; sourceTree = "<group>"; };
+		B2459BB91924AAF200C3D28B /* SearchHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchHeadView.m; sourceTree = "<group>"; };
+		B2459BBB1925A70400C3D28B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		B2459BBC1925A70400C3D28B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		B24D56BE1917597600D756A5 /* FZInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZInfoView.h; sourceTree = "<group>"; };
 		B24D56BF1917597600D756A5 /* FZInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZInfoView.m; sourceTree = "<group>"; };
 		B24D56C119176F7400D756A5 /* JBInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JBInfoView.h; sourceTree = "<group>"; };
@@ -147,6 +165,16 @@
 		B254239A190E651B00874878 /* ChangeTimePopoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeTimePopoVC.m; sourceTree = "<group>"; };
 		B254239B190E651B00874878 /* PopoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoTableViewController.h; sourceTree = "<group>"; };
 		B254239C190E651B00874878 /* PopoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoTableViewController.m; sourceTree = "<group>"; };
+		B293353E1921C9D300499F31 /* MyMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageController.h; sourceTree = "<group>"; };
+		B293353F1921C9D300499F31 /* MyMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessageController.m; sourceTree = "<group>"; };
+		B29335411921DEE300499F31 /* MyMessageM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageM.h; sourceTree = "<group>"; };
+		B29335421921DEE300499F31 /* MyMessageM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessageM.m; sourceTree = "<group>"; };
+		B29335441922FD7500499F31 /* MessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageVC.h; sourceTree = "<group>"; };
+		B29335451922FD7500499F31 /* MessageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageVC.m; sourceTree = "<group>"; };
+		B29335471922FDBE00499F31 /* MasterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterTableViewController.h; sourceTree = "<group>"; };
+		B29335481922FDBE00499F31 /* MasterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterTableViewController.m; sourceTree = "<group>"; };
+		B293354A1922FDDF00499F31 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		B293354B1922FDDF00499F31 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		B2A78835191885E500AE55BC /* FuZhuInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuZhuInfoView.h; sourceTree = "<group>"; };
 		B2A78836191885E500AE55BC /* FuZhuInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuZhuInfoView.m; sourceTree = "<group>"; };
 		B2A7883B191A173000AE55BC /* CommListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommListController.h; sourceTree = "<group>"; };
@@ -349,6 +377,47 @@
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
+		B293353A1921C90D00499F31 /* MyMessage */ = {
+			isa = PBXGroup;
+			children = (
+				B293353B1921C90D00499F31 /* Controller */,
+				B293353C1921C90D00499F31 /* Model */,
+				B293353D1921C90D00499F31 /* View */,
+			);
+			path = MyMessage;
+			sourceTree = "<group>";
+		};
+		B293353B1921C90D00499F31 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B293353E1921C9D300499F31 /* MyMessageController.h */,
+				B293353F1921C9D300499F31 /* MyMessageController.m */,
+				B29335441922FD7500499F31 /* MessageVC.h */,
+				B29335451922FD7500499F31 /* MessageVC.m */,
+				B29335471922FDBE00499F31 /* MasterTableViewController.h */,
+				B29335481922FDBE00499F31 /* MasterTableViewController.m */,
+				B293354A1922FDDF00499F31 /* DetailViewController.h */,
+				B293354B1922FDDF00499F31 /* DetailViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B293353C1921C90D00499F31 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B29335411921DEE300499F31 /* MyMessageM.h */,
+				B29335421921DEE300499F31 /* MyMessageM.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B293353D1921C90D00499F31 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B2A78853191B326400AE55BC /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -442,6 +511,7 @@
 				B2DDFEC6190BB62000A71A4F /* LogIn */,
 				B2DDFECA190BB62000A71A4F /* Main */,
 				B2DDFEC1190BB62000A71A4F /* Home */,
+				B293353A1921C90D00499F31 /* MyMessage */,
 				B2DDFECE190BB62000A71A4F /* MyCars */,
 				B2DDFED4190BB62000A71A4F /* Setting */,
 				B2DDFED8190BB62000A71A4F /* Tool */,
@@ -468,6 +538,8 @@
 				B254239C190E651B00874878 /* PopoTableViewController.m */,
 				B2DDFEE2190BB70B00A71A4F /* HomeViewController.h */,
 				B2DDFEE3190BB70B00A71A4F /* HomeViewController.m */,
+				B2459BB0192379A200C3D28B /* SearchVC.h */,
+				B2459BB1192379A200C3D28B /* SearchVC.m */,
 				B2DDFF91190D49A200A71A4F /* InfoMainController.h */,
 				B2DDFF92190D49A200A71A4F /* InfoMainController.m */,
 				B2DDFF94190D4B3B00A71A4F /* DetailVC */,
@@ -508,6 +580,10 @@
 				B2A78851191B1FAF00AE55BC /* CommHeadView.xib */,
 				B2DDFF9E190D4D3D00A71A4F /* InfoDock.h */,
 				B2DDFF9F190D4D3D00A71A4F /* InfoDock.m */,
+				B2459BB51924A75800C3D28B /* LimitSearchView.h */,
+				B2459BB61924A75800C3D28B /* LimitSearchView.m */,
+				B2459BB81924AAF200C3D28B /* SearchHeadView.h */,
+				B2459BB91924AAF200C3D28B /* SearchHeadView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -776,6 +852,7 @@
 				B2DDFF99190D4BF000A71A4F /* IntentionCarsController.m */,
 				B2DDFF9B190D4C7D00A71A4F /* SearchCarViewController.h */,
 				B2DDFF9C190D4C7D00A71A4F /* SearchCarViewController.m */,
+				B2459BB31924970C00C3D28B /* Empty.xib */,
 				B2A78853191B326400AE55BC /* SubVC */,
 			);
 			name = DetailVC;
@@ -839,6 +916,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = B2DDFE85190BB3F000A71A4F;
 			productRefGroup = B2DDFE8F190BB3F000A71A4F /* Products */;
@@ -865,6 +943,7 @@
 				B2542365190E0C4F00874878 /* HUDCheckmark@2x.png in Resources */,
 				B2DDFEA4190BB3F000A71A4F /* Images.xcassets in Resources */,
 				B2A7885D191B42D200AE55BC /* CommunAddVC.xib in Resources */,
+				B2459BB41924970C00C3D28B /* Empty.xib in Resources */,
 				B2542366190E0C4F00874878 /* hudError@2x.png in Resources */,
 				B2A7884D191A29D800AE55BC /* CommunCell.xib in Resources */,
 			);
@@ -893,6 +972,7 @@
 				B2C6FDE91921AE3E00C80400 /* DriveCarM.m in Sources */,
 				B2DDFF78190C1C7000A71A4F /* MKNetworkOperation.m in Sources */,
 				B2A7883D191A173000AE55BC /* CommListController.m in Sources */,
+				B29335461922FD7500499F31 /* MessageVC.m in Sources */,
 				B2DDFEE1190BB6C100A71A4F /* LogInViewController.m in Sources */,
 				B2DDFF9A190D4BF000A71A4F /* IntentionCarsController.m in Sources */,
 				B2DDFF90190C291F00A71A4F /* MBProgressHUD.m in Sources */,
@@ -904,11 +984,15 @@
 				B2DDFEA2190BB3F000A71A4F /* AppDelegate.m in Sources */,
 				B254238C190E5C9400874878 /* MJIvar.m in Sources */,
 				B2542373190E592C00874878 /* UserReservationM.m in Sources */,
+				B2459BB2192379A200C3D28B /* SearchVC.m in Sources */,
+				B293354C1922FDDF00499F31 /* DetailViewController.m in Sources */,
 				B2A78850191B1F8900AE55BC /* CommHeadView.m in Sources */,
 				B2DDFEEA190BB77A00A71A4F /* SettingViewController.m in Sources */,
+				B2459BBA1924AAF200C3D28B /* SearchHeadView.m in Sources */,
 				B2DDFF73190C1C7000A71A4F /* NSDictionary+RequestEncoding.m in Sources */,
 				B2DDFF75190C1C7000A71A4F /* UIAlertView+MKNetworkKitAdditions.m in Sources */,
 				B254239E190E651B00874878 /* PopoTableViewController.m in Sources */,
+				B29335401921C9D300499F31 /* MyMessageController.m in Sources */,
 				B2DDFF79190C1C7000A71A4F /* Reachability.m in Sources */,
 				B24D56C619178B4100D756A5 /* FZPopoTableController.m in Sources */,
 				B2542367190E0C4F00874878 /* SCHudManager.m in Sources */,
@@ -925,8 +1009,11 @@
 				B2542390190E5C9400874878 /* MJTypeEncoding.m in Sources */,
 				B2C6FDE61921AE1800C80400 /* LookCarM.m in Sources */,
 				B2542392190E5C9400874878 /* NSObject+MJKeyValue.m in Sources */,
+				B2459BB71924A75800C3D28B /* LimitSearchView.m in Sources */,
 				B254236D190E139200874878 /* ProgressHUD.m in Sources */,
+				B29335491922FDBE00499F31 /* MasterTableViewController.m in Sources */,
 				B254238F190E5C9400874878 /* MJType.m in Sources */,
+				B29335431921DEE300499F31 /* MyMessageM.m in Sources */,
 				B2A78837191885E500AE55BC /* FuZhuInfoView.m in Sources */,
 				B2DDFF87190C1DB200A71A4F /* HttpManager.m in Sources */,
 				B2542393190E5C9400874878 /* NSObject+MJMember.m in Sources */,
@@ -969,6 +1056,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				B2DDFE9B190BB3F000A71A4F /* en */,
+				B2459BBB1925A70400C3D28B /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -977,6 +1065,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				B2DDFEB4190BB3F100A71A4F /* en */,
+				B2459BBC1925A70400C3D28B /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
