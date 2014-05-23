@@ -13,7 +13,7 @@
 #import "UserReservationM.h"
 #import "NSObject+MJKeyValue.h"
 #import "CommunListM.h"
-#import "MyMessageM.h"
+#import "MyMessage.h"
 
 @implementation HttpManager
 
@@ -132,7 +132,7 @@
                                   NSArray *array = [dataDic objectForKey:@"baseHint"];
                                   NSMutableArray *arrayM = [NSMutableArray arrayWithCapacity:array.count];
                                   for (NSDictionary *dic in array) {
-                                      MyMessageM *myMessage = [[MyMessageM alloc] init];
+                                      MyMessage *myMessage = [[MyMessage alloc] init];
                                       [myMessage setKeyValues:dic];
                                       [arrayM addObject:myMessage];
                                   }

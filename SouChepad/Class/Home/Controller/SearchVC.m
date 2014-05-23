@@ -9,52 +9,44 @@
 #import "SearchVC.h"
 
 @interface SearchVC () <UISearchBarDelegate>
-
+{
+    UITableView *tableView;
+}
 @end
 
 @implementation SearchVC
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-//    [self.navigationController.navigationBar setBarTintColor:[UIColor redColor]];
+    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStylePlain];
+    [self.view addSubview:tableView];
+    [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     
     UISearchBar *searchBar = [[UISearchBar alloc] init];
-    [searchBar sizeToFit];
+    [searchBar setBounds:CGRectMake(0, 0, 500, 40)];
+    [searchBar setCenter:self.headBar.center];
     searchBar.delegate = self;
     [searchBar setPlaceholder:@"搜索消息"];
+    [searchBar becomeFirstResponder];
+    [searchBar setKeyboardType:UIKeyboardTypeNumberPad];
     [searchBar setBarTintColor:[UIColor clearColor]];
     searchBar.layer.borderWidth=0.5f;
     searchBar.layer.borderColor=[[UIColor darkGrayColor] CGColor];
     [searchBar setBarTintColor:[UIColor whiteColor]];
     [searchBar.layer setMasksToBounds:YES];
     [searchBar.layer setCornerRadius:8];
-    UIView *barWrapper = [[UIView alloc]initWithFrame:searchBar.bounds];
-    [barWrapper addSubview:searchBar];
-//    self.navigationItem.titleView = barWrapper;
-//    [searchBar becomeFirstResponder];
-
+    [self.headBar addSubview:searchBar];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(backk)];
     
-    UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息",@"卖车信息"]];
-    [seg setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
-    [seg sizeToFit];
-//    [seg setBackgroundColor:[UIColor grayColor]];
-//    [seg addTarget:self action:@selector(segChanged:) forControlEvents:UIControlEventValueChanged];
-    [seg setBounds:CGRectMake(0, 0, 330, 35)];
-    [seg setSelectedSegmentIndex:0];
-    [self.navigationItem setTitleView:seg];
+    UIButton *backBut = [[UIButton alloc] initWithFrame:CGRectMake(10, searchBar.frame.origin.y, 100, 40)];
+    [backBut setBackgroundColor:[UIColor yellowColor]];
+    [self.headBar addSubview:backBut];
+    [backBut addTarget:self action:@selector(backk) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
@@ -71,18 +63,15 @@
 
 - (void)backk
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self.navigationController popViewControllerAnimated:YES];
 
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -92,19 +81,19 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//#warning Potentially incomplete method implementation.
+//    // Return the number of sections.
+//    return 0;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//#warning Incomplete method implementation.
+//    // Return the number of rows in the section.
+//    return 0;
+//}
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

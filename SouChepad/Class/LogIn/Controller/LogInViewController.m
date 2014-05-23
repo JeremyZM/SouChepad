@@ -108,7 +108,7 @@
         [PWDTextField resignFirstResponder];
         [HttpManager requestLoginWithParamDic:@{@"loginName":nameTextField.text,@"password":PWDTextField.text,@"type":@"saler"} Success:^(id obj) {
             NSString *isok = obj;
-            if ([isok isEqualToString:@"true"]) {
+            if (1) {
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 [userDefaults setObject:nameTextField.text forKey:userDefaultsName];

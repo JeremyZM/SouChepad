@@ -32,7 +32,6 @@ static NSString *seconCellID = @"seconCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor orangeColor]];
     
     [self addLimitSearchView];
     
@@ -70,23 +69,20 @@ static NSString *seconCellID = @"seconCell";
     [self.view insertSubview:toolbar belowSubview:_limitView];
     
     UILabel *gong = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 20, 20)];
-    [gong setText:@"共"];
+    [gong setText:@"共搜索到车辆"];
     [gong sizeToFit];
     [toolbar addSubview:gong];
     
-    UILabel *carNumbar = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(gong.frame), 35, 20, 20)];
+    UILabel *carNumbar = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(gong.frame)+5, 35, 20, 20)];
     [carNumbar setTextColor:[UIColor redColor]];
     [carNumbar setText:@"28"];
-    [carNumbar setFont:[UIFont systemFontOfSize:24]];
+    [carNumbar setFont:[UIFont systemFontOfSize:28]];
     [carNumbar sizeToFit];
     [toolbar addSubview:carNumbar];
     
-    UILabel *liang = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(carNumbar.frame), 40, 20, 20)];
-    [liang setText:@"辆车"];
-    [liang sizeToFit];
-    [toolbar addSubview:liang];
+
     
-    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(liang.frame)+30, 40, 20, 20)];
+    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(carNumbar.frame)+30, 40, 20, 20)];
     [xian setText:@"显示预售车"];
     [xian sizeToFit];
     [toolbar addSubview:xian];
@@ -98,7 +94,7 @@ static NSString *seconCellID = @"seconCell";
     
     
     
-    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(toolbar.frame.size.width-100, 0, 80, 80)];
+    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(toolbar.frame.size.width-100, 20, 80, 80)];
     [limitBut setBackgroundColor:[UIColor yellowColor]];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:limitBut];

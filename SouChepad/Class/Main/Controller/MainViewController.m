@@ -78,7 +78,7 @@
     HomeViewController *homeVC = [[HomeViewController alloc] init];
     UINavigationController *homeNav = [[UINavigationController alloc] initWithRootViewController:homeVC];
     [self addChildViewController:homeNav];
-    
+
     // 添加主页view
     [_contentView addSubview:homeNav.view];
     

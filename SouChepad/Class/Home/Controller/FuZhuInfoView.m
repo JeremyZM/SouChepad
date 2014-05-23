@@ -153,7 +153,8 @@
 {
     return 50;
 }
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
     return @"111111";
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -164,7 +165,46 @@
     
 }
 
+/*
+ - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+ {
+ return 2;
+ }
+ - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+ {
+ if (component == kProvinceComponent) {
+ return [self.provinces count];
+ }
+ return [self.cities count];
+ }
+ #pragma mark Picker Delegate Methods
+ - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+ 
+ if (component == kProvinceComponent) {
+ return [self.provinces objectAtIndex:row];
+ }
+ return [self.cities objectAtIndex:row];
+ }
+ - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+ {
+ if (component == kProvinceComponent) {
+ NSString *selectedState = [self.provinces objectAtIndex:row];
+ NSArray *array = [provinceCities objectForKey:selectedState];
+ self.cities = array;
+ [picker selectRow:0 inComponent:kCityComponent animated:YES];
+ [picker reloadComponent:kCityComponent];
+ }
+ }
+ - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+ {
+ if (component == kCityComponent) {
+ return 150;
+ }
+ return 140;
+ }
 
+ 
+ */
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

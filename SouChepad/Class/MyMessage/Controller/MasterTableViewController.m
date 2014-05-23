@@ -8,63 +8,106 @@
 
 #import "MasterTableViewController.h"
 #import "HttpManager.h"
-#import "MyMessageM.h"
+#import "MyMessage.h"
 #import "DetailViewController.h"
+#import "CoreDateManager.h"
+#import "MJRefresh.h"
 
-@interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate>
+@interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate,MJRefreshBaseViewDelegate>
 {
     NSArray *_messageArray;
     UISearchBar *mySearchBar;
     UISearchDisplayController *searchDisplay;
     NSArray *filteredContentList;
+    
+    CoreDateManager *coreManager;
+     MJRefreshHeaderView *_refreshControl; // 下拉刷新
 }
 @property (nonatomic, strong) DetailViewController *detailViewController;
+
 @end
 
 @implementation MasterTableViewController
 
-- (void)viewDidAppear:(BOOL)animated
+
+- (void)navigationset
 {
-    [super viewDidAppear:animated];
-//    [self.navigationController.navigationBar setFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
     [self.navigationController.navigationBar setBarTintColor:[UIColor redColor]];
-    [HttpManager requestMyMessageWithParamDic:nil Success:^(id obj) {
-        _messageArray = [NSArray arrayWithArray:obj];
-        [self.tableView reloadData];
-    } fail:^(id obj) {
-        
-    }];
-}
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"筛选" style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
-    
+}
+
+- (void)addsearchDisplay
+{
     mySearchBar = [[UISearchBar alloc] init];
     [mySearchBar sizeToFit];
     mySearchBar.delegate = self;
     [mySearchBar setPlaceholder:@"搜索消息"];
-//    [self.navigationItem setTitleView:mySearchBar];
+    //    [self.navigationItem setTitleView:mySearchBar];
     [self.tableView setTableHeaderView:mySearchBar];
     
     searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:mySearchBar contentsController:self];
     searchDisplay.delegate = self;
     searchDisplay.searchResultsDataSource = self;
     searchDisplay.searchResultsDelegate = self;
+    
+
 }
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self navigationset];
+    
+    [self addsearchDisplay];
+    
+    coreManager = [[CoreDateManager alloc]init];
+    
+    // 1.添加下拉刷新
+    _refreshControl = [MJRefreshHeaderView header];
+    _refreshControl.delegate = self;
+    _refreshControl.scrollView = self.tableView;
+    [_refreshControl setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
+    // 自动进入刷新状态
+    [_refreshControl beginRefreshing];
+
+    
+}
+
+// 开始刷新
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    [self writeDate];
+}
+
+// 结束刷新
+- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
+{
+
+}
+
+
+-(void)writeDate
+{
+    [HttpManager requestMyMessageWithParamDic:nil Success:^(id obj) {
+        [_refreshControl endRefreshing];
+        _messageArray = [NSArray arrayWithArray:obj];
+        [coreManager deleteData];
+        //把数据写到数据库
+        [coreManager insertCoreData:_messageArray];
+        
+        [self.tableView reloadData];
+    } fail:^(id obj) {
+        _messageArray = [coreManager selectData:100 andOffset:0];
+        [self.tableView reloadData];
+        [_refreshControl endRefreshing];
+    }];
+    
+}
+
 
 - (void)iconShowDock
 {
@@ -108,7 +151,7 @@
     if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
-    MyMessageM *message;
+    MyMessage *message;
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
         message = filteredContentList[indexPath.row];
         DLog(@"1112121212121");
@@ -116,6 +159,8 @@
         DLog(@"------------------");
         message = _messageArray[indexPath.row];
     }
+    
+    
     [cell.textLabel setText:message.title];
     [cell.detailTextLabel setText:message.dateCreate];
     
@@ -125,7 +170,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MyMessageM *message;
+    MyMessage *message;
     if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
         message = filteredContentList[indexPath.row];
     } else {
@@ -154,5 +199,10 @@
     return array;
 }
 
+
+- (void)dealloc
+{
+    [_refreshControl free];
+}
 
 @end

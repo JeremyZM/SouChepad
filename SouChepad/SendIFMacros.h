@@ -49,6 +49,8 @@ fprintf(stderr, "-----------------------------------\n");                       
 #define KShowDockNotification @"ShowDockNotification"
 
 
-#define KHttpBaseURL  @"122.224.68.242:8081/soucheweb"
+#define KHttpBaseURL  @"115.29.10.121:11080/soucheweb"
+
+#define Khttp @"115.29.10.121:11080/soucheweb 122.224.68.242:8081/soucheweb"
 
 #endif

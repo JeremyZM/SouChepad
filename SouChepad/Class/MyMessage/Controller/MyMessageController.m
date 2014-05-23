@@ -8,7 +8,7 @@
 
 #import "MyMessageController.h"
 #import "HttpManager.h"
-#import "MyMessageM.h"
+#import "MyMessage.h"
 
 @interface MyMessageController () <UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
 {
@@ -111,7 +111,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
 
-    MyMessageM *message = _messageArray[indexPath.row];
+    MyMessage *message = _messageArray[indexPath.row];
     [cell.textLabel setText:message.title];
     [cell.detailTextLabel setText:message.dateCreate];
     
@@ -128,7 +128,7 @@
     
     NSString *searchString = mySearchBar.text;
     
-    for (MyMessageM *message in _messageArray) {
+    for (MyMessage *message in _messageArray) {
         NSString *tempStr = message.title;
         NSComparisonResult result = [tempStr compare:searchString options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchString length])];
         if (result == NSOrderedSame) {

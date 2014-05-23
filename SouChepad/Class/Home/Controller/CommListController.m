@@ -89,6 +89,7 @@ static NSString *CellIdentifier = @"communCell";
     
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:commAddVC];
     [navVC setModalPresentationStyle:UIModalPresentationFormSheet];
+//    [navVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
     [self presentViewController:navVC animated:YES completion:^{
         
     }];

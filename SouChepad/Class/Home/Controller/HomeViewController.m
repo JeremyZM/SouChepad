@@ -18,12 +18,12 @@
 #import "ProgressHUD.h"
 #import "SearchVC.h"
 
-@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UISearchBarDelegate>
+@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate>
 {
     UITableView *table;
-    UISearchBar *search;
+//    UISearchBar *search;
     UIPopoverController *popoVC;
-    UIView *backView;  // 蒙版
+//    UIView *backView;  // 蒙版
     NSInteger ratselectRow; // 等级选中的行
     NSInteger nameSelectRow; // 时间，姓名选中行
     
@@ -38,16 +38,6 @@
 
 static NSString *CellIdentifier = @"cellID";
 @implementation HomeViewController
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES];
-    [self.navigationController.interactivePopGestureRecognizer setDelegate:self];
-    
-
-
-    
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -79,35 +69,37 @@ static NSString *CellIdentifier = @"cellID";
 #pragma mark - 添加UI
 - (void)addHeadUI
 {
-    CGSize size = [UIScreen mainScreen].bounds.size;
-    
-    UIView *headBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.height, 100)];
-    [headBar setBackgroundColor:[UIColor redColor]];
-    [self.view addSubview:headBar];
     
     UIButton *icon = [UIButton buttonWithType:UIButtonTypeCustom];
     [icon setFrame:CGRectMake(10, 30, 120, 50)];
     [icon setBackgroundColor:[UIColor blueColor]];
     [icon addTarget:self action:@selector(iconShowDock) forControlEvents:UIControlEventTouchUpInside];
     [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forState:UIControlStateNormal];
-    [headBar addSubview:icon];
+    [self.headBar addSubview:icon];
     
-    search = [[UISearchBar alloc] init];
-    [search setBounds:CGRectMake(0, 0, 500, 40)];
-    [search setCenter:headBar.center];
-    [search setDelegate:self];
-    [search setPlaceholder:@"搜索预约号或手机号码"];
-    [headBar addSubview:search];
-    search.layer.borderWidth=0.5f;
-    search.layer.borderColor=[[UIColor darkGrayColor] CGColor];
-    [search setBarTintColor:[UIColor whiteColor]];
-    [search.layer setMasksToBounds:YES];
-    [search.layer setCornerRadius:8];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont systemFontOfSize:22]];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(myKeyboardWillHideHandler:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+    
+    UIButton *searchBut = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 500, 40)];
+    [searchBut setCenter:self.headBar.center];
+    [searchBut setBackgroundColor:[UIColor yellowColor]];
+    [searchBut setTitle:@"搜索" forState:UIControlStateNormal];
+    [searchBut addTarget:self action:@selector(toSearchUser) forControlEvents:UIControlEventTouchUpInside];
+    [self.headBar addSubview:searchBut];
+//    search = [[UISearchBar alloc] init];
+//    [search setBounds:CGRectMake(0, 0, 500, 40)];
+//    [search setCenter:headBar.center];
+//    [search setDelegate:self];
+//    [search setPlaceholder:@"搜索预约号或手机号码"];
+//    [headBar addSubview:search];
+//    search.layer.borderWidth=0.5f;
+//    search.layer.borderColor=[[UIColor darkGrayColor] CGColor];
+//    [search setBarTintColor:[UIColor whiteColor]];
+//    [search.layer setMasksToBounds:YES];
+//    [search.layer setCornerRadius:8];
+//    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont systemFontOfSize:22]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(myKeyboardWillHideHandler:)
+//                                                 name:UIKeyboardWillHideNotification
+//                                               object:nil];
     
     
     
@@ -120,7 +112,7 @@ static NSString *CellIdentifier = @"cellID";
     [addBut.layer setMasksToBounds:YES];
     [addBut.layer setCornerRadius:8];
     
-    [headBar addSubview:addBut];
+    [self.headBar addSubview:addBut];
     
 }
 
@@ -150,46 +142,55 @@ static NSString *CellIdentifier = @"cellID";
     [self.navigationController pushViewController:infoMVC animated:YES];
 }
 
-#pragma mark - 键盘将要消失
-- (void) myKeyboardWillHideHandler:(NSNotification *)notification {
-    [self handleBackgroundTap:nil];
-}
+//#pragma mark - 键盘将要消失
+//- (void) myKeyboardWillHideHandler:(NSNotification *)notification {
+//    [self handleBackgroundTap:nil];
+//}
 
-#pragma mark - 搜索条代理
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+//#pragma mark - 搜索条代理
+//- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+//{
+//    //    UIImage *imge = [table screenshot];
+//    //    imge = [imge applyBlurWithRadius:3.0 tintColor:nil saturationDeltaFactor:1.5 maskImage:nil];
+//    //
+//    //    UIImageView *backimage = [[UIImageView alloc] initWithImage:imge];
+//    //    [table addSubview:backimage];
+//    //    [backimage setUserInteractionEnabled:YES];
+//    
+//    backView = [[UIView alloc] initWithFrame:table.frame];
+//    //    [backView addSubview:backimage];
+//    [backView setBackgroundColor:[UIColor blackColor]];
+//    [backView setAlpha:0.2];
+//    [self.view addSubview:backView];
+//    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleBackgroundTap:)];
+//    tapRecognizer.cancelsTouchesInView = NO;
+//    [backView addGestureRecognizer:tapRecognizer];
+//    
+//}
+
+//-(void)handleBackgroundTap:(UITapGestureRecognizer *)sender{
+//    [search resignFirstResponder];
+//    [backView removeFromSuperview];
+//}
+
+
+//- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+//{
+//    SearchVC *searchVC = [[SearchVC alloc] initWithStyle:UITableViewStylePlain];
+//    UINavigationController *seNav = [[UINavigationController alloc] initWithRootViewController:searchVC];
+////    [self.navigationController pushViewController:searchVC animated:YES];
+//    [self presentViewController:seNav animated:YES completion:nil];
+//    return NO;
+//}
+
+- (void)toSearchUser
 {
-    //    UIImage *imge = [table screenshot];
-    //    imge = [imge applyBlurWithRadius:3.0 tintColor:nil saturationDeltaFactor:1.5 maskImage:nil];
-    //
-    //    UIImageView *backimage = [[UIImageView alloc] initWithImage:imge];
-    //    [table addSubview:backimage];
-    //    [backimage setUserInteractionEnabled:YES];
-    
-    backView = [[UIView alloc] initWithFrame:table.frame];
-    //    [backView addSubview:backimage];
-    [backView setBackgroundColor:[UIColor blackColor]];
-    [backView setAlpha:0.2];
-    [self.view addSubview:backView];
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleBackgroundTap:)];
-    tapRecognizer.cancelsTouchesInView = NO;
-    [backView addGestureRecognizer:tapRecognizer];
-    
+    SearchVC *searchVC = [[SearchVC alloc] init];
+
+    [self.navigationController pushViewController:searchVC animated:YES];
+//    [self presentViewController:seNav animated:YES completion:nil];
 }
 
--(void)handleBackgroundTap:(UITapGestureRecognizer *)sender{
-    [search resignFirstResponder];
-    [backView removeFromSuperview];
-}
-
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
-{
-    SearchVC *searchVC = [[SearchVC alloc] initWithStyle:UITableViewStylePlain];
-    UINavigationController *seNav = [[UINavigationController alloc] initWithRootViewController:searchVC];
-//    [self.navigationController pushViewController:searchVC animated:YES];
-    [self presentViewController:seNav animated:YES completion:nil];
-    return NO;
-}
 
 #pragma mark - 显示popo
 - (void)showpopoview:(UIButton *)button

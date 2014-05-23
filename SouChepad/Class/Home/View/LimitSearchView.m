@@ -31,11 +31,15 @@
     frme.origin.y -= frme.size.height;
     [UIView animateWithDuration:0.25 animations:^{
         [self setFrame:frme];
-    } completion:^(BOOL finished) {
+        
         if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
             [_limitDelegate limitSearch:self withDic:@{}];
         }
+
+    } completion:^(BOOL finished) {
     }];
 }
+
+
 
 @end

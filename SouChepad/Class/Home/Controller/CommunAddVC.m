@@ -41,7 +41,13 @@
     [neir setText:@"内容"];
     [self.view addSubview:neir];
     
-    UITextView *content = [[UITextView alloc] initWithFrame:CGRectMake(timeLabel.frame.origin.x, neir.frame.origin.y, 300, 300)];
+    UITextView *content = [[UITextView alloc] initWithFrame:CGRectMake(timeLabel.frame.origin.x, neir.frame.origin.y, 300, 280)];
+//    [content setDataDetectorTypes:UIDataDetectorTypeAll];
+//    [content setEditable:NO];
+//    [content setAttributedText:[[NSAttributedString alloc]initWithString:@"My phone number is +8602980000000.\r\n"
+//                                "My personal web site www.xxxxxx.com.\r\n"
+//                                "My E-mail address is XXXXX@gmail.com.\r\n""I was born in 1900-01-01."]];
+
     [content.layer setCornerRadius:10];
     [content.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [content setFont:[UIFont systemFontOfSize:17]];

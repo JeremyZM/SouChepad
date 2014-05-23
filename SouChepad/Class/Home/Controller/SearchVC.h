@@ -6,8 +6,9 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SCBasicController.h"
 
-@interface SearchVC : UITableViewController
+@interface SearchVC : SCBasicController
+
 
 @end

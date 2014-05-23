@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface DetailViewController ()
 {
@@ -22,7 +23,7 @@
     [self.navigationController.navigationBar setBarTintColor:[UIColor redColor]];
 }
 
-- (void)setMessageM:(MyMessageM *)messageM
+- (void)setMessageM:(MyMessage *)messageM
 {
     _messageM = messageM;
     [self.titleLabel setText:messageM.title];
@@ -38,7 +39,26 @@
     [self.contentLabel setFrame:CGRectMake(30, CGRectGetMaxY(self.dateLabel.frame)+20, scrollView.frame.size.width-60, 30)];
     [self.contentLabel sizeToFit];
 
-    [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.contentLabel.frame))];
+    if (![messageM.image  isEqual: @"NULL"]) {
+        [self.imageView setFrame:CGRectMake(30, CGRectGetMaxY(self.contentLabel.frame)+30, 50, 50)];
+        
+        NSURL *url =[NSURL URLWithString:[NSString stringWithFormat:@"http://res.souche.com/%@",messageM.image]];
+    
+    [self.imageView setImageWithURL:url placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+        
+        [[SDImageCache sharedImageCache] storeImage:image forKey:messageM.image];
+        
+    }];
+        [self.imageView sizeToFit];
+        [scrollView addSubview:self.imageView];
+
+            [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.imageView.frame))];
+    }else{
+        [self.imageView removeFromSuperview];
+        [self.imageView setFrame:CGRectZero];
+        [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.contentLabel.frame))];
+
+    }
     
 }
 
@@ -66,7 +86,8 @@
 //    [self.contentLabel setFont:[UIFont systemFontOfSize:80]];
     [self.contentLabel setNumberOfLines:0];
 
-    
+    self.imageView = [[UIImageView alloc] init];
+   [scrollView addSubview:self.imageView];
 
 }
 

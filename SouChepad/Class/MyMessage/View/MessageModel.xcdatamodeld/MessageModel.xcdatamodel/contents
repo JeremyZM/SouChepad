@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="MyMessage" syncable="YES">
+        <attribute name="comment" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="commentShwo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateCreate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateDelete" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateUpdate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MyMessage" positionX="-63" positionY="-18" width="128" height="150"/>
+    </elements>
+</model>

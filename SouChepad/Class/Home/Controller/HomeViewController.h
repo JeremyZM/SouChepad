@@ -6,8 +6,8 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SCBasicController.h"
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : SCBasicController
 
 @end
