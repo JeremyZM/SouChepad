@@ -17,8 +17,9 @@
 //#import "UsertoStore.h"
 #import "ProgressHUD.h"
 #import "SearchVC.h"
+#import "NSString+val.h"
 
-@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate>
+@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate>
 {
     UITableView *table;
 //    UISearchBar *search;
@@ -137,9 +138,38 @@ static NSString *CellIdentifier = @"cellID";
 
 - (void)addUserInfo:(UIButton*)button
 {
-    InfoMainController *infoMVC = [[InfoMainController alloc] init];
-    [infoMVC setIsNew:YES];
-    [self.navigationController pushViewController:infoMVC animated:YES];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"添加新客户" message:@"尽量填写客户手机号！" delegate:self cancelButtonTitle:@"取消添加" otherButtonTitles:@"添加接待", nil];
+    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    UITextField *te = [alert textFieldAtIndex:0];
+    [te setKeyboardType:UIKeyboardTypeNumberPad];
+    [alert show];
+
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    DLog(@"%d",buttonIndex);
+    if (buttonIndex==0) { // 取消添加
+        
+    }else if (buttonIndex==1) { // 有手机号添加接待
+        if (textField.text.length>0) {
+            if ([NSString phoneValidate:textField.text] ) {
+                InfoMainController *infoMVC = [[InfoMainController alloc] init];
+                [infoMVC setIsNew:YES];
+                [self.navigationController pushViewController:infoMVC animated:YES];
+            }
+
+        }else
+        {
+            InfoMainController *infoMVC = [[InfoMainController alloc] init];
+            [infoMVC setIsNew:YES];
+            [self.navigationController pushViewController:infoMVC animated:YES];
+            
+        }
+        
+    }
+    
 }
 
 //#pragma mark - 键盘将要消失
@@ -248,6 +278,7 @@ static NSString *CellIdentifier = @"cellID";
     	NSMutableArray *descriptors=[[NSMutableArray alloc]initWithObjects:&distanceDescriptor count:1];
     	[dicArray sortUsingDescriptors:descriptors];
     return dicArray;
+
 }
 
 
@@ -262,15 +293,13 @@ static NSString *CellIdentifier = @"cellID";
 {
     CGRect rect =CGRectMake(0, 0, tableView.bounds.size.width, 40);
     UIToolbar *oneView = [[UIToolbar alloc] initWithFrame:rect];
-    //    UIView *oneView = [[UIView alloc] initWithFrame:rect];
-    [oneView setBarTintColor:[UIColor lightGrayColor]];
+
     UILabel *oneLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 200, 40)];
     [oneLabel setText:[NSString stringWithFormat:@"今日预约%d",userReserArray.count]];
     [oneView addSubview:oneLabel];
     
     UIToolbar *twoView = [[UIToolbar alloc] initWithFrame:rect];
-    [twoView setBarTintColor:[UIColor lightGrayColor]];
-    //    UIView *twoView = [[UIView alloc] initWithFrame:rect];
+
     UILabel *twoLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 200, 40)];
     [twoLabel setText:[NSString stringWithFormat:@"全部客户%d",usertoStoreArray.count]];
     [twoView addSubview:twoLabel];

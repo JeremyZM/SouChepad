@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 
 #import "MKNetworkKit.h"
+#import "JDStatusBarNotification.h"
 #define kFreezableOperationExtension @"mknetworkkitfrozenoperation"
 
 #ifdef __OBJC_GC__
@@ -207,6 +208,7 @@ static NSOperationQueue *_sharedNetworkQueue;
 {
   if([self.reachability currentReachabilityStatus] == ReachableViaWiFi)
   {
+      [JDStatusBarNotification showWithStatus:self.hostName dismissAfter:2.0 styleName:JDStatusBarStyleSuccess];
     DLog(@"Server [%@] is reachable via Wifi", self.hostName);
     [_sharedNetworkQueue setMaxConcurrentOperationCount:6];
     
@@ -226,6 +228,7 @@ static NSOperationQueue *_sharedNetworkQueue;
   }
   else if([self.reachability currentReachabilityStatus] == NotReachable)
   {
+      [JDStatusBarNotification showWithStatus:self.hostName dismissAfter:2.0 styleName:JDStatusBarStyleError];
     DLog(@"Server [%@] is not reachable", self.hostName);
     [self freezeOperations];
   }

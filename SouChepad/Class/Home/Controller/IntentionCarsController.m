@@ -91,12 +91,10 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)SegmentedChanged:(UISegmentedControl *)Seg
 {
-    if (Seg.selectedSegmentIndex == 0) {
-        
-        [_collectionView setContentOffset:CGPointZero animated:YES];
-    }else if (Seg.selectedSegmentIndex == 1){
-        [_collectionView setContentOffset:CGPointMake(0, 1800) animated:YES];
-    }
+    NSIndexPath *index  = [NSIndexPath indexPathForItem:0 inSection:Seg.selectedSegmentIndex];
+    
+   
+    [_collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
     
     
 }

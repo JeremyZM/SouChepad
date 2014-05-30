@@ -179,6 +179,7 @@
     
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.detailViewController setMessageM:message];
+//    [self.detailViewController.view setNeedsLayout];
 }
 
 

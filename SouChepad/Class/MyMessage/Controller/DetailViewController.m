@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "UIImageView+WebCache.h"
+#import "UIImageView+LK.h"
 
 @interface DetailViewController ()
 {
@@ -25,47 +26,77 @@
 
 - (void)setMessageM:(MyMessage *)messageM
 {
-    _messageM = messageM;
-    [self.titleLabel setText:messageM.title];
-    [self.titleLabel setFrame:CGRectMake(30, 30, scrollView.frame.size.width-60, 30)];
-    [self.titleLabel sizeToFit];
-
-    [self.dateLabel setText:messageM.dateCreate];
-    [self.dateLabel setFrame:CGRectMake(30, CGRectGetMaxY(self.titleLabel.frame)+5, 30, 30)];
-    [self.dateLabel sizeToFit];
-    
-    
-    [self.contentLabel setText:messageM.comment];
-    [self.contentLabel setFrame:CGRectMake(30, CGRectGetMaxY(self.dateLabel.frame)+20, scrollView.frame.size.width-60, 30)];
-    [self.contentLabel sizeToFit];
-
-    if (![messageM.image  isEqual: @"NULL"]) {
-        [self.imageView setFrame:CGRectMake(30, CGRectGetMaxY(self.contentLabel.frame)+30, 50, 50)];
+    if (_messageM != messageM) {
         
-        NSURL *url =[NSURL URLWithString:[NSString stringWithFormat:@"http://res.souche.com/%@",messageM.image]];
+        _messageM = messageM;
     
-    [self.imageView setImageWithURL:url placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+        [self.titleLabel setText:messageM.title];
+        [self.titleLabel setFrame:CGRectMake(30, 30, scrollView.frame.size.width-60, 30)];
+        [self.titleLabel sizeToFit];
         
-        [[SDImageCache sharedImageCache] storeImage:image forKey:messageM.image];
+        [self.dateLabel setText:messageM.dateCreate];
+        [self.dateLabel setFrame:CGRectMake(30, CGRectGetMaxY(self.titleLabel.frame)+5, 30, 30)];
+        [self.dateLabel sizeToFit];
         
-    }];
-        [self.imageView sizeToFit];
-        [scrollView addSubview:self.imageView];
-
-            [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.imageView.frame))];
-    }else{
-        [self.imageView removeFromSuperview];
-        [self.imageView setFrame:CGRectZero];
+        
+        [self.contentLabel setText:messageM.comment];
+        [self.contentLabel setFrame:CGRectMake(30, CGRectGetMaxY(self.dateLabel.frame)+20, scrollView.frame.size.width-60, 30)];
+        [self.contentLabel sizeToFit];
+        
         [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.contentLabel.frame))];
+        
+        if (![messageM.image  isEqual: @"NULL"]) {
 
+            
+            if (self.imageView == nil) {
+                
+               self.imageView = [[UIImageView alloc] init];
+//                [self.imageView setNeedsLayout];
+                [scrollView addSubview:self.imageView];
+            }
+            [self.imageView setFrame:CGRectMake(30, CGRectGetMaxY(self.contentLabel.frame)+20, 200, 200)];
+
+            [SDWebImageManager.sharedManager.imageCache clearMemory];
+            [SDWebImageManager.sharedManager.imageCache clearDisk];
+            NSURL *url =[NSURL URLWithString:[NSString stringWithFormat:@"http://res.souche.com/%@",messageM.image]];
+//            [self.imageView setImageWithURL:[NSURL URLWithString:@"http://imgsrc.baidu.com/forum/pic/item/eb058794a4c27d1e6b6ad74019d5ad6edcc438a4.jpg"] placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+//                [self.imageView sizeToFit];
+//                [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.imageView.frame))];
+//            }];
+//            [self.imageView setImageURL:@"http://assets.sbnation.com/assets/2512203/dogflops.gif"];
+            [self.imageView setImageURL:@"http://imgsrc.baidu.com/forum/pic/item/bb22720e0cf3d7ca3e07d2f2f01fbe096a63a945.jpg" result:^(BOOL isDownload) {
+                [self.imageView sizeToFit];
+                [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.imageView.frame)+30)];
+            }];
+            
+
+        }else{
+            if (self.imageView) {
+                
+                [self.imageView removeFromSuperview];
+                self.imageView = nil;
+            }
+            
+        }
+             [scrollView setContentOffset:CGPointMake(0, -64) animated:YES];
     }
     
 }
+
+
+//- (void)viewDidLayoutSubviews
+//{
+//    [super viewDidLayoutSubviews];
+//    [self.imageView sizeToFit];
+//    
+//}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+
+    
     scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
     [scrollView setBackgroundColor:[UIColor whiteColor]];
     [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
@@ -86,9 +117,7 @@
 //    [self.contentLabel setFont:[UIFont systemFontOfSize:80]];
     [self.contentLabel setNumberOfLines:0];
 
-    self.imageView = [[UIImageView alloc] init];
-   [scrollView addSubview:self.imageView];
-
+ 
 }
 
 
