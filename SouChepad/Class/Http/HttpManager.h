@@ -18,24 +18,40 @@ typedef void (^UploadProgress)(NSString *progress);
 // 取消网络请求
 + (void)cancelRequest:(MKNetworkOperation*)operation;
 
+#pragma mark - 获取各评价list
++ (void)getDictionarySuccess:(Success)success fail:(Fail)fail;
+
+
+
 #pragma mark - 销售登陆
-+(MKNetworkOperation*)requestLoginWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
++(void)requestLoginWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 搜索手机号
+/**
+ *  搜索手机号
+ *
+ *  @param paramDic 手机号和销售id
+ *  @param success  成功
+ *  @param fail     失败
+ */
++(void)requestSearchPhoneNumaber:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
 
 #pragma mark - 搜索客户
-+(MKNetworkOperation *)requestClientWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
++(void)requestClientWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 客户基本信息
-+ (MKNetworkOperation*)requestUserInfoWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
++ (void)requestUserInfoWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 沟通记录
-+ (MKNetworkOperation*)requestCommunicationWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
++ (void)requestCommunicationWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 意向车辆
-+ (MKNetworkOperation *)requestUserIntentionWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
++ (void)requestUserIntentionWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 我的消息
-+ (MKNetworkOperation *)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
++ (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
 // 上传图片，成功后返回dictionary
-+ (MKNetworkOperation*)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;
++ (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;
 @end

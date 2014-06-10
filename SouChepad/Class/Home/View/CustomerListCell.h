@@ -9,12 +9,34 @@
 #import <UIKit/UIKit.h>
 
 @interface CustomerListCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *NameCustomer;     // 客户姓名
-@property (weak, nonatomic) IBOutlet UILabel *SexCustomer;      // 客户性别
-@property (weak, nonatomic) IBOutlet UILabel *PhoneCustomer;    // 客户电话
-@property (weak, nonatomic) IBOutlet UILabel *GradeCustomer;    // 等级
-@property (weak, nonatomic) IBOutlet UIButton *TimeUpdate;       // 客户更新时间
-- (IBAction)changeTime:(id)sender;
+/** 客户姓名 */
+@property (weak, nonatomic) IBOutlet UILabel *NameCustomer;
 
+/**
+ *  //客户性别
+ */
+@property (weak, nonatomic) IBOutlet UILabel *SexCustomer;
+
+/**
+ * // 客户电话
+ */
+@property (weak, nonatomic) IBOutlet UILabel *PhoneCustomer;
+
+/**
+ * // 等级
+ */
+@property (weak, nonatomic) IBOutlet UILabel *GradeCustomer;
+
+/**
+ *  客户更新时间
+ */
+@property (weak, nonatomic) IBOutlet UIButton *TimeUpdate;
+
+/**
+ *   修改预约时间
+ *
+ *  @param sender 修改预约时间
+ */
+//- (IBAction)changeTime:(id)sender;
 
 @end

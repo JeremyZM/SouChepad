@@ -30,8 +30,10 @@
 
     CGSize size = [UIScreen mainScreen].bounds.size;
     
-    _headBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.height, 100)];
-    [_headBar setBackgroundColor:[UIColor redColor]];
+    _headBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
+    [_headBar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [_headBar setBarTintColor:[UIColor hexStringToColor:KBaseColo]];
+//    [_headBar setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
     [self.view addSubview:_headBar];
     
 }

@@ -35,7 +35,7 @@
     [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     _scrollView = scrollView;
 
-    [self.view addSubview:scrollView];
+    [self.view insertSubview:scrollView atIndex:0];
     
     // 1.添加toolbar
     [self addToolbar];
@@ -57,17 +57,19 @@
 
 - (void)addToolbar
 {
-    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
-    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self.view addSubview:toolbar];
+//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
+//    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+//    [toolbar setBarTintColor:[UIColor redColor]];
+//    [self.view addSubview:toolbar];
     
     UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息",@"卖车信息"]];
     [seg setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
-    [seg setCenter:toolbar.center];
+    [seg setCenter:self.headBar.center];
     [seg addTarget:self action:@selector(segChanged:) forControlEvents:UIControlEventValueChanged];
+    [seg setTintColor:[UIColor whiteColor]];
     [seg setBounds:CGRectMake(0, 0, 330, 40)];
     [seg setSelectedSegmentIndex:0];
-    [toolbar addSubview:seg];
+    [self.headBar addSubview:seg];
 }
 
 - (void)segChanged:(UISegmentedControl*)seg
@@ -125,7 +127,6 @@
         [_scrollView setContentSize:CGSizeMake(0, fztableView.bounds.size.height+100)];
     }
     [_scrollView addSubview:_fuzhuView];
-
 
 }
 

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SCBasicController : UIViewController
-@property (nonatomic, strong) UIView *headBar;
+@property (nonatomic, strong) UIToolbar *headBar;
 @end

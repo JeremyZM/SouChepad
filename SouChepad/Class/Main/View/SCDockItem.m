@@ -28,7 +28,7 @@
 
 - (void)setFrame:(CGRect)frame
 {
-//    frame.size = CGSizeMake(kDockItemW, kDockItemH);
+
     [super setFrame:frame];
 }
 
@@ -44,6 +44,7 @@
 - (void)setTitle:(NSString *)title
 {
     _title = title;
+    [self.titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
     [self setTitle:title forState:UIControlStateNormal];
 }
 
@@ -57,6 +58,7 @@
 {
     _selectedIcon = selectedIcon;
     [self setImage:[UIImage imageNamed:selectedIcon] forState:UIControlStateDisabled];
+    [self setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateDisabled];
 }
 
 #pragma mark 覆盖父类在highlighted时的所有操作
@@ -68,7 +70,7 @@
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
     CGFloat imageX = 0;
-    CGFloat imageY = 0;
+    CGFloat imageY = 10;
     CGFloat imageWidth = contentRect.size.width;
     CGFloat imageHeight = contentRect.size.height * ( 1- kTitleRatio );
     return CGRectMake(imageX, imageY, imageWidth, imageHeight);
@@ -79,7 +81,7 @@
 {
     CGFloat titleX = 0;
     CGFloat titleHeight = contentRect.size.height * kTitleRatio;
-    CGFloat titleY = contentRect.size.height - titleHeight - 3;
+    CGFloat titleY = contentRect.size.height - titleHeight-10;
     CGFloat titleWidth = contentRect.size.width;
     return CGRectMake(titleX, titleY, titleWidth, titleHeight);
 }

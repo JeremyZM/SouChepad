@@ -6,11 +6,11 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SCBasicController.h"
 
 @class UserReservationM;
 
-@interface CommListController : UIViewController
+@interface CommListController : SCBasicController
 @property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, strong) UserReservationM *userResM;
 

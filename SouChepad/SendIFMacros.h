@@ -36,21 +36,99 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 
 // 文字的高度比例
-#define kTitleRatio 0.3
+#define kTitleRatio 0.4
 
 #define ratBtnTag 100  // 按等级排序按钮tag
 #define nameBtnTag 101  // 按时间排序按钮tag
 
-#define KDockW 200
+#define KDockW 180
 
-#define kDockItemH 125  // DockItem栏宽
-#define kDockItemW 200
+#define kDockItemH 100  // DockItem栏宽
+#define kDockItemW 180
 
 #define KShowDockNotification @"ShowDockNotification"
 
 
-#define KHttpBaseURL  @"115.29.10.121:11080/soucheweb"
+#define KHttpBaseURL  @"115.29.10.121:9999/soucheweb"
 
-#define Khttp @"115.29.10.121:11080/soucheweb 122.224.68.242:8081/soucheweb"
+#define Khttp @"115.29.10.121:11080/soucheweb   122.224.68.242:8081/soucheweb  192.168.0.250:8088/soucheweb"
+
+#define KImageBaseURL @"http://res.souche.com/"
+
+
+
+#define KUserName [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]
+#define KUserPWD [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]
+
+/**
+ *   18号字体
+ */
+#define KFont18 [UIFont systemFontOfSize:18]
+
+/**
+ *  18号粗体
+ */
+#define KBoldFont18  [UIFont boldSystemFontOfSize:18]
+
+/**
+ *  主色
+ */
+#define KBaseColo @"#ff5719"
+/**
+ *  主色背景黑
+ */
+#define KBackColo @"#262626"
+
+/**
+ *  分割线颜色
+ */
+#define KSeparatorColor @"#e6e6e6"
+
+/**
+ *  buyerStatus
+ */
+#define KbuyerStatus [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"buyerStatus.plist"]
+/**
+ *  carCountrySimple
+ */
+#define KcarCountrySimple [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"carCountrySimple.plist"]
+
+/**
+ *  departureReason
+ */
+#define KdepartureReason [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"departureReason.plist"]
+
+/**
+ *  driveCarEvaluate
+ */
+#define KdriveCarEvaluate [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"driveCarEvaluate.plist"]
+
+/**
+ *  lookCarEvaluate
+ */
+#define KlookCarEvaluate [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"lookCarEvaluate.plist"]
+
+
+/**
+ *  mileageSimple
+ */
+#define KmileageSimple [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"mileageSimple.plist"]
+
+
+/**
+ *  satisfactionDegree
+ */
+#define KsatisfactionDegree [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"satisfactionDegree.plist"]
+
+
+/**
+ *  seeCarTime
+ */
+#define KseeCarTime [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"seeCarTime.plist"]
+
+/**
+ *  vehicleType
+ */
+#define KvehicleType [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"vehicleType.plist"]
 
 #endif

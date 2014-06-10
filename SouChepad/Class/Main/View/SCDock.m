@@ -33,20 +33,23 @@
 - (void)addAllItems
 {
     // 1.我的客户
-    [self addOneTabTitle:@"我的客户" icon:@"" selectedIcon:@"" index:0];
+    [self addOneTabTitle:@"我的客户" icon:@"tubiao_03" selectedIcon:@"tubiao_10" index:0];
     
     
     // 2.我的消息
-    [self addOneTabTitle:@"我的消息" icon:@"" selectedIcon:@"" index:1];
-    
+    [self addOneTabTitle:@"我的消息" icon:@"tubiao_04" selectedIcon:@"tubiao_11" index:1];
+/*
     // 3.我的车辆
-    [self addOneTabTitle:@"我的车辆" icon:@"" selectedIcon:@"" index:2];
+    [self addOneTabTitle:@"我的车辆" icon:@"tubiao_05" selectedIcon:@"tubiao_12" index:2];
     
     // 4.工具
-    [self addOneTabTitle:@"工具" icon:@"" selectedIcon:@"" index:3];
+    [self addOneTabTitle:@"服务工具" icon:@"tubiao_06" selectedIcon:@"tubiao_13" index:3];
     
+    [self addOneTabTitle:@"知识话术" icon:@"tubiao_07" selectedIcon:@"tubiao_14" index:4];
+    
+ */
     // 5.设置
-    [self addOneTabTitle:@"设置" icon:@"" selectedIcon:@"" index:4];
+    [self addOneTabTitle:@"设置" icon:@"tubiao_08" selectedIcon:@"tubiao_15" index:5];
     
 
 }
@@ -54,7 +57,7 @@
 // 添加一个Item
 - (void)addOneTabTitle:(NSString *)title icon:(NSString *)icon selectedIcon:(NSString *)selectedIcon index:(int)index
 {
-    SCDockItem *dockItem = [[SCDockItem alloc] initWithFrame:CGRectMake(0, kDockItemH*index, kDockItemW, kDockItemH)];
+    SCDockItem *dockItem = [[SCDockItem alloc] initWithFrame:CGRectMake(0, kDockItemH*index+50, KDockW, kDockItemH)];
     [dockItem setTitle:title Icon:icon selectedIcon:selectedIcon];
     [dockItem addTarget:self action:@selector(tabClick:) forControlEvents:UIControlEventTouchUpInside];
     dockItem.tag = index;

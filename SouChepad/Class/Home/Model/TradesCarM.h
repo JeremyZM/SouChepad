@@ -4,25 +4,58 @@
 //
 //  Created by 张艳东 on 14-5-13.
 //  Copyright (c) 2014年 souche. All rights reserved.
-//
+//  成交车辆
 
-#import <Foundation/Foundation.h>
+#import "CarBaseModel.h"
 
-@interface TradesCarM : NSObject
-@property (nonatomic, copy) NSString *carID;
-@property (nonatomic, copy) NSString *carName;
-@property (nonatomic, copy) NSString *carStatus;
+@interface TradesCarM : CarBaseModel
+
+/**
+ *  成交日期
+ */
 @property (nonatomic, copy) NSString *day;
+
+/**
+ *  定金
+ */
 @property (nonatomic, copy) NSString *downPayment;
-@property (nonatomic, copy) NSString *firstLicensePlateDate;
-@property (nonatomic, copy) NSString *ID;
-@property (nonatomic, copy) NSString *image;
-@property (nonatomic, copy) NSString *souchePrice;
+
+
+/**
+ *  过户信息ID
+ */
+@property (nonatomic, copy) NSString *tradeId;
+
+
+/**
+ *  过户坐席
+ */
 @property (nonatomic, copy) NSString *tradeCC;
+
+/**
+ *  成交价
+ */
 @property (nonatomic, copy) NSString *tradePrice;
+
+/**
+ *  过户销售
+ */
 @property (nonatomic, copy) NSString *tradeSell;
+
+/**
+ *  交易状态
+ */
 @property (nonatomic, copy) NSString *tradeStatus;
+
+/**
+ *  过户地
+ */
 @property (nonatomic, copy) NSString *transferMode;
+
+/**
+ *  过户地
+ */
 @property (nonatomic, copy) NSString *transferTo;
-@property (nonatomic, copy) NSString *vin;
+
+
 @end

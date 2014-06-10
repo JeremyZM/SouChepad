@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class PopoTableViewController;
 
+
 @protocol PopoTableViewDelegate <NSObject>
 @optional
 - (void)PopoTableViewController:(PopoTableViewController*)popoTableVC seleckChanged:(NSString *)seleckStr andseleckRow:(NSInteger)row andselectBtn:(UIButton*)selecBtn;
@@ -16,7 +17,7 @@
 @end
 
 @interface PopoTableViewController : UITableViewController
-
+@property (nonatomic, strong) NSMutableArray *array;
 @property (nonatomic, strong) UIButton *sortWayBtn;
 @property (nonatomic, assign) NSInteger selectRow;
 @property (nonatomic,weak) id <PopoTableViewDelegate> popoTabelDelegate;

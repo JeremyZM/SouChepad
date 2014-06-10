@@ -10,7 +10,7 @@
 #import "ChangeTimePopoVC.h"
 
 @interface CustomerListCell ()
-@property (nonatomic, strong) UIPopoverController *timePopoVC;
+
 @end
 
 @implementation CustomerListCell
@@ -27,18 +27,6 @@
     // Configure the view for the selected state
 }
 
-- (IBAction)changeTime:(UIButton*)sender {
-    ChangeTimePopoVC *changeTime = [[ChangeTimePopoVC alloc] init];
-
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:changeTime];
-    self.timePopoVC = [[UIPopoverController alloc] initWithContentViewController:nav];
-    
-    CGRect frame = [self.superview convertRect:sender.frame fromView:sender.superview];
-    self.timePopoVC.popoverContentSize = CGSizeMake(320, 300);
-    [self.timePopoVC presentPopoverFromRect:frame inView:self.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    
-    [changeTime.datepicker addTarget:self action:@selector(valuechanged:) forControlEvents:UIControlEventValueChanged];
-}
 
 - (void)valuechanged:(UIDatePicker *)sender
 {
@@ -47,7 +35,7 @@
     // NSDateFormatter 专门用来转换日期格式的 类
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     // 设置格式
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
     // NSDateFormatter转换为NSString
     NSString *dateStr = [formatter stringFromDate:date];
     

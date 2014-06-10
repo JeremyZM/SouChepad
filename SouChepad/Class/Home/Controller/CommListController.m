@@ -51,23 +51,27 @@ static NSString *CellIdentifier = @"communCell";
 - (void)addToolbar
 {
     
-    CGSize size = self.view.bounds.size;
-    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
-    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self.view addSubview:toolbar];
+//    CGSize size = self.view.bounds.size;
+//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
+//    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+//    [self.view addSubview:toolbar];
     UILabel *titel = [[UILabel alloc] init];
     [titel setText:@"沟通记录"];
-    [titel setCenter:toolbar.center];
+    [titel setTextColor:[UIColor whiteColor]];
+    [titel setFont:KBoldFont18];
+    [titel setCenter:self.headBar.center];
     [titel setBounds:CGRectMake(0, 0, 100, 44)];
     [titel setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
-    [toolbar addSubview:titel];
+    [self.headBar addSubview:titel];
     
-    UIButton *addBut = [[UIButton alloc] initWithFrame:CGRectMake(toolbar.bounds.size.width-150, titel.frame.origin.y, 100, 44)];
-    [addBut setBackgroundColor:[UIColor redColor]];
-    [addBut setTitle:@"新增" forState:UIControlStateNormal];
+    UIButton *addBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.bounds.size.width-180, titel.frame.origin.y, 150, 44)];
+    [addBut setImage:[UIImage imageNamed:@"tubiao_35"] forState:UIControlStateNormal];
+    [addBut.titleLabel setFont:KBoldFont18];
+    [addBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [addBut setTitle:@"新增沟通记录" forState:UIControlStateNormal];
     [addBut setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
     [addBut addTarget:self action:@selector(addOneCommun:) forControlEvents:UIControlEventTouchUpInside];
-    [toolbar addSubview:addBut];
+    [self.headBar addSubview:addBut];
     
 
     
@@ -78,6 +82,7 @@ static NSString *CellIdentifier = @"communCell";
     [tableView setDelegate:self];
     [tableView setContentInset:UIEdgeInsetsMake(100, 0, 0, 0)];
     [tableView setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 20)];
+    [tableView setSeparatorColor:[UIColor hexStringToColor:KSeparatorColor]];
     [self.view insertSubview:tableView atIndex:0];
     // 注册cell
     [tableView registerNib:[UINib nibWithNibName:@"CommunCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];

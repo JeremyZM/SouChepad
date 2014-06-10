@@ -9,7 +9,19 @@
 #import <Foundation/Foundation.h>
 
 @interface CommunListM : NSObject
+/**
+ *  沟通记录
+ */
 @property (nonatomic, copy) NSString *comment;
+
+/**
+ *  记录时间
+ */
 @property (nonatomic, copy) NSString *day;
+
+/**
+ *  记录处理人
+ */
 @property (nonatomic, copy) NSString *handler;
+
 @end

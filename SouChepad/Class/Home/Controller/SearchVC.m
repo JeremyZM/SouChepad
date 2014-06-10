@@ -7,12 +7,28 @@
 //
 
 #import "SearchVC.h"
+#import "NSString+val.h"
+#import "HttpManager.h"
+#import "SearchNewUserCell.h"
+#import "OtherSellUserCell.h"
+#import "CustomerListCell.h"
+#import "UserReservationM.h"
 
-@interface SearchVC () <UISearchBarDelegate>
+@interface SearchVC () <UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
 {
-    UITableView *tableView;
+    UITableView *_tableView;
+    NSDictionary *searchUserDic;
+    NSArray *otherSell;
+    NSArray *myself;
+    NSArray *newUser;
+    
+    UISearchBar *phoneSearch;
 }
 @end
+
+static NSString *myselfCell = @"cellID";
+static NSString *otherSellCell = @"otherSellUserCell";
+static NSString *newUserCell = @"newUserCell";
 
 @implementation SearchVC
 
@@ -21,16 +37,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    CGSize size = [UIScreen mainScreen].bounds.size;
     
-    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStylePlain];
-    [self.view addSubview:tableView];
-    [tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    UIView *headBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
+    [headBar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [headBar setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.view addSubview:headBar];
+    
+    
     
     UISearchBar *searchBar = [[UISearchBar alloc] init];
-    [searchBar setBounds:CGRectMake(0, 0, 500, 40)];
-    [searchBar setCenter:self.headBar.center];
+    phoneSearch = searchBar;
+    [searchBar setFrame:CGRectMake(280, 40, 500, 40)];
+    [searchBar setText:@"18758188560"];
     searchBar.delegate = self;
-    [searchBar setPlaceholder:@"搜索消息"];
+    [searchBar setPlaceholder:@"搜索客户手机号"];
     [searchBar becomeFirstResponder];
     [searchBar setKeyboardType:UIKeyboardTypeNumberPad];
     [searchBar setBarTintColor:[UIColor clearColor]];
@@ -39,26 +61,127 @@
     [searchBar setBarTintColor:[UIColor whiteColor]];
     [searchBar.layer setMasksToBounds:YES];
     [searchBar.layer setCornerRadius:8];
-    [self.headBar addSubview:searchBar];
+    [headBar addSubview:searchBar];
+    [[UITextField appearance] setTintColor:[UIColor redColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont systemFontOfSize:22]];
     
     
-    UIButton *backBut = [[UIButton alloc] initWithFrame:CGRectMake(10, searchBar.frame.origin.y, 100, 40)];
-    [backBut setBackgroundColor:[UIColor yellowColor]];
-    [self.headBar addSubview:backBut];
+    UIButton *backBut = [[UIButton alloc] initWithFrame:CGRectMake(20, searchBar.frame.origin.y, 80, 40)];
+    [backBut setImage:[UIImage imageNamed:@"tubiao_38"] forState:UIControlStateNormal];
+    [backBut setTitle:@"返回" forState:UIControlStateNormal];
+    [headBar addSubview:backBut];
     [backBut addTarget:self action:@selector(backk) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
+// 开始搜索
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-//    [searchBar setShowsCancelButton:NO animated:YES];
-    return YES;
+    if ([NSString phoneValidate:searchBar.text]) {
+        [HttpManager requestSearchPhoneNumaber:@{@"contact":searchBar.text,@"userName":KUserName} Success:^(id obj) {
+            
+            searchUserDic = [NSDictionary dictionaryWithDictionary:obj];
+            if (![searchUserDic objectForKey:@"-1"]) {
+                otherSell = [NSArray arrayWithArray:[searchUserDic objectForKey:@"1"]];
+                myself = [NSArray arrayWithArray:[searchUserDic objectForKey:@"2"]];
+            }else{
+                newUser = [searchUserDic objectForKey:@"-1"];
+            }
+            
+            
+            if (_tableView==nil) {
+                
+                _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStyleGrouped];
+                [_tableView setDataSource:self];
+                [_tableView setDelegate:self];
+                [self.view addSubview:_tableView];
+                [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+                // 注册cell
+                [_tableView registerNib:[UINib nibWithNibName:@"CustomerListCell" bundle:nil] forCellReuseIdentifier:myselfCell];
+                [_tableView registerNib:[UINib nibWithNibName:@"SearchNewUserCell" bundle:nil] forCellReuseIdentifier:newUserCell];
+                [_tableView registerNib:[UINib nibWithNibName:@"OtherSellUserCell" bundle:nil] forCellReuseIdentifier:otherSellCell];
+            }
+            [_tableView reloadData];
+            
+        } fail:^(id obj) {
+            
+        }];
+    }
 }
 
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-//    [searchBar setShowsCancelButton:YES animated:YES];
-    return YES;
+    return searchUserDic.allKeys.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (newUser.count!= 0) {
+        return 1;
+    }else {
+        if (myself.count!=0&&otherSell.count!=0) {
+            if (section==0) {
+                return myself.count;
+            }else if (section == 1){
+                return otherSell.count;
+            }
+        }else if (myself.count!=0&&otherSell.count==0){
+            return myself.count;
+        }else if (myself.count ==0&&otherSell.count != 0){
+            return otherSell.count;
+        }
+    }
+        return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    DLog(@"%@",searchUserDic);
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    if (newUser.count) {
+        
+        SearchNewUserCell *newCell = [tableView dequeueReusableCellWithIdentifier:newUserCell];
+        cell = newCell;
+        [newCell.PhoneLabel setText:phoneSearch.text];
+        return newCell;
+    }else {
+            if (indexPath.section==0) {
+                UserReservationM *userM = myself[indexPath.row];
+
+                CustomerListCell *myUserCell = [tableView dequeueReusableCellWithIdentifier:myselfCell];
+                cell = myUserCell;
+                [myUserCell.NameCustomer setText:userM.user];
+                [myUserCell.SexCustomer setText:userM.sex];
+                [myUserCell.PhoneCustomer setText:userM.phone];
+                [myUserCell.GradeCustomer setText:userM.userLevel];
+                [myUserCell.TimeUpdate setTitle:userM.day forState:UIControlStateNormal];
+                return myUserCell;
+            }else if (indexPath.section == 1){
+                NSDictionary *otherDic = otherSell[indexPath.row];
+
+                OtherSellUserCell *otherCell = [tableView dequeueReusableCellWithIdentifier:otherSellCell];
+                cell = otherCell;
+                otherCell = (OtherSellUserCell *) cell;
+                [otherCell.phoneNumberLabel setText:[otherDic objectForKey:@"phone"]];
+                [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",[otherDic objectForKey:@"name"]]];
+                return otherCell;
+        }
+
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.0;
 }
 
 - (void)backk
@@ -67,33 +190,7 @@
 
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view data source
-
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//#warning Potentially incomplete method implementation.
-//    // Return the number of sections.
-//    return 0;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//#warning Incomplete method implementation.
-//    // Return the number of rows in the section.
-//    return 0;
-//}
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

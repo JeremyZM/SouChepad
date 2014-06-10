@@ -6,10 +6,10 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SCBasicController.h"
 
 @class UserReservationM;
-@interface CustomPIMController : UIViewController
+@interface CustomPIMController : SCBasicController
 @property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, strong) UserReservationM *userInfoM;
 

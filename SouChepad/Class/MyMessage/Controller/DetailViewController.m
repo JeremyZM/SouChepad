@@ -21,7 +21,7 @@
 {
     [super viewDidAppear:animated];
 //    [self.navigationController.navigationBar setFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
-    [self.navigationController.navigationBar setBarTintColor:[UIColor redColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor hexStringToColor:KBaseColo]];
 }
 
 - (void)setMessageM:(MyMessage *)messageM

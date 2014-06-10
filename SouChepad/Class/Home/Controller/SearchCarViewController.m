@@ -14,7 +14,7 @@
 @interface SearchCarViewController () <UICollectionViewDataSource,UICollectionViewDelegate,LimitSearchViewDelegate>
 {
     UICollectionView *_collectionView;
-    UIToolbar *_headview;
+//    UIToolbar *_headview;
     
     CGFloat contentOffsetY;
     
@@ -49,7 +49,7 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)limitSearch:(LimitSearchView *)limitSearchView withDic:(NSDictionary *)searchDic
 {
-    if (_headview == nil) {
+    if (_collectionView == nil) {
         
         [self addHeadToobar];
         [self addCollectionView];
@@ -62,42 +62,42 @@ static NSString *seconCellID = @"seconCell";
 - (void)addHeadToobar
 {
 
-    CGSize size = self.view.frame.size;
-    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
-    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    _headview = toolbar;
-    [self.view insertSubview:toolbar belowSubview:_limitView];
+//    CGSize size = self.view.frame.size;
+//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
+//    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+//    _headview = toolbar;
+    [self.view insertSubview:self.headBar belowSubview:_limitView];
     
     UILabel *gong = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 20, 20)];
     [gong setText:@"共搜索到车辆"];
     [gong sizeToFit];
-    [toolbar addSubview:gong];
+    [self.headBar addSubview:gong];
     
     UILabel *carNumbar = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(gong.frame)+5, 35, 20, 20)];
     [carNumbar setTextColor:[UIColor redColor]];
     [carNumbar setText:@"28"];
     [carNumbar setFont:[UIFont systemFontOfSize:28]];
     [carNumbar sizeToFit];
-    [toolbar addSubview:carNumbar];
+    [self.headBar addSubview:carNumbar];
     
 
     
     UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(carNumbar.frame)+30, 40, 20, 20)];
     [xian setText:@"显示预售车"];
     [xian sizeToFit];
-    [toolbar addSubview:xian];
+    [self.headBar addSubview:xian];
     
     UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 40, 30)];
     //    [switchPresell setTransform:CGAffineTransformMakeScale(1.2,1.2)];
     //    [switchPresell sizeToFit];
-    [toolbar addSubview:switchPresell];
+    [self.headBar addSubview:switchPresell];
     
     
     
-    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(toolbar.frame.size.width-100, 20, 80, 80)];
+    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.frame.size.width-100, 20, 80, 80)];
     [limitBut setBackgroundColor:[UIColor yellowColor]];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
-    [toolbar addSubview:limitBut];
+    [self.headBar addSubview:limitBut];
     
 }
 
@@ -133,29 +133,29 @@ static NSString *seconCellID = @"seconCell";
     
     newContentOffsetY = scrollView.contentOffset.y;
     
-    CGRect frame = _headview.frame;
+    CGRect frame = self.headBar.frame;
     
     if (scrollView.dragging) {  // 拖拽
         
         
         if ((scrollView.contentOffset.y - contentOffsetY) > 5.0f) {  // 向上拖拽
             
-            if (_headview.frame.origin.y == 0) {
+            if (self.headBar.frame.origin.y == 0) {
             
-                frame.origin.y -= _headview.frame.size.height;
+                frame.origin.y -= self.headBar.frame.size.height;
             }
             
                   } else if ((contentOffsetY - scrollView.contentOffset.y) > 5.0f) {   // 向下拖拽
             
-            if (_headview.frame.origin.y!=0) {
-                frame.origin.y+= _headview.frame.size.height;
+            if (self.headBar.frame.origin.y!=0) {
+                frame.origin.y+= self.headBar.frame.size.height;
             }
             
         }
     }
     [UIView animateWithDuration:0.25 animations:^{
 
-        [_headview setFrame:frame];
+        [self.headBar setFrame:frame];
     } completion:^(BOOL finished) {
         
     }];

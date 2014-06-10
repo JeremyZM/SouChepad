@@ -8,8 +8,9 @@
 
 #import "PopoTableViewController.h"
 
+
 @interface PopoTableViewController ()
-@property (nonatomic, strong) NSArray *array;
+
 @property (nonatomic, strong) NSIndexPath *seleindexPath;
 @end
 
@@ -29,16 +30,21 @@
     [super viewDidLoad];
     [self.tableView setScrollEnabled:NO];
 //    self.tableView
-    if (self.sortWayBtn.tag==101) {
-        self.array = @[@"按姓名排序",@"按到店时间",@"按更新时间"];
-    }else if(self.sortWayBtn.tag==100){
-        self.array = @[@"所有等级",@"H 级",@"C 级",@"O 级"];
-    }else if (self.sortWayBtn.tag == 800){
-        self.array = @[@"官网",@"门店",@"aaaa",@"bbb",@"ccc"];
-    
-    }else if (self.sortWayBtn.tag == 806){
-        self.array = @[@"20-25",@"26-30",@"31-40",@"41-50",@"50+"];
-    }
+//    if (self.sortWayBtn.tag==101) {
+////        self.array = @[@"按到店时间",@"按姓名排序",@"按更新时间"];
+//    }else if(self.sortWayBtn.tag==100){
+//        NSArray *aarray = [NSKeyedUnarchiver unarchiveObjectWithFile:KbuyerStatus];
+//        self.array = [NSMutableArray array];
+//        for (BaseDtaModel *dataM in aarray) {
+//            [self.array addObject:dataM.name];
+//        }
+//        [self.array insertObject:@"所有等级" atIndex:0];
+//    }else if (self.sortWayBtn.tag == 800){
+////        self.array = @[@"官网",@"门店",@"aaaa",@"bbb",@"ccc"];
+//    
+//    }else if (self.sortWayBtn.tag == 806){
+////        self.array = @[@"20-25",@"26-30",@"31-40",@"41-50",@"50+"];
+//    }
 }
 
 

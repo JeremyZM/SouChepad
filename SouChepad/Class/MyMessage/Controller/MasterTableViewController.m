@@ -32,7 +32,7 @@
 
 - (void)navigationset
 {
-    [self.navigationController.navigationBar setBarTintColor:[UIColor redColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor hexStringToColor:KBaseColo]];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
     

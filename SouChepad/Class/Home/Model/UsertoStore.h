@@ -9,13 +9,36 @@
 #import <Foundation/Foundation.h>
 
 @interface UsertoStore : NSObject
-
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *crmUserId;
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *day;
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *phone;
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *sex;
+
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *user;
+
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *updateDay;
+
+/**
+ *  <#Description#>
+ */
 @property (copy, nonatomic) NSString *userLevel;
 
 @end

@@ -6,11 +6,19 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
+#import "SCBasicController.h"
+@class IntentionCarsController;
 @class UserReservationM;
 
-@interface IntentionCarsController : UIViewController
+@protocol IntentionCarsControllerDelegat <NSObject>
+
+- (void)intentionCarsController:(IntentionCarsController *)controller carID:(NSString *)carid;
+
+@end
+
+@interface IntentionCarsController : SCBasicController
 @property (nonatomic, strong) UserReservationM *userReserM;
 @property (nonatomic, assign) BOOL isNew;
+
+@property (nonatomic, weak) id <IntentionCarsControllerDelegat> deleget;
 @end

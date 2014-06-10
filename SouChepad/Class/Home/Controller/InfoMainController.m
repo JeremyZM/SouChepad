@@ -13,9 +13,10 @@
 #import "SearchCarViewController.h"
 #import "UserReservationM.h"
 #import "CommListController.h"
+#import "CarDetailWebView.h"
 
 #define KInfoDockW 100
-@interface InfoMainController () <InfoDockDelegate>
+@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat>
 {
     UIView *_contentView;
 }
@@ -41,7 +42,7 @@
 {
     InfoDock *userInfoDock = [[InfoDock alloc] initWithFrame:CGRectMake(0, 0, KInfoDockW, self.view.frame.size.height)];
     [userInfoDock setDelegate:self];
-    [userInfoDock setBackgroundColor:[UIColor blueColor]];
+    [userInfoDock setBackgroundColor:[UIColor whiteColor]];
     [userInfoDock setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:userInfoDock];
     
@@ -62,6 +63,7 @@
     [self addChildViewController:customPIM];
     
     IntentionCarsController *intentionCarsVC = [[IntentionCarsController alloc] init];
+    [intentionCarsVC setDeleget:self];
     intentionCarsVC.isNew = self.isNew;
     intentionCarsVC.userReserM = self.userInfoM;
     [self addChildViewController:intentionCarsVC];
@@ -98,6 +100,12 @@
     }
 
 }
+
+- (void)intentionCarsController:(IntentionCarsController *)controller carID:(NSString *)carid
+{
+
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -16,7 +16,10 @@
 #import "MessageVC.h"
 #import "MasterTableViewController.h"
 #import "DetailViewController.h"
-
+#import "HttpManager.h"
+#import "KnowledgeVC.h"
+#import "SellInfoVC.h"
+#import "ChangePasswordVC.h"
 
 @interface MainViewController () <SCDockDelegate>
 {
@@ -28,11 +31,21 @@
 
 @implementation MainViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+        
+    [HttpManager getDictionarySuccess:^(id obj) {
+        
+    } fail:^(id obj) {
+        
+    }];
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
+    
     // 1.添加dock栏
     [self addDockView];
     
@@ -44,7 +57,7 @@
 - (void)addDockView
 {
     self.dock = [[SCDock alloc] initWithFrame:CGRectMake(0, 0, KDockW, self.view.bounds.size.height)];
-    [self.dock setBackgroundColor:[UIColor orangeColor]];
+    [self.dock setBackgroundColor:[UIColor hexStringToColor:KBackColo]];
     [self.dock setDelegate:self];
     [self.view addSubview:self.dock];
     [self.dock setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
@@ -87,8 +100,6 @@
 //    MyMessageController *messageVC = [[MyMessageController alloc] init];
 //    [self addChildViewController:messageVC];
 //    UINavigationController *messageNav = [[UINavigationController alloc] initWithRootViewController:messageVC];
-    
-    
     UISplitViewController *messageNav = [[UISplitViewController alloc] init];
     MasterTableViewController *masterCtrl = [[MasterTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
@@ -109,7 +120,25 @@
     UINavigationController *toolNav = [[UINavigationController alloc] initWithRootViewController:toolVC];
     [self addChildViewController:toolNav];
     
+    // 知识话术
+    KnowledgeVC *knowlegeVC = [[KnowledgeVC alloc] init];
+    UINavigationController *knowlegeNav = [[UINavigationController alloc] initWithRootViewController:knowlegeVC];
+    [self addChildViewController:knowlegeNav];
+    
     // 设置
+//    UISplitViewController *settingSplitVC = [[UISplitViewController alloc] init];
+//    SettingViewController *settingVC = [[SettingViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//    
+//    
+//    
+//    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:masterCtrl];
+//    UINavigationController *detailNav = [[UINavigationController alloc] initWithRootViewController:detailCtrl];
+//    [messageNav setViewControllers:@[masterNav,detailNav]];
+//    [self addChildViewController:messageNav];
+
+    
+    
+    
     SettingViewController *settingVC = [[SettingViewController alloc] init];
     UINavigationController *settingNav = [[UINavigationController alloc] initWithRootViewController:settingVC];
     [self addChildViewController:settingNav];

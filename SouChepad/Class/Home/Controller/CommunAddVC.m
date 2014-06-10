@@ -20,8 +20,9 @@
     [super viewDidLoad];
     [self.navigationItem setTitle:@"新增沟通记录"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelRecord:)];
+
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleBordered target:self action:@selector(saveRecord:)];
-    
+
     
     UILabel *shij = [[UILabel alloc] initWithFrame:CGRectMake(20, 20+44, 60, 44)];
     [shij setText:@"时间"];
@@ -42,11 +43,6 @@
     [self.view addSubview:neir];
     
     UITextView *content = [[UITextView alloc] initWithFrame:CGRectMake(timeLabel.frame.origin.x, neir.frame.origin.y, 300, 280)];
-//    [content setDataDetectorTypes:UIDataDetectorTypeAll];
-//    [content setEditable:NO];
-//    [content setAttributedText:[[NSAttributedString alloc]initWithString:@"My phone number is +8602980000000.\r\n"
-//                                "My personal web site www.xxxxxx.com.\r\n"
-//                                "My E-mail address is XXXXX@gmail.com.\r\n""I was born in 1900-01-01."]];
 
     [content.layer setCornerRadius:10];
     [content.layer setBorderColor:[UIColor lightGrayColor].CGColor];

@@ -17,11 +17,12 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     
     DLog(@"%@--%@",[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
     BOOL islog = !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]==nil) && !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD] == nil);
-    if (1) {
+    if (islog) {
 
         // 已经登陆
         MainViewController *mainVC = [[MainViewController alloc] init];
@@ -37,6 +38,7 @@
     [self.window makeKeyAndVisible];
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
