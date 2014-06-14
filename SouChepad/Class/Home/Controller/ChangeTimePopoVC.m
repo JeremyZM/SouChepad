@@ -37,8 +37,11 @@
     NSDateFormatter *formate = [[NSDateFormatter alloc] init];
 //    [formate setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0800"]];
     [formate setDateFormat:@"yyyy-MM-dd"];
-
-    NSDate *nowdate = [formate dateFromString:self.userResM.reservationDate];
+    NSDate *nowdate = [NSDate date];
+    if (self.userResM) {
+       nowdate = [formate dateFromString:self.userResM.reservationDate];
+        
+    }
     [self.datepicker setDate:nowdate];
     [self.datepicker setMinimumDate:nowdate];
     
@@ -56,12 +59,15 @@
     [self.periodPicker setDataSource:self];
     [self.periodPicker setDelegate: self];
     [popoverView addSubview:self.periodPicker];
-    if ([self.userResM.reservationTime isEqualToString:@"morning"]) {
-         [self.periodPicker selectRow:0 inComponent:0 animated:NO];
-    }else if ([self.userResM.reservationTime isEqualToString:@"afternoon"]){
-        [self.periodPicker selectRow:1 inComponent:0 animated:NO];
-    }else if ([self.userResM.reservationTime isEqualToString:@""]){
-        [self.periodPicker selectRow:2 inComponent:0 animated:NO];
+    [self.periodPicker selectRow:0 inComponent:0 animated:NO];
+    if (self.userResM) {
+        if ([self.userResM.reservationTime isEqualToString:@"morning"]) {
+            [self.periodPicker selectRow:0 inComponent:0 animated:NO];
+        }else if ([self.userResM.reservationTime isEqualToString:@"afternoon"]){
+            [self.periodPicker selectRow:1 inComponent:0 animated:NO];
+        }else if ([self.userResM.reservationTime isEqualToString:@"night"]){
+            [self.periodPicker selectRow:2 inComponent:0 animated:NO];
+        }
     }
     perStr = @"上午";
 }

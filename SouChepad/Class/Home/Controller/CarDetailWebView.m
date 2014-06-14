@@ -31,7 +31,7 @@
     [self.headBar addSubview:infoCQI];
     
     
-    UIWebView *carWeb = [[UIWebView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width+80, self.view.bounds.size.height-100)];
+    UIWebView *carWeb = [[UIWebView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100)];
     [carWeb setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:carWeb];
     [carWeb setScalesPageToFit:YES];

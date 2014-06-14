@@ -41,7 +41,6 @@
 		B227B28419334C8700A40EE4 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B227B27719334C8700A40EE4 /* UIImageView+WebCache.m */; };
 		B227B28A1933521D00A40EE4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B227B2891933521C00A40EE4 /* QuartzCore.framework */; };
 		B2459BB2192379A200C3D28B /* SearchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB1192379A200C3D28B /* SearchVC.m */; };
-		B2459BB41924970C00C3D28B /* Empty.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2459BB31924970C00C3D28B /* Empty.xib */; };
 		B2459BB71924A75800C3D28B /* LimitSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB61924A75800C3D28B /* LimitSearchView.m */; };
 		B2459BBA1924AAF200C3D28B /* SearchHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB91924AAF200C3D28B /* SearchHeadView.m */; };
 		B24D56C01917597600D756A5 /* FZInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56BF1917597600D756A5 /* FZInfoView.m */; };
@@ -70,6 +69,23 @@
 		B2542398190E646D00874878 /* CustomerListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2542396190E646D00874878 /* CustomerListCell.xib */; };
 		B254239D190E651B00874878 /* ChangeTimePopoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B254239A190E651B00874878 /* ChangeTimePopoVC.m */; };
 		B254239E190E651B00874878 /* PopoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B254239C190E651B00874878 /* PopoTableViewController.m */; };
+		B2711F29194C489300A65BDF /* A+.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1A194C489300A65BDF /* A+.png */; };
+		B2711F2A194C489300A65BDF /* A.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1B194C489300A65BDF /* A.png */; };
+		B2711F2B194C489300A65BDF /* B+.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1C194C489300A65BDF /* B+.png */; };
+		B2711F2C194C489300A65BDF /* B.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1D194C489300A65BDF /* B.png */; };
+		B2711F2D194C489300A65BDF /* C+.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1E194C489300A65BDF /* C+.png */; };
+		B2711F2E194C489300A65BDF /* C.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1F194C489300A65BDF /* C.png */; };
+		B2711F2F194C489300A65BDF /* outOfPrint.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F20194C489300A65BDF /* outOfPrint.png */; };
+		B2711F30194C489300A65BDF /* presell.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F21194C489300A65BDF /* presell.png */; };
+		B2711F31194C489300A65BDF /* SoldCar.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F22194C489300A65BDF /* SoldCar.png */; };
+		B2711F32194C489300A65BDF /* timeDownPrice.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F23194C489300A65BDF /* timeDownPrice.png */; };
+		B2711F33194C489300A65BDF /* 标准车辆卡片小图标_13.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F24194C489300A65BDF /* 标准车辆卡片小图标_13.png */; };
+		B2711F34194C489300A65BDF /* 标准车辆卡片小图标_14.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F25194C489300A65BDF /* 标准车辆卡片小图标_14.png */; };
+		B2711F35194C489300A65BDF /* 标准车辆卡片小图标_17.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F26194C489300A65BDF /* 标准车辆卡片小图标_17.png */; };
+		B2711F36194C489300A65BDF /* 标准车辆卡片小图标_18.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F27194C489300A65BDF /* 标准车辆卡片小图标_18.png */; };
+		B2711F37194C489300A65BDF /* 标准车辆卡片小图标_20.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F28194C489300A65BDF /* 标准车辆卡片小图标_20.png */; };
+		B2711F39194C4C3E00A65BDF /* done_04.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F38194C4C3E00A65BDF /* done_04.png */; };
+		B2711F3C194C999F00A65BDF /* SellInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2711F3B194C999F00A65BDF /* SellInfoModel.m */; };
 		B29335401921C9D300499F31 /* MyMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = B293353F1921C9D300499F31 /* MyMessageController.m */; };
 		B29335461922FD7500499F31 /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335451922FD7500499F31 /* MessageVC.m */; };
 		B29335491922FDBE00499F31 /* MasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335481922FDBE00499F31 /* MasterTableViewController.m */; };
@@ -82,6 +98,16 @@
 		B298AE4F192DBD1A00DCE795 /* MyMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = B298AE4E192DBD1A00DCE795 /* MyMessage.m */; };
 		B298AE51192DC9B200DCE795 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B298AE50192DC9B200DCE795 /* CoreData.framework */; };
 		B298AE54192DCBBD00DCE795 /* MessageModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B298AE52192DCBBD00DCE795 /* MessageModel.xcdatamodeld */; };
+		B29FC18A19484D9E00AAE7E2 /* TTCounterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC18719484D9E00AAE7E2 /* TTCounterLabel.m */; };
+		B29FC18B19484D9E00AAE7E2 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC18919484D9E00AAE7E2 /* TTTAttributedLabel.m */; };
+		B29FC1D91949B1E700AAE7E2 /* UserVOModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC1D81949B1E700AAE7E2 /* UserVOModel.m */; };
+		B29FC1DC1949B55F00AAE7E2 /* UserExtendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC1DB1949B55F00AAE7E2 /* UserExtendModel.m */; };
+		B29FC260194AE49E00AAE7E2 /* TradeCarInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC25F194AE49E00AAE7E2 /* TradeCarInfoModel.m */; };
+		B29FC263194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC262194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.m */; };
+		B29FC266194AEB9200AAE7E2 /* TradeCarInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC265194AEB9200AAE7E2 /* TradeCarInfoCell.m */; };
+		B29FC26A194AEBB900AAE7E2 /* TradeCarInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B29FC269194AEBB900AAE7E2 /* TradeCarInfoCell.xib */; };
+		B29FC26F194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC26E194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.m */; };
+		B29FC271194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B29FC270194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib */; };
 		B2A78837191885E500AE55BC /* FuZhuInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A78836191885E500AE55BC /* FuZhuInfoView.m */; };
 		B2A7883D191A173000AE55BC /* CommListController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A7883C191A173000AE55BC /* CommListController.m */; };
 		B2A78840191A270D00AE55BC /* CommunListM.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A7883F191A270D00AE55BC /* CommunListM.m */; };
@@ -96,10 +122,6 @@
 		B2B2977D19349A6A000AF928 /* NSData+MD5Digest.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B2977819349A6A000AF928 /* NSData+MD5Digest.m */; };
 		B2B2977E19349A6A000AF928 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B2977A19349A6A000AF928 /* NSString+MD5.m */; };
 		B2B2977F19349A6A000AF928 /* NSString+val.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B2977C19349A6A000AF928 /* NSString+val.m */; };
-		B2C6FDE01920CCAC00C80400 /* seconCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C6FDDE1920CCAC00C80400 /* seconCell.m */; };
-		B2C6FDE31921ADFD00C80400 /* TradesCarM.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C6FDE21921ADFD00C80400 /* TradesCarM.m */; };
-		B2C6FDE61921AE1800C80400 /* LookCarM.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C6FDE51921AE1800C80400 /* LookCarM.m */; };
-		B2C6FDE91921AE3E00C80400 /* DriveCarM.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C6FDE81921AE3E00C80400 /* DriveCarM.m */; };
 		B2DDFE92190BB3F000A71A4F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2DDFE91190BB3F000A71A4F /* Foundation.framework */; };
 		B2DDFE94190BB3F000A71A4F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2DDFE93190BB3F000A71A4F /* CoreGraphics.framework */; };
 		B2DDFE96190BB3F000A71A4F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2DDFE95190BB3F000A71A4F /* UIKit.framework */; };
@@ -278,7 +300,6 @@
 		B227B2891933521C00A40EE4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B2459BB0192379A200C3D28B /* SearchVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchVC.h; sourceTree = "<group>"; };
 		B2459BB1192379A200C3D28B /* SearchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchVC.m; sourceTree = "<group>"; };
-		B2459BB31924970C00C3D28B /* Empty.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Empty.xib; sourceTree = "<group>"; };
 		B2459BB51924A75800C3D28B /* LimitSearchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitSearchView.h; sourceTree = "<group>"; };
 		B2459BB61924A75800C3D28B /* LimitSearchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitSearchView.m; sourceTree = "<group>"; };
 		B2459BB81924AAF200C3D28B /* SearchHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchHeadView.h; sourceTree = "<group>"; };
@@ -332,6 +353,24 @@
 		B254239A190E651B00874878 /* ChangeTimePopoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeTimePopoVC.m; sourceTree = "<group>"; };
 		B254239B190E651B00874878 /* PopoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoTableViewController.h; sourceTree = "<group>"; };
 		B254239C190E651B00874878 /* PopoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoTableViewController.m; sourceTree = "<group>"; };
+		B2711F1A194C489300A65BDF /* A+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+.png"; sourceTree = "<group>"; };
+		B2711F1B194C489300A65BDF /* A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = A.png; sourceTree = "<group>"; };
+		B2711F1C194C489300A65BDF /* B+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "B+.png"; sourceTree = "<group>"; };
+		B2711F1D194C489300A65BDF /* B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = B.png; sourceTree = "<group>"; };
+		B2711F1E194C489300A65BDF /* C+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "C+.png"; sourceTree = "<group>"; };
+		B2711F1F194C489300A65BDF /* C.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = C.png; sourceTree = "<group>"; };
+		B2711F20194C489300A65BDF /* outOfPrint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outOfPrint.png; sourceTree = "<group>"; };
+		B2711F21194C489300A65BDF /* presell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = presell.png; sourceTree = "<group>"; };
+		B2711F22194C489300A65BDF /* SoldCar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SoldCar.png; sourceTree = "<group>"; };
+		B2711F23194C489300A65BDF /* timeDownPrice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timeDownPrice.png; sourceTree = "<group>"; };
+		B2711F24194C489300A65BDF /* 标准车辆卡片小图标_13.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "标准车辆卡片小图标_13.png"; sourceTree = "<group>"; };
+		B2711F25194C489300A65BDF /* 标准车辆卡片小图标_14.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "标准车辆卡片小图标_14.png"; sourceTree = "<group>"; };
+		B2711F26194C489300A65BDF /* 标准车辆卡片小图标_17.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "标准车辆卡片小图标_17.png"; sourceTree = "<group>"; };
+		B2711F27194C489300A65BDF /* 标准车辆卡片小图标_18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "标准车辆卡片小图标_18.png"; sourceTree = "<group>"; };
+		B2711F28194C489300A65BDF /* 标准车辆卡片小图标_20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "标准车辆卡片小图标_20.png"; sourceTree = "<group>"; };
+		B2711F38194C4C3E00A65BDF /* done_04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = done_04.png; sourceTree = "<group>"; };
+		B2711F3A194C999F00A65BDF /* SellInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SellInfoModel.h; sourceTree = "<group>"; };
+		B2711F3B194C999F00A65BDF /* SellInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SellInfoModel.m; sourceTree = "<group>"; };
 		B293353E1921C9D300499F31 /* MyMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageController.h; sourceTree = "<group>"; };
 		B293353F1921C9D300499F31 /* MyMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessageController.m; sourceTree = "<group>"; };
 		B29335441922FD7500499F31 /* MessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageVC.h; sourceTree = "<group>"; };
@@ -354,6 +393,24 @@
 		B298AE4E192DBD1A00DCE795 /* MyMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessage.m; sourceTree = "<group>"; };
 		B298AE50192DC9B200DCE795 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B298AE53192DCBBD00DCE795 /* MessageModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MessageModel.xcdatamodel; sourceTree = "<group>"; };
+		B29FC18619484D9E00AAE7E2 /* TTCounterLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCounterLabel.h; sourceTree = "<group>"; };
+		B29FC18719484D9E00AAE7E2 /* TTCounterLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCounterLabel.m; sourceTree = "<group>"; };
+		B29FC18819484D9E00AAE7E2 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
+		B29FC18919484D9E00AAE7E2 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		B29FC1D71949B1E700AAE7E2 /* UserVOModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVOModel.h; sourceTree = "<group>"; };
+		B29FC1D81949B1E700AAE7E2 /* UserVOModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVOModel.m; sourceTree = "<group>"; };
+		B29FC1DA1949B55F00AAE7E2 /* UserExtendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserExtendModel.h; sourceTree = "<group>"; };
+		B29FC1DB1949B55F00AAE7E2 /* UserExtendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserExtendModel.m; sourceTree = "<group>"; };
+		B29FC25E194AE49E00AAE7E2 /* TradeCarInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TradeCarInfoModel.h; sourceTree = "<group>"; };
+		B29FC25F194AE49E00AAE7E2 /* TradeCarInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TradeCarInfoModel.m; sourceTree = "<group>"; };
+		B29FC261194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookOrDriveCarInfoModel.h; sourceTree = "<group>"; };
+		B29FC262194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookOrDriveCarInfoModel.m; sourceTree = "<group>"; };
+		B29FC264194AEB9200AAE7E2 /* TradeCarInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TradeCarInfoCell.h; sourceTree = "<group>"; };
+		B29FC265194AEB9200AAE7E2 /* TradeCarInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TradeCarInfoCell.m; sourceTree = "<group>"; };
+		B29FC269194AEBB900AAE7E2 /* TradeCarInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TradeCarInfoCell.xib; sourceTree = "<group>"; };
+		B29FC26D194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookOrDriveCarInfoCell.h; sourceTree = "<group>"; };
+		B29FC26E194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookOrDriveCarInfoCell.m; sourceTree = "<group>"; };
+		B29FC270194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LookOrDriveCarInfoCell.xib; sourceTree = "<group>"; };
 		B2A78835191885E500AE55BC /* FuZhuInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuZhuInfoView.h; sourceTree = "<group>"; };
 		B2A78836191885E500AE55BC /* FuZhuInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuZhuInfoView.m; sourceTree = "<group>"; };
 		B2A7883B191A173000AE55BC /* CommListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommListController.h; sourceTree = "<group>"; };
@@ -380,14 +437,6 @@
 		B2B2977A19349A6A000AF928 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		B2B2977B19349A6A000AF928 /* NSString+val.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+val.h"; sourceTree = "<group>"; };
 		B2B2977C19349A6A000AF928 /* NSString+val.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+val.m"; sourceTree = "<group>"; };
-		B2C6FDDD1920CCAC00C80400 /* seconCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = seconCell.h; sourceTree = "<group>"; };
-		B2C6FDDE1920CCAC00C80400 /* seconCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = seconCell.m; sourceTree = "<group>"; };
-		B2C6FDE11921ADFD00C80400 /* TradesCarM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TradesCarM.h; sourceTree = "<group>"; };
-		B2C6FDE21921ADFD00C80400 /* TradesCarM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TradesCarM.m; sourceTree = "<group>"; };
-		B2C6FDE41921AE1800C80400 /* LookCarM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookCarM.h; sourceTree = "<group>"; };
-		B2C6FDE51921AE1800C80400 /* LookCarM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookCarM.m; sourceTree = "<group>"; };
-		B2C6FDE71921AE3E00C80400 /* DriveCarM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DriveCarM.h; sourceTree = "<group>"; };
-		B2C6FDE81921AE3E00C80400 /* DriveCarM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DriveCarM.m; sourceTree = "<group>"; };
 		B2DDFE8E190BB3F000A71A4F /* SouChepad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SouChepad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2DDFE91190BB3F000A71A4F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B2DDFE93190BB3F000A71A4F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -644,13 +693,18 @@
 		B24D56B719173C3600D756A5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B2711F19194C489300A65BDF /* images */,
 				B2F18632194071B100AEF90E /* CollectCarCell.h */,
 				B2F18633194071B100AEF90E /* CollectCarCell.m */,
 				B2F18635194071DF00AEF90E /* CollectCarCell.xib */,
+				B29FC264194AEB9200AAE7E2 /* TradeCarInfoCell.h */,
+				B29FC265194AEB9200AAE7E2 /* TradeCarInfoCell.m */,
+				B29FC269194AEBB900AAE7E2 /* TradeCarInfoCell.xib */,
+				B29FC26D194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.h */,
+				B29FC26E194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.m */,
+				B29FC270194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib */,
 				B2227602194479DC00FD2A2C /* CollectHeadView.h */,
 				B2227603194479DC00FD2A2C /* CollectHeadView.m */,
-				B2C6FDDD1920CCAC00C80400 /* seconCell.h */,
-				B2C6FDDE1920CCAC00C80400 /* seconCell.m */,
 				B24D56BE1917597600D756A5 /* FZInfoView.h */,
 				B24D56BF1917597600D756A5 /* FZInfoView.m */,
 				B2A78835191885E500AE55BC /* FuZhuInfoView.h */,
@@ -723,6 +777,29 @@
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
+		B2711F19194C489300A65BDF /* images */ = {
+			isa = PBXGroup;
+			children = (
+				B2711F38194C4C3E00A65BDF /* done_04.png */,
+				B2711F1A194C489300A65BDF /* A+.png */,
+				B2711F1B194C489300A65BDF /* A.png */,
+				B2711F1C194C489300A65BDF /* B+.png */,
+				B2711F1D194C489300A65BDF /* B.png */,
+				B2711F1E194C489300A65BDF /* C+.png */,
+				B2711F1F194C489300A65BDF /* C.png */,
+				B2711F20194C489300A65BDF /* outOfPrint.png */,
+				B2711F21194C489300A65BDF /* presell.png */,
+				B2711F22194C489300A65BDF /* SoldCar.png */,
+				B2711F23194C489300A65BDF /* timeDownPrice.png */,
+				B2711F24194C489300A65BDF /* 标准车辆卡片小图标_13.png */,
+				B2711F25194C489300A65BDF /* 标准车辆卡片小图标_14.png */,
+				B2711F26194C489300A65BDF /* 标准车辆卡片小图标_17.png */,
+				B2711F27194C489300A65BDF /* 标准车辆卡片小图标_18.png */,
+				B2711F28194C489300A65BDF /* 标准车辆卡片小图标_20.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		B293353A1921C90D00499F31 /* MyMessage */ = {
 			isa = PBXGroup;
 			children = (
@@ -782,6 +859,17 @@
 				B298AE3E192D91DB00DCE795 /* MJRefreshHeaderView.m */,
 			);
 			path = MJRefresh;
+			sourceTree = "<group>";
+		};
+		B29FC18519484D9E00AAE7E2 /* TTCounterLabel */ = {
+			isa = PBXGroup;
+			children = (
+				B29FC18619484D9E00AAE7E2 /* TTCounterLabel.h */,
+				B29FC18719484D9E00AAE7E2 /* TTCounterLabel.m */,
+				B29FC18819484D9E00AAE7E2 /* TTTAttributedLabel.h */,
+				B29FC18919484D9E00AAE7E2 /* TTTAttributedLabel.m */,
+			);
+			path = TTCounterLabel;
 			sourceTree = "<group>";
 		};
 		B2A78853191B326400AE55BC /* SubVC */ = {
@@ -956,16 +1044,20 @@
 				B2542375190E5A6A00874878 /* UsertoStore.m */,
 				B2A7883E191A270D00AE55BC /* CommunListM.h */,
 				B2A7883F191A270D00AE55BC /* CommunListM.m */,
-				B2C6FDE11921ADFD00C80400 /* TradesCarM.h */,
-				B2C6FDE21921ADFD00C80400 /* TradesCarM.m */,
-				B2C6FDE41921AE1800C80400 /* LookCarM.h */,
-				B2C6FDE51921AE1800C80400 /* LookCarM.m */,
-				B2C6FDE71921AE3E00C80400 /* DriveCarM.h */,
-				B2C6FDE81921AE3E00C80400 /* DriveCarM.m */,
 				B2F1862F1940620300AEF90E /* CarBaseModel.h */,
 				B2F186301940620300AEF90E /* CarBaseModel.m */,
+				B29FC261194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.h */,
+				B29FC262194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.m */,
+				B29FC25E194AE49E00AAE7E2 /* TradeCarInfoModel.h */,
+				B29FC25F194AE49E00AAE7E2 /* TradeCarInfoModel.m */,
 				B20CEEC31946B58C00A893E1 /* SearchUserM.h */,
 				B20CEEC41946B58C00A893E1 /* SearchUserM.m */,
+				B29FC1D71949B1E700AAE7E2 /* UserVOModel.h */,
+				B29FC1D81949B1E700AAE7E2 /* UserVOModel.m */,
+				B29FC1DA1949B55F00AAE7E2 /* UserExtendModel.h */,
+				B29FC1DB1949B55F00AAE7E2 /* UserExtendModel.m */,
+				B2711F3A194C999F00A65BDF /* SellInfoModel.h */,
+				B2711F3B194C999F00A65BDF /* SellInfoModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1129,6 +1221,7 @@
 		B2DDFED3190BB62000A71A4F /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				B29FC18519484D9E00AAE7E2 /* TTCounterLabel */,
 				B2B2977619349A6A000AF928 /* NSData+MD5Digest */,
 				B2B2976C19348BF9000AF928 /* JDStatusBarNotification */,
 				B227B2501933491C00A40EE4 /* SDWebImage-Category */,
@@ -1279,7 +1372,6 @@
 				B2DDFF99190D4BF000A71A4F /* IntentionCarsController.m */,
 				B2DDFF9B190D4C7D00A71A4F /* SearchCarViewController.h */,
 				B2DDFF9C190D4C7D00A71A4F /* SearchCarViewController.m */,
-				B2459BB31924970C00C3D28B /* Empty.xib */,
 				B2A78853191B326400AE55BC /* SubVC */,
 			);
 			name = DetailVC;
@@ -1437,40 +1529,52 @@
 				B2F18619193F1E6400AEF90E /* tubiao_40.png in Resources */,
 				B2F18613193F1E6400AEF90E /* tubiao_33.png in Resources */,
 				B2F18610193F1E6400AEF90E /* tubiao_30.png in Resources */,
+				B2711F29194C489300A65BDF /* A+.png in Resources */,
 				B2F1860A193F1E6400AEF90E /* tubiao_23.png in Resources */,
 				B2A78852191B1FAF00AE55BC /* CommHeadView.xib in Resources */,
 				B24D56CC1917920900D756A5 /* KeyboardTool.xib in Resources */,
 				B2542364190E0C4F00874878 /* HUDCheckmark.png in Resources */,
 				B2F1861D193F1E6400AEF90E /* tubiao_44.png in Resources */,
+				B2711F2D194C489300A65BDF /* C+.png in Resources */,
 				B2F18617193F1E6400AEF90E /* tubiao_38.png in Resources */,
 				B2F18620193F1E6400AEF90E /* tubiao_47.png in Resources */,
 				B2F18626193F1E6400AEF90E /* tubiao_54.png in Resources */,
+				B2711F39194C4C3E00A65BDF /* done_04.png in Resources */,
 				B2F185F8193F1E6400AEF90E /* tubiao_04.png in Resources */,
+				B2711F36194C489300A65BDF /* 标准车辆卡片小图标_18.png in Resources */,
 				B2F1860E193F1E6400AEF90E /* tubiao_28.png in Resources */,
 				B2DDFE9C190BB3F000A71A4F /* InfoPlist.strings in Resources */,
+				B2711F32194C489300A65BDF /* timeDownPrice.png in Resources */,
 				B2F18614193F1E6400AEF90E /* tubiao_35.png in Resources */,
 				B2F185F7193F1E6400AEF90E /* tubiao_03.png in Resources */,
 				B2F185FB193F1E6400AEF90E /* tubiao_07.png in Resources */,
+				B2711F30194C489300A65BDF /* presell.png in Resources */,
 				B2F18609193F1E6400AEF90E /* tubiao_22.png in Resources */,
 				B2F185FC193F1E6400AEF90E /* tubiao_08.png in Resources */,
 				B2F1862B193F1E9000AEF90E /* denglu2.png in Resources */,
 				B20CEEB31945CA9E00A893E1 /* loading_03.png in Resources */,
+				B2711F2C194C489300A65BDF /* B.png in Resources */,
 				B2F18623193F1E6400AEF90E /* tubiao_50.png in Resources */,
 				B2F18612193F1E6400AEF90E /* tubiao_32.png in Resources */,
 				B2542398190E646D00874878 /* CustomerListCell.xib in Resources */,
 				B2F18600193F1E6400AEF90E /* tubiao_13.png in Resources */,
 				B2F1861F193F1E6400AEF90E /* tubiao_46.png in Resources */,
+				B29FC26A194AEBB900AAE7E2 /* TradeCarInfoCell.xib in Resources */,
 				B2F18608193F1E6400AEF90E /* tubiao_21.png in Resources */,
 				B2F1862E193F2CC300AEF90E /* dengluanniu1_60.png in Resources */,
 				B2F18615193F1E6400AEF90E /* tubiao_36.png in Resources */,
 				B2F185C3193EE68A00AEF90E /* log_logohigth.png in Resources */,
+				B2711F2B194C489300A65BDF /* B+.png in Resources */,
 				B227B2591933491C00A40EE4 /* remind_noimage@2x.png in Resources */,
+				B2711F33194C489300A65BDF /* 标准车辆卡片小图标_13.png in Resources */,
 				B2F18621193F1E6400AEF90E /* tubiao_48.png in Resources */,
 				B2F185FA193F1E6400AEF90E /* tubiao_06.png in Resources */,
 				B2F18618193F1E6400AEF90E /* tubiao_39.png in Resources */,
 				B2F18606193F1E6400AEF90E /* tubiao_19.png in Resources */,
 				B20CEED11946FE6500A893E1 /* SearchNewUserCell.xib in Resources */,
+				B2711F2E194C489300A65BDF /* C.png in Resources */,
 				B2F1861E193F1E6400AEF90E /* tubiao_45.png in Resources */,
+				B2711F2A194C489300A65BDF /* A.png in Resources */,
 				B2F18602193F1E6400AEF90E /* tubiao_15.png in Resources */,
 				B2F185FF193F1E6400AEF90E /* tubiao_12.png in Resources */,
 				B2F1861B193F1E6400AEF90E /* tubiao_42.png in Resources */,
@@ -1479,11 +1583,12 @@
 				B2F1860D193F1E6400AEF90E /* tubiao_27.png in Resources */,
 				B2F1860C193F1E6400AEF90E /* tubiao_26.png in Resources */,
 				B2F18603193F1E6400AEF90E /* tubiao_16.png in Resources */,
+				B2711F35194C489300A65BDF /* 标准车辆卡片小图标_17.png in Resources */,
 				B298AE3F192D91DB00DCE795 /* MJRefresh.bundle in Resources */,
+				B2711F34194C489300A65BDF /* 标准车辆卡片小图标_14.png in Resources */,
 				B2DDFEA4190BB3F000A71A4F /* Images.xcassets in Resources */,
 				B227B2581933491C00A40EE4 /* remind_noimage.png in Resources */,
 				B2F1861A193F1E6400AEF90E /* tubiao_41.png in Resources */,
-				B2459BB41924970C00C3D28B /* Empty.xib in Resources */,
 				B2F18628193F1E6400AEF90E /* tubiao_56.png in Resources */,
 				B2F1860B193F1E6400AEF90E /* tubiao_25.png in Resources */,
 				B2F18624193F1E6400AEF90E /* tubiao_51.png in Resources */,
@@ -1495,16 +1600,20 @@
 				B2F18601193F1E6400AEF90E /* tubiao_14.png in Resources */,
 				B2542366190E0C4F00874878 /* hudError@2x.png in Resources */,
 				B2F18611193F1E6400AEF90E /* tubiao_31.png in Resources */,
+				B2711F2F194C489300A65BDF /* outOfPrint.png in Resources */,
 				B2F185F9193F1E6400AEF90E /* tubiao_05.png in Resources */,
 				B2F18607193F1E6400AEF90E /* tubiao_20.png in Resources */,
 				B2F185FE193F1E6400AEF90E /* tubiao_11.png in Resources */,
 				B2F18604193F1E6400AEF90E /* tubiao_17.png in Resources */,
 				B2A7884D191A29D800AE55BC /* CommunCell.xib in Resources */,
+				B2711F31194C489300A65BDF /* SoldCar.png in Resources */,
 				B2F18627193F1E6400AEF90E /* tubiao_55.png in Resources */,
 				B2F18616193F1E6400AEF90E /* tubiao_37.png in Resources */,
 				B2F18605193F1E6400AEF90E /* tubiao_18.png in Resources */,
 				B2F185C2193EE68A00AEF90E /* log_logo.png in Resources */,
 				B2F18636194071DF00AEF90E /* CollectCarCell.xib in Resources */,
+				B29FC271194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib in Resources */,
+				B2711F37194C489300A65BDF /* 标准车辆卡片小图标_20.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1528,16 +1637,18 @@
 				B24D56C01917597600D756A5 /* FZInfoView.m in Sources */,
 				B254238D190E5C9400874878 /* MJMember.m in Sources */,
 				B254238E190E5C9400874878 /* MJMethod.m in Sources */,
-				B2C6FDE91921AE3E00C80400 /* DriveCarM.m in Sources */,
 				B2DDFF78190C1C7000A71A4F /* MKNetworkOperation.m in Sources */,
 				B227B27819334C8700A40EE4 /* NSData+GIF.m in Sources */,
 				B2A7883D191A173000AE55BC /* CommListController.m in Sources */,
 				B29335461922FD7500499F31 /* MessageVC.m in Sources */,
 				B227B25B1933491C00A40EE4 /* UIImageView+LK.m in Sources */,
+				B29FC1DC1949B55F00AAE7E2 /* UserExtendModel.m in Sources */,
 				B2DDFEE1190BB6C100A71A4F /* LogInViewController.m in Sources */,
 				B227B27C19334C8700A40EE4 /* SDWebImageDecoder.m in Sources */,
+				B29FC1D91949B1E700AAE7E2 /* UserVOModel.m in Sources */,
 				B2DDFF9A190D4BF000A71A4F /* IntentionCarsController.m in Sources */,
 				B2DDFF90190C291F00A71A4F /* MBProgressHUD.m in Sources */,
+				B29FC18A19484D9E00AAE7E2 /* TTCounterLabel.m in Sources */,
 				B2DDFF88190C1DB200A71A4F /* HttpService.m in Sources */,
 				B2DDFEF3190BB90400A71A4F /* SCDockItem.m in Sources */,
 				B2DDFF74190C1C7000A71A4F /* NSString+MKNetworkKitAdditions.m in Sources */,
@@ -1556,6 +1667,7 @@
 				B20CEED01946FE6500A893E1 /* SearchNewUserCell.m in Sources */,
 				B2459BBA1924AAF200C3D28B /* SearchHeadView.m in Sources */,
 				B2DDFF73190C1C7000A71A4F /* NSDictionary+RequestEncoding.m in Sources */,
+				B29FC263194AE9A900AAE7E2 /* LookOrDriveCarInfoModel.m in Sources */,
 				B298AE4F192DBD1A00DCE795 /* MyMessage.m in Sources */,
 				B2DDFF75190C1C7000A71A4F /* UIAlertView+MKNetworkKitAdditions.m in Sources */,
 				B254239E190E651B00874878 /* PopoTableViewController.m in Sources */,
@@ -1569,6 +1681,7 @@
 				B24D56C619178B4100D756A5 /* FZPopoTableController.m in Sources */,
 				B298AE54192DCBBD00DCE795 /* MessageModel.xcdatamodeld in Sources */,
 				B2542367190E0C4F00874878 /* SCHudManager.m in Sources */,
+				B29FC260194AE49E00AAE7E2 /* TradeCarInfoModel.m in Sources */,
 				B2B2977D19349A6A000AF928 /* NSData+MD5Digest.m in Sources */,
 				B2DDFEED190BB78B00A71A4F /* ToolViewController.m in Sources */,
 				B2F185B7193EBFDB00AEF90E /* SCTextfield.m in Sources */,
@@ -1579,6 +1692,7 @@
 				B24D56CB1917920900D756A5 /* KeyboardTool.m in Sources */,
 				B298AE40192D91DB00DCE795 /* MJRefreshBaseView.m in Sources */,
 				B20CEEBC1945D07A00A893E1 /* SettingViewController.m in Sources */,
+				B29FC18B19484D9E00AAE7E2 /* TTTAttributedLabel.m in Sources */,
 				B298AE41192D91DB00DCE795 /* MJRefreshConst.m in Sources */,
 				B2DDFF9D190D4C7D00A71A4F /* SearchCarViewController.m in Sources */,
 				B2F186311940620300AEF90E /* CarBaseModel.m in Sources */,
@@ -1592,9 +1706,10 @@
 				B227B28219334C8700A40EE4 /* UIImage+GIF.m in Sources */,
 				B2F18634194071B100AEF90E /* CollectCarCell.m in Sources */,
 				B20CEEC51946B58C00A893E1 /* SearchUserM.m in Sources */,
+				B29FC266194AEB9200AAE7E2 /* TradeCarInfoCell.m in Sources */,
 				B2542390190E5C9400874878 /* MJTypeEncoding.m in Sources */,
 				B2B2977319348BF9000AF928 /* JDStatusBarNotification.m in Sources */,
-				B2C6FDE61921AE1800C80400 /* LookCarM.m in Sources */,
+				B2711F3C194C999F00A65BDF /* SellInfoModel.m in Sources */,
 				B298AE42192D91DB00DCE795 /* MJRefreshFooterView.m in Sources */,
 				B2542392190E5C9400874878 /* NSObject+MJKeyValue.m in Sources */,
 				B227B28019334C8700A40EE4 /* SDWebImagePrefetcher.m in Sources */,
@@ -1602,6 +1717,7 @@
 				B2459BB71924A75800C3D28B /* LimitSearchView.m in Sources */,
 				B254236D190E139200874878 /* ProgressHUD.m in Sources */,
 				B227B25A1933491C00A40EE4 /* THProgressView.m in Sources */,
+				B29FC26F194AF99C00AAE7E2 /* LookOrDriveCarInfoCell.m in Sources */,
 				B227B28319334C8700A40EE4 /* UIImage+MultiFormat.m in Sources */,
 				B29335491922FDBE00499F31 /* MasterTableViewController.m in Sources */,
 				B227B28419334C8700A40EE4 /* UIImageView+WebCache.m in Sources */,
@@ -1614,7 +1730,6 @@
 				B2542393190E5C9400874878 /* NSObject+MJMember.m in Sources */,
 				B22503781929F8C9007018B0 /* SCBasicController.m in Sources */,
 				B2DDFEE4190BB70B00A71A4F /* HomeViewController.m in Sources */,
-				B2C6FDE01920CCAC00C80400 /* seconCell.m in Sources */,
 				B2542397190E646D00874878 /* CustomerListCell.m in Sources */,
 				B2DDFF93190D49A200A71A4F /* InfoMainController.m in Sources */,
 				B2DDFE9E190BB3F000A71A4F /* main.m in Sources */,
@@ -1624,7 +1739,6 @@
 				B254239D190E651B00874878 /* ChangeTimePopoVC.m in Sources */,
 				B24D56C319176F7400D756A5 /* JBInfoView.m in Sources */,
 				B2A7885C191B42D200AE55BC /* CommunAddVC.m in Sources */,
-				B2C6FDE31921ADFD00C80400 /* TradesCarM.m in Sources */,
 				B20CEEC21945DAF300A893E1 /* CarDetailWebView.m in Sources */,
 				B2DDFFA0190D4D3D00A71A4F /* InfoDock.m in Sources */,
 				B2DDFF72190C1C7000A71A4F /* NSDate+RFC1123.m in Sources */,

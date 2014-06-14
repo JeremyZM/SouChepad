@@ -1,14 +1,15 @@
 //
-//  LookCarM.h
+//  LookOrDriveCarInfoModel.h
 //  SouChepad
 //
-//  Created by 张艳东 on 14-5-13.
+//  Created by 张艳东 on 14-6-13.
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
 #import "CarBaseModel.h"
 
-@interface LookCarM : CarBaseModel
+@interface LookOrDriveCarInfoModel : CarBaseModel
+
 /** 看车试驾id */
 @property (copy, nonatomic) NSString *driveAndLookId;
 
@@ -41,7 +42,6 @@
 
 /** 试驾时间 */
 @property (copy, nonatomic) NSString *driveTime;
-
 
 /** 看车开始时间 */
 @property (copy, nonatomic) NSString *lookBeginTime;

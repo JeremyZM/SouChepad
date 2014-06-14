@@ -34,6 +34,8 @@
 
     NSArray *seleckArray;
     
+    UIButton *icon;
+    
 }
 
 @property (nonatomic, strong) UIPopoverController *timePopoVC;
@@ -51,7 +53,7 @@ static NSString *CellIdentifier = @"cellID";
             dataDic = [NSDictionary dictionaryWithDictionary:obj];
             userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
             usertoStoreArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"usertostore"]];
-//            [self addTableView];
+            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
             [table reloadData];
         }
         
@@ -73,14 +75,13 @@ static NSString *CellIdentifier = @"cellID";
 - (void)addHeadUI
 {
     
-    UIButton *icon = [UIButton buttonWithType:UIButtonTypeCustom];
+    icon = [UIButton buttonWithType:UIButtonTypeCustom];
     [icon setImage:[UIImage imageNamed:@"tubiao_36"] forState:UIControlStateNormal];
     [icon.titleLabel setFont:KBoldFont18];
     icon.titleEdgeInsets = UIEdgeInsetsMake(0, 18, 0, 0);
     [icon setFrame:CGRectMake(30, 30, 140, 40)];
-//    [icon setBackgroundColor:[UIColor blueColor]];
     [icon addTarget:self action:@selector(iconShowDock) forControlEvents:UIControlEventTouchUpInside];
-    [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forState:UIControlStateNormal];
+    [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
     [self.headBar addSubview:icon];
     
     
@@ -215,7 +216,14 @@ static NSString *CellIdentifier = @"cellID";
     if (selecBtn.tag==nameBtnTag) {
         nameSelectRow = row;
         _namSeleckStr = seleckStr;
-        usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"day" ascending:YES];
+        if (row==0) {
+            
+            usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"day" ascending:NO];
+        }else if (row == 1){
+            usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"updateDay" ascending:NO];
+        }else {
+            usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"user" ascending:NO];
+        }
         
     } else if (selecBtn.tag==ratBtnTag) {//按等级筛选
         ratselectRow = row;
@@ -229,8 +237,6 @@ static NSString *CellIdentifier = @"cellID";
     }
 
     [table reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-
-//    [selecBtn setTitle:seleckStr forState:UIControlStateNormal];
     [popoVC dismissPopoverAnimated:YES];
 }
 
@@ -246,7 +252,7 @@ static NSString *CellIdentifier = @"cellID";
 
 // 排序
 - (NSMutableArray*) changeArray:(NSMutableArray *)dicArray orderWithKey:(NSString *)key ascending:(BOOL)yesOrNo{
-        NSSortDescriptor *distanceDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:yesOrNo];
+        NSSortDescriptor *distanceDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:YES];
     	NSMutableArray *descriptors=[[NSMutableArray alloc]initWithObjects:&distanceDescriptor count:1];
     	[dicArray sortUsingDescriptors:descriptors];
     return dicArray;
@@ -349,6 +355,7 @@ static NSString *CellIdentifier = @"cellID";
         [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateNormal];
         
         [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.TimeUpdate setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
         [cell.TimeUpdate setTag:(900+indexPath.row)];
         [cell.TimeUpdate setEnabled:YES];
     }else if (indexPath.section == 1){

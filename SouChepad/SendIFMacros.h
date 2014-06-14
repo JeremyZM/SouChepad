@@ -55,6 +55,18 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 #define KImageBaseURL @"http://res.souche.com/"
 
+// 销售昵称
+#define KSellName @"sellName"
+// 邮箱
+#define KSellEmail @"sellEmail"
+// 电话
+#define KSellPhone @"sellPhone"
+// 地址
+#define KSellAddressName @"sellAddressName"
+// qq
+#define KSellQQ @"sellQQ"
+
+
 
 
 #define KUserName [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]

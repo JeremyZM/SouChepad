@@ -14,12 +14,23 @@
 #import "UserReservationM.h"
 #import "CommListController.h"
 #import "CarDetailWebView.h"
+#import "SCDockItem.h"
+#import "TTCounterLabel.h"
+
+
+typedef NS_ENUM(NSInteger, kTTCounter){
+    kTTCounterRunning = 0,
+    kTTCounterStopped,
+    kTTCounterReset,
+    kTTCounterEnded
+};
 
 #define KInfoDockW 100
-@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat>
+@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat,TTCounterLabelDelegate>
 {
     UIView *_contentView;
 }
+@property (strong, nonatomic) TTCounterLabel *counterLabel;
 @end
 
 @implementation InfoMainController
@@ -46,6 +57,25 @@
     [userInfoDock setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:userInfoDock];
     
+    
+    
+    UIButton *beginBtn =[[UIButton alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-200, 100, 100)];
+    [beginBtn setTitle:@"开始接待" forState:UIControlStateNormal];
+
+    [beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+    [beginBtn setBackgroundColor:[UIColor redColor]];
+    
+    [beginBtn addTarget:self action:@selector(startStopTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [userInfoDock addSubview:beginBtn];
+    
+    self.counterLabel = [[TTCounterLabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(beginBtn.frame)+10,KInfoDockW, 30)];
+    [userInfoDock addSubview:self.counterLabel];
+    [self.counterLabel setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+    
+    self.counterLabel.textColor = [UIColor redColor];
+    [self.counterLabel updateApperance];
+
+
     // 2.添加内容view
     _contentView = [[UIView alloc] init];
     CGFloat w = self.view.frame.size.width - KInfoDockW;
@@ -54,6 +84,51 @@
     _contentView.frame = CGRectMake(KInfoDockW, 0, w, h);
     [self.view addSubview:_contentView];
 }
+
+- (void)startStopTapped:(UIButton*)sender {
+    if (self.counterLabel.isRunning) {
+        [self.counterLabel reset];
+        [sender setTitle:@"开始接待" forState:UIControlStateNormal];
+        [self updateUIForState:kTTCounterStopped];
+    } else {
+        [self.counterLabel start];
+        [sender setTitle:@"结束接待" forState:UIControlStateNormal];
+        [self updateUIForState:kTTCounterRunning];
+    }
+}
+
+
+- (void)updateUIForState:(NSInteger)state {
+    switch (state) {
+        case kTTCounterRunning:
+
+            break;
+            
+        case kTTCounterStopped:
+            break;
+            
+        case kTTCounterReset:
+
+
+            break;
+            
+        case kTTCounterEnded:
+
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+#pragma mark - TTCounterLabelDelegate
+
+- (void)countdownDidEnd {
+    [self updateUIForState:kTTCounterEnded];
+}
+
+
 
 - (void)addAllInfoChildViewControllers
 {

@@ -8,16 +8,33 @@
 
 #import "JBInfoView.h"
 
+@interface JBInfoView ()<UITableViewDelegate,UITableViewDataSource>
+{
+    UITableView *JBtableView;
+}
+@end
+
 @implementation JBInfoView
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundColor:[UIColor whiteColor]];
+        
+        NSArray *array = @[@"姓名",@"手机",@"性别",@"级别",@"指标",@"过户方式",@"付款方式",@"购车用途",@"拥有车辆",@"是否卖车"];
+        JBtableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+        [JBtableView setDataSource:self];
+        [JBtableView setDelegate:self];
+        [self addSubview:JBtableView];
+        
         
     }
     return self;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 10;
 }
 
 

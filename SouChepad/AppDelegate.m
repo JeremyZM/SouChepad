@@ -19,7 +19,6 @@
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    
     DLog(@"%@--%@",[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
     BOOL islog = !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]==nil) && !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD] == nil);
     if (islog) {

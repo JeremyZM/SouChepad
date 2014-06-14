@@ -44,4 +44,7 @@
 /** 预约到店ID */
 @property (copy, nonatomic) NSString *reservationId;
 
+
+/** 更新时间 */
+@property (copy, nonatomic) NSString *updateDay;
 @end

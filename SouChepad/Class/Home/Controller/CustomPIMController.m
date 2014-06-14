@@ -41,12 +41,12 @@
     [self addToolbar];
     if (self.isNew) {
         // 添加基本信息view
-        [self addBasicInfoView];
+//        [self addBasicInfoView];
     }else{
     
-        [HttpManager requestUserInfoWithParamDic:@{@"userId":self.userInfoM.crmUserId} Success:^(id obj) {
+        [HttpManager requestUserInfoWithParamDic:@{@"userId":@"18758188560"} Success:^(id obj) {
             // 添加基本信息view
-            [self addBasicInfoView];
+//            [self addBasicInfoView];
             
         } fail:^(id obj) {
             
@@ -57,17 +57,13 @@
 
 - (void)addToolbar
 {
-//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
-//    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-//    [toolbar setBarTintColor:[UIColor redColor]];
-//    [self.view addSubview:toolbar];
     
-    UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息",@"卖车信息"]];
+    UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息"]];
     [seg setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
     [seg setCenter:self.headBar.center];
     [seg addTarget:self action:@selector(segChanged:) forControlEvents:UIControlEventValueChanged];
     [seg setTintColor:[UIColor whiteColor]];
-    [seg setBounds:CGRectMake(0, 0, 330, 40)];
+    [seg setBounds:CGRectMake(0, 0, 260, 44)];
     [seg setSelectedSegmentIndex:0];
     [self.headBar addSubview:seg];
 }
@@ -77,12 +73,12 @@
     switch (seg.selectedSegmentIndex) {
         case 0:
             // 添加基本信息view
-            [self addBasicInfoView];
+//            [self addBasicInfoView];
 
             break;
         case 1:
             // 3.添加辅助信息view
-            [self addauxiliaryInfoView];
+//            [self addauxiliaryInfoView];
             
             break;
         default:
@@ -94,9 +90,7 @@
 
 - (void)addBasicInfoView
 {
-    if (_fuzhuView) {
-        [_fuzhuView removeFromSuperview];
-    }
+    [_fuzhuView removeFromSuperview];
     if (_jbInfoView == nil) {
         
         JBInfoView *jbInfo = [[JBInfoView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 800)];
@@ -109,16 +103,7 @@
 
 - (void)addauxiliaryInfoView
 {
-    if (_jbInfoView) {
-        [_jbInfoView removeFromSuperview];
-    }
-//    if (_fuzhuTable==nil) {
-//        FZInfoView *fztableView = [[FZInfoView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 800)];
-//        [fztableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-//        _fuzhuTable = fztableView;
-//        [_scrollView setContentSize:CGSizeMake(0, fztableView.bounds.size.height)];
-//    }
-//    [_scrollView addSubview:_fuzhuTable];
+    [_jbInfoView removeFromSuperview];
 
     if (_fuzhuView==nil) {
         FuZhuInfoView *fztableView = [[FuZhuInfoView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 800)];

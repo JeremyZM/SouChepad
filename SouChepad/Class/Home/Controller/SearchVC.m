@@ -77,7 +77,14 @@ static NSString *newUserCell = @"newUserCell";
 // 开始搜索
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    
     if ([NSString phoneValidate:searchBar.text]) {
+        
+        searchUserDic = nil;
+        myself = nil;
+        otherSell = nil;
+        newUser = nil;
+        
         [HttpManager requestSearchPhoneNumaber:@{@"contact":searchBar.text,@"userName":KUserName} Success:^(id obj) {
             
             searchUserDic = [NSDictionary dictionaryWithDictionary:obj];
@@ -87,7 +94,6 @@ static NSString *newUserCell = @"newUserCell";
             }else{
                 newUser = [searchUserDic objectForKey:@"-1"];
             }
-            
             
             if (_tableView==nil) {
                 
@@ -158,7 +164,6 @@ static NSString *newUserCell = @"newUserCell";
                 return myUserCell;
             }else if (indexPath.section == 1){
                 NSDictionary *otherDic = otherSell[indexPath.row];
-
                 OtherSellUserCell *otherCell = [tableView dequeueReusableCellWithIdentifier:otherSellCell];
                 cell = otherCell;
                 otherCell = (OtherSellUserCell *) cell;

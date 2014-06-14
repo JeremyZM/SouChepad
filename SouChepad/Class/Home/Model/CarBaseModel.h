@@ -40,5 +40,7 @@
 /** 等级 */
 @property (copy, nonatomic,readonly) NSString *level;
 
+/** 看车or试驾 */
+@property (copy, nonatomic) NSString *lookORdrive;
 
 @end

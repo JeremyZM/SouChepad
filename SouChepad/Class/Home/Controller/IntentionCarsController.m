@@ -9,11 +9,12 @@
 #import "IntentionCarsController.h"
 //#import "Cell.h"
 #import "CollectCarCell.h"
-#import "seconCell.h"
 #import "HttpManager.h"
 #import "UserReservationM.h"
 #import "CollectHeadView.h"
 #import "CarDetailWebView.h"
+#import "TradeCarInfoCell.h"
+#import "LookOrDriveCarInfoCell.h"
 
 @interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate>
 {
@@ -28,7 +29,8 @@
 }
 @end
 static NSString *CollectCarCellid = @"CollectCarCellid";
-static NSString *seconCellID = @"seconCell";
+static NSString *TradeCarInfoCellid = @"TradeCarInfoCellid";
+static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 @implementation IntentionCarsController
 
@@ -98,8 +100,10 @@ static NSString *seconCellID = @"seconCell";
     
     // 注册cell
     [_collectionView registerNib:[UINib nibWithNibName:@"CollectCarCell" bundle:nil] forCellWithReuseIdentifier:CollectCarCellid];
-    [_collectionView registerClass:[seconCell class] forCellWithReuseIdentifier:seconCellID];
     
+    [_collectionView registerNib:[UINib nibWithNibName:@"TradeCarInfoCell" bundle:nil] forCellWithReuseIdentifier:TradeCarInfoCellid];
+    
+    [_collectionView registerNib:[UINib nibWithNibName:@"LookOrDriveCarInfoCell" bundle:nil] forCellWithReuseIdentifier:LookOrDriveCarInfoCellid];
     
     // 注册头部view
     [_collectionView registerClass:[CollectHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"collectionView"];
@@ -143,8 +147,9 @@ static NSString *seconCellID = @"seconCell";
 {
     NSIndexPath *index  = [NSIndexPath indexPathForItem:0 inSection:Seg.selectedSegmentIndex];
     
-   
-    [_collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+    if ((Seg.selectedSegmentIndex==0&&tradesCars.count)||(Seg.selectedSegmentIndex==1&&driveCars.count)||(Seg.selectedSegmentIndex==2&&readyseeCars.count)||(Seg.selectedSegmentIndex==3&&collectCars.count)) {
+        [_collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+    }
     
     
 }
@@ -178,37 +183,45 @@ static NSString *seconCellID = @"seconCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    CGSize size = CGSizeMake(self.view.frame.size.width-40 , 300);
-//    if (indexPath.section==1) {
-      CGSize  size = CGSizeMake(278, 286);
-//    }
+    CGSize size = CGSizeMake(875 , 286);
+    if (indexPath.section==2||indexPath.section == 3) {
+        size = CGSizeMake(278, 286);
+    }
     return size;
 }
 
 
 - (UITableViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CollectCarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
-    [cell.contentView.layer setBorderWidth:1.0];
-    [cell.contentView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
-    [cell.contentView.layer setCornerRadius:2.0];
-    [cell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-
-//    [[cell.contentView layer] setShadowOffset:CGSizeMake(1, 1)];
-//    [[cell.contentView layer] setShadowRadius:5];
-//    [[cell.contentView layer] setShadowOpacity:1];
-//    [[cell.contentView layer] setShadowColor:[UIColor blackColor].CGColor];
+    UITableViewCell *cell = nil;
     
         if (indexPath.section==0) {
-        
-        [cell setCarModel:tradesCars[indexPath.row]];
+            cell = [collectionView dequeueReusableCellWithReuseIdentifier:TradeCarInfoCellid forIndexPath:indexPath];
+            TradeCarInfoCell *tradeCarCell = (TradeCarInfoCell*)cell;
+            [tradeCarCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+            [tradeCarCell setTradeCarInfoM:tradesCars[indexPath.row]];
     }else if (indexPath.section == 1){
-        [cell setCarModel:driveCars[indexPath.row]];
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:LookOrDriveCarInfoCellid forIndexPath:indexPath];
+        LookOrDriveCarInfoCell *lookOrDriveCell = (LookOrDriveCarInfoCell*)cell;
+            [lookOrDriveCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+        [lookOrDriveCell setLookOrDriveCellM:driveCars[indexPath.row]];
     }else if (indexPath.section == 2){
-        [cell setCarModel:readyseeCars[indexPath.row]];
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
+        CollectCarCell *collectCell = (CollectCarCell*)cell;
+        [collectCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+        [collectCell setCarModel:readyseeCars[indexPath.row]];
+        
     }else {
-        [cell setCarModel:collectCars[indexPath.row]];
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
+        CollectCarCell *collectCell = (CollectCarCell*)cell;
+        [collectCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+        [collectCell setCarModel:collectCars[indexPath.row]];
     }
+    
+    
+    [cell.contentView.layer setBorderWidth:1.0];
+    [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
+    [cell.contentView.layer setCornerRadius:2.0];
     
     return cell;
 }

@@ -13,9 +13,12 @@
 #import "CommunListM.h"
 #import "MyMessage.h"
 #import "CarBaseModel.h"
-#import "LookCarM.h"
-#import "TradesCarM.h"
+#import "TradeCarInfoModel.h"
+#import "LookOrDriveCarInfoModel.h"
 #import "BaseDtaModel.h"
+#import "UserExtendModel.h"
+#import "UserVOModel.h"
+#import "SellInfoModel.h"
 
 @implementation HttpManager
 
@@ -36,6 +39,7 @@
 {
     [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getDictionary.json" parameters:nil success:^(MKNetworkOperation *obj) {
       
+         DLog(@"%@",[obj responseJSON]);
         NSDictionary* dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
 
         NSArray *keyArray = [dic allKeys];
@@ -73,7 +77,7 @@
             }
         }
         
-        DLog(@"%@",[obj responseJSON]);
+       
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
     } reload:YES needHud:NO hudEnabled:NO];
@@ -108,9 +112,19 @@
 +(void)requestClientWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail{
     NSString *url = @"pages/sellManageAction/sellToUser.json";
         [[HttpService sharedService] requestWithApi:url parameters:paramDic success:^(MKNetworkOperation *obj) {
-        [ProgressHUD show:nil];
-        DLog(@"obj--:%@",[obj responseJSON]);
-        NSDictionary *dataDic = [obj responseJSON];
+            [ProgressHUD show:nil];
+            DLog(@"obj--:%@",[obj responseJSON]);
+            NSDictionary *dataDic = [obj responseJSON];
+            NSDictionary *sellDic = [dataDic objectForKey:@"sell"];
+            SellInfoModel *sellInfoM = [[SellInfoModel alloc] init];
+            [sellInfoM setKeyValues:sellDic];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.name forKey:KSellName];
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.email forKey:KSellEmail];
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.phone forKey:KSellPhone];
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.addressName forKey:KSellAddressName];
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.qq forKey:KSellQQ];
+            
             
         NSMutableArray *reserArrayM = [NSMutableArray array];
             
@@ -192,8 +206,14 @@
                     [userM setKeyValues:dicVO];
                     [myselfArray addObject:userM];
                 }
-                [dataDic setObject:otherSell forKey:@"1"];
-                [dataDic setObject:myselfArray forKey:@"2"];
+                if (otherSell.count) {
+                    
+                    [dataDic setObject:otherSell forKey:@"1"];
+                }
+                if (myselfArray.count) {
+                    
+                    [dataDic setObject:myselfArray forKey:@"2"];
+                }
             }
         }
         
@@ -210,10 +230,19 @@
 #pragma mark - 客户基本信息
 + (void)requestUserInfoWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
 {
-    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getToStoreUser.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getUser.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
         DLog(@"%@",[obj responseJSON]);
+        NSDictionary *userInfoDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        NSDictionary *userVOdic = [userInfoDic objectForKey:@"user"];
+        UserVOModel *userVOM = [[UserVOModel alloc] init];
+        [userVOM setKeyValues:userVOdic];
+        NSDictionary *userExtendDic = [userInfoDic objectForKey:@"userExtend"];
+        UserExtendModel *userExtendM = [[UserExtendModel alloc] init];
+        [userExtendM setKeyValues:userExtendDic];
         
-        success([obj responseJSON]);
+        NSDictionary *dicUser = @{@"user":userVOM,@"userExtend":userExtendM};
+        
+        success(dicUser);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         fail([error localizedDescription]);
     } reload:YES needHud:YES hudEnabled:NO];
@@ -254,6 +283,7 @@
         for (NSDictionary *collectDic in collect) {
             CarBaseModel *collectCarM = [[CarBaseModel alloc] init];
             [collectCarM setKeyValues:collectDic];
+            [collectCarM setLookORdrive:@"收藏"];
             [collectCars addObject:collectCarM];
         }
         // 预约车辆
@@ -262,6 +292,7 @@
         for (NSDictionary *readyseecarDic in readyseecar) {
             CarBaseModel *readyseeCarM = [[CarBaseModel alloc] init];
             [readyseeCarM setKeyValues:readyseecarDic];
+            [readyseeCarM setLookORdrive:@"预约"];
             [readyseeCars addObject:readyseeCarM];
         }
         
@@ -270,13 +301,15 @@
         NSArray *lookcar = [NSArray arrayWithArray:[dicCars objectForKey:@"lookcar"]];
         NSMutableArray *driveCars = [NSMutableArray arrayWithCapacity:(readyseecar.count+lookcar.count)];
         for (NSDictionary *driveDic in drive) {
-            LookCarM *driveCarM = [[LookCarM alloc] init];
+            LookOrDriveCarInfoModel *driveCarM = [[LookOrDriveCarInfoModel alloc] init];
             [driveCarM setKeyValues:driveDic];
+            [driveCarM setLookORdrive:@"试驾"];
             [driveCars addObject:driveCarM];
         }
         for (NSDictionary *lookcarDic in lookcar) {
-            LookCarM *lookCarM = [[LookCarM alloc] init];
+            LookOrDriveCarInfoModel *lookCarM = [[LookOrDriveCarInfoModel alloc] init];
             [lookCarM setKeyValues:lookcarDic];
+            [lookCarM setLookORdrive:@"看车"];
             [driveCars addObject:lookCarM];
         }
         
@@ -284,8 +317,9 @@
         NSArray *trades = [NSArray arrayWithArray:[dicCars objectForKey:@"trades"]];
         NSMutableArray *tradesCars = [NSMutableArray arrayWithCapacity:trades.count];
         for (NSDictionary *tradesDic in trades) {
-            TradesCarM *tradesCarMs = [[TradesCarM alloc] init];
+            TradeCarInfoModel *tradesCarMs = [[TradeCarInfoModel alloc] init];
             [tradesCarMs setKeyValues:tradesDic];
+            [tradesCarMs setLookORdrive:@"成交"];
             [tradesCars addObject:tradesCarMs];
         }
         NSDictionary *intentionCars = @{@"collect":collectCars,@"readyseecar":readyseeCars,@"drive":driveCars,@"trades":tradesCars};

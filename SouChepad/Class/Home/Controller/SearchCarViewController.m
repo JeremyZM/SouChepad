@@ -7,7 +7,6 @@
 //
 
 #import "SearchCarViewController.h"
-#import "seconCell.h"
 #import "LimitSearchView.h"
 //#import "SearchHeadView.h"
 
@@ -180,7 +179,7 @@ static NSString *seconCellID = @"seconCell";
     _collectionView = [[UICollectionView alloc]initWithFrame:self.view.bounds collectionViewLayout:layout];
     [_collectionView setContentInset:UIEdgeInsetsMake(100, 0, 0, 0)];
     // 注册cell
-    [_collectionView registerClass:[seconCell class] forCellWithReuseIdentifier:seconCellID];
+//    [_collectionView registerClass:[seconCell class] forCellWithReuseIdentifier:seconCellID];
     
     // 注册头部view
 //    [_collectionView registerClass:[SearchHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderIdentifier];
