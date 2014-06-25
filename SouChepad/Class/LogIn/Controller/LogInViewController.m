@@ -49,7 +49,6 @@
     [nameTextField setCenter:CGPointMake(center.y, center.x-130)];
     [nameTextField setDelegate:self];
     [nameTextField setPlaceholder:@"账号"];
-//    [nameTextField setText:@"lixuanxu"];
     [nameTextField setReturnKeyType:UIReturnKeyNext];
 
     [nameTextField setlaybyRoundingCorners:(UIRectCornerTopLeft|UIRectCornerTopRight) cornerRadii:CGSizeMake(5, 5)];
@@ -59,7 +58,7 @@
     PWDTextField = [[SCTextfield alloc] initWithFrame:CGRectMake(nameTextField.frame.origin.x, CGRectGetMaxY(nameTextField.frame), 300, 44)];
     
     [PWDTextField setReturnKeyType:UIReturnKeyJoin];
-    [PWDTextField setKeyboardType:UIKeyboardTypePhonePad];
+//    [PWDTextField setKeyboardType:UIKeyboardTypePhonePad];
     [PWDTextField setPlaceholder:@"密码"];
 //    [PWDTextField setText:@"1234567890"];
     [PWDTextField setSecureTextEntry:YES];
@@ -151,30 +150,36 @@
 {
 
 
-    if (nameTextField.text.length>=6&&PWDTextField.text.length>=6) {
+    if (nameTextField.text.length>0&&PWDTextField.text.length>0) {
         [imageView setHighlighted:YES];
         [logInBtn setSelected:YES];
         [nameTextField resignFirstResponder];
         [PWDTextField resignFirstResponder];
         [HttpManager requestLoginWithParamDic:@{@"loginName":nameTextField.text,@"password":PWDTextField.text,@"type":@"saler"} Success:^(id obj) {
-            NSString *isok = obj;
-            if ([isok isEqualToString:@"true"]) {
-                
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:nameTextField.text forKey:userDefaultsName];
-                [userDefaults setObject:PWDTextField.text forKey:userDefaultsPWD];
-                [userDefaults synchronize];
-                
-                [NSThread sleepForTimeInterval:1.0];
-                MainViewController *controller = [[MainViewController alloc]init];
-                [self.view.window setRootViewController:controller];
-                [logInBtn setSelected:NO];
-            }else{
-                [logInBtn setSelected:NO];
-                [imageView setHighlighted:NO];
-                [ProgressHUD showError:@"请确认账号或密码！"];
-                
+            NSDictionary *isok = [NSDictionary dictionaryWithDictionary:obj];
+            if ([isok objectForKey:@"login"]) {
+                if ([[isok objectForKey:@"login"] isEqualToString:@"true"]) {
+                    
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    [userDefaults setObject:nameTextField.text forKey:userDefaultsName];
+                    [userDefaults setObject:PWDTextField.text forKey:userDefaultsPWD];
+                    [userDefaults synchronize];
+                    
+                    [NSThread sleepForTimeInterval:1.0];
+                    MainViewController *controller = [[MainViewController alloc]init];
+                    [self.view.window setRootViewController:controller];
+                    
+                }else{
+//                    [ProgressHUD showError:@"请确认账号或密码！"];
+                    [[[UIAlertView alloc] initWithTitle:@"错误" message:@"请确认账号或密码！" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil, nil] show];
+                }
+            } else if ([isok objectForKey:@"errorMessage"]){
+                [[[UIAlertView alloc] initWithTitle:nil message:[isok objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil, nil] show];
+//                [ProgressHUD showError:[isok objectForKey:@"errorMessage"]];
             }
+            
+            [logInBtn setSelected:NO];
+            [imageView setHighlighted:NO];
         } fail:^(id obj) {
             [logInBtn setSelected:NO];
             [imageView setHighlighted:NO];

@@ -47,13 +47,19 @@
         [_carNameLable setTextColor:[UIColor blackColor]];
         [_souchePriceLabel setTextColor:[UIColor redColor]];
         
+    }else if ([lookOrDriveCellM.carStatus isEqualToString:@"预售"]){
+        [_carStatusImage setHidden:YES];
+        [_levelImage setHidden:NO];
+        [_levelImage setImage:[UIImage imageNamed:@"presell"]];
+        [_carNameLable setTextColor:[UIColor blackColor]];
+        [_souchePriceLabel setTextColor:[UIColor redColor]];
+        
     }else {
         [_carStatusImage setHidden:NO];
         [_carNameLable setTextColor:[UIColor lightGrayColor]];
         [_souchePriceLabel setTextColor:[UIColor lightGrayColor]];
         [_carStatusImage setImage:[UIImage imageNamed:@"done_04"]];
     }
-    
     
     
     // 车辆图片

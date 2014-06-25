@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserReservationM.h"
+@class CommunAddVC;
+
+@protocol CommunAddVCDelegate <NSObject>
+
+- (void)communAddVC:(CommunAddVC*)commumVC ReservationDateByUser:(NSDictionary *)dic;
+
+@end
 
 @interface CommunAddVC : UIViewController
+
+@property (nonatomic, strong) UserReservationM *userResM;
+
+@property (nonatomic, weak) id<CommunAddVCDelegate> delegate;
 
 @end

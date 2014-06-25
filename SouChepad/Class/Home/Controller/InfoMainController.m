@@ -16,6 +16,9 @@
 #import "CarDetailWebView.h"
 #import "SCDockItem.h"
 #import "TTCounterLabel.h"
+#import "HttpManager.h"
+#import "EndReceiveViewController.h"
+#import "BeginBut.h"
 
 
 typedef NS_ENUM(NSInteger, kTTCounter){
@@ -26,9 +29,12 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 };
 
 #define KInfoDockW 100
-@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat,TTCounterLabelDelegate>
+@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat,TTCounterLabelDelegate,UIAlertViewDelegate>
 {
     UIView *_contentView;
+    BeginBut *beginBtn;
+    NSDate *beginDate;
+    NSDate *endDate;
 }
 @property (strong, nonatomic) TTCounterLabel *counterLabel;
 @end
@@ -59,11 +65,18 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     
     
     
-    UIButton *beginBtn =[[UIButton alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-200, 100, 100)];
+    beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-200, 100, 100)];
+    [beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
+    [beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
     [beginBtn setTitle:@"开始接待" forState:UIControlStateNormal];
-
+    [beginBtn setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+//    [beginBtn.imageView setFrame:CGRectMake(0, 0, beginBtn.bounds.size.width, 70)];
+//     [beginBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 40, 0)]; //将image的位置向右移动100个像素
+//    [beginBtn.imageView setCenter:beginBtn.center];
+//    [beginBtn setTitleEdgeInsets:UIEdgeInsetsMake(20, 0, 0, 0)];
+//    [beginBtn.titleLabel setFrame:CGRectMake(0, 70, beginBtn.bounds.size.width, 30)];
     [beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [beginBtn setBackgroundColor:[UIColor redColor]];
+//    [beginBtn setBackgroundColor:[UIColor grayColor]];
     
     [beginBtn addTarget:self action:@selector(startStopTapped:) forControlEvents:UIControlEventTouchUpInside];
     [userInfoDock addSubview:beginBtn];
@@ -86,14 +99,73 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 }
 
 - (void)startStopTapped:(UIButton*)sender {
-    if (self.counterLabel.isRunning) {
-        [self.counterLabel reset];
-        [sender setTitle:@"开始接待" forState:UIControlStateNormal];
-        [self updateUIForState:kTTCounterStopped];
+        if ([self.counterLabel isRunning]) {
+
+//            EndReceiveViewController *endReceiveVC = [[EndReceiveViewController alloc] init];
+//            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:endReceiveVC];
+//            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
+//            [self presentViewController:nav animated:YES completion:^{
+//                [self.counterLabel stop];
+//                [self updateUIForState:kTTCounterStopped];
+//            }];
+            UIAlertView *endAlert = [[UIAlertView alloc] initWithTitle:@"确认结束接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+            [endAlert setTag:255];
+            [endAlert show];
     } else {
-        [self.counterLabel start];
-        [sender setTitle:@"结束接待" forState:UIControlStateNormal];
-        [self updateUIForState:kTTCounterRunning];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认开始接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+        [alert setTag:256];
+        [alert show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==256) {
+        if (buttonIndex==1) {
+            if (self.userInfoM.reservationId==nil||[self.userInfoM.reservationId isEqualToString:@"暂无"]) {
+                [HttpManager requestUpdateBeginReservationByUser:@{@"user":self.userInfoM.crmUserId,@"userName":KUserName} Success:^(id obj) {
+                    [beginBtn setSelected:YES];
+                    beginDate = [NSDate date];
+                    [self.counterLabel start];
+                    [beginBtn setTitle:@"结束接待" forState:UIControlStateNormal];
+                    [self updateUIForState:kTTCounterRunning];
+                } fail:^(id obj) {
+                    
+                }];
+                
+            }else {
+                [HttpManager requestUpdateBeginReservationById:@{@"reservationId":self.userInfoM.reservationId,@"userName":KUserName} Success:^(id obj) {
+                    beginDate = [NSDate date];
+                    [self.counterLabel start];
+                    [beginBtn setSelected:YES];
+                    [beginBtn setTitle:@"结束接待" forState:UIControlStateNormal];
+                    [self updateUIForState:kTTCounterRunning];
+                    
+                } fail:^(id obj) {
+                    
+                }];
+            }
+        }
+
+    }else if (alertView.tag==255){
+        endDate = [NSDate date];
+        // NSDateFormatter 专门用来转换日期格式的 类
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        // 设置格式
+        [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        // NSDateFormatter转换为NSString
+        NSString *beginDateStr = [formatter stringFromDate:beginDate];
+        NSString *endDateStr = [formatter stringFromDate:endDate];
+        
+        
+        [HttpManager requestUserOutStore:@{@"user":self.userInfoM.crmUserId,@"name":self.userInfoM.user,@"userName":KUserName,@"phone":self.userInfoM.phone,@"receptionBeginTime":beginDateStr,@"receptionEndTime":endDateStr,@"store":@"A",@"level":self.userInfoM.userLevel,@"comment":@"",@"remark":@""} Success:^(id obj) {
+            NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:obj];
+            if ([dicobj objectForKey:@"succeedMessage"]) {
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+        } fail:^(id obj) {
+            
+        }];
     }
 }
 
@@ -133,18 +205,15 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)addAllInfoChildViewControllers
 {
     CustomPIMController *customPIM = [[CustomPIMController alloc] init];
-    customPIM.isNew = self.isNew;
     customPIM.userInfoM = self.userInfoM;
     [self addChildViewController:customPIM];
     
     IntentionCarsController *intentionCarsVC = [[IntentionCarsController alloc] init];
     [intentionCarsVC setDeleget:self];
-    intentionCarsVC.isNew = self.isNew;
     intentionCarsVC.userReserM = self.userInfoM;
     [self addChildViewController:intentionCarsVC];
     
     CommListController *commListVC = [[CommListController alloc] init];
-    commListVC.isNew = self.isNew;
     commListVC.userResM = self.userInfoM;
     [self addChildViewController:commListVC];
 

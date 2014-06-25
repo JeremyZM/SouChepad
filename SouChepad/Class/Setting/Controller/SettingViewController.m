@@ -46,7 +46,9 @@
 
     
     UIButton *backBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 40, 80, 40)];
-    [backBtn setBackgroundColor:[UIColor yellowColor]];
+    [backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [backBtn setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName]  forState:UIControlStateNormal];
+//    [backBtn setBackgroundColor:[UIColor yellowColor]];
     [self.headBar addSubview:backBtn];
     [backBtn addTarget:self action:@selector(showDockCilck) forControlEvents:UIControlEventTouchUpInside];
     

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserReservationM.h"
 
 @interface CustomerListCell : UITableViewCell
 /** 客户姓名 */
@@ -32,6 +33,8 @@
  */
 @property (weak, nonatomic) IBOutlet UIButton *TimeUpdate;
 
+
+@property (nonatomic, strong) UserReservationM *userReserM;
 /**
  *   修改预约时间
  *

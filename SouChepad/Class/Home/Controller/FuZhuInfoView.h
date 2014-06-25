@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomPIMController.h"
+#import "UserExtendModel.h"
+#import "UserVOModel.h"
 
 @interface FuZhuInfoView : UIView
-
+@property (nonatomic, weak) CustomPIMController *customPIMVC;
+- (id)initWithFrame:(CGRect)frame userVOModel:(UserVOModel*)userVo userExtendmodel:(UserExtendModel*)userExtendM;
 @end

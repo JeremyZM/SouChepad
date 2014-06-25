@@ -19,6 +19,10 @@
 #import "UserExtendModel.h"
 #import "UserVOModel.h"
 #import "SellInfoModel.h"
+#import "RequireBrandsModel.h"
+#import "RequireInfoModel.h"
+#import "PinYin4Objc.h"
+#import "ChineseString.h"
 
 @implementation HttpManager
 
@@ -42,41 +46,15 @@
          DLog(@"%@",[obj responseJSON]);
         NSDictionary* dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
 
+        [dic writeToFile:KallListData atomically:YES];
+
         NSArray *keyArray = [dic allKeys];
         for (NSString *keyStr in keyArray) {
-            
             if ([keyStr isEqualToString:@"errorMessage"]) return;
-                
-            NSMutableArray *buyArrayM = [NSMutableArray array];
-            NSArray *buyerStatusArray = [dic objectForKey:keyStr];
-            for (NSDictionary *dic in buyerStatusArray) {
-                BaseDtaModel *buyerStatusM = [[BaseDtaModel alloc] init];
-                [buyerStatusM setKeyValues:dic];
-                [buyArrayM addObject:buyerStatusM];
-            }
-            if ([keyStr isEqualToString:@"buyerStatus"]) {
-                
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KbuyerStatus];
-            }else if ([keyStr isEqualToString:@"carCountrySimple"]) {
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KcarCountrySimple];
-            }else if ([keyStr isEqualToString:@"departureReason"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KdepartureReason];
-            }else if ([keyStr isEqualToString:@"driveCarEvaluate"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KdriveCarEvaluate];
-            }else if ([keyStr isEqualToString:@"lookCarEvaluate"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KlookCarEvaluate];
-            }else if ([keyStr isEqualToString:@"mileageSimple"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KmileageSimple];
-            }else if ([keyStr isEqualToString:@"satisfactionDegree"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KsatisfactionDegree];
             
-            }else if ([keyStr isEqualToString:@"seeCarTime"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KseeCarTime];
-            }else if ([keyStr isEqualToString:@"vehicleType"]){
-                [NSKeyedArchiver archiveRootObject:buyArrayM toFile:KvehicleType];
-            }
+            [[dic objectForKey:keyStr] writeToFile:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist",keyStr]] atomically:YES];
+
         }
-        
        
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
@@ -97,10 +75,10 @@
 +(void)requestLoginWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
 {
     [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/sellLogin.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        DLog(@"obj---%@",obj);
+        DLog(@"obj---%@",obj );
         NSDictionary *login = [obj responseJSON];
-        NSString *isok = login[@"login"];
-        success(isok);
+       
+        success(login);
     } fail:^(MKNetworkOperation *obj,NSError*error) {
         DLog(@"errer---%@",[error localizedDescription]);
         fail(obj);
@@ -109,7 +87,8 @@
 }
 
 #pragma mark - 搜索所有客户
-+(void)requestClientWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail{
++(void)requestClientWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
     NSString *url = @"pages/sellManageAction/sellToUser.json";
         [[HttpService sharedService] requestWithApi:url parameters:paramDic success:^(MKNetworkOperation *obj) {
             [ProgressHUD show:nil];
@@ -117,7 +96,9 @@
             NSDictionary *dataDic = [obj responseJSON];
             NSDictionary *sellDic = [dataDic objectForKey:@"sell"];
             SellInfoModel *sellInfoM = [[SellInfoModel alloc] init];
-            [sellInfoM setKeyValues:sellDic];
+            if (![sellDic isKindOfClass:[NSNull class]]) {
+                [sellInfoM setKeyValues:sellDic];
+            }
             
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.name forKey:KSellName];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.email forKey:KSellEmail];
@@ -225,7 +206,54 @@
 
 }
 
+#pragma mark - 修改用户个人信息////创建无号码用户
++ (void)requestUpdtaeUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateUser.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseString]);
+        if ([obj responseJSON]) {
+            NSDictionary *dic = [obj responseJSON];
+            [ProgressHUD showError:[dic objectForKey:@"errorMessage"]];
+        }else if([obj responseString]){
+//            NSString *strUrl = [urlString stringByReplacingOccurrencesOfString:@" " withString:@""];
+            NSString *userID = [[obj responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            success(userID);
+        }
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+}
 
+
+#pragma mark - 用户信息进入接待
++ (void)requestUpdateBeginReservationByUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateBeginReservationByUser.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",obj);
+        NSDictionary *dic = [obj responseJSON];
+        if ([dic objectForKey:@"succeedMessage"]) {
+            
+            success([obj responseJSON]);
+        }else{
+            [ProgressHUD showError:@""];
+        }
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        DLog(@"%@",obj);
+    } reload:YES needHud:YES hudEnabled:YES];
+
+}
+
+
+#pragma mark - 预约客户进入接待
++ (void)requestUpdateBeginReservationById:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateBeginReservationById.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+}
 
 #pragma mark - 客户基本信息
 + (void)requestUserInfoWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
@@ -235,10 +263,17 @@
         NSDictionary *userInfoDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
         NSDictionary *userVOdic = [userInfoDic objectForKey:@"user"];
         UserVOModel *userVOM = [[UserVOModel alloc] init];
-        [userVOM setKeyValues:userVOdic];
+        if (![userVOdic isKindOfClass:[NSNull class]])
+        {
+            
+            [userVOM setKeyValues:userVOdic];
+        }
         NSDictionary *userExtendDic = [userInfoDic objectForKey:@"userExtend"];
+        
         UserExtendModel *userExtendM = [[UserExtendModel alloc] init];
-        [userExtendM setKeyValues:userExtendDic];
+        if (![userExtendDic isKindOfClass:[NSNull class]]) {
+            [userExtendM setKeyValues:userExtendDic];
+        }
         
         NSDictionary *dicUser = @{@"user":userVOM,@"userExtend":userExtendM};
         
@@ -249,6 +284,33 @@
 
 
 }
+
+#pragma mark - 销售修改预约到店时间
++ (void)requestUpdateReservationDate:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateReservationDate.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *messageDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        success(messageDic);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail([error localizedDescription]);
+    } reload:YES needHud:YES hudEnabled:YES];
+}
+
+
+#pragma mark - 销售修改预约到店时间（填写沟通）
++ (void)requestUpdateReservationDateByUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateReservationDateByUser.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",obj);
+        NSDictionary *messageDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        success(messageDic);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail([error localizedDescription]);
+    } reload:YES needHud:YES hudEnabled:YES];
+    
+}
+
 
 #pragma mark - 沟通记录
 + (void)requestCommunicationWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
@@ -331,6 +393,47 @@
 
 }
 
+
+#pragma mark - 客户需求
++ (void)requestUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getUserRequirementInfo.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *objDic = [obj responseJSON];
+        // 用户需求车型列表
+        NSMutableArray *reqBrandArrayM = [NSMutableArray array];
+        NSArray *reqBrandsArray = [NSArray arrayWithArray:[objDic objectForKey:@"requireBrands"]];
+        for (NSDictionary *reqDic in reqBrandsArray) {
+            RequireBrandsModel *requBranM = [[RequireBrandsModel alloc] init];
+            [requBranM setKeyValues:reqDic];
+            [reqBrandArrayM addObject:requBranM];
+        }
+        
+        // 用户 删除的 需求车型列表
+        NSArray *reqDeleteBranArray = [NSArray arrayWithArray:[objDic objectForKey:@"requireBrandsDelete"]];
+        NSMutableArray *reqBranDeleteArrayM = [NSMutableArray array];
+        for (NSDictionary *reqDeleteDic in reqDeleteBranArray) {
+            RequireBrandsModel *reqDeleteM = [[RequireBrandsModel alloc] init];
+            [reqDeleteM setKeyValues:reqDeleteDic];
+            [reqBranDeleteArrayM addObject:reqDeleteM];
+        }
+        
+        // 用户基本需求
+        NSDictionary *requireInfoDic = [NSDictionary dictionaryWithDictionary:[objDic objectForKey:@"requireInfo"]];
+        RequireInfoModel *requireInfoModel = [[RequireInfoModel alloc] init];
+        [requireInfoModel setKeyValues:requireInfoDic];
+        
+        
+        success(@{@"requireBrands":[NSArray arrayWithArray:reqBrandArrayM],@"requireBrandsDelete":[NSArray arrayWithArray:reqBranDeleteArrayM],@"requireInfo":requireInfoModel});
+        
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+
+
 #pragma mark - 我的消息
 + (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
@@ -352,6 +455,121 @@
                               } reload:YES needHud:YES hudEnabled:NO];
 }
 
+
+#pragma mark - 获取所有车型
++ (void)getDictionaryByTypeAndLevel:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getDictionaryByTypeAndLevel.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            NSDictionary *dicOBJ = [obj responseJSON];
+            NSArray *arr = [dicOBJ objectForKey:@"items"];
+            
+//            NSMutableArray *arrM = [NSMutableArray array];
+//            for (NSDictionary *diccc in arr) {
+//                NSString *namestr = [diccc objectForKey:@"name"];
+//                
+//                HanyuPinyinOutputFormat *outputFormat=[[HanyuPinyinOutputFormat alloc] init];
+//                [outputFormat setToneType:ToneTypeWithoutTone];
+//                [outputFormat setVCharType:VCharTypeWithV];
+//                [outputFormat setCaseType:CaseTypeLowercase];
+//                DLog(@"%@",namestr);
+//                NSString *outputPinyin=[PinyinHelper toHanyuPinyinStringWithNSString:namestr withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
+//                
+//                DLog(@"----------%@",outputPinyin);
+//                [arrM addObject:[diccc objectForKey:@"name"]];
+//            }
+            NSArray *carArray = [self getChineseStringArr:arr];
+            
+            [carArray writeToFile:KAllCarTypeData atomically:YES];
+        });
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail([error localizedDescription]);
+        DLog(@"%@",[error localizedDescription]);
+    } reload:YES needHud:NO hudEnabled:NO];
+}
+
+
++ (NSMutableArray *)getChineseStringArr:(NSArray *)arrToSort {
+    
+    NSMutableArray *_sectionHeadsKeys = [NSMutableArray array];
+    NSMutableArray *chineseStringsArray = [NSMutableArray array];
+    for(int i = 0; i < [arrToSort count]; i++) {
+        ChineseString *chineseString=[[ChineseString alloc]init];
+        NSDictionary *dicc = [arrToSort objectAtIndex:i];
+        chineseString.string=[NSString stringWithString:[dicc objectForKey:@"name"]];
+        chineseString.dic = dicc;
+        if(chineseString.string==nil){
+            chineseString.string=@"";
+        }
+        
+        if(![chineseString.string isEqualToString:@""]){
+            //join the pinYin
+            NSString *pinYinResult = [NSString string];
+            HanyuPinyinOutputFormat *format = [[HanyuPinyinOutputFormat alloc] init];
+            
+            NSString *nameStr = [[PinyinHelper toHanyuPinyinStringWithNSString:chineseString.string  withHanyuPinyinOutputFormat:format withNSString:@""] uppercaseString];
+            for(int j = 0;j < nameStr.length; j++) {
+                NSString *singlePinyinLetter = [[NSString stringWithFormat:@"%c",[nameStr characterAtIndex:j]] uppercaseString];
+                
+                pinYinResult = [pinYinResult stringByAppendingString:singlePinyinLetter];
+            }
+            chineseString.pinYin = pinYinResult;
+        } else {
+            chineseString.pinYin = @"";
+        }
+        [chineseStringsArray addObject:chineseString];
+    }
+    
+    //sort the ChineseStringArr by pinYin
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"pinYin" ascending:YES]];
+    [chineseStringsArray sortUsingDescriptors:sortDescriptors];
+    
+    
+    NSMutableArray *arrayForArrays = [NSMutableArray array];
+    BOOL checkValueAtIndex= NO;  //flag to check
+    NSMutableArray *TempArrForGrouping = nil;
+    
+    for(int index = 0; index < [chineseStringsArray count]; index++)
+    {
+        ChineseString *chineseStr = (ChineseString *)[chineseStringsArray objectAtIndex:index];
+        NSMutableString *strchar= [NSMutableString stringWithString:chineseStr.pinYin];
+        NSString *sr= [strchar substringToIndex:1];
+        //sr containing here the first character of each string
+        if(![_sectionHeadsKeys containsObject:[sr uppercaseString]])//here I'm checking whether the character already in the selection header keys or not
+        {
+            [_sectionHeadsKeys addObject:[sr uppercaseString]];
+            TempArrForGrouping = [[NSMutableArray alloc] initWithObjects:nil];
+            checkValueAtIndex = NO;
+        }
+        if([_sectionHeadsKeys containsObject:[sr uppercaseString]])
+        {
+            [TempArrForGrouping addObject:chineseStr.dic];
+            if(checkValueAtIndex == NO)
+            {
+                [arrayForArrays addObject:@{@"key":sr,@"car":TempArrForGrouping}];
+                checkValueAtIndex = YES;
+            }
+        }
+    }
+    return arrayForArrays;
+}
+
+
+#pragma mark - 用户结束接待
++ (void)requestUserOutStore:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/userOutStore.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+    
+}
 
 
 

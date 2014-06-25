@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TGCenterLineLabel.h"
 @class TradeCarInfoModel;
 
 @interface TradeCarInfoCell : UICollectionViewCell
@@ -85,5 +86,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 
 @property (nonatomic, strong) TradeCarInfoModel *tradeCarInfoM;
+
+@property (weak, nonatomic) IBOutlet TGCenterLineLabel *lineLabel;
+
 
 @end

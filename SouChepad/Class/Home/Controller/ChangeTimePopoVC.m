@@ -11,7 +11,7 @@
 @interface ChangeTimePopoVC () <UIPickerViewDataSource,UIPickerViewDelegate>
 {
     NSArray *periodArray;
-    NSString *perStr;
+    NSInteger perRow;
 }
 @end
 
@@ -38,9 +38,9 @@
 //    [formate setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0800"]];
     [formate setDateFormat:@"yyyy-MM-dd"];
     NSDate *nowdate = [NSDate date];
-    if (self.userResM) {
+    if (self.userResM.reservationDate) {
        nowdate = [formate dateFromString:self.userResM.reservationDate];
-        
+
     }
     [self.datepicker setDate:nowdate];
     [self.datepicker setMinimumDate:nowdate];
@@ -69,13 +69,43 @@
             [self.periodPicker selectRow:2 inComponent:0 animated:NO];
         }
     }
-    perStr = @"上午";
+    perRow = 0;
 }
 
 
 - (void)saveChangdeDate:(UIBarButtonItem*)saveItem
 {
-    NSDate *changedate = self.datepicker.date;
+    if ([_delegate respondsToSelector:@selector(ChangeTimePopoVC:changeTimeDic:)]) {
+        // NSDateFormatter 专门用来转换日期格式的 类
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        // 设置格式
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        // NSDateFormatter转换为NSString
+        NSString *dateStr = [formatter stringFromDate:self.datepicker.date];
+        
+        NSString *reservationTime = nil;
+        switch (perRow) {
+            case 0:
+                reservationTime = @"morning";
+                break;
+            case 1:
+                reservationTime = @"afternoon";
+                break;
+            case 2:
+                reservationTime = @"night";
+                break;
+            default:
+                break;
+        }
+        if (self.userResM.reservationDate) {
+            
+            DLog(@"%@",self.userResM.reservationId);
+            [_delegate ChangeTimePopoVC:self changeTimeDic:@{@"reservationId":self.userResM.reservationId,@"reservationDate":dateStr,@"reservationTime":reservationTime,@"userName":KUserName}];
+        }else {
+            [_delegate ChangeTimePopoVC:self changeTimeDic:@{@"user":self.userResM.crmUserId,@"reservationDate":dateStr,@"reservationTime":reservationTime,@"userName":KUserName}];
+        }
+        
+    }
     
 }
 
@@ -100,7 +130,7 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    perStr = periodArray[row];
+    perRow = row;
 }
 
 @end

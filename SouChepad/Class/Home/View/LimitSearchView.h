@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SearchCarViewController.h"
 @class LimitSearchView;
 
 @protocol LimitSearchViewDelegate <NSObject>
@@ -16,6 +17,7 @@
 @end
 
 @interface LimitSearchView : UIToolbar
+@property (nonatomic, weak) SearchCarViewController *secrVC;
 @property (nonatomic, strong) UIButton *searchBut;
 @property (nonatomic, weak) id<LimitSearchViewDelegate>limitDelegate;
 @end

@@ -1,4 +1,4 @@
-//
+
 //  SearchCarViewController.m
 //  SouChepad
 //
@@ -8,7 +8,7 @@
 
 #import "SearchCarViewController.h"
 #import "LimitSearchView.h"
-//#import "SearchHeadView.h"
+#import "HttpManager.h"
 
 @interface SearchCarViewController () <UICollectionViewDataSource,UICollectionViewDelegate,LimitSearchViewDelegate>
 {
@@ -31,7 +31,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     [self addLimitSearchView];
     
 }
@@ -39,7 +39,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)addLimitSearchView
 {
     _limitView = [[LimitSearchView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    
+    [_limitView setSecrVC:self];
     [_limitView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:_limitView];
     [_limitView setLimitDelegate:self];
@@ -61,10 +61,6 @@ static NSString *seconCellID = @"seconCell";
 - (void)addHeadToobar
 {
 
-//    CGSize size = self.view.frame.size;
-//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
-//    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-//    _headview = toolbar;
     [self.view insertSubview:self.headBar belowSubview:_limitView];
     
     UILabel *gong = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 20, 20)];
@@ -87,8 +83,7 @@ static NSString *seconCellID = @"seconCell";
     [self.headBar addSubview:xian];
     
     UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 40, 30)];
-    //    [switchPresell setTransform:CGAffineTransformMakeScale(1.2,1.2)];
-    //    [switchPresell sizeToFit];
+
     [self.headBar addSubview:switchPresell];
     
     

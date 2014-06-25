@@ -48,6 +48,13 @@
         [_carNameLable setTextColor:[UIColor blackColor]];
         [_souchePriceLabel setTextColor:[UIColor redColor]];
         
+    }else if ([carModel.carStatus isEqualToString:@"预售"]){
+        [_carStatusImage setHidden:YES];
+        [_levelImage setHidden:NO];
+        [_levelImage setImage:[UIImage imageNamed:@"presell"]];
+        [_carNameLable setTextColor:[UIColor blackColor]];
+        [_souchePriceLabel setTextColor:[UIColor redColor]];
+        
     }else {
         [_carStatusImage setHidden:NO];
         [_carNameLable setTextColor:[UIColor lightGrayColor]];
@@ -59,8 +66,9 @@
     // 车辆图片
     [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,carModel.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
-    NSString*a = carModel.carStatus;
-    DLog(@"------af-----------------%@",a);
+//    NSString*a = carModel.carStatus;
+    
+//    DLog(@"------af-----------------%@",a);
     [_labelLabel setText:carModel.lookORdrive];
 }
 

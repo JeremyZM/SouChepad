@@ -8,11 +8,15 @@
 
 #import "CommunAddVC.h"
 #import "ChangeTimePopoVC.h"
+#import "HttpManager.h"
+#import "ProgressHUD.h"
 
-@interface CommunAddVC ()
+@interface CommunAddVC () <ChangeTimePopoDelegate>
 {
     UIButton *timeBut;
     UIPopoverController *timePopoVC;
+    NSDictionary *requesDic;
+    UITextView *content;
 }
 @end
 
@@ -35,7 +39,7 @@
     [neir setText:@"内容"];
     [self.view addSubview:neir];
     
-    UITextView *content = [[UITextView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(neir.frame)+20, neir.frame.origin.y, 400, 250)];
+    content = [[UITextView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(neir.frame)+20, neir.frame.origin.y, 400, 250)];
     [content.layer setCornerRadius:10];
     [content.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [content setFont:[UIFont systemFontOfSize:17]];
@@ -64,6 +68,8 @@
     [self.view addSubview:timeBut];
     [timeBut setHidden:YES];
     [timeBut addTarget:self action:@selector(showPopoChangeTime:) forControlEvents:UIControlEventTouchUpInside];
+    
+    requesDic = [NSDictionary dictionary];
 }
 
 - (void)addTimeSwitch:(UISwitch *)sw
@@ -80,6 +86,8 @@
 - (void)showPopoChangeTime:(UIButton*)sender
 {
     ChangeTimePopoVC *changeTime = [[ChangeTimePopoVC alloc] init];
+    [changeTime setUserResM:self.userResM];
+    [changeTime setDelegate:self];
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:changeTime];
     timePopoVC = [[UIPopoverController alloc] initWithContentViewController:nav];
@@ -88,6 +96,24 @@
     timePopoVC.popoverContentSize = CGSizeMake(400, 300);
     [timePopoVC presentPopoverFromRect:frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
+
+- (void)ChangeTimePopoVC:(ChangeTimePopoVC *)changeTVC changeTimeDic:(NSDictionary *)dateDic
+{
+    requesDic = [NSDictionary dictionaryWithDictionary:dateDic];
+    NSString *tim = nil;
+
+    if ([[requesDic objectForKey:@"reservationTime"] isEqualToString:@"morning"]) {
+        tim = @"上午";
+    }else if ([[requesDic objectForKey:@"reservationTime"] isEqualToString:@"afternoon"]) {
+        tim = @"下午";
+    }else {
+        tim = @"晚上";
+    }
+    
+    [timeBut setTitle:[NSString stringWithFormat:@"%@  %@",[requesDic objectForKey:@"reservationDate"],tim] forState:UIControlStateNormal];
+    [timePopoVC dismissPopoverAnimated:YES];
+}
+
 
 #pragma mark - 取消记录
 - (void)cancelRecord:(UIBarButtonItem*)item
@@ -100,9 +126,36 @@
 #pragma mark - 保存记录
 - (void)saveRecord:(UIBarButtonItem *)item
 {
-    [self dismissViewControllerAnimated:YES completion:^{
+    if (content.text.length>0) {
+        NSDictionary *commDateDic = nil;
+        if ([requesDic allKeys].count) {
+            
+            commDateDic = @{@"user":self.userResM.crmUserId,@"reservationDate":[requesDic objectForKey:@"reservationDate"],@"reservationTime":[requesDic objectForKey:@"reservationTime"],@"userName":KUserName,@"comment":content.text,@"store":@"A"};
+        }else
+        {
+            commDateDic = @{@"user":self.userResM.crmUserId,@"reservationDate":@"",@"reservationTime":@"",@"userName":KUserName,@"comment":content.text,@"store":@"A"};
+            
+        }
         
-    }];
+        [HttpManager requestUpdateReservationDateByUser:commDateDic Success:^(id obj) {
+            if ([obj objectForKey:@"succeedMessage"]) {
+                if ([_delegate respondsToSelector:@selector(communAddVC:ReservationDateByUser:)]) {
+                    [_delegate communAddVC:self ReservationDateByUser:commDateDic];
+                }
+                [self dismissViewControllerAnimated:YES completion:^{
+                    
+                }];
+
+            }else
+            {
+                [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
+            }
+            
+        } fail:^(id obj) {
+            
+        }];
+        
+}
 }
 
 

@@ -67,7 +67,7 @@
 /** 渠道来源 */
 @property (copy, nonatomic) NSString *channel;
 
-/** <#Name#> */
+/** 渠道来源 */
 @property (copy, nonatomic) NSString *channelName;
 
 /** <#Name#> */
@@ -137,7 +137,7 @@
 /** 微信登陆账号 */
 @property (copy, nonatomic) NSString *loginWeixin;
 
-/** <#Name#> */
+/**  */
 @property (copy, nonatomic) NSString *name;
 
 /** <#Name#> */
@@ -203,7 +203,7 @@
 /** <#Name#> */
 @property (copy, nonatomic) NSString *userEnable;
 
-/** <#Name#> */
+/** 用户名称 */
 @property (copy, nonatomic) NSString *userName;
 
 

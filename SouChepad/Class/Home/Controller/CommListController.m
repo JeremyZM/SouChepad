@@ -13,35 +13,26 @@
 #import "CommunListM.h"
 #import "CommHeadView.h"
 #import "CommunAddVC.h"
+#import "ProgressHUD.h"
 
-@interface CommListController () <UITableViewDataSource,UITableViewDelegate>
+@interface CommListController () <UITableViewDataSource,UITableViewDelegate,CommunAddVCDelegate>
 {
     NSArray *_dataArray;
     UITableView *_tableView;
 }
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @end
 static NSString *CellIdentifier = @"communCell";
 @implementation CommListController
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (!self.isNew) {
-        [HttpManager requestCommunicationWithParamDic:@{@"userId":self.userResM.crmUserId} Success:^(id obj) {
-            _dataArray = [NSArray arrayWithArray:obj];
-            [_tableView reloadData];
-        } fail:^(id obj) {
-            
-        }];
-    }
-}
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor grayColor]];
-    
+
+    [self RefreshViewControlEventValueChanged];
     // 1.添加toolbar，添加tableview
     [self addToolbar];
     
@@ -50,11 +41,7 @@ static NSString *CellIdentifier = @"communCell";
 
 - (void)addToolbar
 {
-    
-//    CGSize size = self.view.bounds.size;
-//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, size.width, 100)];
-//    [toolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-//    [self.view addSubview:toolbar];
+
     UILabel *titel = [[UILabel alloc] init];
     [titel setText:@"沟通记录"];
     [titel setTextColor:[UIColor whiteColor]];
@@ -73,7 +60,6 @@ static NSString *CellIdentifier = @"communCell";
     [addBut addTarget:self action:@selector(addOneCommun:) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:addBut];
     
-
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -86,18 +72,43 @@ static NSString *CellIdentifier = @"communCell";
     [self.view insertSubview:tableView atIndex:0];
     // 注册cell
     [tableView registerNib:[UINib nibWithNibName:@"CommunCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+//    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [tableView addSubview:self.refreshControl];
+    [self.refreshControl beginRefreshing];
 }
 
 - (void)addOneCommun:(UIButton*)but
 {
     CommunAddVC *commAddVC = [[CommunAddVC alloc] init];
-    
+    [commAddVC setUserResM:self.userResM];
+    [commAddVC setDelegate:self];
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:commAddVC];
     [navVC setModalPresentationStyle:UIModalPresentationFormSheet];
-//    [navVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+
     [self presentViewController:navVC animated:YES completion:^{
         
     }];
+}
+
+- (void)RefreshViewControlEventValueChanged
+{
+        [HttpManager requestCommunicationWithParamDic:@{@"userId":self.userResM.crmUserId} Success:^(id obj) {
+            [self.refreshControl endRefreshing];
+            _dataArray = [NSArray arrayWithArray:obj];
+            [_tableView reloadData];
+        } fail:^(id obj) {
+            [self.refreshControl endRefreshing];
+        }];
+
+}
+
+- (void)communAddVC:(CommunAddVC *)commumVC ReservationDateByUser:(NSDictionary *)dic
+{
+    [self RefreshViewControlEventValueChanged];
 }
 
 
@@ -109,10 +120,20 @@ static NSString *CellIdentifier = @"communCell";
 - (CommunCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CommunCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        CommunListM *commM = _dataArray[indexPath.row];
-    [cell.dayLabel setText:commM.day];
-    [cell.communLabel setText:commM.comment];
-    [cell.handlerLabel setText:commM.handler];
+    CommunListM *communM = _dataArray[indexPath.row];
+    [cell.dayLabel setText:communM.day];
+    [cell.handlerLabel setText:communM.handler];
+    
+    CGSize size = [communM.comment boundingRectWithSize:CGSizeMake(460, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:[NSDictionary dictionaryWithObjectsAndKeys:cell.communLabel.font,NSFontAttributeName, nil]  context:nil].size;
+    
+    [cell.communLabel setText:communM.comment];
+    
+    if (size.height>60) {
+        CGRect cellframe = cell.frame;
+        cellframe.size.height = size.height;
+        [cell setFrame:cellframe];
+
+    }
     
     return cell;
 }
@@ -136,17 +157,9 @@ static NSString *CellIdentifier = @"communCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CommunListM *communM = _dataArray[indexPath.row];
-//    NSString *commentStr = communM.comment;
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    NSDictionary *attributes = @{ NSParagraphStyleAttributeName:paragraphStyle.copy};
-    CGSize size = [communM.comment boundingRectWithSize:CGSizeMake(480, 10000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attributes context:nil].size;
-
-    if (size.height>60) {
-        return size.height;
-    }
-    return 60;
+    
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    return cell.frame.size.height;
 }
 
 - (void)didReceiveMemoryWarning

@@ -44,15 +44,19 @@
         [_carNameLable setTextColor:[UIColor blackColor]];
         [_souchePriceLabel setTextColor:[UIColor redColor]];
         
+    }else if ([tradeCarInfoM.carStatus isEqualToString:@"预售"]){
+        [_carStatusImage setHidden:YES];
+        [_levelImage setHidden:NO];
+        [_levelImage setImage:[UIImage imageNamed:@"presell"]];
+        [_carNameLable setTextColor:[UIColor blackColor]];
+        [_souchePriceLabel setTextColor:[UIColor redColor]];
+        
     }else {
         [_carStatusImage setHidden:NO];
         [_carNameLable setTextColor:[UIColor lightGrayColor]];
         [_souchePriceLabel setTextColor:[UIColor lightGrayColor]];
         [_carStatusImage setImage:[UIImage imageNamed:@"done_04"]];
     }
-
-    
-    
     
     // 车辆图片
     [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,tradeCarInfoM.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
@@ -60,6 +64,8 @@
     NSString*a = tradeCarInfoM.carStatus;
     DLog(@"------af-----------------%@",a);
     
+    [_lineLabel setText:[NSString stringWithFormat:@"(搜车价 %@万)",tradeCarInfoM.souchePrice]];
+    [_lineLabel sizeToFit];
     /**
      *  成交，试驾看车，预约，收藏
      */
@@ -70,7 +76,7 @@
     [_tradeTypeLabel setText:tradeCarInfoM.transferMode];
     
     // 成交价
-    [_tradePriceLabel setText:tradeCarInfoM.tradePrice];
+    [_tradePriceLabel setText:[NSString stringWithFormat:@"%@万",tradeCarInfoM.tradePrice]];
     // 过户地
     [_transferToLabel setText:tradeCarInfoM.transferTo];
     // 交易进度

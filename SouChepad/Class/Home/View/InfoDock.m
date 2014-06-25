@@ -41,7 +41,13 @@
 - (void)addAllInfoItems
 {
     // 1.我的客户
-    [self addOneInfoTabTitle:@"返回" icon:@"tubiao_38" selectedIcon:@"tubiao_38" index:0];
+//    [self addOneInfoTabTitle:@"" icon:@"tubiao_38" selectedIcon:@"tubiao_38" index:0];
+    UIButton *backBut = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 100)];
+    [backBut setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
+    [backBut setImage:[UIImage imageNamed:@"tubiao_38"] forState:UIControlStateNormal];
+    [backBut addTarget:self action:@selector(InfotabClick:) forControlEvents:UIControlEventTouchUpInside];
+    [backBut setTag:0];
+    [self addSubview:backBut];
 
     // 2.我的车辆
     [self addOneInfoTabTitle:@"个人信息" icon:@"tubiao_16" selectedIcon:@"tubiao_25" index:1];
@@ -54,10 +60,8 @@
     [self addOneInfoTabTitle:@"沟通记录" icon:@"tubiao_18" selectedIcon:@"tubiao_27" index:3];
     
     // 4.逛店找车
-    [self addOneInfoTabTitle:@"逛店找车" icon:@"tubiao_19" selectedIcon:@"tubiao_28" index:4];
+//    [self addOneInfoTabTitle:@"逛店找车" icon:@"tubiao_19" selectedIcon:@"tubiao_28" index:4];
     
-    
-
 }
 
 

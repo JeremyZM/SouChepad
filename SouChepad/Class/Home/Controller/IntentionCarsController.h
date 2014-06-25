@@ -18,7 +18,6 @@
 
 @interface IntentionCarsController : SCBasicController
 @property (nonatomic, strong) UserReservationM *userReserM;
-@property (nonatomic, assign) BOOL isNew;
 
 @property (nonatomic, weak) id <IntentionCarsControllerDelegat> deleget;
 @end

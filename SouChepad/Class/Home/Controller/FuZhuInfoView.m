@@ -8,62 +8,249 @@
 
 #import "FuZhuInfoView.h"
 #import "KeyboardTool.h"
+#import "SJAvatarBrowser.h"
+#import "ImageViewController.h"
+#import "ProgressHUD.h"
+#import "UIImageView+WebCache.h"
 
-
-@interface FuZhuInfoView()<KeyboardToolDelegate,UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITableViewDataSource,UITableViewDelegate>
+@interface FuZhuInfoView()<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     UITableView *_fzInfoTable;
     NSArray *_dataArray;
-    
-    NSInteger ratselectRow; // 等级选中的行
-    NSInteger nameSelectRow; // 时间，姓名选中行
+
+    UIImageView *cardIDup;
+    UIImageView *cardIDdown;
+    UIImageView *driveCard;
+    UIImageView *selectImage;
     
     UIPopoverController *popoVC;
     
-    UIPickerView  *_languagePicker;
+    UserVOModel *userVoModel;
+    UserExtendModel *userExtendModel;
 }
 
-// 键盘工具自定义视图
-@property (strong, nonatomic) KeyboardTool *keyboardTool;
-
-// 建立所有文本输入控件的数组
-@property (strong, nonatomic) NSMutableArray *textFiledArray;
-
-// 用户选中的文本框
-@property (weak, nonatomic) UITextField *selectedTextField;
 @end
 
 @implementation FuZhuInfoView
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame userVOModel:(UserVOModel*)userVo userExtendmodel:(UserExtendModel*)userExtendM
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _fzInfoTable = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
+        userVoModel = userVo;
+        userExtendModel = userExtendM;
+        _fzInfoTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height-130) style:UITableViewStylePlain];
+        [_fzInfoTable setSeparatorColor:[UIColor hexStringToColor:KSeparatorColor]];
+        [_fzInfoTable setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 20)];
         [_fzInfoTable setDelegate:self];
         [_fzInfoTable setDataSource:self];
-        [_fzInfoTable setScrollEnabled:NO];
         [_fzInfoTable setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
         [self addSubview:_fzInfoTable];
+
         
-        self.keyboardTool = [KeyboardTool keyboardTool];
-        [self.keyboardTool setToolDelegate:self];
+        _dataArray = @[@"来源",@"QQ",@"微信",@"邮箱",@"座机",@"生日",@"年龄段",@"身份证",@"所在地"];
         
-        self.textFiledArray = [NSMutableArray array];
+        UIView *pickView = [[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height-130, frame.size.width, 130)];
+        [pickView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
         
-        UIPickerView *languagePicker = [[UIPickerView alloc] init];
-        [languagePicker setDelegate:self];
-        [languagePicker setDataSource:self];
-        [languagePicker setShowsSelectionIndicator:YES];
-        [languagePicker setBackgroundColor:[UIColor whiteColor]];
-        _languagePicker = languagePicker;
+        UILabel *zhengjian = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 100, 30)];
+        [zhengjian setText:@"证件上传"];
+        [zhengjian setFont:KFont18];
+        [zhengjian setTextColor:[UIColor darkGrayColor]];
+        [pickView addSubview:zhengjian];
+        [self addSubview:pickView];
         
-        _dataArray = @[@"来源",@"QQ",@"微信",@"邮箱",@"座机",@"生日",@"年龄段",@"身份证",@"所在地",@"优惠信息",@"证件上传"];
+        
+        cardIDup = [[UIImageView alloc] initWithFrame:CGRectMake(150, 20, 120, 120*768/1024)];
+        [cardIDup setUserInteractionEnabled:YES];
+        UITapGestureRecognizer *oneTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseImage:)];
+        [cardIDup addGestureRecognizer:oneTap];
+        [pickView addSubview:cardIDup];
+        [cardIDup setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_03"]]];
+        [cardIDup setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardFront]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        UILongPressGestureRecognizer *cardUPlongPressGesture = [[UILongPressGestureRecognizer alloc]
+                                           initWithTarget:self
+                                           action:@selector(handleLongPressGestures:)];
+        [cardIDup addGestureRecognizer:cardUPlongPressGesture];
+        
+        
+        cardIDdown = [[UIImageView alloc] initWithFrame:CGRectMake(330, 20, 120, 120*768/1024)];
+        [cardIDdown setUserInteractionEnabled:YES];
+        UITapGestureRecognizer *twoTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseImage:)];
+        [cardIDdown addGestureRecognizer:twoTap];
+        [pickView addSubview:cardIDdown];
+        [cardIDdown setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_03"]]];
+        [cardIDdown setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardBack]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        
+        
+        driveCard = [[UIImageView alloc] initWithFrame:CGRectMake(510, 20, 120, 120*768/1024)];
+        [driveCard setUserInteractionEnabled:YES];
+        [driveCard setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_03"]]];
+        [driveCard setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        UITapGestureRecognizer *driveTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(chooseImage:)];
+        [driveCard addGestureRecognizer:driveTap];
+        [pickView addSubview:driveCard];
+        UILongPressGestureRecognizer *driveCardlongPressGesture = [[UILongPressGestureRecognizer alloc]
+                                                                initWithTarget:self
+                                                                action:@selector(handleLongPressGestures:)];
+        [driveCard addGestureRecognizer:driveCardlongPressGesture];
+        
+        
     }
     return self;
 }
 
+
+// 长按手势
+- (void) handleLongPressGestures:(UILongPressGestureRecognizer *)paramSender{
+    if ([paramSender state] == UIGestureRecognizerStateBegan) {
+        UIImageView *imageView = (UIImageView*)paramSender.view;
+        if (imageView.image) {
+            selectImage = imageView;
+            UIActionSheet *deleSheet = [[UIActionSheet alloc] initWithTitle:@"删除照片" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"确认删除" otherButtonTitles:nil, nil];
+            [deleSheet setTag:222];
+            [deleSheet showFromRect:imageView.frame inView:imageView.superview animated:YES];
+        }
+        
+    }
+}
+
+// 单击手势
+- (void)chooseImage:(UITapGestureRecognizer*)tap
+{
+    
+    UIImageView *image = (UIImageView *)tap.view;
+    if (image.image) {
+        ImageViewController *imageVC = [[ImageViewController alloc] init];
+        [imageVC setAvatarImageView:image];
+        [self.customPIMVC presentViewController:imageVC animated:YES completion:^{
+            
+        }];
+//        [SJAvatarBrowser showImage:image];
+        
+    }else{
+        
+        selectImage = image;
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从相册选择",nil];
+        [sheet setTag:221];
+        [sheet showFromRect:image.frame inView:image.superview animated:YES];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    DLog(@"%d",buttonIndex);
+}
+
+
+#pragma mark - 
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (actionSheet.tag==221) {
+        if (buttonIndex==0) { //拍照
+            // 判断相机可以使用
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                imagePicker.delegate = self;
+                [imagePicker setAllowsEditing:NO];
+                [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+                imagePicker.showsCameraControls  = YES;
+                UIImage *imageCamera = nil;
+                
+                if (selectImage==cardIDup) {
+                    imageCamera = [UIImage imageNamed:@"shenfengzheng1"];
+                }else if(selectImage == cardIDdown){
+                    imageCamera = [UIImage imageNamed:@"shenfengzheng2"];
+                }else if(selectImage==driveCard) {
+                    imageCamera = [UIImage imageNamed:@"jiashizheng"];
+                }
+                
+                UIImageView *cameraImage = [[UIImageView alloc] initWithImage:imageCamera];
+                [cameraImage setCenter:imagePicker.view.center];
+                [cameraImage setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+                [imagePicker setCameraOverlayView:cameraImage];
+                [self.customPIMVC presentViewController:imagePicker animated:YES completion:^{
+                    
+                }];
+            }else {
+                [[[UIAlertView alloc] initWithTitle:nil message:@"摄像头不可用！！！" delegate:self cancelButtonTitle:@"知道了！" otherButtonTitles:nil, nil] show];
+            }
+            
+        }else if(buttonIndex ==1) {  // 从相册选择
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                imagePicker.delegate = self;
+                [imagePicker setAllowsEditing:YES];
+                
+                imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                
+                popoVC = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
+                [popoVC setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
+                [popoVC  presentPopoverFromRect:selectImage.frame inView:selectImage.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                
+            }else {
+                
+            }
+            
+        }
+        
+    }else if (actionSheet.tag==222)
+    {
+
+        if (buttonIndex==0) {
+            [selectImage setImage:nil];
+        }
+    }
+}
+
+// 保存图片后到相册后，调用的相关方法，查看是否保存成功
+- (void) imageWasSavedSuccessfully:(UIImage *)paramImage didFinishSavingWithError:(NSError *)paramError contextInfo:(void *)paramContextInfo{
+    if (paramError == nil){
+        [ProgressHUD showSuccess:@"保存成功"];
+    } else {
+        [ProgressHUD showSuccess:@"保存失败"];
+        
+    }
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    
+    if (picker.sourceType==UIImagePickerControllerSourceTypePhotoLibrary) {
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [selectImage setImage:image];
+        [popoVC dismissPopoverAnimated:YES];
+    }else{
+        [picker dismissViewControllerAnimated:YES completion:^{
+            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            [selectImage setImage:image];
+            UIImageWriteToSavedPhotosAlbum(image, self,
+                                           @selector(imageWasSavedSuccessfully:didFinishSavingWithError:contextInfo:), nil);
+        }];
+        
+    }
+    
+}
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+
+
+
+
+#pragma mark - tableviewdelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -72,155 +259,52 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell =[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
+    static NSString *cellid = @"cellid";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellid];
+    UILabel *titLabel = nil;
+    if (cell==nil) {
+        cell =[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell.textLabel setTextColor:[UIColor darkGrayColor]];
+        [cell.textLabel setFont:KFont18];
+        titLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 0, 600, 60)];
+        [titLabel setFont:KFont18];
+        [cell.contentView addSubview:titLabel];
+    }
     [cell.textLabel setText:_dataArray[indexPath.row]];
-    [cell.textLabel setTextColor:[UIColor darkGrayColor]];
+    switch (indexPath.row) {
+        case 0:
+            [titLabel setText:userVoModel.source];
+            break;
+        case 1:
+            [titLabel setText:userVoModel.qq];
+            break;
+        case 2:
+            [titLabel setText:userVoModel.weixin];
+            break;
+        case 3:
+            [titLabel setText:userVoModel.email];
+            break;
+        case 4:
+            [titLabel setText:userVoModel.wirePhone];
+            break;
+        case 5:
+            [titLabel setText:userVoModel.birthday];
+            break;
+        case 6:
+            [titLabel setText:userVoModel.ageGroupName];
+            break;
+        case 7:
+            [titLabel setText:userVoModel.cardNumber];
+            break;
+        case 8:
+            [titLabel setText:userVoModel.addressName];
+            break;
+        default:
+            break;
+    }
     
-    UITextField *IDCardNumberF = [self addTextField];
-
-    [cell.contentView addSubview:IDCardNumberF];
-    [self.textFiledArray addObject:IDCardNumberF];
     return cell;
-}
-
-- (void)keyboardTool:(KeyboardTool *)keyboard buttonType:(KeyboardToolButtonType)buttonType
-{
-    /**
-     上一个&下一个文本控件的切换
-     */
-    if (kKeyboardToolButtonDone == buttonType) {
-        // 关闭键盘
-        [self hideKeyboard];
-    } else {
-        // 1. 获取当前选中的文本控件
-        // 2. 获取当前空间在数组中的索引
-        NSUInteger index = [self.textFiledArray indexOfObject:self.selectedTextField];
-        
-        if (kKeyboardToolButtonNext == buttonType) {
-            index++;
-        } else {
-            index--;
-        }
-        
-        UITextField *textField = self.textFiledArray[index];
-        
-        [textField becomeFirstResponder];
-    }
-}
-
-
-- (void)hideKeyboard
-{
-    
-    [UIView animateWithDuration:0.25f animations:^{
-        [self endEditing:YES];
-    } completion:^(BOOL finished) {
-        
-        
-    }];
-}
-
-#pragma mark textField代理方法
-// 开始编辑
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    // 记录当前选中的文本框
-    self.selectedTextField = textField;
-    
-    NSUInteger index = [self.textFiledArray indexOfObject:textField];
-    
-    if (index==	0||index==5) {
-        [textField setInputView:_languagePicker];
-    }
-    
-    // 如果是数组中第一个文本框，禁用上一个按钮
-    self.keyboardTool.prevButton.enabled = (index != 0);
-    // 如果是数组中最后一个文本框，禁用下一个按钮
-    self.keyboardTool.nextButton.enabled = (index != self.textFiledArray.count - 1);
-}
-
-
-#pragma mark -
-// 设置数据列数
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-    
-}
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return 50;
-}
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return @"111111";
-}
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    
-    
-    
-    
-}
-
-/*
- - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
- {
- return 2;
- }
- - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
- {
- if (component == kProvinceComponent) {
- return [self.provinces count];
- }
- return [self.cities count];
- }
- #pragma mark Picker Delegate Methods
- - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
- 
- if (component == kProvinceComponent) {
- return [self.provinces objectAtIndex:row];
- }
- return [self.cities objectAtIndex:row];
- }
- - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
- {
- if (component == kProvinceComponent) {
- NSString *selectedState = [self.provinces objectAtIndex:row];
- NSArray *array = [provinceCities objectForKey:selectedState];
- self.cities = array;
- [picker selectRow:0 inComponent:kCityComponent animated:YES];
- [picker reloadComponent:kCityComponent];
- }
- }
- - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
- {
- if (component == kCityComponent) {
- return 150;
- }
- return 140;
- }
-
- 
- */
-
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 60;
-}
-
-
-- (UITextField*)addTextField
-{
-    UITextField *textf = [[UITextField alloc] initWithFrame:CGRectMake(150, 0, 600, 60)];
-    [textf setDelegate:self];
-    [textf setInputAccessoryView:self.keyboardTool];
-    [textf setPlaceholder:@"请填写"];
-    [textf setFont:[UIFont systemFontOfSize:22]];
-    return textf;
 }
 
 

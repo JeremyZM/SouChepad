@@ -28,7 +28,7 @@
     UIButton *infoCQI = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-80, 30, 50, 40)];
     [infoCQI addTarget:self action:@selector(showinfoCQI) forControlEvents:UIControlEventTouchUpInside];
     [infoCQI setBackgroundColor:[UIColor whiteColor]];
-    [self.headBar addSubview:infoCQI];
+//    [self.headBar addSubview:infoCQI];
     
     
     UIWebView *carWeb = [[UIWebView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100)];

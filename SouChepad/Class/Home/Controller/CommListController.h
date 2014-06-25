@@ -11,7 +11,6 @@
 @class UserReservationM;
 
 @interface CommListController : SCBasicController
-@property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, strong) UserReservationM *userResM;
 
 @end

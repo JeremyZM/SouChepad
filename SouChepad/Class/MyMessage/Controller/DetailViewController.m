@@ -64,8 +64,8 @@
 //                [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.imageView.frame))];
 //            }];
 //            [self.imageView setImageURL:@"http://assets.sbnation.com/assets/2512203/dogflops.gif"];
-            [self.imageView setImageURL:@"http://imgsrc.baidu.com/forum/pic/item/bb22720e0cf3d7ca3e07d2f2f01fbe096a63a945.jpg" result:^(BOOL isDownload) {
-                [self.imageView sizeToFit];
+            [self.imageView setImageURL:url result:^(BOOL isDownload) {
+                [_imageView sizeToFit];
                 [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.imageView.frame)+30)];
             }];
             

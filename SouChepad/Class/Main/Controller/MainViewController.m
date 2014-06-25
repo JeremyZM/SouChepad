@@ -31,20 +31,22 @@
 
 @implementation MainViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLoad
 {
-        
+    [super viewDidLoad];
+    
     [HttpManager getDictionarySuccess:^(id obj) {
         
     } fail:^(id obj) {
         
     }];
-}
+    
+    [HttpManager getDictionaryByTypeAndLevel:@{@"type":@"car-subdivision",@"level":@"brand",@"nextlevel":@"series"} Success:^(id obj) {
+        
+    } fail:^(id obj) {
+        
+    }];
 
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
     
     // 1.添加dock栏
     [self addDockView];

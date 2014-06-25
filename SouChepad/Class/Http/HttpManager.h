@@ -27,13 +27,6 @@ typedef void (^UploadProgress)(NSString *progress);
 +(void)requestLoginWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 搜索手机号
-/**
- *  搜索手机号
- *
- *  @param paramDic 手机号和销售id
- *  @param success  成功
- *  @param fail     失败
- */
 +(void)requestSearchPhoneNumaber:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 
@@ -43,14 +36,40 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 客户基本信息
 + (void)requestUserInfoWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 修改用户个人信息////创建无号码用户
++ (void)requestUpdtaeUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 销售修改预约到店时间
++ (void)requestUpdateReservationDate:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+
+#pragma mark - 用户信息进入接待
++ (void)requestUpdateBeginReservationByUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 预约客户进入接待
++ (void)requestUpdateBeginReservationById:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 销售修改预约到店时间（填写沟通）
++ (void)requestUpdateReservationDateByUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
 #pragma mark - 沟通记录
 + (void)requestCommunicationWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 意向车辆
 + (void)requestUserIntentionWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 客户需求
++ (void)requestUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
 #pragma mark - 我的消息
 + (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+
+#pragma mark - 获取所有车型
++ (void)getDictionaryByTypeAndLevel:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 用户结束接待
++ (void)requestUserOutStore:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 // 上传图片，成功后返回dictionary
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;

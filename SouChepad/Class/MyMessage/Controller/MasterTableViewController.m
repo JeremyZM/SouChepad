@@ -21,7 +21,7 @@
     NSArray *filteredContentList;
     
     CoreDateManager *coreManager;
-     MJRefreshHeaderView *_refreshControl; // 下拉刷新
+//     MJRefreshHeaderView *_refreshControl; // 下拉刷新
 }
 @property (nonatomic, strong) DetailViewController *detailViewController;
 
@@ -34,9 +34,10 @@
 {
     [self.navigationController.navigationBar setBarTintColor:[UIColor hexStringToColor:KBaseColo]];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"筛选" style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"筛选" style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
 }
 
 - (void)addsearchDisplay
@@ -66,34 +67,48 @@
     
     coreManager = [[CoreDateManager alloc]init];
     
-    // 1.添加下拉刷新
-    _refreshControl = [MJRefreshHeaderView header];
-    _refreshControl.delegate = self;
-    _refreshControl.scrollView = self.tableView;
-    [_refreshControl setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
-    // 自动进入刷新状态
-    [_refreshControl beginRefreshing];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+    
+    [self.refreshControl beginRefreshing];
+    [self writeDate];
+//    // 1.添加下拉刷新
+//    _refreshControl = [MJRefreshHeaderView header];
+//    _refreshControl.delegate = self;
+//    _refreshControl.scrollView = self.tableView;
+//    [_refreshControl setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
+//    // 自动进入刷新状态
+//    [_refreshControl beginRefreshing];
 
     
 }
 
-// 开始刷新
-- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+//// 开始刷新
+//- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+//{
+//    [self writeDate];
+//}
+//
+//// 结束刷新
+//- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
+//{
+//
+//}
+
+- (void)RefreshViewControlEventValueChanged
 {
     [self writeDate];
 }
 
-// 结束刷新
-- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
-{
-
-}
-
-
 -(void)writeDate
 {
     [HttpManager requestMyMessageWithParamDic:nil Success:^(id obj) {
-        [_refreshControl endRefreshing];
+//        [_refreshControl endRefreshing];
+        [self.refreshControl endRefreshing];
         _messageArray = [NSArray arrayWithArray:obj];
         [coreManager deleteData];
         //把数据写到数据库
@@ -103,7 +118,8 @@
     } fail:^(id obj) {
         _messageArray = [coreManager selectData:100 andOffset:0];
         [self.tableView reloadData];
-        [_refreshControl endRefreshing];
+        [self.refreshControl endRefreshing];
+//        [_refreshControl endRefreshing];
     }];
     
 }
@@ -201,9 +217,9 @@
 }
 
 
-- (void)dealloc
-{
-    [_refreshControl free];
-}
+//- (void)dealloc
+//{
+//    [_refreshControl free];
+//}
 
 @end

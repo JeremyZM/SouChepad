@@ -17,8 +17,9 @@
 #import "ProgressHUD.h"
 #import "SearchVC.h"
 #import "NSString+val.h"
+#import "ProgressHUD.h"
 
-@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate>
+@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate,ChangeTimePopoDelegate>
 {
     UITableView *table;
     UIPopoverController *popoVC;
@@ -38,6 +39,7 @@
     
 }
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) UIPopoverController *timePopoVC;
 
 @end
@@ -48,19 +50,7 @@ static NSString *CellIdentifier = @"cellID";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [HttpManager requestClientWithParamDic:@{@"userName":[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],@"type":@"saler"} Success:^(id obj) {
-        if (obj) {
-            dataDic = [NSDictionary dictionaryWithDictionary:obj];
-            userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
-            usertoStoreArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"usertostore"]];
-            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
-            [table reloadData];
-        }
-        
-        
-    } fail:^(id obj) {
-        
-    }];
+    [self RefreshViewControlEventValueChanged];
 }
 
 - (void)viewDidLoad
@@ -95,7 +85,6 @@ static NSString *CellIdentifier = @"cellID";
     [self.headBar addSubview:searchBut];
 
     
-    
     UIButton *addBut = [[UIButton alloc] initWithFrame:CGRectMake(840, 30, 140, 40)];
     addBut.titleEdgeInsets = UIEdgeInsetsMake(0, 18, 0, 0);
     [addBut setImage:[UIImage imageNamed:@"tubiao_35"] forState:UIControlStateNormal];
@@ -125,9 +114,36 @@ static NSString *CellIdentifier = @"cellID";
     [table registerNib:[UINib nibWithNibName:@"CustomerListCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
 
     [self.view addSubview:table];
-    
     _seleckStr = @"所有等级";
     _namSeleckStr = @"按到店时间";
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+//    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [table addSubview:self.refreshControl];
+    
+    [self.refreshControl beginRefreshing];
+}
+
+ // 刷新数据
+- (void)RefreshViewControlEventValueChanged
+{
+    DLog(@"%@",KUserName);
+    [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
+        if (obj) {
+            dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
+            usertoStoreArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"usertostore"]];
+            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
+            [table reloadData];
+        }
+        [self.refreshControl endRefreshing];
+        
+    } fail:^(id obj) {
+        [self.refreshControl endRefreshing];
+    }];
+
 }
 
 - (void)addUserInfo:(UIButton*)button
@@ -156,9 +172,17 @@ static NSString *CellIdentifier = @"cellID";
 
         }else
         {
-            InfoMainController *infoMVC = [[InfoMainController alloc] init];
-            [infoMVC setIsNew:YES];
-            [self.navigationController pushViewController:infoMVC animated:YES];
+            [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"userTag":@"111"} Success:^(id obj) {
+                UserReservationM *newUserM = [[UserReservationM alloc] init];
+                [newUserM setCrmUserId:obj];
+                InfoMainController *infoMVC = [[InfoMainController alloc] init];
+                
+                [infoMVC setUserInfoM:newUserM];
+                [self.navigationController pushViewController:infoMVC animated:YES];
+            } fail:^(id obj) {
+                
+            }];
+            
             
         }
         
@@ -186,9 +210,11 @@ static NSString *CellIdentifier = @"cellID";
     [popo setPopoTabelDelegate:self];
     popo.sortWayBtn = button;
     if (button.tag == ratBtnTag) {
-        NSArray *aarray = [NSKeyedUnarchiver unarchiveObjectWithFile:KbuyerStatus];
-        for (BaseDtaModel *dataM in aarray) {
-            [arrayM addObject:dataM.name];
+//        NSArray *aarray = [NSKeyedUnarchiver unarchiveObjectWithFile:KbuyerStatus];
+        NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
+
+        for (NSDictionary *dataM in aarray) {
+            [arrayM addObject:[dataM objectForKey:@"name"]];
         }
         [arrayM insertObject:@"所有等级" atIndex:0];
         [popo setArray:arrayM];
@@ -236,7 +262,7 @@ static NSString *CellIdentifier = @"cellID";
         }
     }
 
-    [table reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+    [table reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationLeft];
     [popoVC dismissPopoverAnimated:YES];
 }
 
@@ -252,7 +278,7 @@ static NSString *CellIdentifier = @"cellID";
 
 // 排序
 - (NSMutableArray*) changeArray:(NSMutableArray *)dicArray orderWithKey:(NSString *)key ascending:(BOOL)yesOrNo{
-        NSSortDescriptor *distanceDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:YES];
+        NSSortDescriptor *distanceDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:NO];
     	NSMutableArray *descriptors=[[NSMutableArray alloc]initWithObjects:&distanceDescriptor count:1];
     	[dicArray sortUsingDescriptors:descriptors];
     return dicArray;
@@ -357,7 +383,12 @@ static NSString *CellIdentifier = @"cellID";
         [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
         [cell.TimeUpdate setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
         [cell.TimeUpdate setTag:(900+indexPath.row)];
-        [cell.TimeUpdate setEnabled:YES];
+        if ([userReserM.day isEqualToString:@"正在接待"]) {
+            [cell.TimeUpdate setEnabled:NO];
+        }else{
+        
+            [cell.TimeUpdate setEnabled:YES];
+        }
     }else if (indexPath.section == 1){
         
         // 接待过的客户
@@ -367,8 +398,8 @@ static NSString *CellIdentifier = @"cellID";
         [cell.PhoneCustomer setText:usertoStore.phone];
         [cell.GradeCustomer setText:usertoStore.userLevel];
         [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day] forState:UIControlStateNormal];
-        
         [cell.TimeUpdate setEnabled:NO];
+        [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
     }
    
     return cell;
@@ -379,6 +410,7 @@ static NSString *CellIdentifier = @"cellID";
 - (void)changeTime:(UIButton*)sender {
     ChangeTimePopoVC *changeTime = [[ChangeTimePopoVC alloc] init];
     [changeTime setUserResM:userReserArray[sender.tag-900]];
+    [changeTime setDelegate:self];
 
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:changeTime];
     self.timePopoVC = [[UIPopoverController alloc] initWithContentViewController:nav];
@@ -389,6 +421,21 @@ static NSString *CellIdentifier = @"cellID";
     
 }
 
+- (void)ChangeTimePopoVC:(ChangeTimePopoVC *)changeTVC changeTimeDic:(NSDictionary *)dateDic
+{
+    [self.timePopoVC dismissPopoverAnimated:YES];
+    [HttpManager requestUpdateReservationDate:dateDic Success:^(id obj) {
+        
+        if ([obj objectForKey:@"succeedMessage"]) {
+            [self viewDidAppear:YES];
+        }else
+        {
+            [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
+        }
+    } fail:^(id obj) {
+        
+    }];
+}
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

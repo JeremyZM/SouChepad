@@ -10,7 +10,6 @@
 
 @class UserReservationM;
 @interface CustomPIMController : SCBasicController
-@property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, strong) UserReservationM *userInfoM;
 
 @end

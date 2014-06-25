@@ -27,6 +27,9 @@
     
     UISegmentedControl *_orderSegmented;
 }
+
+@property(nonatomic, strong) UIRefreshControl *refreshControl;
+
 @end
 static NSString *CollectCarCellid = @"CollectCarCellid";
 static NSString *TradeCarInfoCellid = @"TradeCarInfoCellid";
@@ -34,42 +37,16 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 @implementation IntentionCarsController
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    
-}
-
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor yellowColor]];
-    
-    if (self.isNew) {
-        
-    }else {
-        [HttpManager requestUserIntentionWithParamDic:@{@"userId":self.userReserM.crmUserId} Success:^(id obj) {
-            intentionCars = [NSDictionary dictionaryWithDictionary:obj];
-            tradesCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"trades"]];
-            driveCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"drive"]];
-            readyseeCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"readyseecar"]];
-            collectCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"collect"]];
-            [_collectionView reloadData];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"已购车辆 %d",tradesCars.count] forSegmentAtIndex:0];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"试驾看车 %d",driveCars.count] forSegmentAtIndex:1];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"预约车辆 %d",readyseeCars.count] forSegmentAtIndex:2];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"收藏车辆 %d",collectCars.count] forSegmentAtIndex:3];
-        } fail:^(id obj) {
-            
-        }];
-    }
 
     
     [self addCollectionView];
     [self addToolbar];
+
+    [self RefreshViewControlEventValueChanged];
 }
 
 - (void)addToolbar
@@ -116,6 +93,33 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
     [self.view insertSubview:_collectionView atIndex:0];
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+//    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [_collectionView addSubview:self.refreshControl];
+    [self.refreshControl beginRefreshing];
+    
+}
+
+- (void)RefreshViewControlEventValueChanged
+{
+
+        [HttpManager requestUserIntentionWithParamDic:@{@"userId":self.userReserM.crmUserId} Success:^(id obj) {
+            intentionCars = [NSDictionary dictionaryWithDictionary:obj];
+            tradesCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"trades"]];
+            driveCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"drive"]];
+            readyseeCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"readyseecar"]];
+            collectCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"collect"]];
+            [_collectionView reloadData];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"已购车辆 %d",tradesCars.count] forSegmentAtIndex:0];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"试驾看车 %d",driveCars.count] forSegmentAtIndex:1];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"预约车辆 %d",readyseeCars.count] forSegmentAtIndex:2];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"收藏车辆 %d",collectCars.count] forSegmentAtIndex:3];
+            [self.refreshControl endRefreshing];
+        } fail:^(id obj) {
+            [self.refreshControl endRefreshing];
+        }];
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath

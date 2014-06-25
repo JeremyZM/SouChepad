@@ -13,6 +13,7 @@
 #import "OtherSellUserCell.h"
 #import "CustomerListCell.h"
 #import "UserReservationM.h"
+#import "InfoMainController.h"
 
 @interface SearchVC () <UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
 {
@@ -50,7 +51,7 @@ static NSString *newUserCell = @"newUserCell";
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     phoneSearch = searchBar;
     [searchBar setFrame:CGRectMake(280, 40, 500, 40)];
-    [searchBar setText:@"18758188560"];
+//    [searchBar setText:@"18758188560"];
     searchBar.delegate = self;
     [searchBar setPlaceholder:@"搜索客户手机号"];
     [searchBar becomeFirstResponder];
@@ -155,6 +156,7 @@ static NSString *newUserCell = @"newUserCell";
                 UserReservationM *userM = myself[indexPath.row];
 
                 CustomerListCell *myUserCell = [tableView dequeueReusableCellWithIdentifier:myselfCell];
+                [myUserCell setUserReserM:userM];
                 cell = myUserCell;
                 [myUserCell.NameCustomer setText:userM.user];
                 [myUserCell.SexCustomer setText:userM.sex];
@@ -180,7 +182,13 @@ static NSString *newUserCell = @"newUserCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    InfoMainController *infoMVC = [[InfoMainController alloc] init];
+#warning aaaaaaa
+    UserReservationM *userReserM = [[UserReservationM alloc] init];
+    [userReserM setCrmUserId:@"18667919830"];
+//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [infoMVC setUserInfoM:userReserM];
+    [self.navigationController pushViewController:infoMVC animated:YES];
 }
 
 
@@ -197,64 +205,5 @@ static NSString *newUserCell = @"newUserCell";
 
 
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

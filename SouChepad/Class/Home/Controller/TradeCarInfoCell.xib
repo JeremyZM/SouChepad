@@ -129,7 +129,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="15.5万" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="A0V-kH-Sz4">
-                        <rect key="frame" x="388" y="67" width="182" height="21"/>
+                        <rect key="frame" x="388" y="67" width="65" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
@@ -153,6 +153,13 @@
                         <color key="textColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9v2-BD-Pcb" customClass="TGCenterLineLabel">
+                        <rect key="frame" x="454" y="67" width="42" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
@@ -167,6 +174,7 @@
                 <outlet property="labelLabel" destination="bc2-C6-up0" id="XK3-bu-M8c"/>
                 <outlet property="labelView" destination="fhk-31-OlJ" id="wf1-h7-5rv"/>
                 <outlet property="levelImage" destination="yHH-Go-U1e" id="vxA-Mo-7p4"/>
+                <outlet property="lineLabel" destination="9v2-BD-Pcb" id="iDf-bn-Zm3"/>
                 <outlet property="souchePriceLabel" destination="ll2-Bf-0vb" id="bt0-Hf-7AQ"/>
                 <outlet property="tradePriceLabel" destination="A0V-kH-Sz4" id="uIv-oR-uAM"/>
                 <outlet property="tradeStatusLabel" destination="tLx-WY-FiZ" id="cBS-A0-UtQ"/>
