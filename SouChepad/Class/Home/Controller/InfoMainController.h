@@ -10,6 +10,5 @@
 @class UserReservationM;
 
 @interface InfoMainController : UIViewController
-@property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, strong) UserReservationM *userInfoM;
 @end

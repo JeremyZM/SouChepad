@@ -89,12 +89,12 @@ static NSString *newUserCell = @"newUserCell";
         [HttpManager requestSearchPhoneNumaber:@{@"contact":searchBar.text,@"userName":KUserName} Success:^(id obj) {
             
             searchUserDic = [NSDictionary dictionaryWithDictionary:obj];
-            if (![searchUserDic objectForKey:@"-1"]) {
+//            if (![searchUserDic objectForKey:@"-1"]) {
                 otherSell = [NSArray arrayWithArray:[searchUserDic objectForKey:@"1"]];
                 myself = [NSArray arrayWithArray:[searchUserDic objectForKey:@"2"]];
-            }else{
-                newUser = [searchUserDic objectForKey:@"-1"];
-            }
+//            }else{
+                newUser = [NSArray arrayWithArray:[searchUserDic objectForKey:@"-1"]];
+//            }
             
             if (_tableView==nil) {
                 
@@ -123,21 +123,24 @@ static NSString *newUserCell = @"newUserCell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (newUser.count!= 0) {
-        return 1;
-    }else {
-        if (myself.count!=0&&otherSell.count!=0) {
-            if (section==0) {
-                return myself.count;
-            }else if (section == 1){
-                return otherSell.count;
-            }
-        }else if (myself.count!=0&&otherSell.count==0){
-            return myself.count;
-        }else if (myself.count ==0&&otherSell.count != 0){
-            return otherSell.count;
-        }
-    }
+    if (section ==0)  return newUser.count;
+    if (section ==1) return myself.count;
+    if (section == 2) return otherSell.count;
+    //    if (newUser.count!= 0) {
+//        return 1;
+//    }else {
+//        if (myself.count!=0&&otherSell.count!=0) {
+//            if (section==0) {
+//                return myself.count;
+//            }else if (section == 1){
+//                return otherSell.count;
+//            }
+//        }else if (myself.count!=0&&otherSell.count==0){
+//            return myself.count;
+//        }else if (myself.count ==0&&otherSell.count != 0){
+//            return otherSell.count;
+//        }
+//    }
         return 1;
 }
 
@@ -145,36 +148,37 @@ static NSString *newUserCell = @"newUserCell";
 {
     DLog(@"%@",searchUserDic);
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    if (newUser.count) {
-        
+    if (indexPath.section==0) {
         SearchNewUserCell *newCell = [tableView dequeueReusableCellWithIdentifier:newUserCell];
         cell = newCell;
+        UserReservationM *userReserM = [newUser firstObject];
+        userReserM.crmUserId = phoneSearch.text;
+        [newCell setUserRM:userReserM];
         [newCell.PhoneLabel setText:phoneSearch.text];
         return newCell;
-    }else {
-            if (indexPath.section==0) {
-                UserReservationM *userM = myself[indexPath.row];
-
-                CustomerListCell *myUserCell = [tableView dequeueReusableCellWithIdentifier:myselfCell];
-                [myUserCell setUserReserM:userM];
-                cell = myUserCell;
-                [myUserCell.NameCustomer setText:userM.user];
-                [myUserCell.SexCustomer setText:userM.sex];
-                [myUserCell.PhoneCustomer setText:userM.phone];
-                [myUserCell.GradeCustomer setText:userM.userLevel];
-                [myUserCell.TimeUpdate setTitle:userM.day forState:UIControlStateNormal];
-                return myUserCell;
-            }else if (indexPath.section == 1){
-                NSDictionary *otherDic = otherSell[indexPath.row];
-                OtherSellUserCell *otherCell = [tableView dequeueReusableCellWithIdentifier:otherSellCell];
-                cell = otherCell;
-                otherCell = (OtherSellUserCell *) cell;
-                [otherCell.phoneNumberLabel setText:[otherDic objectForKey:@"phone"]];
-                [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",[otherDic objectForKey:@"name"]]];
-                return otherCell;
-        }
-
+    }else if (indexPath.section==1){
+        UserReservationM *userM = myself[indexPath.row];
+        
+        CustomerListCell *myUserCell = [tableView dequeueReusableCellWithIdentifier:myselfCell];
+        [myUserCell setUserReserM:userM];
+        cell = myUserCell;
+        [myUserCell.NameCustomer setText:userM.user];
+        [myUserCell.SexCustomer setText:userM.sex];
+        [myUserCell.PhoneCustomer setText:userM.phone];
+        [myUserCell.GradeCustomer setText:userM.userLevel];
+        [myUserCell.TimeUpdate setTitle:userM.day forState:UIControlStateNormal];
+        return myUserCell;
+    
+    }else if (indexPath.section == 2){
+        NSDictionary *otherDic = otherSell[indexPath.row];
+        OtherSellUserCell *otherCell = [tableView dequeueReusableCellWithIdentifier:otherSellCell];
+        cell = otherCell;
+        otherCell = (OtherSellUserCell *) cell;
+        [otherCell.phoneNumberLabel setText:[otherDic objectForKey:@"phone"]];
+        [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",[otherDic objectForKey:@"name"]]];
+        return otherCell;
     }
+
     
     return cell;
 }
@@ -184,8 +188,17 @@ static NSString *newUserCell = @"newUserCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     InfoMainController *infoMVC = [[InfoMainController alloc] init];
 #warning aaaaaaa
-    UserReservationM *userReserM = [[UserReservationM alloc] init];
-    [userReserM setCrmUserId:@"18667919830"];
+    UserReservationM *userReserM=nil;
+    if (indexPath.section==0) {
+        SearchNewUserCell *newCell = (SearchNewUserCell*)[tableView cellForRowAtIndexPath:indexPath];
+        userReserM = newCell.userRM;
+    }else if (indexPath.section ==1){
+        CustomerListCell *cell = (CustomerListCell*)[tableView cellForRowAtIndexPath:indexPath];
+        userReserM = cell.userReserM;
+    }else if (indexPath.section ==2){
+        OtherSellUserCell *otherCell = (OtherSellUserCell*)[tableView cellForRowAtIndexPath:indexPath];
+        userReserM = otherCell.userReserM;
+    }
 //    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [infoMVC setUserInfoM:userReserM];
     [self.navigationController pushViewController:infoMVC animated:YES];

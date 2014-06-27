@@ -15,6 +15,7 @@
 #import "CarDetailWebView.h"
 #import "TradeCarInfoCell.h"
 #import "LookOrDriveCarInfoCell.h"
+#import "ZBarController.h"
 
 @interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate>
 {
@@ -59,11 +60,26 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
     [orderSegmented setCenter:self.headBar.center];
     [orderSegmented setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
     [orderSegmented setSelectedSegmentIndex:0];
-    //    [orderSegmented setTintColor:[UIColor lightGrayColor]];
     [orderSegmented addTarget:self action:@selector(SegmentedChanged:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:orderSegmented];
+    
+    UIButton *scanBut = [[UIButton alloc] initWithFrame:CGRectMake(750, 30, 150, 44)];
+    [scanBut addTarget:self action:@selector(scanErWeiMaBut:) forControlEvents:UIControlEventTouchUpInside];
+    [scanBut setTitle:@"扫描车辆二维码" forState:UIControlStateNormal];
+    [scanBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.headBar addSubview:scanBut];
+    
+    
 }
 
+
+- (void)scanErWeiMaBut:(UIButton*)seanBut
+{
+    ZBarController *zbarVC = [[ZBarController alloc] init];
+    [self presentViewController:zbarVC animated:YES completion:^{
+        
+    }];
+}
 
 - (void)addCollectionView
 {
@@ -98,6 +114,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
     [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
     [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
     [_collectionView addSubview:self.refreshControl];
+    _collectionView.alwaysBounceVertical = YES;
     [self.refreshControl beginRefreshing];
     
 }

@@ -135,6 +135,7 @@
     
     UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息"]];
     [seg setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
+    [seg setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:19] forKey:NSFontAttributeName] forState:UIControlStateNormal];
     [seg setCenter:self.headBar.center];
     [seg addTarget:self action:@selector(segChanged:) forControlEvents:UIControlEventValueChanged];
     [seg setTintColor:[UIColor whiteColor]];

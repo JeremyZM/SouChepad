@@ -166,7 +166,9 @@ static NSString *CellIdentifier = @"cellID";
         if (textField.text.length>0) {
             if ([NSString phoneValidate:textField.text] ) {
                 InfoMainController *infoMVC = [[InfoMainController alloc] init];
-                [infoMVC setIsNew:YES];
+                UserReservationM *userReserM = [[UserReservationM alloc] init];
+                userReserM.crmUserId = textField.text;
+                [infoMVC setUserInfoM:userReserM];
                 [self.navigationController pushViewController:infoMVC animated:YES];
             }
 
@@ -300,7 +302,7 @@ static NSString *CellIdentifier = @"cellID";
     [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
     
     UIButton *oneLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
-    [oneLabel setTitle:[NSString stringWithFormat:@"今日预约 %d",userReserArray.count] forState:UIControlStateNormal];
+    [oneLabel setTitle:[NSString stringWithFormat:@"今明预约 %d",userReserArray.count] forState:UIControlStateNormal];
     [oneLabel.titleLabel setFont:KBoldFont18];
     [oneLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
     [oneLabel setImage:[UIImage imageNamed:@"tubiao_50"] forState:UIControlStateNormal];

@@ -171,33 +171,39 @@
         NSArray *items = [dicObj objectForKey:@"items"];
         NSMutableArray *otherSell = [NSMutableArray array];
         NSMutableArray *myselfArray = [NSMutableArray array];
+        NSMutableArray *newArray = [NSMutableArray array];
         NSMutableDictionary *dataDic = [NSMutableDictionary dictionary];
         for (NSDictionary *dicItem in items) {
             NSString *status = [dicItem objectForKey:@"status"];
             if ([status isEqualToString:@"-1"]) { // 无用户
-                [dataDic setObject:@[@"无用户"] forKey:@"-1"];
+                UserReservationM *userM = [[UserReservationM alloc] init];
+                [newArray addObject:userM];
+//                [dataDic setObject:@[@"新客户"] forKey:@"-1"];
             } else {
                 
                 if ([status isEqualToString:@"1"]) { // 其他销售客户
                     NSDictionary *dicVO = [dicItem objectForKey:@"uservo"];
-                    [otherSell addObject:dicVO];
+                    UserReservationM *userM = [[UserReservationM alloc] init];
+                    userM.crmUserId= [dicVO objectForKey:@"id"];
+                    [otherSell addObject:userM];
                 }if ([status isEqualToString:@"2"]) { // 无归属用户/自己的客户
                     NSDictionary *dicVO = [dicItem objectForKey:@"userToStoreVO"];
                     UserReservationM *userM = [[UserReservationM alloc] init];
                     [userM setKeyValues:dicVO];
                     [myselfArray addObject:userM];
                 }
-                if (otherSell.count) {
-                    
-                    [dataDic setObject:otherSell forKey:@"1"];
-                }
-                if (myselfArray.count) {
-                    
-                    [dataDic setObject:myselfArray forKey:@"2"];
-                }
+//                if (otherSell.count) {
+                
+//                }
+//                if (myselfArray.count) {
+                
+//                }
             }
+            
         }
-        
+        [dataDic setObject:newArray forKey:@"-1"];
+        [dataDic setObject:otherSell forKey:@"1"];
+        [dataDic setObject:myselfArray forKey:@"2"];
         success(dataDic);
 
     } fail:^(MKNetworkOperation *obj, NSError *error) {
