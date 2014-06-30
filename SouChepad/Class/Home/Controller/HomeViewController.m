@@ -64,7 +64,6 @@ static NSString *CellIdentifier = @"cellID";
 #pragma mark - 添加UI
 - (void)addHeadUI
 {
-    
     icon = [UIButton buttonWithType:UIButtonTypeCustom];
     [icon setImage:[UIImage imageNamed:@"tubiao_36"] forState:UIControlStateNormal];
     [icon.titleLabel setFont:KBoldFont18];
@@ -246,7 +245,14 @@ static NSString *CellIdentifier = @"cellID";
         _namSeleckStr = seleckStr;
         if (row==0) {
             
+            for (UserReservationM *userM in usertoStoreArray) {
+                DLog(@"%@",userM.day);
+            }
             usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"day" ascending:NO];
+ 
+            for (UserReservationM *userM in usertoStoreArray) {
+                DLog(@"%@",userM.day);
+            }
         }else if (row == 1){
             usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"updateDay" ascending:NO];
         }else {
@@ -263,8 +269,8 @@ static NSString *CellIdentifier = @"cellID";
             usertoStoreArray = [NSMutableArray arrayWithArray:[self siftArray:arrayM orderWithKey:seleckStr]];
         }
     }
-
-    [table reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationLeft];
+    [table reloadData];
+//    [table reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationLeft];
     [popoVC dismissPopoverAnimated:YES];
 }
 
@@ -280,8 +286,9 @@ static NSString *CellIdentifier = @"cellID";
 
 // 排序
 - (NSMutableArray*) changeArray:(NSMutableArray *)dicArray orderWithKey:(NSString *)key ascending:(BOOL)yesOrNo{
-        NSSortDescriptor *distanceDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:NO];
-    	NSMutableArray *descriptors=[[NSMutableArray alloc]initWithObjects:&distanceDescriptor count:1];
+        NSSortDescriptor *distanceDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:yesOrNo];
+    
+    	NSArray *descriptors=[NSArray arrayWithObject:distanceDescriptor];
     	[dicArray sortUsingDescriptors:descriptors];
     return dicArray;
 
@@ -337,8 +344,7 @@ static NSString *CellIdentifier = @"cellID";
         [ratbut.layer setBorderColor:[[UIColor hexStringToColor:KBaseColo] CGColor]];
         [ratbut.layer setCornerRadius:5];
         [twoView addSubview:ratbut];
-        
-        
+    
         //    ; // 时间筛选按钮
         UIButton *nameBut = [UIButton buttonWithType:UIButtonTypeCustom];
         [nameBut setTag:nameBtnTag];

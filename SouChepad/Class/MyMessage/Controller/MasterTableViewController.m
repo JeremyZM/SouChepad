@@ -34,9 +34,8 @@
 {
     [self.navigationController.navigationBar setBarTintColor:[UIColor hexStringToColor:KBaseColo]];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithImage:[UIImage imageNamed:@"tubiao_36"] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-    
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"筛选" style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
 }
 

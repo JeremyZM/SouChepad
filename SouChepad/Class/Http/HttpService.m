@@ -22,9 +22,12 @@ static HttpService * engine;
         dispatch_once(&onceToken, ^{
             engine = [[self alloc] initWithHostName:KHttpBaseURL];
         });
+//         [[NSNotificationCenter defaultCenter] addObserver:self selector:nil name:@"NSUserDefaultsDidChangeNotification" object:[[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]];
      }
     return engine;
 }
+
+
 
 // post 请求
 - (MKNetworkOperation*)requestWithApi:(NSString*)api parameters:(NSDictionary*)parameter success:(SuccessBlock)successBlock fail:(FailBlock)failBlock reload:(BOOL)reload needHud:(BOOL)needHud hudEnabled:(BOOL)hudEnabled {

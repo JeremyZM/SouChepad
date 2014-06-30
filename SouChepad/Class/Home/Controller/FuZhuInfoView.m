@@ -67,7 +67,7 @@
         UITapGestureRecognizer *oneTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseImage:)];
         [cardIDup addGestureRecognizer:oneTap];
         [pickView addSubview:cardIDup];
-        [cardIDup setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_03"]]];
+        [cardIDup setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_60.png"]]];
         [cardIDup setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardFront]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
         UILongPressGestureRecognizer *cardUPlongPressGesture = [[UILongPressGestureRecognizer alloc]
                                            initWithTarget:self
@@ -80,13 +80,13 @@
         UITapGestureRecognizer *twoTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseImage:)];
         [cardIDdown addGestureRecognizer:twoTap];
         [pickView addSubview:cardIDdown];
-        [cardIDdown setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_03"]]];
+        [cardIDdown setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_62.png"]]];
         [cardIDdown setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardBack]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
         
         
         driveCard = [[UIImageView alloc] initWithFrame:CGRectMake(510, 20, 120, 120*768/1024)];
         [driveCard setUserInteractionEnabled:YES];
-        [driveCard setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"loading_03"]]];
+        [driveCard setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_64.png"]]];
         [driveCard setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
         UITapGestureRecognizer *driveTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(chooseImage:)];
         [driveCard addGestureRecognizer:driveTap];

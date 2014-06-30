@@ -78,7 +78,7 @@ static NSString *newUserCell = @"newUserCell";
 // 开始搜索
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    
+    [searchBar resignFirstResponder];
     if ([NSString phoneValidate:searchBar.text]) {
         
         searchUserDic = nil;
@@ -187,7 +187,6 @@ static NSString *newUserCell = @"newUserCell";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     InfoMainController *infoMVC = [[InfoMainController alloc] init];
-#warning aaaaaaa
     UserReservationM *userReserM=nil;
     if (indexPath.section==0) {
         SearchNewUserCell *newCell = (SearchNewUserCell*)[tableView cellForRowAtIndexPath:indexPath];

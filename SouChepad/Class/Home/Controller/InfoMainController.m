@@ -70,23 +70,17 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     [beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
     [beginBtn setTitle:@"开始接待" forState:UIControlStateNormal];
     [beginBtn setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
-//    [beginBtn.imageView setFrame:CGRectMake(0, 0, beginBtn.bounds.size.width, 70)];
-//     [beginBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 40, 0)]; //将image的位置向右移动100个像素
-//    [beginBtn.imageView setCenter:beginBtn.center];
-//    [beginBtn setTitleEdgeInsets:UIEdgeInsetsMake(20, 0, 0, 0)];
-//    [beginBtn.titleLabel setFrame:CGRectMake(0, 70, beginBtn.bounds.size.width, 30)];
     [beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-//    [beginBtn setBackgroundColor:[UIColor grayColor]];
-    
     [beginBtn addTarget:self action:@selector(startStopTapped:) forControlEvents:UIControlEventTouchUpInside];
     [userInfoDock addSubview:beginBtn];
     
-    self.counterLabel = [[TTCounterLabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(beginBtn.frame)+10,KInfoDockW, 30)];
-    [userInfoDock addSubview:self.counterLabel];
-    [self.counterLabel setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
     
-    self.counterLabel.textColor = [UIColor redColor];
-    [self.counterLabel updateApperance];
+//    self.counterLabel = [[TTCounterLabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(beginBtn.frame)+10,KInfoDockW, 30)];
+//    [userInfoDock addSubview:self.counterLabel];
+//    [self.counterLabel setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+//    
+//    self.counterLabel.textColor = [UIColor redColor];
+//    [self.counterLabel updateApperance];
 
 
     // 2.添加内容view
@@ -180,8 +174,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
             break;
             
         case kTTCounterReset:
-
-
             break;
             
         case kTTCounterEnded:
