@@ -8,6 +8,7 @@
 
 #import "CarDetailWebView.h"
 #import "ProgressHUD.h"
+#import "CarCQIInfoController.h"
 
 @interface CarDetailWebView () <UIWebViewDelegate>
 
@@ -25,10 +26,11 @@
     [disBut addTarget:self action:@selector(dismisSelf) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:disBut];
     
-    UIButton *infoCQI = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-80, 30, 50, 40)];
+    UIButton *infoCQI = [[UIButton alloc] initWithFrame:CGRectMake(850, 40, 150, 40)];
     [infoCQI addTarget:self action:@selector(showinfoCQI) forControlEvents:UIControlEventTouchUpInside];
-    [infoCQI setBackgroundColor:[UIColor whiteColor]];
-//    [self.headBar addSubview:infoCQI];
+    [infoCQI setTitle:@"详细质检报告" forState:UIControlStateNormal];
+    [infoCQI setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.headBar addSubview:infoCQI];
     
     
     UIWebView *carWeb = [[UIWebView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100)];
@@ -43,20 +45,21 @@
 
 - (void)showinfoCQI
 {
-    UIWebView *infoCQIView = [[UIWebView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-900, 0, 900, self.view.bounds.size.height)];
-    [infoCQIView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleHeight];
-    [self.view addSubview:infoCQIView];
-    [infoCQIView setDelegate:self];
+    CarCQIInfoController *carCQIVC = [[CarCQIInfoController alloc] init];
+    carCQIVC.carID = self.carID;
     
-    NSString *url = [NSString stringWithFormat:@"http://manage.souche.com/pages/car/preview-report.html?carId=prg9I4G"];
-    [infoCQIView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:carCQIVC];
+    [navVC setModalPresentationStyle:UIModalPresentationPageSheet];
+    [self presentViewController:navVC animated:YES completion:^{
+        
+    }];
     
 }
 
 - (void)dismisSelf
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        
+        [ProgressHUD dismiss];
     }];
 }
 

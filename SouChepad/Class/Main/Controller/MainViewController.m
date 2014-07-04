@@ -35,13 +35,9 @@
 {
     [super viewDidLoad];
     
-    [HttpManager getDictionarySuccess:^(id obj) {
-        
-    } fail:^(id obj) {
-        
-    }];
+    [self performSelector:@selector(getDictionaryByCars) withObject:nil afterDelay:10.0];
     
-    [HttpManager getDictionaryByTypeAndLevel:@{@"type":@"car-subdivision",@"level":@"brand",@"nextlevel":@"series"} Success:^(id obj) {
+    [HttpManager getDictionarySuccess:^(id obj) {
         
     } fail:^(id obj) {
         
@@ -53,6 +49,15 @@
     
     // 2.添加所有子控制器
     [self addAllChildViewControllers];
+}
+
+- (void)getDictionaryByCars
+{
+    [HttpManager getDictionaryByTypeAndLevel:@{@"type":@"car-subdivision",@"level":@"brand",@"nextlevel":@"series"} Success:^(id obj) {
+        
+    } fail:^(id obj) {
+        
+    }];
 }
 
 #pragma mark - 添加dock栏

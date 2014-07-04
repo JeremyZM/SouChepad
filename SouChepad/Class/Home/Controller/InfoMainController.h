@@ -11,4 +11,5 @@
 
 @interface InfoMainController : UIViewController
 @property (nonatomic, strong) UserReservationM *userInfoM;
+@property (nonatomic, assign) BOOL inHand;
 @end

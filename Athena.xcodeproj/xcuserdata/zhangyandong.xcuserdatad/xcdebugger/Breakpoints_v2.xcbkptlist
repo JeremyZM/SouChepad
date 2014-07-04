@@ -9,13 +9,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Other/Lib/MKNetworkKit/MKNetworkEngine.m"
-            timestampString = "425719376.92478"
+            filePath = "SouChepad/Class/Home/Controller/InfoMainController.m"
+            timestampString = "426075337.490618"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
-            landmarkName = "-changeIP"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
+            landmarkName = "-alertView:clickedButtonAtIndex:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SouChepad/Class/Http/HttpManager.m"
+            timestampString = "426075332.073297"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "575"
+            endingLineNumber = "575"
+            landmarkName = "+requestUserOutStore:Success:fail:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

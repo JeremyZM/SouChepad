@@ -51,7 +51,7 @@ static NSString *newUserCell = @"newUserCell";
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     phoneSearch = searchBar;
     [searchBar setFrame:CGRectMake(280, 40, 500, 40)];
-//    [searchBar setText:@"18758188560"];
+    [searchBar setText:@"13901075113"];
     searchBar.delegate = self;
     [searchBar setPlaceholder:@"搜索客户手机号"];
     [searchBar becomeFirstResponder];
@@ -98,7 +98,7 @@ static NSString *newUserCell = @"newUserCell";
             
             if (_tableView==nil) {
                 
-                _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStyleGrouped];
+                _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStylePlain];
                 [_tableView setDataSource:self];
                 [_tableView setDelegate:self];
                 [self.view addSubview:_tableView];
@@ -115,6 +115,7 @@ static NSString *newUserCell = @"newUserCell";
         }];
     }
 }
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -170,12 +171,11 @@ static NSString *newUserCell = @"newUserCell";
         return myUserCell;
     
     }else if (indexPath.section == 2){
-        NSDictionary *otherDic = otherSell[indexPath.row];
+        UserReservationM *userM = otherSell[indexPath.row];
         OtherSellUserCell *otherCell = [tableView dequeueReusableCellWithIdentifier:otherSellCell];
         cell = otherCell;
-        otherCell = (OtherSellUserCell *) cell;
-        [otherCell.phoneNumberLabel setText:[otherDic objectForKey:@"phone"]];
-        [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",[otherDic objectForKey:@"name"]]];
+        [otherCell.phoneNumberLabel setText:userM.phone];
+        [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",userM.user]];
         return otherCell;
     }
 

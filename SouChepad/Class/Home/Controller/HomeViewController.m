@@ -451,11 +451,15 @@ static NSString *CellIdentifier = @"cellID";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     InfoMainController *infoMVC = [[InfoMainController alloc] init];
     if (indexPath.section==0) {
-        
-        infoMVC.userInfoM =userReserArray[indexPath.row];
+        UserReservationM *userReserM = userReserArray[indexPath.row];
+        infoMVC.userInfoM = userReserM;
+        if ([userReserM.day isEqualToString:@"正在接待"]) {
+            [infoMVC setInHand:YES];
+        }
     }else if (indexPath.section == 1){
         infoMVC.userInfoM = usertoStoreArray[indexPath.row];
     }
+
     [self.navigationController pushViewController:infoMVC animated:YES];
 }
 

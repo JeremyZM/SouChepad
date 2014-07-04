@@ -163,6 +163,7 @@
 		B2AB25EB195185C700D0253A /* ALPickerViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB25E7195185C700D0253A /* ALPickerViewCell.m */; };
 		B2AB25EC195185C700D0253A /* CYCustomMultiSelectPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB25E9195185C700D0253A /* CYCustomMultiSelectPickerView.m */; };
 		B2AB25EF195185E900D0253A /* CheXingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB25EE195185E900D0253A /* CheXingViewController.m */; };
+		B2B075A519667F4700A3057E /* CarCQIInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B075A419667F4700A3057E /* CarCQIInfoController.m */; };
 		B2B2977319348BF9000AF928 /* JDStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B2976E19348BF9000AF928 /* JDStatusBarNotification.m */; };
 		B2B2977419348BF9000AF928 /* JDStatusBarStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B2977019348BF9000AF928 /* JDStatusBarStyle.m */; };
 		B2B2977519348BF9000AF928 /* JDStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B2977219348BF9000AF928 /* JDStatusBarView.m */; };
@@ -553,6 +554,8 @@
 		B2AB25E9195185C700D0253A /* CYCustomMultiSelectPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYCustomMultiSelectPickerView.m; sourceTree = "<group>"; };
 		B2AB25ED195185E900D0253A /* CheXingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheXingViewController.h; sourceTree = "<group>"; };
 		B2AB25EE195185E900D0253A /* CheXingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheXingViewController.m; sourceTree = "<group>"; };
+		B2B075A319667F4700A3057E /* CarCQIInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarCQIInfoController.h; sourceTree = "<group>"; };
+		B2B075A419667F4700A3057E /* CarCQIInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarCQIInfoController.m; sourceTree = "<group>"; };
 		B2B2976D19348BF9000AF928 /* JDStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDStatusBarNotification.h; sourceTree = "<group>"; };
 		B2B2976E19348BF9000AF928 /* JDStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDStatusBarNotification.m; sourceTree = "<group>"; };
 		B2B2976F19348BF9000AF928 /* JDStatusBarStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDStatusBarStyle.h; sourceTree = "<group>"; };
@@ -861,6 +864,8 @@
 				B2A656C71956AC77009CF193 /* New Group */,
 				B20CEEC01945DAF300A893E1 /* CarDetailWebView.h */,
 				B20CEEC11945DAF300A893E1 /* CarDetailWebView.m */,
+				B2B075A319667F4700A3057E /* CarCQIInfoController.h */,
+				B2B075A419667F4700A3057E /* CarCQIInfoController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2035,6 +2040,7 @@
 				B29335401921C9D300499F31 /* MyMessageController.m in Sources */,
 				B2227604194479DC00FD2A2C /* CollectHeadView.m in Sources */,
 				B2DDFF79190C1C7000A71A4F /* Reachability.m in Sources */,
+				B2B075A519667F4700A3057E /* CarCQIInfoController.m in Sources */,
 				B225042E192C9EF9007018B0 /* CoreDateManager.m in Sources */,
 				B298AE54192DCBBD00DCE795 /* MessageModel.xcdatamodeld in Sources */,
 				B2542367190E0C4F00874878 /* SCHudManager.m in Sources */,

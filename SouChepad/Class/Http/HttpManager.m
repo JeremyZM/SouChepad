@@ -114,6 +114,7 @@
         for (NSDictionary *userReserDic in userreservationInHand) {
             UserReservationM *userReserM = [[UserReservationM alloc] init];
             [userReserM setKeyValues:userReserDic];
+//            [userReserM setInHand:YES];
             [reserArrayM addObject:userReserM];
         }
             
@@ -184,7 +185,9 @@
                 if ([status isEqualToString:@"1"]) { // 其他销售客户
                     NSDictionary *dicVO = [dicItem objectForKey:@"uservo"];
                     UserReservationM *userM = [[UserReservationM alloc] init];
-                    userM.crmUserId= [dicVO objectForKey:@"id"];
+                    userM.crmUserId= [dicVO objectForKey:@"phone"];
+                    userM.phone = [dicVO objectForKey:@"phone"];
+                    userM.user = [dicVO objectForKey:@"sellerNameShow"];
                     [otherSell addObject:userM];
                 }if ([status isEqualToString:@"2"]) { // 无归属用户/自己的客户
                     NSDictionary *dicVO = [dicItem objectForKey:@"userToStoreVO"];

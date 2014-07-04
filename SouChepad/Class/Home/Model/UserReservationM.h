@@ -47,4 +47,5 @@
 
 /** 更新时间 */
 @property (copy, nonatomic) NSString *updateDay;
+
 @end

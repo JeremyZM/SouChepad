@@ -22,7 +22,6 @@ static HttpService * engine;
         dispatch_once(&onceToken, ^{
             engine = [[self alloc] initWithHostName:KHttpBaseURL];
         });
-//         [[NSNotificationCenter defaultCenter] addObserver:self selector:nil name:@"NSUserDefaultsDidChangeNotification" object:[[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]];
      }
     return engine;
 }

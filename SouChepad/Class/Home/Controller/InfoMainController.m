@@ -69,18 +69,25 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     [beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
     [beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
     [beginBtn setTitle:@"开始接待" forState:UIControlStateNormal];
+    [beginBtn setTitle:@"结束接待" forState:UIControlStateSelected];
     [beginBtn setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
     [beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
     [beginBtn addTarget:self action:@selector(startStopTapped:) forControlEvents:UIControlEventTouchUpInside];
+//    [beginBtn setSelected:YES];
     [userInfoDock addSubview:beginBtn];
     
     
 //    self.counterLabel = [[TTCounterLabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(beginBtn.frame)+10,KInfoDockW, 30)];
-//    [userInfoDock addSubview:self.counterLabel];
+     self.counterLabel = [[TTCounterLabel alloc] initWithFrame:CGRectZero];
+    [userInfoDock addSubview:self.counterLabel];
 //    [self.counterLabel setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-//    
+    
 //    self.counterLabel.textColor = [UIColor redColor];
-//    [self.counterLabel updateApperance];
+    [self.counterLabel updateApperance];
+    if (self.inHand) {
+        [beginBtn setSelected:YES];
+        [self.counterLabel start];
+    }
 
 
     // 2.添加内容view
@@ -94,14 +101,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 
 - (void)startStopTapped:(UIButton*)sender {
         if ([self.counterLabel isRunning]) {
-
-//            EndReceiveViewController *endReceiveVC = [[EndReceiveViewController alloc] init];
-//            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:endReceiveVC];
-//            [nav setModalPresentationStyle:UIModalPresentationFormSheet];
-//            [self presentViewController:nav animated:YES completion:^{
-//                [self.counterLabel stop];
-//                [self updateUIForState:kTTCounterStopped];
-//            }];
             UIAlertView *endAlert = [[UIAlertView alloc] initWithTitle:@"确认结束接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
             [endAlert setTag:255];
             [endAlert show];
@@ -121,7 +120,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
                     [beginBtn setSelected:YES];
                     beginDate = [NSDate date];
                     [self.counterLabel start];
-                    [beginBtn setTitle:@"结束接待" forState:UIControlStateNormal];
                     [self updateUIForState:kTTCounterRunning];
                 } fail:^(id obj) {
                     
@@ -132,7 +130,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
                     beginDate = [NSDate date];
                     [self.counterLabel start];
                     [beginBtn setSelected:YES];
-                    [beginBtn setTitle:@"结束接待" forState:UIControlStateNormal];
                     [self updateUIForState:kTTCounterRunning];
                     
                 } fail:^(id obj) {
@@ -142,24 +139,49 @@ typedef NS_ENUM(NSInteger, kTTCounter){
         }
 
     }else if (alertView.tag==255){
-        endDate = [NSDate date];
-        // NSDateFormatter 专门用来转换日期格式的 类
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        // 设置格式
-        [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-        // NSDateFormatter转换为NSString
-        NSString *beginDateStr = [formatter stringFromDate:beginDate];
-        NSString *endDateStr = [formatter stringFromDate:endDate];
-        
-        
-        [HttpManager requestUserOutStore:@{@"user":self.userInfoM.crmUserId,@"name":self.userInfoM.user,@"userName":KUserName,@"phone":self.userInfoM.phone,@"receptionBeginTime":beginDateStr,@"receptionEndTime":endDateStr,@"store":@"A",@"level":self.userInfoM.userLevel,@"comment":@"",@"remark":@""} Success:^(id obj) {
-            NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:obj];
-            if ([dicobj objectForKey:@"succeedMessage"]) {
-                [self.navigationController popToRootViewControllerAnimated:YES];
+        if (buttonIndex==1) {
+            endDate = [NSDate date];
+            // NSDateFormatter 专门用来转换日期格式的 类
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            // 设置格式
+            [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            // NSDateFormatter转换为NSString
+            NSString *beginDateStr = [formatter stringFromDate:beginDate];
+            NSString *endDateStr = [formatter stringFromDate:endDate];
+            NSMutableDictionary *requDic = [NSMutableDictionary dictionary];
+            [requDic setObject:self.userInfoM.crmUserId forKey:@"user"];
+            if (self.userInfoM.user) {
+                [requDic setObject:self.userInfoM.user forKey:@"name"];
             }
-        } fail:^(id obj) {
+            if (KUserName) {
+                [requDic setObject:KUserName forKey:@"userName"];
+            }
+            if (self.userInfoM.phone) {
+                [requDic setObject:self.userInfoM.phone forKey:@"phone"];
+            }
+            if (beginDateStr) {
+                [requDic setObject:beginDateStr forKey:@"receptionBeginTime"];
+            }
+            if (endDateStr) {
+                [requDic setObject:endDateStr forKey:@"receptionEndTime"];
+            }
+            if (self.userInfoM.userLevel) {
+                [requDic setObject:self.userInfoM.userLevel forKey:@"level"];
+            }
+            [requDic setObject:@"A"forKey:@"store"];
+            [requDic setObject:@"" forKey:@"comment"];
+            [requDic setObject:@"" forKey:@"remark"];
             
-        }];
+            
+            [HttpManager requestUserOutStore:requDic Success:^(id obj) {
+                NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:obj];
+                if ([dicobj objectForKey:@"succeedMessage"]) {
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                }
+            } fail:^(id obj) {
+                
+            }];
+        }
     }
 }
 

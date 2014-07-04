@@ -14,6 +14,5 @@
 @property (nonatomic, strong) UserReservationM *userReserM;
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sellNameLabel;
-@property (weak, nonatomic) IBOutlet UIButton *receptionBut;
 
 @end

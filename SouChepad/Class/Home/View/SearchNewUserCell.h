@@ -11,7 +11,7 @@
 
 @interface SearchNewUserCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *PhoneLabel;
-@property (weak, nonatomic) IBOutlet UIButton *addNewUserBut;
+
 @property (strong, nonatomic) UserReservationM *userRM;
 
 @end
