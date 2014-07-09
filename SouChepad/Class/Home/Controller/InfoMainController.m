@@ -109,49 +109,40 @@ typedef NS_ENUM(NSInteger, kTTCounter){
             [self presentViewController:endNavVC animated:YES completion:^{
                 
             }];
-//            UIAlertView *endAlert = [[UIAlertView alloc] initWithTitle:@"确认结束接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
-//            [endAlert setTag:255];
-//            [endAlert show];
+
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认开始接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
-        [alert setTag:256];
         [alert show];
     }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag==256) {
-        if (buttonIndex==1) {
-            if (self.userInfoM.reservationId==nil||[self.userInfoM.reservationId isEqualToString:@"暂无"]) {
-                [HttpManager requestUpdateBeginReservationByUser:@{@"user":self.userInfoM.crmUserId,@"userName":KUserName} Success:^(id obj) {
-                    [beginBtn setSelected:YES];
-                    beginDate = [NSDate date];
-                    [self.counterLabel start];
-                    [self updateUIForState:kTTCounterRunning];
-                    [ProgressHUD showSuccess:@""];
-                } fail:^(id obj) {
-                    
-                }];
+    if (buttonIndex==1) {
+        if (self.userInfoM.reservationId==nil||[self.userInfoM.reservationId isEqualToString:@"暂无"]) {
+            [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
+                [beginBtn setSelected:YES];
+                beginDate = [NSDate date];
+                [self.counterLabel start];
+                [self updateUIForState:kTTCounterRunning];
+                [ProgressHUD showSuccess:@""];
+            } fail:^(id obj) {
                 
-            }else {
-                [HttpManager requestUpdateBeginReservationById:@{@"reservationId":self.userInfoM.reservationId,@"userName":KUserName} Success:^(id obj) {
-                    beginDate = [NSDate date];
-                    [self.counterLabel start];
-                    [beginBtn setSelected:YES];
-                    [self updateUIForState:kTTCounterRunning];
-                    [ProgressHUD showSuccess:@""];
-                } fail:^(id obj) {
-                    
-                }];
-            }
-        }
-
-    }else if (alertView.tag==255){
-        if (buttonIndex==1) {
+            }];
             
+        }else {
+            [HttpManager requestUpdateBeginReservationById:@{@"reservationId":self.userInfoM.reservationId,@"userName":KUserName} Success:^(id obj) {
+                beginDate = [NSDate date];
+                [self.counterLabel start];
+                [beginBtn setSelected:YES];
+                [self updateUIForState:kTTCounterRunning];
+                [ProgressHUD showSuccess:@""];
+            } fail:^(id obj) {
+                
+            }];
         }
     }
+
 }
 
 

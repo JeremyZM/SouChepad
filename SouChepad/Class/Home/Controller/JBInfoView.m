@@ -27,7 +27,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        _userVo = userVo;
+        _userExtendM = userExtendM;
         array = @[@"姓名",@"手机",@"性别",@"级别"];
         fuArray = @[@"指标",@"过户方式",@"付款方式",@"购车用途",@"拥有车辆",@"是否卖车"];
         for (NSInteger i = 0; i<array.count; i++) {
@@ -158,7 +159,6 @@
             [self.fuKuanFenqi setChecked:YES];
         }
         
-        
         self.yongtuBut = [self QRbutWithFrame:CGRectMake(150, 460, 110, 60) andtitle:@"新手练车" groupId:@"6"];
         [self addSubview:self.yongtuBut];
         self.yongtujiaBut = [self QRbutWithFrame:CGRectMake(260, 460, 110, 60) andtitle:@"家用代步" groupId:@"6"];
@@ -190,6 +190,66 @@
         }
     }
     return self;
+}
+
+- (void)setDataDic:(NSDictionary *)dataDic
+{
+    _dataDic = dataDic;
+   UserVOModel *userVo = [dataDic objectForKey:@"user"];
+   UserExtendModel *userExtendM = [dataDic objectForKey:@"userExtend"];
+    if (![userVo.userName isEqualToString:@"暂无"]) {
+        
+        [self.nameText setText:userVo.userName];
+    }
+    if (![userVo.phone isEqualToString:@"暂无"]) {
+        
+        [self.phoneText setText:userVo.phone];
+    }
+    if ([userVo.sex isEqualToString:@"man"]) {
+        [self.manBut setChecked:YES];
+    }else if ([userVo.sex isEqualToString:@"woman"]) {
+        [self.womanBut setChecked:YES];
+    }
+    
+    NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
+    for (NSInteger i = 0; i<aarray.count; i++) {
+        NSDictionary *dataM = aarray[i];
+        QRadioButton *dengji = self.jibieButArray[i];
+        if ([userVo.userStatus isEqualToString:[dataM objectForKey:@"code"]]) {
+            [dengji setChecked:YES];
+        }
+    }
+    if ([userExtendM.carTarget isEqualToString:@"1"]) {
+        [self.zhibiaoBut setChecked:YES];
+        [zhibiaoDateBut setHidden:NO];
+        [zhibiaoDateBut setTitle:userExtendM.carTargetEndDate forState:UIControlStateNormal];
+    }else if ([userExtendM.carTarget isEqualToString:@"0"]){
+        [self.zhibiaoNOBut setChecked:YES];
+    }
+    
+    if ([userExtendM.insureType isEqualToString:@"this_city"]) {
+        [self.guoHuTypeBut setChecked:YES];
+    }else if ([userExtendM.insureType isEqualToString:@"outside_move"]){
+        [self.guoHuwaiBut setChecked:YES];
+    }
+    
+    if ([userExtendM.payType isEqualToString:@"fullpay"]) {
+        [self.fuKuanTypeBut setChecked:YES];
+    }else if ([userExtendM.payType isEqualToString:@"partpay"]){
+        [self.fuKuanFenqi setChecked:YES];
+    }
+    
+    if ([userExtendM.isHaveCar isEqualToString:@"1"]) {
+        [self.haveCarBut setChecked:YES];
+    }else if ([userExtendM.isHaveCar isEqualToString:@"0"]){
+        [self.haveNocarBut setChecked:YES];
+    }
+
+    if ([userExtendM.isSellCar isEqualToString:@"1"]) {
+        [self.maicheBut setChecked:YES];
+    }else if ([userExtendM.isSellCar isEqualToString:@"0"]){
+        [self.maicheNOBut setChecked:YES];
+    }
 }
 
 - (void)chooseGuohuCity:(UIButton *)button

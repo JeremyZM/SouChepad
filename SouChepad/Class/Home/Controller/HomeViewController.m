@@ -396,7 +396,8 @@ static NSString *CellIdentifier = @"cellID";
         [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
         [cell.TimeUpdate setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
         [cell.TimeUpdate setTag:(900+indexPath.row)];
-        if ([userReserM.day isEqualToString:@"正在接待"]) {
+        [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
+        if ([userReserM.reservationStatus isEqualToString:@"inHand"]) {
             [cell.TimeUpdate setEnabled:NO];
         }else{
         
@@ -458,7 +459,7 @@ static NSString *CellIdentifier = @"cellID";
     if (indexPath.section==0) {
         UserReservationM *userReserM = userReserArray[indexPath.row];
         infoMVC.userInfoM = userReserM;
-        if ([userReserM.day isEqualToString:@"正在接待"]) {
+        if ([userReserM.reservationStatus isEqualToString:@"inHand"]) {
             [infoMVC setInHand:YES];
         }
     }else if (indexPath.section == 1){

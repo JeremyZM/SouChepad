@@ -47,7 +47,6 @@
         [_fzInfoTable setDataSource:self];
         [_fzInfoTable setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
         [self addSubview:_fzInfoTable];
-
         
         _dataArray = @[@"来源",@"QQ",@"微信",@"邮箱",@"座机",@"生日",@"年龄段",@"身份证",@"所在地"];
         
@@ -99,6 +98,17 @@
         
     }
     return self;
+}
+
+- (void)setDataDic:(NSDictionary *)dataDic
+{
+    _dataDic = dataDic;
+    userVoModel = [dataDic objectForKey:@"user"];
+    userExtendModel = [dataDic objectForKey:@"userExtend"];
+    [_fzInfoTable reloadData];
+    [cardIDup setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendModel.idcardFront]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [cardIDdown setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendModel.idcardBack]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [driveCard setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendModel.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
 }
 
 

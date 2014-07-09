@@ -212,9 +212,9 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 }
 
 
-- (UITableViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = nil;
+    UICollectionViewCell *cell = nil;
     
         if (indexPath.section==0) {
             cell = [collectionView dequeueReusableCellWithReuseIdentifier:TradeCarInfoCellid forIndexPath:indexPath];

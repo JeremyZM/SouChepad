@@ -14,9 +14,10 @@
 #import "GuoBieViewController.h"
 //#import "LiChengViewController.h"
 #import "PopoTableViewController.h"
+#import "BiaoQianView.h"
 
 
-@interface EndReceiveViewController () <UITextViewDelegate,PopoTableViewDelegate>
+@interface EndReceiveViewController () <UITextFieldDelegate,UITextViewDelegate,PopoTableViewDelegate,BiaoQianViewDelegate>
 {
     UITextField *nameTextF;
     UITextField *phoneTextF;
@@ -25,6 +26,9 @@
     UISwitch *messgeSwitch;
     UserVOModel *userVOM;
     UIPopoverController *popoController;
+    UITextField *otherCauseTextF;
+    NSString *leaveString;
+    NSString *biaoqianString;
 }
 @property (nonatomic, strong) UIScrollView *scorllView;
 @end
@@ -35,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    biaoqianString = @"";
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.scorllView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     [self.scorllView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -62,7 +67,7 @@
     [phoneTextF setPlaceholder:@"请填写客户手机号"];
     [self.scorllView addSubview:phoneTextF];
     
-    jibieBut = [[UIButton alloc] initWithFrame:CGRectMake(130, 120, 220, 60)];
+    jibieBut = [[UIButton alloc] initWithFrame:CGRectMake(130, 120, 350, 60)];
     [jibieBut setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [jibieBut setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [jibieBut setTitle:@"请选择" forState:UIControlStateNormal];
@@ -77,7 +82,18 @@
     [lineliV setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
     [self.scorllView addSubview:lineliV];
     
+    BiaoQianView *biaoqian = [[BiaoQianView alloc] initWithFrame:CGRectMake(130, 190, 400, 180)];
+    [biaoqian setDelegate:self];
+    [biaoqian setBackgroundColor:[UIColor redColor]];
+    NSArray *dataArray = [NSArray arrayWithContentsOfFile:KdepartureReason];
+    [biaoqian setDataArray:dataArray];
+    [self.scorllView addSubview:biaoqian];
     
+    otherCauseTextF = [[UITextField alloc] initWithFrame:CGRectMake(130, 330, 400, 40)];
+    [otherCauseTextF setDelegate:self];
+    [otherCauseTextF setBorderStyle:UITextBorderStyleRoundedRect];
+    [otherCauseTextF setPlaceholder:@"其他原因..."];
+    [self.scorllView addSubview:otherCauseTextF];
     
 //    UIView *lidianView = [[UIView alloc] initWithFrame:CGRectMake(0, 180, self.scorllView.bounds.size.width, 200)];
 //    [lidianView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -103,11 +119,17 @@
     [messgeTextView setDelegate:self];
     [self.scorllView addSubview:messgeTextView];
     
-    [HttpManager requestUserInfoWithParamDic:@{@"userId":self.userInfoM.crmUserId} Success:^(id obj) {
+    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
         userVOM = [dataInfoDic objectForKey:@"user"];
-        [nameTextF setText:userVOM.name];
-        [phoneTextF setText:userVOM.phone];
+        if (![userVOM.name isEqualToString:@"暂无"]) {
+            
+            [nameTextF setText:userVOM.name];
+        }
+        if (![userVOM.phone isEqualToString:@"暂无"]) {
+            
+            [phoneTextF setText:userVOM.phone];
+        }
         if (!([userVOM.userStatus isEqualToString:@"暂无"]||userVOM.userStatus==nil)) {
             [jibieBut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [jibieBut setTitle:userVOM.userStatusName forState:UIControlStateNormal];
@@ -117,6 +139,27 @@
         
     }];
     
+}
+
+- (void)biaoQianView:(BiaoQianView *)biaoqian selectBiaoqian:(NSString *)selectString
+{
+    biaoqianString = [NSString stringWithFormat:@"%@",selectString];
+    
+}
+
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField == otherCauseTextF) {
+        [self.scorllView setContentOffset:CGPointMake(0, 40) animated:YES];
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField == otherCauseTextF) {
+       [self.scorllView setContentOffset:CGPointMake(0, -44) animated:YES];
+    }
 }
 
 - (void)sendMessgaChangde:(UISwitch*)messwitch
@@ -152,16 +195,20 @@
 {
     PopoTableViewController *dengjiVC = [[PopoTableViewController alloc] initWithStyle:UITableViewStylePlain];
     [dengjiVC setPopoTabelDelegate:self];
-    NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
+    NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatusOther];
     NSMutableArray *arrayM = [NSMutableArray array];
-    for (NSDictionary *dataM in aarray) {
-        [arrayM addObject:[dataM objectForKey:@"name"]];
+    for (NSInteger i = 0; i<aarray.count; i++) {
+        NSDictionary *dataM = aarray[i];
+         [arrayM addObject:[dataM objectForKey:@"name"]];
+        if ([jibieB.titleLabel.text isEqualToString:[dataM objectForKey:@"name"]]) {
+            [dengjiVC setSelectRow:i];
+        }
     }
-    [dengjiVC setSelectRow:3];
+
     [dengjiVC setArray:arrayM];
     popoController = [[UIPopoverController alloc] initWithContentViewController:dengjiVC];
 //    CGRect frame = [self convertRect:jibieB.frame fromView:jibieB.superview];
-    popoController.popoverContentSize = CGSizeMake(320, 480);
+    popoController.popoverContentSize = CGSizeMake(480, 400);
     [popoController presentPopoverFromRect:jibieB.frame inView:self.scorllView permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
 
 }
@@ -176,8 +223,11 @@
 
 - (void)saveItemReceive
 {
-    if ([NSString phoneValidate:phoneTextF.text]) {
-        
+    leaveString = [NSString stringWithFormat:@"%@%@",biaoqianString,otherCauseTextF.text];
+    if (leaveString.length>0) {
+        if (phoneTextF.text.length>0) {
+            if (![NSString phoneValidate:phoneTextF.text]) return;
+        }
         NSMutableDictionary *requDic = [NSMutableDictionary dictionary];
         [requDic setObject:self.userInfoM.crmUserId forKey:@"user"];
         [requDic setObject:nameTextF.text forKey:@"name"];
@@ -185,15 +235,37 @@
             [requDic setObject:KUserName forKey:@"userName"];
         }
         [requDic setObject:phoneTextF.text forKey:@"phone"];
-        
-        if (self.userInfoM.userLevel) {
-            [requDic setObject:self.userInfoM.userLevel forKey:@"level"];
+        NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatusOther];
+        for (NSDictionary *dic in aarray) {
+            if ([jibieBut.titleLabel.text isEqualToString:[dic objectForKey:@"name"]]) {
+                [requDic setObject:[dic objectForKey:@"code"] forKey:@"level"];
+            }
+            continue;
         }
+
         [requDic setObject:@"A"forKey:@"store"];
-        [requDic setObject:@"" forKey:@"comment"];
-        [requDic setObject:@"" forKey:@"remark"];
+        [requDic setObject:leaveString forKey:@"comment"];
         
         
+    if ([self.userInfoM.phone isEqualToString:@"暂无"]&&[NSString phoneValidate:phoneTextF.text]) {
+        [HttpManager requestUserHandleByType:@{@"phone":phoneTextF.text,@"userTag":userVOM.userTag} Success:^(id obj) {
+            [requDic setObject:obj forKey:@"user"];
+            [HttpManager requestUserOutStore:requDic Success:^(id obj) {
+                NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:obj];
+                if ([dicobj objectForKey:@"succeedMessage"]) {
+                    [ProgressHUD showSuccess:@"接待完成！"];
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        
+                    }];
+                }
+            } fail:^(id obj) {
+                
+            }];
+        } fail:^(id obj) {
+            
+        }];
+    }else
+    {
         [HttpManager requestUserOutStore:requDic Success:^(id obj) {
             NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:obj];
             if ([dicobj objectForKey:@"succeedMessage"]) {
@@ -205,7 +277,12 @@
         } fail:^(id obj) {
             
         }];
+        
     }
+    }else  {
+        [ProgressHUD showError:@"请填写离店原因！"];
+    }
+        
 
 }
 

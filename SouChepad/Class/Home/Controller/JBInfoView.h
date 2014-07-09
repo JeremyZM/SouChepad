@@ -14,6 +14,9 @@
 @interface JBInfoView : UIView
 
 - (id)initWithFrame:(CGRect)frame userVOModel:(UserVOModel*)userVo userExtendmodel:(UserExtendModel*)userExtendM;
+@property (nonatomic, strong) NSDictionary *dataDic;
+@property (nonatomic, strong) UserVOModel *userVo;
+@property (nonatomic, strong) UserExtendModel *userExtendM;
 
 @property (nonatomic, strong) UITextField *nameText;
 @property (nonatomic, strong) UITextField *phoneText;

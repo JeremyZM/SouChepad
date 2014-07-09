@@ -102,6 +102,8 @@ fprintf(stderr, "-----------------------------------\n");                       
 #define KallListData [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"allListData.plist"]
 
 
+#define KbuyerStatusOther [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"buyerStatusOther.plist"]
+
 #define KAllCarTypeData [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"AllCarTypeData.plist"]
 
 /**

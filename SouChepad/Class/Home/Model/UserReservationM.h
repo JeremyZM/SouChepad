@@ -13,6 +13,10 @@
  *  用户ID
  */
 @property (copy, nonatomic) NSString *crmUserId;
+
+/** 接待状态 */
+@property (copy, nonatomic) NSString *reservationStatus;
+
 /**
  *  预约时间
  */

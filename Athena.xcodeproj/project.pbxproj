@@ -217,6 +217,8 @@
 		B2DDFF9A190D4BF000A71A4F /* IntentionCarsController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFF99190D4BF000A71A4F /* IntentionCarsController.m */; };
 		B2DDFF9D190D4C7D00A71A4F /* SearchCarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFF9C190D4C7D00A71A4F /* SearchCarViewController.m */; };
 		B2DDFFA0190D4D3D00A71A4F /* InfoDock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFF9F190D4D3D00A71A4F /* InfoDock.m */; };
+		B2E5CD90196D28CC0006168E /* BiaoQianView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5CD8F196D28CC0006168E /* BiaoQianView.m */; };
+		B2E5CD93196D295D0006168E /* BiaoqainCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5CD92196D295D0006168E /* BiaoqainCell.m */; };
 		B2F185B7193EBFDB00AEF90E /* SCTextfield.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F185B6193EBFDB00AEF90E /* SCTextfield.m */; };
 		B2F185BF193ECEE200AEF90E /* UIColor+_6jinzhi.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F185BE193ECEE200AEF90E /* UIColor+_6jinzhi.m */; };
 		B2F185C2193EE68A00AEF90E /* log_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F185C0193EE68A00AEF90E /* log_logo.png */; };
@@ -652,6 +654,10 @@
 		B2DDFF9C190D4C7D00A71A4F /* SearchCarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCarViewController.m; sourceTree = "<group>"; };
 		B2DDFF9E190D4D3D00A71A4F /* InfoDock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoDock.h; sourceTree = "<group>"; };
 		B2DDFF9F190D4D3D00A71A4F /* InfoDock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoDock.m; sourceTree = "<group>"; };
+		B2E5CD8E196D28CC0006168E /* BiaoQianView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BiaoQianView.h; sourceTree = "<group>"; };
+		B2E5CD8F196D28CC0006168E /* BiaoQianView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BiaoQianView.m; sourceTree = "<group>"; };
+		B2E5CD91196D295D0006168E /* BiaoqainCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BiaoqainCell.h; sourceTree = "<group>"; };
+		B2E5CD92196D295D0006168E /* BiaoqainCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BiaoqainCell.m; sourceTree = "<group>"; };
 		B2F185B5193EBFDB00AEF90E /* SCTextfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTextfield.h; sourceTree = "<group>"; };
 		B2F185B6193EBFDB00AEF90E /* SCTextfield.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTextfield.m; sourceTree = "<group>"; };
 		B2F185BD193ECEE200AEF90E /* UIColor+_6jinzhi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+_6jinzhi.h"; sourceTree = "<group>"; };
@@ -841,6 +847,10 @@
 			children = (
 				B2062A3E1959AA8D007A0CCF /* BeginBut.h */,
 				B2062A3F1959AA8D007A0CCF /* BeginBut.m */,
+				B2E5CD8E196D28CC0006168E /* BiaoQianView.h */,
+				B2E5CD8F196D28CC0006168E /* BiaoQianView.m */,
+				B2E5CD91196D295D0006168E /* BiaoqainCell.h */,
+				B2E5CD92196D295D0006168E /* BiaoqainCell.m */,
 				B2711F19194C489300A65BDF /* images */,
 				B2F18632194071B100AEF90E /* CollectCarCell.h */,
 				B2F18633194071B100AEF90E /* CollectCarCell.m */,
@@ -1989,6 +1999,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2DDFF97190D4B8200A71A4F /* CustomPIMController.m in Sources */,
+				B2E5CD93196D295D0006168E /* BiaoqainCell.m in Sources */,
 				B254238B190E5C9400874878 /* MJArgument.m in Sources */,
 				B24D56C01917597600D756A5 /* FZInfoView.m in Sources */,
 				B254238D190E5C9400874878 /* MJMember.m in Sources */,
@@ -2065,6 +2076,7 @@
 				B2F186311940620300AEF90E /* CarBaseModel.m in Sources */,
 				B2A656C61956AC70009CF193 /* CityPickViewController.m in Sources */,
 				B2542376190E5A6A00874878 /* UsertoStore.m in Sources */,
+				B2E5CD90196D28CC0006168E /* BiaoQianView.m in Sources */,
 				B2DDFEF0190BB8B800A71A4F /* SCDock.m in Sources */,
 				B2AB255B194ED87200D0253A /* TGCenterLineLabel.m in Sources */,
 				B2A78840191A270D00AE55BC /* CommunListM.m in Sources */,

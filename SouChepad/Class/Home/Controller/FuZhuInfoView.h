@@ -13,5 +13,7 @@
 
 @interface FuZhuInfoView : UIView
 @property (nonatomic, weak) CustomPIMController *customPIMVC;
+@property (nonatomic, strong) NSDictionary *dataDic;
+
 - (id)initWithFrame:(CGRect)frame userVOModel:(UserVOModel*)userVo userExtendmodel:(UserExtendModel*)userExtendM;
 @end

@@ -131,10 +131,15 @@
                     
                     if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
                         [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
-                            DLog(@"aa");
                             [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
-                            [self viewDidLoad];
+                            [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+                                NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
+                                [_jbInfoView setDataDic:dataInfoDic];
+                                [_fuzhuView setDataDic:dataInfoDic];
+                            } fail:^(id obj) {
+                                
+                            }];
                         } fail:^(id obj) {
                             
                         }];
