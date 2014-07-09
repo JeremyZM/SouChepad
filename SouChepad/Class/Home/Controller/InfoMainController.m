@@ -19,6 +19,7 @@
 #import "HttpManager.h"
 #import "EndReceiveViewController.h"
 #import "BeginBut.h"
+#import "ProgressHUD.h"
 
 
 typedef NS_ENUM(NSInteger, kTTCounter){
@@ -46,7 +47,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [[NSUserDefaults standardUserDefaults] setObject:self.userInfoM.crmUserId forKey:@"userID"];
     // 1.添加dock栏
     [self addInfoDockView];
     
@@ -101,9 +102,16 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 
 - (void)startStopTapped:(UIButton*)sender {
         if ([self.counterLabel isRunning]) {
-            UIAlertView *endAlert = [[UIAlertView alloc] initWithTitle:@"确认结束接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
-            [endAlert setTag:255];
-            [endAlert show];
+            EndReceiveViewController *endVC = [[EndReceiveViewController alloc] init];
+            endVC.userInfoM = self.userInfoM;
+            UINavigationController *endNavVC = [[UINavigationController alloc] initWithRootViewController:endVC];
+            [endNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
+            [self presentViewController:endNavVC animated:YES completion:^{
+                
+            }];
+//            UIAlertView *endAlert = [[UIAlertView alloc] initWithTitle:@"确认结束接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+//            [endAlert setTag:255];
+//            [endAlert show];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认开始接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
         [alert setTag:256];
@@ -121,6 +129,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
                     beginDate = [NSDate date];
                     [self.counterLabel start];
                     [self updateUIForState:kTTCounterRunning];
+                    [ProgressHUD showSuccess:@""];
                 } fail:^(id obj) {
                     
                 }];
@@ -131,7 +140,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
                     [self.counterLabel start];
                     [beginBtn setSelected:YES];
                     [self updateUIForState:kTTCounterRunning];
-                    
+                    [ProgressHUD showSuccess:@""];
                 } fail:^(id obj) {
                     
                 }];
@@ -140,47 +149,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 
     }else if (alertView.tag==255){
         if (buttonIndex==1) {
-            endDate = [NSDate date];
-            // NSDateFormatter 专门用来转换日期格式的 类
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            // 设置格式
-            [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-            // NSDateFormatter转换为NSString
-            NSString *beginDateStr = [formatter stringFromDate:beginDate];
-            NSString *endDateStr = [formatter stringFromDate:endDate];
-            NSMutableDictionary *requDic = [NSMutableDictionary dictionary];
-            [requDic setObject:self.userInfoM.crmUserId forKey:@"user"];
-            if (self.userInfoM.user) {
-                [requDic setObject:self.userInfoM.user forKey:@"name"];
-            }
-            if (KUserName) {
-                [requDic setObject:KUserName forKey:@"userName"];
-            }
-            if (self.userInfoM.phone) {
-                [requDic setObject:self.userInfoM.phone forKey:@"phone"];
-            }
-            if (beginDateStr) {
-                [requDic setObject:beginDateStr forKey:@"receptionBeginTime"];
-            }
-            if (endDateStr) {
-                [requDic setObject:endDateStr forKey:@"receptionEndTime"];
-            }
-            if (self.userInfoM.userLevel) {
-                [requDic setObject:self.userInfoM.userLevel forKey:@"level"];
-            }
-            [requDic setObject:@"A"forKey:@"store"];
-            [requDic setObject:@"" forKey:@"comment"];
-            [requDic setObject:@"" forKey:@"remark"];
             
-            
-            [HttpManager requestUserOutStore:requDic Success:^(id obj) {
-                NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:obj];
-                if ([dicobj objectForKey:@"succeedMessage"]) {
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                }
-            } fail:^(id obj) {
-                
-            }];
         }
     }
 }
@@ -223,9 +192,10 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     [self addChildViewController:customPIM];
     
     IntentionCarsController *intentionCarsVC = [[IntentionCarsController alloc] init];
+    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:intentionCarsVC];
     [intentionCarsVC setDeleget:self];
     intentionCarsVC.userReserM = self.userInfoM;
-    [self addChildViewController:intentionCarsVC];
+    [self addChildViewController:navVC];
     
     CommListController *commListVC = [[CommListController alloc] init];
     commListVC.userResM = self.userInfoM;

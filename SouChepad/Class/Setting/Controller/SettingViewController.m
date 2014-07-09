@@ -110,6 +110,11 @@
         
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsName];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsPWD];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellName];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellEmail];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellPhone];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellAddressName];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellQQ];
         [self.view.window setRootViewController:[LogInViewController new]];
     }
 }

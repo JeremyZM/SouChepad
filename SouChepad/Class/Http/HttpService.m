@@ -10,6 +10,9 @@
 #import "SCHudManager.h"
 #import "ProgressHUD.h"
 
+// 字符串格式化
+#define FormatStr(fmt, ...) [NSString stringWithFormat:fmt, ##__VA_ARGS__]
+
 //#define kServiceDomain @"app.souche.com"
 
 static HttpService * engine;
@@ -82,7 +85,22 @@ static HttpService * engine;
     }];
 
     [engine enqueueOperation:operation forceReload:NO];
+    
+    [self formatUrlAndParameters:parameter path:api];
     return operation;
+}
+
+- (void)formatUrlAndParameters:(NSDictionary*)parameters path:(NSString*)path{
+    //格式化url和参数
+    NSString *paraString=@"";
+    NSArray *keyArray = [parameters allKeys];
+    int index = 0;
+    for (NSString *key in keyArray) {
+        NSString *value = [parameters objectForKey:key];
+        paraString = FormatStr(@"%@%@=%@%@",paraString,key,value, ++index == keyArray.count ? @"" : @"&");
+    }
+    NSString *api = FormatStr(@"====\n%@/%@?%@\n=======", KHttpBaseURL,path, paraString);
+    DLog(@"api:%@", api);
 }
 
 // upload

@@ -42,8 +42,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(RefreshViewControlEventValueChanged) name:@"userIDchange" object:nil];
     [self addCollectionView];
     [self addToolbar];
 
@@ -76,8 +75,9 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 - (void)scanErWeiMaBut:(UIButton*)seanBut
 {
     ZBarController *zbarVC = [[ZBarController alloc] init];
+//    [self.navigationController pushViewController:zbarVC animated:YES];
     [self presentViewController:zbarVC animated:YES completion:^{
-        
+    
     }];
 }
 
@@ -122,7 +122,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 - (void)RefreshViewControlEventValueChanged
 {
 
-        [HttpManager requestUserIntentionWithParamDic:@{@"userId":self.userReserM.crmUserId} Success:^(id obj) {
+        [HttpManager requestUserIntentionWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
             intentionCars = [NSDictionary dictionaryWithDictionary:obj];
             tradesCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"trades"]];
             driveCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"drive"]];

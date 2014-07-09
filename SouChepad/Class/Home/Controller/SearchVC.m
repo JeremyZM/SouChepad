@@ -51,7 +51,7 @@ static NSString *newUserCell = @"newUserCell";
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     phoneSearch = searchBar;
     [searchBar setFrame:CGRectMake(280, 40, 500, 40)];
-    [searchBar setText:@"13901075113"];
+//    [searchBar setText:@"13901075113"];
     searchBar.delegate = self;
     [searchBar setPlaceholder:@"搜索客户手机号"];
     [searchBar becomeFirstResponder];

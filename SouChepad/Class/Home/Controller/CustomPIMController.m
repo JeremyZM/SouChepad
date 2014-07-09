@@ -15,6 +15,7 @@
 #import "UserVOModel.h"
 #import "UserExtendModel.h"
 #import "QRadioButton.h"
+#import "NSString+val.h"
 
 
 @interface CustomPIMController ()
@@ -37,7 +38,7 @@
     // 1.添加toolbar
     [self addToolbar];
     
-    [HttpManager requestUserInfoWithParamDic:@{@"userId":self.userInfoM.crmUserId} Success:^(id obj) {
+    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
         userVomodel = [dataInfoDic objectForKey:@"user"];
         userExtendmodel = [dataInfoDic objectForKey:@"userExtend"];
@@ -63,7 +64,6 @@
     if (_jbInfoView) {
         NSMutableDictionary *reqDic = [NSMutableDictionary dictionary];
         [reqDic setObject:self.userInfoM.crmUserId forKey:@"userId"];
-        [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
         [reqDic setObject:_jbInfoView.nameText.text forKey:@"name"];
         if (_jbInfoView.manBut.checked) {
             [reqDic setObject:@"man" forKey:@"sex"];
@@ -102,14 +102,14 @@
             [reqDic setObject:@"0" forKey:@"carTarget"];
         }
         if (_jbInfoView.guoHuTypeBut.checked) {
-            [reqDic setObject:@"1" forKey:@"insureType"];
+            [reqDic setObject:@"this_city" forKey:@"insureType"];
         }else if (_jbInfoView.guoHuwaiBut.checked){
-            [reqDic setObject:@"0" forKey:@"insureType"];
+            [reqDic setObject:@"outside_move" forKey:@"insureType"];
         }
         if (_jbInfoView.fuKuanFenqi.checked) {
-            [reqDic setObject:@"1" forKey:@"payType"];
+            [reqDic setObject:@"partpay" forKey:@"payType"];
         }else if (_jbInfoView.fuKuanTypeBut.checked){
-            [reqDic setObject:@"0" forKey:@"payType"];
+            [reqDic setObject:@"fullpay" forKey:@"payType"];
         }
         if (_jbInfoView.maicheBut.checked) {
             [reqDic setObject:@"1" forKey:@"isSellCar"];
@@ -121,12 +121,49 @@
         }else if(_jbInfoView.haveNocarBut.checked){
             [reqDic setObject:@"0" forKey:@"isHaveCar"];
         }
-        
-        [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-            DLog(@"%@",obj);
-        } fail:^(id obj) {
-            
-        }];
+        [reqDic setObject:userVomodel.callPhone1 forKey:@"callPhone1"];
+        [reqDic setObject:userVomodel.callPhone2 forKey:@"callPhone2"];
+        [reqDic setObject:userVomodel.callPhone3 forKey:@"callPhone3"];
+        [reqDic setObject:userVomodel.callPhone4 forKey:@"callPhone4"];
+        if ([userVomodel.phone isEqualToString:@"暂无"]) {
+            [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+                if (_jbInfoView.phoneText.text.length) {
+                    
+                    if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
+                        [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
+                            DLog(@"aa");
+                            [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
+                            [self viewDidLoad];
+                        } fail:^(id obj) {
+                            
+                        }];
+                    }
+                }else {
+                    
+                }
+            } fail:^(id obj) {
+                
+            }];
+        }else{
+            if (_jbInfoView.phoneText.text.length) {
+                if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
+                    [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
+                    [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+                        
+                    } fail:^(id obj) {
+                        
+                    }];
+                }
+            }else
+            {
+                [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+                    
+                } fail:^(id obj) {
+                    
+                }];
+            }
+        }
     }
 }
 

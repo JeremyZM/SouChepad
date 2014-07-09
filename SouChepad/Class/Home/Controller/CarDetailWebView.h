@@ -7,10 +7,18 @@
 //
 
 #import "SCBasicController.h"
+@class CarDetailWebView;
+
+@protocol CarDetailVCDelegate <NSObject>
+
+- (void)dismissViewAllController:(CarDetailWebView*)carDetailVC;
+
+@end
 
 @interface CarDetailWebView : SCBasicController
 
 /** 车辆ID */
 @property (copy, nonatomic) NSString *carID;
+@property (weak, nonatomic) id<CarDetailVCDelegate> delegate;
 
 @end

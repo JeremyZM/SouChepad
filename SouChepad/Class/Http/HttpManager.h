@@ -42,6 +42,8 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 销售修改预约到店时间
 + (void)requestUpdateReservationDate:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 根据vin码获取车辆的ID
++ (void)getCarInVin:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 用户信息进入接待
 + (void)requestUpdateBeginReservationByUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
@@ -67,6 +69,10 @@ typedef void (^UploadProgress)(NSString *progress);
 
 #pragma mark - 获取所有车型
 + (void)getDictionaryByTypeAndLevel:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 用户强合并
++ (void)requestUserHandleByType:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
 
 #pragma mark - 用户结束接待
 + (void)requestUserOutStore:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;

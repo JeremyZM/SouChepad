@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserReservationM.h"
 
 @interface EndReceiveViewController : UIViewController
-
+@property (nonatomic, strong) UserReservationM *userInfoM;
 @end

@@ -74,14 +74,19 @@
         }
         
         self.nameText = [[UITextField alloc] initWithFrame:CGRectMake(150, 10, 600, 60)];
-
-        [self.nameText setText:userVo.userName];
+        if (![userVo.userName isEqualToString:@"暂无"]) {
+            
+            [self.nameText setText:userVo.userName];
+        }
         [self.nameText setPlaceholder:@"填写名字"];
         [self addSubview:self.nameText];
         
         self.phoneText = [[UITextField alloc] initWithFrame:CGRectMake(150, 70, 600, 60)];
         [self.phoneText setPlaceholder:@"填写手机号"];
-        [self.phoneText setText:userVo.phone];
+        if (![userVo.phone isEqualToString:@"暂无"]) {
+            
+            [self.phoneText setText:userVo.phone];
+        }
         [self addSubview:self.phoneText];
         
         
@@ -113,6 +118,7 @@
         [self addSubview:self.zhibiaoBut];
         self.zhibiaoNOBut = [self QRbutWithFrame:CGRectMake(240, 280, 90, 60) andtitle:@"无" groupId:@"3"];
         [self addSubview:self.zhibiaoNOBut];
+        
         zhibiaoDateBut = [self buttonChooes:CGRectMake(700, 295, 120, 30) andtitle:@"过期时间"];
         [zhibiaoDateBut setHidden:YES];
         [zhibiaoDateBut addTarget:self action:@selector(chooseZhibiaoDate:) forControlEvents:UIControlEventTouchUpInside];
@@ -135,9 +141,9 @@
         [guohuCityBut addTarget:self action:@selector(chooseGuohuCity:) forControlEvents:UIControlEventTouchUpInside];
         [guohuCityBut setHidden:YES];
         [self addSubview:guohuCityBut];
-        if (userExtendM.insureType) {
+        if ([userExtendM.insureType isEqualToString:@"this_city"]) {
             [self.guoHuTypeBut setChecked:YES];
-        }else if (userExtendM.insureAddr){
+        }else if ([userExtendM.insureType isEqualToString:@"outside_move"]){
             [self.guoHuwaiBut setChecked:YES];
         }
         
@@ -146,9 +152,9 @@
         [self addSubview:self.fuKuanTypeBut];
         self.fuKuanFenqi = [self QRbutWithFrame:CGRectMake(240, 400, 90, 60) andtitle:@"分期" groupId:@"5"];
         [self addSubview:self.fuKuanFenqi];
-        if ([userExtendM.payType isEqualToString:@"全款"]) {
+        if ([userExtendM.payType isEqualToString:@"fullpay"]) {
             [self.fuKuanTypeBut setChecked:YES];
-        }else if ([userExtendM.payType isEqualToString:@"分期"]){
+        }else if ([userExtendM.payType isEqualToString:@"partpay"]){
             [self.fuKuanFenqi setChecked:YES];
         }
         
@@ -161,6 +167,7 @@
         [self addSubview:self.yongtubiaoBut];
         self.yongtubuBut = [self QRbutWithFrame:CGRectMake(480, 460, 110, 60) andtitle:@"代步" groupId:@"6"];
         [self addSubview:self.yongtubuBut];
+        
         
         self.haveCarBut = [self QRbutWithFrame:CGRectMake(150, 520, 90, 60) andtitle:@"有" groupId:@"7"];
         [self addSubview:self.haveCarBut];

@@ -40,7 +40,9 @@
     [carWeb setDelegate:self];
 
     NSString *url = [NSString stringWithFormat:@"http://souche.com/pages/choosecarpage/choose-car-detail.html?carId=%@&isapp=1",self.carID];
-    [carWeb loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+    NSString *encodedString=[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *weburl = [NSURL URLWithString:encodedString];
+    [carWeb loadRequest:[NSURLRequest requestWithURL:weburl]];
 }
 
 - (void)showinfoCQI
@@ -60,6 +62,9 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [ProgressHUD dismiss];
+        if ([_delegate respondsToSelector:@selector(dismissViewAllController:)]) {
+            [_delegate dismissViewAllController:self];
+        }
     }];
 }
 
@@ -76,6 +81,7 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [ProgressHUD showError:error.localizedRecoveryOptions[0]];
+    [ProgressHUD showError:@"暂无该车辆信息"];
 }
 
 @end

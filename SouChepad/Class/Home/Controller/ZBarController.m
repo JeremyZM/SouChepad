@@ -8,8 +8,13 @@
 
 #import "ZBarController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "HttpManager.h"
+#import "CarDetailWebView.h"
 
-@interface ZBarController () <AVCaptureMetadataOutputObjectsDelegate>
+@interface ZBarController () <AVCaptureMetadataOutputObjectsDelegate,CarDetailVCDelegate>
+{
+//    CarDetailWebView *carDetailVC;
+}
 @property (strong, nonatomic) AVCaptureSession *session;
 @property (strong, nonatomic) AVCaptureVideoPreviewLayer *previewLayer;
 
@@ -21,14 +26,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     
     UIView *vie = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
     [vie setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [vie setBackgroundColor:[UIColor grayColor]];
+    [vie setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
     UIButton *but = [[UIButton alloc] initWithFrame:CGRectMake(20, 30, 100, 40)];
-    
-    [but setBackgroundColor:[UIColor redColor]];
+    [but setImage:[UIImage imageNamed:@"tubiao_37"] forState:UIControlStateNormal];
     [but addTarget:self action:@selector(dismiselfVC) forControlEvents:UIControlEventTouchUpInside];
     [vie addSubview:but];
     [self.view addSubview:vie];
@@ -53,7 +57,10 @@
     
     if (error) {
         NSLog(@"没有摄像头-%@", error.localizedDescription);
-        
+//        [self.navigationController popViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
         return;
     }
     
@@ -112,6 +119,7 @@ static AVCaptureVideoOrientation avOrientationForInterfaceOrientation(UIInterfac
 
 - (void)dismiselfVC
 {
+//    [self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
@@ -131,14 +139,26 @@ static AVCaptureVideoOrientation avOrientationForInterfaceOrientation(UIInterfac
     
     // 3. 设置界面显示扫描结果
     if (metadataObjects.count > 0) {
-        AVMetadataMachineReadableCodeObject *obj = metadataObjects[0];
+        AVMetadataMachineReadableCodeObject *objAV = metadataObjects[0];
         // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
-        UILabel *labe = [[UILabel alloc] initWithFrame:CGRectMake(200, 30, 400, 30)];
-        [labe setTextColor:[UIColor whiteColor]];
-        [labe setText:obj.stringValue];
-        [self.view addSubview:labe];
-        NSLog(@"%@",obj.stringValue);
+        [HttpManager getCarInVin:@{@"vin":objAV.stringValue} Success:^(id obj) {
+            if (obj) {
+                CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
+                [carDetailVC setCarID:obj];
+                [carDetailVC setDelegate:self];
+//                [self.view addSubview:carDetailVC.view];
+                [self presentViewController:carDetailVC animated:YES completion:^{
+                }];
+            }
+        } fail:^(id obj) {
+            
+        }];
     }
+}
+
+- (void)dismissViewAllController:(CarDetailWebView *)carDetailVC
+{
+    [self dismiselfVC];
 }
 
 @end

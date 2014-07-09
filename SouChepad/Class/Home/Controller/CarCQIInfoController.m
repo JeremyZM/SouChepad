@@ -29,7 +29,9 @@
     [infoCQIView setDelegate:self];
     
     NSString *url = [NSString stringWithFormat:@"http://manage.souche.com/pages/sellipad/preview-report.html?carId=%@&source=sellipad&s=0000s0yP9HIpTyEPnBglffYM2R2:18a1kacdt",self.carID];
-    [infoCQIView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+    NSString *encodedString=[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *weburl = [NSURL URLWithString:encodedString];
+    [infoCQIView loadRequest:[NSURLRequest requestWithURL:weburl]];
 }
 
 - (void)dismisSelf

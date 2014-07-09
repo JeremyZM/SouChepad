@@ -164,16 +164,21 @@ static NSString *CellIdentifier = @"cellID";
     }else if (buttonIndex==1) { // 有手机号添加接待
         if (textField.text.length>0) {
             if ([NSString phoneValidate:textField.text] ) {
-                InfoMainController *infoMVC = [[InfoMainController alloc] init];
-                UserReservationM *userReserM = [[UserReservationM alloc] init];
-                userReserM.crmUserId = textField.text;
-                [infoMVC setUserInfoM:userReserM];
-                [self.navigationController pushViewController:infoMVC animated:YES];
+                [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":textField.text} Success:^(id obj) {
+                    InfoMainController *infoMVC = [[InfoMainController alloc] init];
+                    UserReservationM *userReserM = [[UserReservationM alloc] init];
+                    userReserM.crmUserId = obj;
+                    [infoMVC setUserInfoM:userReserM];
+                    [self.navigationController pushViewController:infoMVC animated:YES];
+                } fail:^(id obj) {
+                    
+                }];
+                
             }
 
         }else
         {
-            [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"userTag":@"111"} Success:^(id obj) {
+            [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":@""} Success:^(id obj) {
                 UserReservationM *newUserM = [[UserReservationM alloc] init];
                 [newUserM setCrmUserId:obj];
                 InfoMainController *infoMVC = [[InfoMainController alloc] init];
@@ -459,7 +464,7 @@ static NSString *CellIdentifier = @"cellID";
     }else if (indexPath.section == 1){
         infoMVC.userInfoM = usertoStoreArray[indexPath.row];
     }
-
+    
     [self.navigationController pushViewController:infoMVC animated:YES];
 }
 

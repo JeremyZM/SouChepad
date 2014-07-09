@@ -31,7 +31,7 @@ static NSString *CellIdentifier = @"communCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(RefreshViewControlEventValueChanged) name:@"userIDchange" object:nil];
     [self RefreshViewControlEventValueChanged];
     // 1.添加toolbar，添加tableview
     [self addToolbar];
@@ -96,7 +96,7 @@ static NSString *CellIdentifier = @"communCell";
 
 - (void)RefreshViewControlEventValueChanged
 {
-        [HttpManager requestCommunicationWithParamDic:@{@"userId":self.userResM.crmUserId} Success:^(id obj) {
+        [HttpManager requestCommunicationWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
             [self.refreshControl endRefreshing];
             _dataArray = [NSArray arrayWithArray:obj];
             [_tableView reloadData];

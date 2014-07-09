@@ -226,6 +226,7 @@
         }else if([obj responseString]){
 //            NSString *strUrl = [urlString stringByReplacingOccurrencesOfString:@" " withString:@""];
             NSString *userID = [[obj responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            [ProgressHUD showSuccess:@""];
             success(userID);
         }
     } fail:^(MKNetworkOperation *obj, NSError *error) {
@@ -290,8 +291,22 @@
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         fail([error localizedDescription]);
     } reload:YES needHud:YES hudEnabled:NO];
+}
 
-
+#pragma mark - 根据vin码获取车辆的ID
++ (void)getCarInVin:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getCarInVin.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",obj);
+        if ([obj responseString]) {
+            NSString *carID = [[obj responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            success(carID);
+        }else{
+            [ProgressHUD showError:@"暂无"];
+        }
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        [ProgressHUD showError:@"暂无"];
+    } reload:YES needHud:YES hudEnabled:YES];
 }
 
 #pragma mark - 销售修改预约到店时间
@@ -567,6 +582,23 @@
     return arrayForArrays;
 }
 
+
+#pragma mark - 用户强合并
++ (void)requestUserHandleByType:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/userHandleByType.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",obj);
+        if ([obj responseString]) {
+            NSString *userID = [[obj responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            success(userID);
+        }else{
+            [ProgressHUD showError:@""];
+        }
+
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+}
 
 #pragma mark - 用户结束接待
 + (void)requestUserOutStore:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
