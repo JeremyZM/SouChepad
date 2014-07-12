@@ -14,6 +14,7 @@
 /**
  *  降价通知，限时特价
  */
+@property (weak, nonatomic) IBOutlet UILabel *downPiceLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *downPriceImage;
 /**
  *  车辆图片

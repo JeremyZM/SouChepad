@@ -59,8 +59,8 @@
     // 4.沟通记录
     [self addOneInfoTabTitle:@"沟通记录" icon:@"tubiao_18" selectedIcon:@"tubiao_27" index:3];
     
-    // 4.逛店找车
-    [self addOneInfoTabTitle:@"逛店找车" icon:@"tubiao_19" selectedIcon:@"tubiao_28" index:4];
+//    // 4.逛店找车
+//    [self addOneInfoTabTitle:@"逛店找车" icon:@"tubiao_19" selectedIcon:@"tubiao_28" index:4];
     
 }
 

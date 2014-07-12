@@ -10,96 +10,99 @@
 #import "CityPickViewController.h"
 #import "DatePickViewController.h"
 
-@interface JBInfoView ()<QRadioButtonDelegate,CitypickViewDelegate,DatePickerVCdelegate>
+@interface JBInfoView ()<QRadioButtonDelegate,CitypickViewDelegate,DatePickerVCdelegate,UITextFieldDelegate>
 {
     UITableView *JBtableView;
     NSArray *array;
     NSArray *fuArray;
-    UIButton *zhibiaoDateBut;
     UIButton *guohuCityBut;
     UIPopoverController *popoVC;
+    UIScrollView *scrollView;
 }
 @end
 
 @implementation JBInfoView
 
-- (id)initWithFrame:(CGRect)frame userVOModel:(UserVOModel*)userVo userExtendmodel:(UserExtendModel*)userExtendM
+- (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _userVo = userVo;
-        _userExtendM = userExtendM;
+//        _userVo = userVo;
+//        _userExtendM = userExtendM;
+        scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        [scrollView setContentSize:CGSizeMake(0, frame.size.height+50)];
+        [self addSubview:scrollView];
         array = @[@"姓名",@"手机",@"性别",@"级别"];
-        fuArray = @[@"指标",@"过户方式",@"付款方式",@"购车用途",@"拥有车辆",@"是否卖车"];
+        fuArray = @[@"指标",@"过户方式",@"付款方式",@"购车用途",@"拥有车辆",@"是否卖车",@"备注"];
         for (NSInteger i = 0; i<array.count; i++) {
             UILabel *labe = [[UILabel alloc] initWithFrame:CGRectMake(40, 10+i*60, 60, 60)];
             [labe setFont:KFont18];
             [labe setText:array[i]];
-            [self addSubview:labe];
+            [scrollView addSubview:labe];
             
             UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20, 10+i*60, frame.size.width-40, 1)];
             [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
             [lineView setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
-            [self addSubview:lineView];
+            [scrollView addSubview:lineView];
             
             UIView *lineL = [[UIView alloc] initWithFrame:CGRectMake(20, 10+i*60, 1, 60)];
             [lineL setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
-            [self addSubview:lineL];
+            [scrollView addSubview:lineL];
             
             UIView *lineR = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width-20, 10+i*60, 1, 60)];
             [lineR setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleLeftMargin];
             
             [lineR setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
-            [self addSubview:lineR];
+            [scrollView addSubview:lineR];
         }
         for (NSInteger j= 0; j<fuArray.count; j++) {
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 280+j*60, 100, 60)];
             [label setFont:KFont18];
             [label setText:fuArray[j]];
-            [self addSubview:label];
+            [scrollView addSubview:label];
             
             UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20, 280+j*60, frame.size.width-40, 1)];
             [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
             [lineView setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
-            [self addSubview:lineView];
+            [scrollView addSubview:lineView];
             
             UIView *lineL = [[UIView alloc] initWithFrame:CGRectMake(20, 280+j*60, 1, 60)];
             [lineL setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
-            [self addSubview:lineL];
+            [scrollView addSubview:lineL];
             
             UIView *lineR = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width-20, 280+j*60, 1, 60)];
             [lineR setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleLeftMargin];
             [lineR setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
-            [self addSubview:lineR];
+            [scrollView addSubview:lineR];
 
         }
         
         self.nameText = [[UITextField alloc] initWithFrame:CGRectMake(150, 10, 600, 60)];
-        if (![userVo.userName isEqualToString:@"暂无"]) {
-            
-            [self.nameText setText:userVo.userName];
-        }
+//        if (![userVo.userName isEqualToString:@"暂无"]) {
+//            
+//            [self.nameText setText:userVo.userName];
+//        }
         [self.nameText setPlaceholder:@"填写名字"];
-        [self addSubview:self.nameText];
+        [scrollView addSubview:self.nameText];
         
         self.phoneText = [[UITextField alloc] initWithFrame:CGRectMake(150, 70, 600, 60)];
         [self.phoneText setPlaceholder:@"填写手机号"];
-        if (![userVo.phone isEqualToString:@"暂无"]) {
-            
-            [self.phoneText setText:userVo.phone];
-        }
-        [self addSubview:self.phoneText];
+//        if (![userVo.phone isEqualToString:@"暂无"]) {
+//            
+//            [self.phoneText setText:userVo.phone];
+//        }
+        [scrollView addSubview:self.phoneText];
         
         
         self.manBut = [self QRbutWithFrame:CGRectMake(150, 130, 60, 60) andtitle:@"男" groupId:@"1"];
-        [self addSubview:self.manBut];
+        [scrollView addSubview:self.manBut];
         self.womanBut = [self QRbutWithFrame:CGRectMake(CGRectGetMaxX(self.manBut.frame)+30, 130, 60, 60) andtitle:@"女" groupId:@"1"];
-        [self addSubview:self.womanBut];
-        if ([userVo.sex isEqualToString:@"man"]) {
-            [self.manBut setChecked:YES];
-        }else if ([userVo.sex isEqualToString:@"woman"]) {
-            [self.womanBut setChecked:YES];
-        }
+        [scrollView addSubview:self.womanBut];
+//        if ([userVo.sex isEqualToString:@"man"]) {
+//            [self.manBut setChecked:YES];
+//        }else if ([userVo.sex isEqualToString:@"woman"]) {
+//            [self.womanBut setChecked:YES];
+//        }
         
         
         NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
@@ -108,88 +111,91 @@
             NSDictionary *dataM = aarray[i];
             
             QRadioButton *dengji = [self QRbutWithFrame:CGRectMake(150+i*90, 190, 90, 60) andtitle:[dataM objectForKey:@"name"] groupId:@"2"];
-            [self addSubview:dengji];
-            if ([userVo.userStatus isEqualToString:[dataM objectForKey:@"code"]]) {
-                [dengji setChecked:YES];
-            }
+            [scrollView addSubview:dengji];
             [self.jibieButArray addObject:dengji];
         }
+        UIView *lineview = [[UIView alloc] initWithFrame:CGRectMake(20, 250, frame.size.width-40, 1)];
+        [lineview setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+        [lineview setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
+        [scrollView addSubview:lineview];
+        
         
         self.zhibiaoBut = [self QRbutWithFrame:CGRectMake(150, 280, 90, 60) andtitle:@"有" groupId:@"3"];
-        [self addSubview:self.zhibiaoBut];
+        [scrollView addSubview:self.zhibiaoBut];
         self.zhibiaoNOBut = [self QRbutWithFrame:CGRectMake(240, 280, 90, 60) andtitle:@"无" groupId:@"3"];
-        [self addSubview:self.zhibiaoNOBut];
+        [scrollView addSubview:self.zhibiaoNOBut];
         
-        zhibiaoDateBut = [self buttonChooes:CGRectMake(700, 295, 120, 30) andtitle:@"过期时间"];
-        [zhibiaoDateBut setHidden:YES];
-        [zhibiaoDateBut addTarget:self action:@selector(chooseZhibiaoDate:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:zhibiaoDateBut];
-        
-        if ([userExtendM.carTarget isEqualToString:@"1"]) {
-            [self.zhibiaoBut setChecked:YES];
-            [zhibiaoDateBut setHidden:NO];
-            [zhibiaoDateBut setTitle:userExtendM.carTargetEndDate forState:UIControlStateNormal];
-        }else if ([userExtendM.carTarget isEqualToString:@"0"]){
-            [self.zhibiaoNOBut setChecked:YES];
-        }
-        
+       self.zhibiaoDateBut = [self buttonChooes:CGRectMake(700, 295, 120, 30) andtitle:@"过期时间"];
+        [self.zhibiaoDateBut setHidden:YES];
+        [self.zhibiaoDateBut addTarget:self action:@selector(chooseZhibiaoDate:) forControlEvents:UIControlEventTouchUpInside];
+        [scrollView addSubview:self.zhibiaoDateBut];
         
         self.guoHuTypeBut = [self QRbutWithFrame:CGRectMake(150, 340, 90, 60) andtitle:@"本市" groupId:@"4"];
-        [self addSubview:self.guoHuTypeBut];
-        self.guoHuwaiBut = [self QRbutWithFrame:CGRectMake(240, 340, 90, 60) andtitle:@"外市" groupId:@"4"];
-        [self addSubview:self.guoHuwaiBut];
+        [scrollView addSubview:self.guoHuTypeBut];
+        self.guoHuwaiBut = [self QRbutWithFrame:CGRectMake(240, 340, 90, 60) andtitle:@"外迁" groupId:@"4"];
+        [scrollView addSubview:self.guoHuwaiBut];
         guohuCityBut = [self buttonChooes:CGRectMake(700, 355, 120, 30) andtitle:@"过户省市"];
         [guohuCityBut addTarget:self action:@selector(chooseGuohuCity:) forControlEvents:UIControlEventTouchUpInside];
         [guohuCityBut setHidden:YES];
-        [self addSubview:guohuCityBut];
-        if ([userExtendM.insureType isEqualToString:@"this_city"]) {
-            [self.guoHuTypeBut setChecked:YES];
-        }else if ([userExtendM.insureType isEqualToString:@"outside_move"]){
-            [self.guoHuwaiBut setChecked:YES];
-        }
+#warning 过户**__*_*__*_*_*_*_*___*_*_*_*_*
+//        [scrollView addSubview:guohuCityBut];
+        
         
         
         self.fuKuanTypeBut = [self QRbutWithFrame:CGRectMake(150, 400, 90, 60) andtitle:@"全款" groupId:@"5"];
-        [self addSubview:self.fuKuanTypeBut];
+        [scrollView addSubview:self.fuKuanTypeBut];
         self.fuKuanFenqi = [self QRbutWithFrame:CGRectMake(240, 400, 90, 60) andtitle:@"分期" groupId:@"5"];
-        [self addSubview:self.fuKuanFenqi];
-        if ([userExtendM.payType isEqualToString:@"fullpay"]) {
-            [self.fuKuanTypeBut setChecked:YES];
-        }else if ([userExtendM.payType isEqualToString:@"partpay"]){
-            [self.fuKuanFenqi setChecked:YES];
-        }
+        [scrollView addSubview:self.fuKuanFenqi];
+
         
         self.yongtuBut = [self QRbutWithFrame:CGRectMake(150, 460, 110, 60) andtitle:@"新手练车" groupId:@"6"];
-        [self addSubview:self.yongtuBut];
+        [scrollView addSubview:self.yongtuBut];
         self.yongtujiaBut = [self QRbutWithFrame:CGRectMake(260, 460, 110, 60) andtitle:@"家用代步" groupId:@"6"];
-        [self addSubview:self.yongtujiaBut];
+        [scrollView addSubview:self.yongtujiaBut];
         self.yongtubiaoBut = [self QRbutWithFrame:CGRectMake(370, 460, 110, 60) andtitle:@"占标车" groupId:@"6"];
-        [self addSubview:self.yongtubiaoBut];
+        [scrollView addSubview:self.yongtubiaoBut];
         self.yongtubuBut = [self QRbutWithFrame:CGRectMake(480, 460, 110, 60) andtitle:@"代步" groupId:@"6"];
-        [self addSubview:self.yongtubuBut];
-        
+        [scrollView addSubview:self.yongtubuBut];
+        self.yongtuArray = @[self.yongtuBut,self.yongtubiaoBut,self.yongtujiaBut,self.yongtubuBut];
         
         self.haveCarBut = [self QRbutWithFrame:CGRectMake(150, 520, 90, 60) andtitle:@"有" groupId:@"7"];
-        [self addSubview:self.haveCarBut];
+        [scrollView addSubview:self.haveCarBut];
         self.haveNocarBut = [self QRbutWithFrame:CGRectMake(240, 520, 90, 60) andtitle:@"无" groupId:@"7"];
-        [self addSubview:self.haveNocarBut];
-        if ([userExtendM.isHaveCar isEqualToString:@"1"]) {
-            [self.haveCarBut setChecked:YES];
-        }else if ([userExtendM.isHaveCar isEqualToString:@"0"]){
-            [self.haveNocarBut setChecked:YES];
-        }
+        [scrollView addSubview:self.haveNocarBut];
         
         self.maicheBut = [self QRbutWithFrame:CGRectMake(150, 580, 90, 60) andtitle:@"是" groupId:@"8"];
-        [self addSubview:self.maicheBut];
+        [scrollView addSubview:self.maicheBut];
         self.maicheNOBut = [self QRbutWithFrame:CGRectMake(240, 580, 90, 60) andtitle:@"否" groupId:@"8"];
-        [self addSubview:self.maicheNOBut];
-        if ([userExtendM.isSellCar isEqualToString:@"1"]) {
-            [self.maicheBut setChecked:YES];
-        }else if ([userExtendM.isSellCar isEqualToString:@"0"]){
-            [self.maicheNOBut setChecked:YES];
-        }
+        [scrollView addSubview:self.maicheNOBut];
+        
+        self.beizhuTextF = [[UITextField alloc] initWithFrame:CGRectMake(150, 650, 730, 40)];
+        [self.beizhuTextF setBorderStyle:UITextBorderStyleRoundedRect];
+        [self.beizhuTextF setPlaceholder:@"填写客户备注信息"];
+
+        [self.beizhuTextF setDelegate:self];
+        [scrollView addSubview:self.beizhuTextF];
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(20, 700, frame.size.width-40, 1)];
+        [line setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+        [line setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
+        [scrollView addSubview:line];
     }
     return self;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField == self.beizhuTextF) {
+        
+        [scrollView setContentOffset:CGPointMake(0, 450) animated:YES];
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField == self.beizhuTextF) {
+        [scrollView setContentOffset:CGPointMake(0, 50) animated:YES];
+    }
 }
 
 - (void)setDataDic:(NSDictionary *)dataDic
@@ -219,12 +225,19 @@
             [dengji setChecked:YES];
         }
     }
+    
+    for (QRadioButton *yongtu in self.yongtuArray) {
+        if ([userExtendM.carUsed isEqualToString:yongtu.titleLabel.text]) {
+            [yongtu setChecked:YES];
+        }
+    }
     if ([userExtendM.carTarget isEqualToString:@"1"]) {
         [self.zhibiaoBut setChecked:YES];
-        [zhibiaoDateBut setHidden:NO];
-        [zhibiaoDateBut setTitle:userExtendM.carTargetEndDate forState:UIControlStateNormal];
+        [self.zhibiaoDateBut setHidden:NO];
+        [self.zhibiaoDateBut setTitle:userExtendM.carTargetEndDate forState:UIControlStateNormal];
     }else if ([userExtendM.carTarget isEqualToString:@"0"]){
         [self.zhibiaoNOBut setChecked:YES];
+        [self.zhibiaoDateBut setHidden:YES];
     }
     
     if ([userExtendM.insureType isEqualToString:@"this_city"]) {
@@ -241,14 +254,22 @@
     
     if ([userExtendM.isHaveCar isEqualToString:@"1"]) {
         [self.haveCarBut setChecked:YES];
+        [self.maicheNOBut setUserInteractionEnabled:YES];
+        [self.maicheBut setUserInteractionEnabled:YES];
     }else if ([userExtendM.isHaveCar isEqualToString:@"0"]){
         [self.haveNocarBut setChecked:YES];
+        [self.maicheBut setUserInteractionEnabled:NO];
+        [self.maicheNOBut setUserInteractionEnabled:NO];
     }
 
     if ([userExtendM.isSellCar isEqualToString:@"1"]) {
         [self.maicheBut setChecked:YES];
     }else if ([userExtendM.isSellCar isEqualToString:@"0"]){
         [self.maicheNOBut setChecked:YES];
+    }
+    
+    if (![userExtendM.remark isEqualToString:@"暂无"]) {
+        [self.beizhuTextF setText:userExtendM.remark];
     }
 }
 
@@ -258,7 +279,7 @@
     [cityPick setDelegate:self];
     popoVC = [[UIPopoverController alloc] initWithContentViewController:cityPick];
     popoVC.popoverContentSize = CGSizeMake(320, 260);
-    [popoVC presentPopoverFromRect:button.frame inView:self permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    [popoVC presentPopoverFromRect:button.frame inView:scrollView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 
@@ -275,21 +296,21 @@
     [datePick setDelegate:self];
     popoVC = [[UIPopoverController alloc] initWithContentViewController:datePick];
     popoVC.popoverContentSize = CGSizeMake(320, 210);
-    [popoVC presentPopoverFromRect:button.frame inView:self permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    [popoVC presentPopoverFromRect:button.frame inView:scrollView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 - (void)datePickerVC:(DatePickViewController *)datePickVC dateStr:(NSString *)datestr
 {
-    [zhibiaoDateBut setTitle:datestr forState:UIControlStateNormal];
+    [self.zhibiaoDateBut setTitle:datestr forState:UIControlStateNormal];
 }
 
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId
 {
     if ([groupId isEqualToString:@"3"]) {
         if ([radio.titleLabel.text isEqualToString:@"有"]) {
-            [zhibiaoDateBut setHidden:NO];
+            [self.zhibiaoDateBut setHidden:NO];
         }else {
-            [zhibiaoDateBut setHidden:YES];
+            [self.zhibiaoDateBut setHidden:YES];
         }
     }else if ([groupId isEqualToString:@"4"]){
         if ([radio.titleLabel.text isEqualToString:@"外市"]) {
@@ -297,8 +318,18 @@
         }else{
             [guohuCityBut setHidden:YES];
         }
+    }else if ([groupId isEqualToString:@"7"]){
+        if ([radio.titleLabel.text isEqualToString:@"有"]) {
+            [self.maicheBut setUserInteractionEnabled:YES];
+            [self.maicheNOBut setUserInteractionEnabled:YES];
+            
+        }else {
+            [self.maicheNOBut setUserInteractionEnabled:NO];
+            [self.maicheBut setUserInteractionEnabled:NO];
+            [self.maicheBut setChecked:NO];
+            [self.maicheNOBut setChecked:NO];
+        }
     }
-    
 }
 
 

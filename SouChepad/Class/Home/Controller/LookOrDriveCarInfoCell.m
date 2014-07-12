@@ -61,6 +61,15 @@
         [_carStatusImage setImage:[UIImage imageNamed:@"done_04"]];
     }
     
+    // 降价
+    if ([lookOrDriveCellM.downPrice isEqualToString:@"暂无"]) {
+        [self.downPriceImage setHidden:YES];
+        [self.downPiceLabel setHidden:YES];
+    }else {
+        [self.downPriceImage setHidden:NO];
+        [self.downPiceLabel setHidden:NO];
+        [self.downPiceLabel setText:lookOrDriveCellM.downPrice];
+    }
     
     // 车辆图片
     [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,lookOrDriveCellM.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];

@@ -16,6 +16,10 @@
  */
 @property (weak, nonatomic) IBOutlet UIImageView *downPriceImage;
 /**
+ *  降价
+ */
+@property (weak, nonatomic) IBOutlet UILabel *downPiceLabel;
+/**
  *  车辆图片
  */
 @property (weak, nonatomic) IBOutlet UIImageView *carImage;

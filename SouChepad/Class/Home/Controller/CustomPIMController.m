@@ -7,7 +7,6 @@
 //
 
 #import "CustomPIMController.h"
-//#import "FZInfoView.h"
 #import "JBInfoView.h"
 #import "HttpManager.h"
 #import "FuZhuInfoView.h"
@@ -23,7 +22,7 @@
     UserExtendModel *userExtendmodel;
     UserVOModel *userVomodel;
     JBInfoView *_jbInfoView;
-    
+    NSDictionary *dataInfoDic;
     FuZhuInfoView *_fuzhuView;
 }
 @end
@@ -39,7 +38,7 @@
     [self addToolbar];
     
     [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-        NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
+        dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
         userVomodel = [dataInfoDic objectForKey:@"user"];
         userExtendmodel = [dataInfoDic objectForKey:@"userExtend"];
         if (userExtendmodel&&userVomodel) {
@@ -51,7 +50,6 @@
             [saveUserInfoBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [saveUserInfoBut addTarget:self action:@selector(saveUserInfoClickt) forControlEvents:UIControlEventTouchUpInside];
             [self.headBar addSubview:saveUserInfoBut];
-            
         }
         
     } fail:^(id obj) {
@@ -63,8 +61,10 @@
 {
     if (_jbInfoView) {
         NSMutableDictionary *reqDic = [NSMutableDictionary dictionary];
-        [reqDic setObject:self.userInfoM.crmUserId forKey:@"userId"];
+        [reqDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"userId"];
         [reqDic setObject:_jbInfoView.nameText.text forKey:@"name"];
+        [reqDic setObject:_jbInfoView.beizhuTextF.text forKey:@"remark"];
+        
         if (_jbInfoView.manBut.checked) {
             [reqDic setObject:@"man" forKey:@"sex"];
         }else if (_jbInfoView.womanBut.checked){
@@ -92,15 +92,28 @@
                 }else if ([dengjiBut.titleLabel.text isEqualToString:@"O2级"]) {
                     [reqDic setObject:@"buyer_O2_level" forKey:@"level"];
                 }
+                continue;
             }
         }
         
+        for (QRadioButton *yongtuB in _jbInfoView.yongtuArray) {
+            if (yongtuB.checked) {
+                [reqDic setObject:yongtuB.titleLabel.text forKey:@"carUsed"];
+            }
+        }
+        
+        // 指标
         if (_jbInfoView.zhibiaoBut.checked) {
             [reqDic setObject:@"1" forKey:@"carTarget"];
+            if (![_jbInfoView.zhibiaoDateBut.titleLabel.text isEqualToString:@"暂无"]) {
+                [reqDic setObject:_jbInfoView.zhibiaoDateBut.titleLabel.text forKey:@"carTargetEndDate"];
+            }
             
-        }else if(_jbInfoView.zhibiaoBut.checked) {
+        }else if(_jbInfoView.zhibiaoNOBut.checked) {
             [reqDic setObject:@"0" forKey:@"carTarget"];
         }
+        
+        
         if (_jbInfoView.guoHuTypeBut.checked) {
             [reqDic setObject:@"this_city" forKey:@"insureType"];
         }else if (_jbInfoView.guoHuwaiBut.checked){
@@ -121,54 +134,106 @@
         }else if(_jbInfoView.haveNocarBut.checked){
             [reqDic setObject:@"0" forKey:@"isHaveCar"];
         }
+        if ([userVomodel.callPhone1 isEqualToString:@"暂无"]) {
+            userVomodel.callPhone1 = @"";
+        }
+        if ([userVomodel.callPhone2 isEqualToString:@"暂无"]) {
+            userVomodel.callPhone2 = @"";
+        }
+        if ([userVomodel.callPhone3 isEqualToString:@"暂无"]) {
+            userVomodel.callPhone3 = @"";
+        }
+        if ([userVomodel.callPhone4 isEqualToString:@"暂无"]) {
+            userVomodel.callPhone4 = @"";
+        }
         [reqDic setObject:userVomodel.callPhone1 forKey:@"callPhone1"];
         [reqDic setObject:userVomodel.callPhone2 forKey:@"callPhone2"];
         [reqDic setObject:userVomodel.callPhone3 forKey:@"callPhone3"];
         [reqDic setObject:userVomodel.callPhone4 forKey:@"callPhone4"];
-        if ([userVomodel.phone isEqualToString:@"暂无"]) {
+        
+        if ([userVomodel.phone isEqualToString:@"暂无"]&&_jbInfoView.phoneText.text.length>0) {
+            [NSString phoneValidate:_jbInfoView.phoneText.text];
             [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-                if (_jbInfoView.phoneText.text.length) {
+                
+                [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
+                    [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
+                    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+                        dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
+                        userVomodel = [dataInfoDic objectForKey:@"user"];
+                        userExtendmodel = [dataInfoDic objectForKey:@"userExtend"];
+                        [_jbInfoView setDataDic:dataInfoDic];
+                        [_fuzhuView setDataDic:dataInfoDic];
+                    } fail:^(id obj) {
+                        
+                    }];
+                } fail:^(id obj) {
                     
-                    if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
-                        [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
-                            [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
-                            [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-                                NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
-                                [_jbInfoView setDataDic:dataInfoDic];
-                                [_fuzhuView setDataDic:dataInfoDic];
-                            } fail:^(id obj) {
-                                
-                            }];
-                        } fail:^(id obj) {
-                            
-                        }];
-                    }
-                }else {
-                    
-                }
+                }];
+                
             } fail:^(id obj) {
                 
             }];
         }else{
-            if (_jbInfoView.phoneText.text.length) {
-                if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
-                    [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
-                    [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-                        
-                    } fail:^(id obj) {
-                        
-                    }];
-                }
-            }else
-            {
-                [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-                    
-                } fail:^(id obj) {
-                    
-                }];
+            if (_jbInfoView.phoneText.text.length>0) {
+                [NSString phoneValidate:_jbInfoView.phoneText.text];
             }
+            [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
+            [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+                
+            } fail:^(id obj) {
+                
+            }];
+        
         }
+        
+        
+        
+        
+//        if ([userVomodel.phone isEqualToString:@"暂无"]) {
+//            [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+//                if (_jbInfoView.phoneText.text.length) {
+//                    
+//                    if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
+//                        [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
+//                            [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
+//                            [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
+//                            [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+//                                dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
+//                                [_jbInfoView setDataDic:dataInfoDic];
+//                                [_fuzhuView setDataDic:dataInfoDic];
+//                            } fail:^(id obj) {
+//                                
+//                            }];
+//                        } fail:^(id obj) {
+//                            
+//                        }];
+//                    }
+//                }else {
+//                    
+//                }
+//            } fail:^(id obj) {
+//                
+//            }];
+//        }else{
+//            if (_jbInfoView.phoneText.text.length) {
+//                if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
+//                    [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
+//                    [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+//                        
+//                    } fail:^(id obj) {
+//                        
+//                    }];
+//                }
+//            }else
+//            {
+//                [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
+//                    
+//                } fail:^(id obj) {
+//                    
+//                }];
+//            }
+//        }
     }
 }
 
@@ -211,9 +276,10 @@
     [_fuzhuView removeFromSuperview];
     if (_jbInfoView == nil) {
         
-        JBInfoView *jbInfo = [[JBInfoView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) userVOModel:userVomodel userExtendmodel:userExtendmodel];
+        JBInfoView *jbInfo = [[JBInfoView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100)];
         [jbInfo setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         _jbInfoView = jbInfo;
+        [_jbInfoView setDataDic:dataInfoDic];
     }
     [self.view addSubview:_jbInfoView];
 
@@ -229,12 +295,10 @@
         [fztableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         _fuzhuView = fztableView;
     }
+    
     [self.view addSubview:_fuzhuView];
 
 }
-
-
-
 
 
 - (void)didReceiveMemoryWarning

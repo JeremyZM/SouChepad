@@ -89,16 +89,14 @@ static NSString *newUserCell = @"newUserCell";
         [HttpManager requestSearchPhoneNumaber:@{@"contact":searchBar.text,@"userName":KUserName} Success:^(id obj) {
             
             searchUserDic = [NSDictionary dictionaryWithDictionary:obj];
-//            if (![searchUserDic objectForKey:@"-1"]) {
-                otherSell = [NSArray arrayWithArray:[searchUserDic objectForKey:@"1"]];
-                myself = [NSArray arrayWithArray:[searchUserDic objectForKey:@"2"]];
-//            }else{
-                newUser = [NSArray arrayWithArray:[searchUserDic objectForKey:@"-1"]];
-//            }
+
+            otherSell = [NSArray arrayWithArray:[searchUserDic objectForKey:@"1"]];
+            myself = [NSArray arrayWithArray:[searchUserDic objectForKey:@"2"]];
+            newUser = [NSArray arrayWithArray:[searchUserDic objectForKey:@"-1"]];
             
             if (_tableView==nil) {
                 
-                _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStylePlain];
+                _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStyleGrouped];
                 [_tableView setDataSource:self];
                 [_tableView setDelegate:self];
                 [self.view addSubview:_tableView];
@@ -127,21 +125,7 @@ static NSString *newUserCell = @"newUserCell";
     if (section ==0)  return newUser.count;
     if (section ==1) return myself.count;
     if (section == 2) return otherSell.count;
-    //    if (newUser.count!= 0) {
-//        return 1;
-//    }else {
-//        if (myself.count!=0&&otherSell.count!=0) {
-//            if (section==0) {
-//                return myself.count;
-//            }else if (section == 1){
-//                return otherSell.count;
-//            }
-//        }else if (myself.count!=0&&otherSell.count==0){
-//            return myself.count;
-//        }else if (myself.count ==0&&otherSell.count != 0){
-//            return otherSell.count;
-//        }
-//    }
+
         return 1;
 }
 

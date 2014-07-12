@@ -146,7 +146,6 @@ static NSString *CellIdentifier = @"communCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-
     return 60;
 }
 

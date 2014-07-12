@@ -19,6 +19,6 @@
 @interface PopoTableViewController : UITableViewController
 @property (nonatomic, strong) NSMutableArray *array;
 @property (nonatomic, strong) UIButton *sortWayBtn;
-@property (nonatomic, assign) NSInteger selectRow;
+@property (nonatomic, assign) NSString *selectRow;
 @property (nonatomic,weak) id <PopoTableViewDelegate> popoTabelDelegate;
 @end

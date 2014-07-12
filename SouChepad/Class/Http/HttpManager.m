@@ -23,6 +23,7 @@
 #import "RequireInfoModel.h"
 #import "PinYin4Objc.h"
 #import "ChineseString.h"
+#import "UsertoStore.h"
 
 @implementation HttpManager
 
@@ -154,6 +155,33 @@
         fail(error);
     } reload:YES needHud:YES hudEnabled:NO];
     
+}
+
+#pragma mark - 客户列表上拉加载更多
++(void)getOldUserParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getOldUser.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if (![dataDic objectForKey:@"errorMessage"]) {
+            UsertoStore *userStore = [[UsertoStore alloc] init];
+            [userStore setKeyValues:dataDic];
+            NSArray *usersArray = [dataDic objectForKey:@"users"];
+            NSMutableArray *userArrayM = [NSMutableArray array];
+            
+            for (NSDictionary *user in usersArray) {
+                UserReservationM *userReserM = [[UserReservationM alloc] init];
+                [userReserM setKeyValues:user];
+                [userArrayM addObject:userReserM];
+            }
+            [userStore setUsersArray:userArrayM];
+            success(userStore);
+        } else {
+            [ProgressHUD showError:[dataDic objectForKey:@"errorMessage"]];
+        }
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+
+    } reload:YES needHud:YES hudEnabled:NO];
 }
 
 #pragma mark - 搜索手机号

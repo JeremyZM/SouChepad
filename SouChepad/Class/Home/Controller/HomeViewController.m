@@ -18,8 +18,10 @@
 #import "SearchVC.h"
 #import "NSString+val.h"
 #import "ProgressHUD.h"
+#import "MJRefresh.h"
+#import "UsertoStore.h"
 
-@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate,ChangeTimePopoDelegate>
+@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate,ChangeTimePopoDelegate,MJRefreshBaseViewDelegate>
 {
     UITableView *table;
     UIPopoverController *popoVC;
@@ -37,9 +39,14 @@
     
     UIButton *icon;
     
+    MJRefreshHeaderView *_header;
+    MJRefreshFooterView *_footer;
+    NSInteger _page;
+    
+    NSString *totalNumber;
 }
 
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+//@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) UIPopoverController *timePopoVC;
 
 @end
@@ -50,15 +57,30 @@ static NSString *CellIdentifier = @"cellID";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self RefreshViewControlEventValueChanged];
+    [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
+        if (obj) {
+            dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
+            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
+            [table reloadData];
+        }
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    } fail:^(id obj) {
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    }];
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    
     [self addHeadUI];
     [self addTableView];
+    
 }
 
 #pragma mark - 添加UI
@@ -115,34 +137,100 @@ static NSString *CellIdentifier = @"cellID";
     [self.view addSubview:table];
     _seleckStr = @"所有等级";
     _namSeleckStr = @"按到店时间";
+
+    // 1.添加下拉刷新
+    _header = [MJRefreshHeaderView header];
+    _header.delegate = self;
+    _header.scrollView = table;
+    // 自动进入刷新状态
+    [_header beginRefreshing];
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-//    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
-    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
-    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
-    [table addSubview:self.refreshControl];
-    
-    [self.refreshControl beginRefreshing];
+    // 2.添加上拉加载
+    _footer = [MJRefreshFooterView footer];
+    _footer.delegate = self;
+    _footer.scrollView = table;
 }
 
- // 刷新数据
-- (void)RefreshViewControlEventValueChanged
+#pragma mark - 刷新的代理方法
+/**
+ *  当控件进入刷新状态的时候就会调用
+ *
+ *  @param refreshView 哪个控件进入了刷新状态
+ */
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    DLog(@"%@",KUserName);
-    [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
-        if (obj) {
-            dataDic = [NSDictionary dictionaryWithDictionary:obj];
-            userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
-            usertoStoreArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"usertostore"]];
-            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
-            [table reloadData];
-        }
-        [self.refreshControl endRefreshing];
+   
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) { // 下拉
+         _page = 1;
+        [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
+            if (obj) {
+                dataDic = [NSDictionary dictionaryWithDictionary:obj];
+                userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
+                [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
+            }
+            [self addOldDataRefreshIndex:[NSString stringWithFormat:@"%d",_page] searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
+            [_footer setHidden:NO];
+        } fail:^(id obj) {
+            [_header endRefreshing];
+            [_footer endRefreshing];
+        }];
         
-    } fail:^(id obj) {
-        [self.refreshControl endRefreshing];
-    }];
+    }else { // 上拉加载更多
+//        _page++;
+        [self addOldDataRefreshIndex:[NSString stringWithFormat:@"%d",_page] searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
+    }
+}
 
+- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
+{
+    NSLog(@"aa");
+}
+
+
+
+
+- (void)addOldDataRefreshIndex:(NSString *)indxet searchLevel:(NSString *)searchLevel searchHavePhone:(NSString *)isHavePhone orderType:(NSString *)orderType
+{
+    NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
+    
+    for (NSDictionary *dataM in aarray) {
+        if ([searchLevel isEqualToString:[dataM objectForKey:@"name"]]) {
+            searchLevel = [dataM objectForKey:@"code"];
+        }
+    }
+    if ([searchLevel isEqualToString:@"所有等级"]) {
+        searchLevel = @"";
+    }
+    if ([orderType isEqualToString:@"按到店时间"]) {
+        orderType = @"orderArrive";
+    }else if ([orderType isEqualToString:@"按更新时间"]){
+        orderType = @"orderUpdate";
+    }
+    
+    [HttpManager getOldUserParamDic:@{@"userName":KUserName,@"index":indxet,@"pageSize":@"20",@"searchLevel":searchLevel,@"searchHavePhone":isHavePhone,@"orderType":orderType} Success:^(id obj) {
+        UsertoStore *user = obj;
+        totalNumber = user.totalNumber;
+        if ([user.nextIndex isEqualToString:user.currentIndex]) {
+            [_footer setHidden:YES];
+        }else{
+            [_footer setHidden:NO];
+        }
+        _page = [user.nextIndex intValue];
+        if (![user.currentIndex isEqualToString:@"1"]) {
+            for (UserReservationM *userRM in user.usersArray) {
+                [usertoStoreArray addObject:userRM];
+            }
+        }else{
+            usertoStoreArray = user.usersArray;
+        }
+        [table reloadData];
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    } fail:^(id obj) {
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    }];
+    
 }
 
 - (void)addUserInfo:(UIButton*)button
@@ -159,38 +247,20 @@ static NSString *CellIdentifier = @"cellID";
 {
     UITextField *textField = [alertView textFieldAtIndex:0];
 
-    if (buttonIndex==0) { // 取消添加
-        
-    }else if (buttonIndex==1) { // 有手机号添加接待
+     if (buttonIndex==1) { // 有手机号添加接待
         if (textField.text.length>0) {
-            if ([NSString phoneValidate:textField.text] ) {
-                [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":textField.text} Success:^(id obj) {
-                    InfoMainController *infoMVC = [[InfoMainController alloc] init];
-                    UserReservationM *userReserM = [[UserReservationM alloc] init];
-                    userReserM.crmUserId = obj;
-                    [infoMVC setUserInfoM:userReserM];
-                    [self.navigationController pushViewController:infoMVC animated:YES];
-                } fail:^(id obj) {
-                    
-                }];
-                
-            }
-
-        }else
-        {
-            [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":@""} Success:^(id obj) {
-                UserReservationM *newUserM = [[UserReservationM alloc] init];
-                [newUserM setCrmUserId:obj];
-                InfoMainController *infoMVC = [[InfoMainController alloc] init];
-                
-                [infoMVC setUserInfoM:newUserM];
-                [self.navigationController pushViewController:infoMVC animated:YES];
-            } fail:^(id obj) {
-                
-            }];
-            
-            
+            if (![NSString phoneValidate:textField.text] ) return;
         }
+         [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":textField.text} Success:^(id obj) {
+             InfoMainController *infoMVC = [[InfoMainController alloc] init];
+             UserReservationM *userReserM = [[UserReservationM alloc] init];
+             userReserM.crmUserId = obj;
+             [infoMVC setUserInfoM:userReserM];
+             [self.navigationController pushViewController:infoMVC animated:YES];
+         } fail:^(id obj) {
+             
+         }];
+
         
     }
     
@@ -224,58 +294,37 @@ static NSString *CellIdentifier = @"cellID";
         }
         [arrayM insertObject:@"所有等级" atIndex:0];
         [popo setArray:arrayM];
-        popo.selectRow = ratselectRow;
+        popo.selectRow = [NSString stringWithFormat:@"%d",ratselectRow];
     }else if(button.tag == nameBtnTag){
 
         [arrayM addObject:@"按到店时间"];
         [arrayM addObject:@"按更新时间"];
-        [arrayM addObject:@"按姓名排序"];
         [popo setArray:arrayM];
-        popo.selectRow = nameSelectRow;
+        popo.selectRow = [NSString stringWithFormat:@"%d",nameSelectRow];
     }
     popoVC = [[UIPopoverController alloc] initWithContentViewController:popo];
     
     CGRect frame = [self.view convertRect:button.frame fromView:button.superview];
-    popoVC.popoverContentSize = CGSizeMake(320, arrayM.count*44);
+    popoVC.popoverContentSize = CGSizeMake(320, arrayM.count*50+40);
     [popoVC presentPopoverFromRect:frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 #pragma mark - 筛选修改代理
 - (void)PopoTableViewController:(PopoTableViewController *)popoTableVC seleckChanged:(NSString *)seleckStr andseleckRow:(NSInteger)row andselectBtn:(UIButton *)selecBtn
 {
-    NSMutableArray *arrayM = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"usertostore"]];
+    
     DLog(@"%@---%d",seleckStr,row);
     if (selecBtn.tag==nameBtnTag) {
         nameSelectRow = row;
         _namSeleckStr = seleckStr;
-        if (row==0) {
-            
-            for (UserReservationM *userM in usertoStoreArray) {
-                DLog(@"%@",userM.day);
-            }
-            usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"day" ascending:NO];
- 
-            for (UserReservationM *userM in usertoStoreArray) {
-                DLog(@"%@",userM.day);
-            }
-        }else if (row == 1){
-            usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"updateDay" ascending:NO];
-        }else {
-            usertoStoreArray = [self changeArray:usertoStoreArray orderWithKey:@"user" ascending:NO];
-        }
+        [self addOldDataRefreshIndex:@"1" searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
         
     } else if (selecBtn.tag==ratBtnTag) {//按等级筛选
         ratselectRow = row;
         _seleckStr = seleckStr;
-        if (row==0) {
-           usertoStoreArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"usertostore"]];;
-        }else {
-        
-            usertoStoreArray = [NSMutableArray arrayWithArray:[self siftArray:arrayM orderWithKey:seleckStr]];
-        }
+        [self addOldDataRefreshIndex:@"1" searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
+
     }
-    [table reloadData];
-//    [table reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationLeft];
     [popoVC dismissPopoverAnimated:YES];
 }
 
@@ -326,8 +375,8 @@ static NSString *CellIdentifier = @"cellID";
     UIView *twoView = [[UIView alloc] initWithFrame:rect];
     [twoView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
 
-    UIButton *twoLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
-    [twoLabel setTitle:[NSString stringWithFormat:@"全部客户 %d",usertoStoreArray.count] forState:UIControlStateNormal];
+    UIButton *twoLabel = [[UIButton alloc] initWithFrame:CGRectMake(60, 0, 200, 60)];
+    [twoLabel setTitle:[NSString stringWithFormat:@"全部客户 %d / %@",usertoStoreArray.count,totalNumber] forState:UIControlStateNormal];
     [twoLabel.titleLabel setFont:KBoldFont18];
     [twoLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
     [twoLabel setImage:[UIImage imageNamed:@"tubiao_49"] forState:UIControlStateNormal];
@@ -339,7 +388,7 @@ static NSString *CellIdentifier = @"cellID";
 //    if (usertoStoreArray.count) {
         //    ; // 等级筛选按钮
         UIButton *ratbut = [UIButton buttonWithType:UIButtonTypeCustom];
-        [ratbut setFrame:CGRectMake(715, 20, 120, 30)];
+        [ratbut setFrame:CGRectMake(500, 20, 120, 30)];
         [ratbut setTitle:_seleckStr forState:UIControlStateNormal];
         [ratbut addTarget:self action:@selector(showpopoview:) forControlEvents:UIControlEventTouchUpInside];
         [ratbut setTag:ratBtnTag];
@@ -353,7 +402,7 @@ static NSString *CellIdentifier = @"cellID";
         //    ; // 时间筛选按钮
         UIButton *nameBut = [UIButton buttonWithType:UIButtonTypeCustom];
         [nameBut setTag:nameBtnTag];
-        [nameBut setFrame:CGRectMake(CGRectGetMaxX(ratbut.frame)+20, 20, 120, 30)];
+        [nameBut setFrame:CGRectMake(CGRectGetMaxX(ratbut.frame)+80, 20, 120, 30)];
         [nameBut setTitle:_namSeleckStr forState:UIControlStateNormal];
         [nameBut addTarget:self action:@selector(showpopoview:) forControlEvents:UIControlEventTouchUpInside];
         [nameBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
@@ -391,18 +440,22 @@ static NSString *CellIdentifier = @"cellID";
         [cell.SexCustomer setText:userReserM.sex];
         [cell.PhoneCustomer setText:userReserM.phone];
         [cell.GradeCustomer setText:[NSString stringWithFormat:@"来自 %@",userReserM.handler]];
-        [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateNormal];
-        
-        [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
         [cell.TimeUpdate setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
-        [cell.TimeUpdate setTag:(900+indexPath.row)];
-        [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
-        if ([userReserM.reservationStatus isEqualToString:@"inHand"]) {
+        [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateNormal];
+        [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateDisabled];
+        if ([userReserM.reservationStatus isEqualToString:@"inHand"]||[userReserM.reservationStatus isEqualToString:@"finish"]) {
             [cell.TimeUpdate setEnabled:NO];
+            [cell.TimeUpdate setUserInteractionEnabled:NO];
         }else{
-        
+            [cell.TimeUpdate setUserInteractionEnabled:YES];
             [cell.TimeUpdate setEnabled:YES];
+//            [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateSelected];
         }
+
+        [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.TimeUpdate setTag:(900+indexPath.row)];
+//        [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
+        
     }else if (indexPath.section == 1){
         
         // 接待过的客户
@@ -411,11 +464,13 @@ static NSString *CellIdentifier = @"cellID";
         [cell.SexCustomer setText:usertoStore.sex];
         [cell.PhoneCustomer setText:usertoStore.phone];
         [cell.GradeCustomer setText:usertoStore.userLevel];
-        [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day] forState:UIControlStateNormal];
+        
         [cell.TimeUpdate setEnabled:NO];
+        [cell.TimeUpdate setUserInteractionEnabled:NO];
         [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
+        [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day] forState:UIControlStateDisabled];
+//        DLog(@"%@------%d",cell.TimeUpdate.titleLabel.text,indexPath.row);
     }
-   
     return cell;
 }
 

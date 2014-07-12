@@ -33,6 +33,9 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 搜索客户
 +(void)requestClientWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 客户列表上拉加载更多
++(void)getOldUserParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
 #pragma mark - 客户基本信息
 + (void)requestUserInfoWithParamDic:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 

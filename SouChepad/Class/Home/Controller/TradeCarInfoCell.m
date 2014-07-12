@@ -58,6 +58,16 @@
         [_carStatusImage setImage:[UIImage imageNamed:@"done_04"]];
     }
     
+    // 降价
+    if ([tradeCarInfoM.downPrice isEqualToString:@"暂无"]) {
+        [self.downPriceImage setHidden:YES];
+        [self.downPiceLabel setHidden:YES];
+    }else {
+        [self.downPriceImage setHidden:NO];
+        [self.downPiceLabel setHidden:NO];
+        [self.downPiceLabel setText:tradeCarInfoM.downPrice];
+    }
+    
     // 车辆图片
     [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,tradeCarInfoM.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
@@ -73,7 +83,7 @@
     
     
     // 付款方式
-    [_tradeTypeLabel setText:tradeCarInfoM.transferMode];
+    [_tradeTypeLabel setText:tradeCarInfoM.payType];
     
     // 成交价
     [_tradePriceLabel setText:[NSString stringWithFormat:@"%@万",tradeCarInfoM.tradePrice]];

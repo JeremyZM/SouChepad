@@ -9,36 +9,23 @@
 #import <Foundation/Foundation.h>
 
 @interface UsertoStore : NSObject
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *crmUserId;
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *day;
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *phone;
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *sex;
 
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *user;
+/** 当前页 */
+@property (copy, nonatomic) NSString *currentIndex;
 
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *updateDay;
+/** 每页个数 */
+@property (copy, nonatomic) NSString *pageSize;
 
-/**
- *  <#Description#>
- */
-@property (copy, nonatomic) NSString *userLevel;
+/** 总记录数 */
+@property (copy, nonatomic) NSString *totalNumber;
+
+/** 总页数 */
+@property (copy, nonatomic) NSString *totalPage;
+
+/** 下一页 */
+@property (copy, nonatomic) NSString *nextIndex;
+
+@property (nonatomic, strong) NSMutableArray *usersArray;
+
 
 @end

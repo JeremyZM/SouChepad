@@ -260,9 +260,9 @@
     [popo setPopoTabelDelegate:self];
     popo.sortWayBtn = but;
     if (but.tag == 806) {
-        popo.selectRow = ratselectRow;
+        popo.selectRow = [NSString stringWithFormat:@"%d",ratselectRow];
     }else if(but.tag == 800){
-         popo.selectRow = nameSelectRow;
+         popo.selectRow = [NSString stringWithFormat:@"%d",nameSelectRow];
     }
     popoVC = [[UIPopoverController alloc] initWithContentViewController:popo];
     

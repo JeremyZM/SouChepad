@@ -18,7 +18,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super initWithStyle:style];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         
     }
@@ -43,12 +43,11 @@
     
 
     UITableViewCell  *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    
     [cell.textLabel setText:self.array[indexPath.row]];
-    if (indexPath.row == self.selectRow) {
+    if (indexPath.row == [self.selectRow intValue]&&self.selectRow) {
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
         [cell.textLabel setTextColor:[UIColor redColor]];
-        self.seleindexPath = [NSIndexPath indexPathForRow:self.selectRow inSection:0];
+        self.seleindexPath = [NSIndexPath indexPathForRow:[self.selectRow intValue]inSection:0];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 
     }
@@ -64,11 +63,15 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50.0;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.seleindexPath == indexPath) return;
-
     // 取消前一个选中的，就是单选啦
     if (self.seleindexPath) {
         UITableViewCell *lastCell = [tableView cellForRowAtIndexPath:self.seleindexPath];

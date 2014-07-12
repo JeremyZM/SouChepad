@@ -16,9 +16,8 @@
     if (self) {
         _burt = [[UIButton alloc] init];
         [_burt setUserInteractionEnabled:NO];
-        //        [_burt addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
         [_burt setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_burt setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
+        [_burt setBackgroundImage:[UIImage imageNamed:@"dengluanniu1_60"] forState:UIControlStateSelected];
         [_burt setBackgroundColor:[UIColor lightGrayColor]];
         [_burt.layer setCornerRadius:3.0];
         [_burt.layer setMasksToBounds:YES];

@@ -36,5 +36,7 @@
 /** 成交日期 */
 @property (copy, nonatomic) NSString *day;
 
+/** 付款方式 */
+@property (copy, nonatomic) NSString *payType;
 
 @end

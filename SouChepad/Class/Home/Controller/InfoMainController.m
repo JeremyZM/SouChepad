@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 };
 
 #define KInfoDockW 100
-@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat,TTCounterLabelDelegate,UIAlertViewDelegate>
+@interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat,TTCounterLabelDelegate,UIAlertViewDelegate,EndReceiveDelegate>
 {
     UIView *_contentView;
     BeginBut *beginBtn;
@@ -103,6 +103,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)startStopTapped:(UIButton*)sender {
         if ([self.counterLabel isRunning]) {
             EndReceiveViewController *endVC = [[EndReceiveViewController alloc] init];
+            [endVC setDelegate:self];
             endVC.userInfoM = self.userInfoM;
             UINavigationController *endNavVC = [[UINavigationController alloc] initWithRootViewController:endVC];
             [endNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
@@ -114,6 +115,11 @@ typedef NS_ENUM(NSInteger, kTTCounter){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确认开始接待" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
         [alert show];
     }
+}
+
+- (void)endReceiveController:(EndReceiveViewController *)endReceiveVC
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

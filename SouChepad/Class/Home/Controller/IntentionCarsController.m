@@ -51,7 +51,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)addToolbar
 {
-    UISegmentedControl *orderSegmented = [[UISegmentedControl alloc] initWithItems:@[@"已购车辆",@"试驾看车",@"预约车辆",@"收藏车辆"]];
+    UISegmentedControl *orderSegmented = [[UISegmentedControl alloc] initWithItems:@[@"成交车辆",@"试驾看车",@"预约车辆",@"收藏车辆"]];
     _orderSegmented = orderSegmented;
     [orderSegmented setTintColor:[UIColor whiteColor]];
     [orderSegmented setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:19] forKey:NSFontAttributeName] forState:UIControlStateNormal];
@@ -129,7 +129,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
             readyseeCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"readyseecar"]];
             collectCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"collect"]];
             [_collectionView reloadData];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"已购车辆 %d",tradesCars.count] forSegmentAtIndex:0];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"成交车辆 %d",tradesCars.count] forSegmentAtIndex:0];
             [_orderSegmented setTitle:[NSString stringWithFormat:@"试驾看车 %d",driveCars.count] forSegmentAtIndex:1];
             [_orderSegmented setTitle:[NSString stringWithFormat:@"预约车辆 %d",readyseeCars.count] forSegmentAtIndex:2];
             [_orderSegmented setTitle:[NSString stringWithFormat:@"收藏车辆 %d",collectCars.count] forSegmentAtIndex:3];
