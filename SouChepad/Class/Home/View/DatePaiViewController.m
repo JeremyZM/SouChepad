@@ -35,20 +35,6 @@
     [swi addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:swi];
     
-    self.array = [NSMutableArray array];
-    NSDate *date = [NSDate date];
-    // NSDateFormatter 专门用来转换日期格式的 类
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    // 设置格式
-    [formatter setDateFormat:@"yyyy"];
-    // NSDateFormatter转换为NSString
-    NSString *dateStr = [formatter stringFromDate:date];
-    
-    
-    for (NSInteger i = 2006; i <= [dateStr integerValue]; i++) {
-        NSString *str = [NSString stringWithFormat:@"%d",i];
-        [self.array addObject:str];
-    }
     self.minPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(20, 80, 120, 220)];
     [self.minPicker setDelegate:self];
     [self.minPicker setDelegate:self];

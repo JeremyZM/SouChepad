@@ -11,11 +11,17 @@
 
 @protocol YushuanViewControllerDelegate <NSObject>
 
-- (void)yuShuanViewController:(YushuanViewController *)yushuanVC selectCode:(NSString *)selectCode selectStr:(NSString *)selectStr;
+- (void)yuShuanViewController:(YushuanViewController *)yushuanVC selectCode:(NSString *)selectCode selectBeginStr:(NSString *)selectBeginStr selectEndStr:(NSString *)selectEndStr;
 
 @end
 
 @interface YushuanViewController : UIViewController
+@property (nonatomic, strong) NSMutableArray *array;
+@property (nonatomic, strong) UIButton *seleckBut;
+/** 开始 */
+@property (copy, nonatomic) NSString *beginSelect;
+/** 结束 */
+@property (copy, nonatomic) NSString *endSelect;
 
 @property (nonatomic, weak) id<YushuanViewControllerDelegate> delegate;
 @end

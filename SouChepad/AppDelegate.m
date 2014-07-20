@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "LogInViewController.h"
 #import "MainViewController.h"
+#import "HttpManager.h"
 
 
 @implementation AppDelegate
@@ -18,6 +19,23 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+    [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
+        
+        NSDictionary *verDic = obj;
+        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+        NSString *versID = [verDic objectForKey:@"versionNumber"];
+        NSString *commentInfo = [verDic objectForKey:@"comment"];
+        if ([versID isEqualToString:localVersion])
+        {
+            UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
+            [createUserResponseAlert show];
+        }
+        
+    } fail:^(id obj) {
+        
+    }];
+    
        DLog(@"%@--%@",[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
     DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]);
     BOOL islog = !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]==nil) && !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD] == nil);
@@ -36,6 +54,17 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+
+- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+
+    if (buttonIndex == 0)
+    {
+        NSString *iTunesLink = @"http:app.souche.com/app/athena";
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+    }
 }
 
 

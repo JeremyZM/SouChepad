@@ -33,6 +33,20 @@
     [operation cancel];
 }
 
+
+#pragma mark - 版本号更新
++(void)getOrWriteVersionNumber:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getVersionNumber.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:NO hudEnabled:NO];
+
+}
+
+
 #pragma mark - 获取各评价list
 /**
  *
@@ -213,7 +227,7 @@
                 if ([status isEqualToString:@"1"]) { // 其他销售客户
                     NSDictionary *dicVO = [dicItem objectForKey:@"uservo"];
                     UserReservationM *userM = [[UserReservationM alloc] init];
-                    userM.crmUserId= [dicVO objectForKey:@"phone"];
+                    userM.crmUserId= [dicVO objectForKey:@"id"];
                     userM.phone = [dicVO objectForKey:@"phone"];
                     userM.user = [dicVO objectForKey:@"sellerNameShow"];
                     [otherSell addObject:userM];
@@ -324,13 +338,19 @@
 #pragma mark - 根据vin码获取车辆的ID
 + (void)getCarInVin:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
 {
+    
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getCarInVin.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        DLog(@"%@",obj);
+        DLog(@"%@,%@",[obj responseJSON],[obj responseString]);
+        if ([obj responseJSON]) {
+            [ProgressHUD showError:@"未找到该车辆信息"];
+            return;
+        }
         if ([obj responseString]) {
+            
             NSString *carID = [[obj responseString] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             success(carID);
         }else{
-            [ProgressHUD showError:@"暂无"];
+            [ProgressHUD showError:@"未找到该车辆信息"];
         }
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         [ProgressHUD showError:@"暂无"];
@@ -451,14 +471,27 @@
 {
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getUserRequirementInfo.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
         
+//        DLog(@"%@",[obj responseJSON]);
         DLog(@"%@",[obj responseJSON]);
         NSDictionary *objDic = [obj responseJSON];
         // 用户需求车型列表
         NSMutableArray *reqBrandArrayM = [NSMutableArray array];
         NSArray *reqBrandsArray = [NSArray arrayWithArray:[objDic objectForKey:@"requireBrands"]];
+        
         for (NSDictionary *reqDic in reqBrandsArray) {
+            NSMutableDictionary *dataReqDic = [NSMutableDictionary dictionaryWithDictionary:reqDic];
+            if ([dataReqDic objectForKey:@"id"]) {
+                [dataReqDic setObject:[dataReqDic objectForKey:@"id"] forKey:@"_id"];
+                [dataReqDic removeObjectForKey:@"id"];
+            }
+//            NSArray *keyArray = [reqDic allKeys];
+//            for (NSString *keyStr in keyArray) {
+//                if ([keyStr isEqualToString:@"id"]) {
+//                    
+//                }
+//            }
             RequireBrandsModel *requBranM = [[RequireBrandsModel alloc] init];
-            [requBranM setKeyValues:reqDic];
+            [requBranM setKeyValues:dataReqDic];
             [reqBrandArrayM addObject:requBranM];
         }
         
@@ -466,13 +499,28 @@
         NSArray *reqDeleteBranArray = [NSArray arrayWithArray:[objDic objectForKey:@"requireBrandsDelete"]];
         NSMutableArray *reqBranDeleteArrayM = [NSMutableArray array];
         for (NSDictionary *reqDeleteDic in reqDeleteBranArray) {
+            
+            NSMutableDictionary *dataReqDic = [NSMutableDictionary dictionaryWithDictionary:reqDeleteDic];
+            if ([dataReqDic objectForKey:@"id"]) {
+                [dataReqDic setObject:[dataReqDic objectForKey:@"id"] forKey:@"_id"];
+                [dataReqDic removeObjectForKey:@"id"];
+            }
+            
+//            if ([reqDeleteDic objectForKey:@"id"]) {
+//                [reqDeleteDic setObject:[reqDeleteDic objectForKey:@"id"] forKey:@"_id"];
+//                [reqDeleteDic removeObjectForKey:@"id"];
+//            }
+            
             RequireBrandsModel *reqDeleteM = [[RequireBrandsModel alloc] init];
-            [reqDeleteM setKeyValues:reqDeleteDic];
+            [reqDeleteM setKeyValues:dataReqDic];
             [reqBranDeleteArrayM addObject:reqDeleteM];
         }
         
         // 用户基本需求
-        NSDictionary *requireInfoDic = [NSDictionary dictionaryWithDictionary:[objDic objectForKey:@"requireInfo"]];
+        NSDictionary *requireInfoDic ;
+        if (![[objDic objectForKey:@"requireInfo"] isKindOfClass:[NSNull class]]) {
+            requireInfoDic = [NSDictionary dictionaryWithDictionary:[objDic objectForKey:@"requireInfo"]];
+        }
         RequireInfoModel *requireInfoModel = [[RequireInfoModel alloc] init];
         [requireInfoModel setKeyValues:requireInfoDic];
         
@@ -484,6 +532,31 @@
     } reload:YES needHud:YES hudEnabled:NO];
 }
 
+#pragma mark - 添加客户意向车型
++ (void)updateUserRequirementBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateUserRequirementBrand.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+
+}
+
+
+#pragma mark - 删除客户需求品牌车系
++ (void)delUserRequirementInfoBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/delUserRequirementInfoBrand.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+
+}
 
 
 #pragma mark - 我的消息
@@ -537,7 +610,7 @@
             
             [carArray writeToFile:KAllCarTypeData atomically:YES];
         });
-        DLog(@"%@",[obj responseJSON]);
+//        DLog(@"%@",[obj responseJSON]);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         fail([error localizedDescription]);
         DLog(@"%@",[error localizedDescription]);
@@ -640,6 +713,17 @@
     
 }
 
+
+#pragma mark - 修改销售个人信息
++ (void)updateSellerData:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateSellerData.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+
+    } reload:YES needHud:YES hudEnabled:YES];
+}
 
 
 

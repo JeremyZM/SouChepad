@@ -10,11 +10,13 @@
 
 @interface RequireBrandsModel : NSObject
 
-/** <#Name#> */
+/** 品牌需求ID */
+@property (copy, nonatomic) NSString *_id;
+
+/** 品牌 */
 @property (copy, nonatomic) NSString *brand;
 
-
-/** <#Name#> */
+/** 品牌 */
 @property (copy, nonatomic) NSString *brandName;
 
 /** <#Name#> */
@@ -53,7 +55,7 @@
 /** <#Name#> */
 @property (copy, nonatomic) NSString *others;
 
-/** <#Name#> */
+/** 备注 */
 @property (copy, nonatomic) NSString *remarks;
 
 /** 车系 */

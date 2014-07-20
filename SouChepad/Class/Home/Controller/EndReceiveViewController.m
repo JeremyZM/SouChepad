@@ -17,7 +17,7 @@
 #import "BiaoQianView.h"
 
 
-@interface EndReceiveViewController () <UITextFieldDelegate,UITextViewDelegate,PopoTableViewDelegate,BiaoQianViewDelegate>
+@interface EndReceiveViewController () <UITextFieldDelegate,UITextViewDelegate,PopoTableViewDelegate,BiaoQianViewDelegate,UIPopoverControllerDelegate>
 {
     UITextField *nameTextF;
     UITextField *phoneTextF;
@@ -127,9 +127,9 @@
         }
         NSString *messgeStr;
         if ([userVOM.name isEqualToString:@"暂无"]) {
-            messgeStr = [NSString stringWithFormat:@"你好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和你聊的很开心，期待您的下次光临！你的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+            messgeStr = [NSString stringWithFormat:@"您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }else {
-            messgeStr = [NSString stringWithFormat:@"%@你好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和你聊的很开心，期待您的下次光临！你的搜车顾问%@：%@",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+            messgeStr = [NSString stringWithFormat:@"%@您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }
         if ([userVOM.phone isEqualToString:@"暂无"]) {
             [messgeSwitch setOn:NO];
@@ -147,11 +147,13 @@
     
 }
 
+
 - (void)biaoQianView:(BiaoQianView *)biaoqian selectBiaoqian:(NSString *)selectString
 {
     biaoqianString = [NSString stringWithFormat:@"%@",selectString];
     
 }
+
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -172,23 +174,28 @@
         popoController = [[UIPopoverController alloc] initWithContentViewController:dengjiVC];
         //    CGRect frame = [self convertRect:jibieB.frame fromView:jibieB.superview];
         popoController.popoverContentSize = CGSizeMake(480, 400);
+//        [popoController setDelegate:self];
         [popoController presentPopoverFromRect:jibieBut.frame inView:self.scorllView permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
         return NO;
     }
     return YES;
 }
 
+
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if (textField == otherCauseTextF) {
-        [self.scorllView setContentOffset:CGPointMake(0, 40) animated:YES];
+        [self.scorllView setContentOffset:CGPointMake(0, 140) animated:YES];
     }
 }
+
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField == otherCauseTextF) {
        [self.scorllView setContentOffset:CGPointMake(0, -44) animated:YES];
+        [textField resignFirstResponder];
     }
 }
 
@@ -301,8 +308,11 @@
     }else  {
         [ProgressHUD showError:@"请选择用户等级或离店原因！"];
     }
-        
-
 }
 
+
+- (void)dealloc
+{
+    popoController = nil;
+}
 @end

@@ -102,7 +102,7 @@
             DLog(@"%@",self.userResM.reservationId);
             [_delegate ChangeTimePopoVC:self changeTimeDic:@{@"reservationId":self.userResM.reservationId,@"reservationDate":dateStr,@"reservationTime":reservationTime,@"userName":KUserName}];
         }else {
-            [_delegate ChangeTimePopoVC:self changeTimeDic:@{@"user":self.userResM.crmUserId,@"reservationDate":dateStr,@"reservationTime":reservationTime,@"userName":KUserName}];
+            [_delegate ChangeTimePopoVC:self changeTimeDic:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"reservationDate":dateStr,@"reservationTime":reservationTime,@"userName":KUserName}];
         }
         
     }

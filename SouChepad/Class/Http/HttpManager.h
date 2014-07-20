@@ -18,6 +18,10 @@ typedef void (^UploadProgress)(NSString *progress);
 // 取消网络请求
 + (void)cancelRequest:(MKNetworkOperation*)operation;
 
+#pragma mark - 版本号更新
++(void)getOrWriteVersionNumber:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+
 #pragma mark - 获取各评价list
 + (void)getDictionarySuccess:(Success)success fail:(Fail)fail;
 
@@ -66,6 +70,14 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 客户需求
 + (void)requestUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 添加客户意向车型
++ (void)updateUserRequirementBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+
+#pragma mark - 删除客户需求品牌车系
++ (void)delUserRequirementInfoBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+
 #pragma mark - 我的消息
 + (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
@@ -79,6 +91,11 @@ typedef void (^UploadProgress)(NSString *progress);
 
 #pragma mark - 用户结束接待
 + (void)requestUserOutStore:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+
+#pragma mark - 修改销售个人信息
++ (void)updateSellerData:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
 
 // 上传图片，成功后返回dictionary
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;

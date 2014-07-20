@@ -43,7 +43,6 @@ static NSString *seconCellID = @"seconCell";
     [_limitView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:_limitView];
     [_limitView setLimitDelegate:self];
-
 }
 
 - (void)limitSearch:(LimitSearchView *)limitSearchView withDic:(NSDictionary *)searchDic

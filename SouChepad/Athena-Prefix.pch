@@ -13,8 +13,9 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "SendIFMacros.h"
+    #import "UIColor+_6jinzhi.h"
+    #import "BaseDtaModel.h"
+
 #endif
 
-#import "SendIFMacros.h"
-#import "UIColor+_6jinzhi.h"
-#import "BaseDtaModel.h"

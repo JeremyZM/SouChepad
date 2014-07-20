@@ -210,11 +210,6 @@ static NSString *CellIdentifier = @"cellID";
     [HttpManager getOldUserParamDic:@{@"userName":KUserName,@"index":indxet,@"pageSize":@"20",@"searchLevel":searchLevel,@"searchHavePhone":isHavePhone,@"orderType":orderType} Success:^(id obj) {
         UsertoStore *user = obj;
         totalNumber = user.totalNumber;
-        if ([user.nextIndex isEqualToString:user.currentIndex]) {
-            [_footer setHidden:YES];
-        }else{
-            [_footer setHidden:NO];
-        }
         _page = [user.nextIndex intValue];
         if (![user.currentIndex isEqualToString:@"1"]) {
             for (UserReservationM *userRM in user.usersArray) {
@@ -222,6 +217,11 @@ static NSString *CellIdentifier = @"cellID";
             }
         }else{
             usertoStoreArray = user.usersArray;
+        }
+        if ([user.nextIndex isEqualToString:user.currentIndex]) {
+            [_footer setHidden:YES];
+        }else{
+            [_footer setHidden:NO];
         }
         [table reloadData];
         [_header endRefreshing];

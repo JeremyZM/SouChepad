@@ -19,13 +19,66 @@
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)setRequireBrandM:(RequireBrandsModel *)requireBrandM
 {
-    // Drawing code
+    _requireBrandM = requireBrandM;
+
+    if (![requireBrandM.brandName isEqualToString:@"暂无"]) {
+        
+        [self.brandNameLabel setText:requireBrandM.brandName];
+    }else {
+        [self.brandNameLabel setText:nil];
+    }
+    
+    if (![requireBrandM.seriesName isEqualToString:@"暂无"]) {
+        
+        [self.seriesNameLabel setText:requireBrandM.seriesName];
+    }else {
+        [self.seriesNameLabel setText:nil];
+    }
+    
+    if (![requireBrandM.colorsName isEqualToString:@"暂无"]) {
+        
+        [self.colorsLabel setText:requireBrandM.colorsName];
+    }else {
+        [self.colorsLabel setText:nil];
+    }
+    
+    if (![requireBrandM.displacementName isEqualToString:@"暂无"]) {
+        
+        [self.displacementLabel setText:requireBrandM.displacementName];
+    }else {
+        [self.displacementLabel setText:nil];
+    }
+
+    
+    if (![requireBrandM.remarks isEqualToString:@"暂无"]) {
+        
+        [self.remarksLabel setText:requireBrandM.remarks];
+    }else {
+        [self.remarksLabel setText:nil];
+    }
+    
+    
+    if (![requireBrandM.speedChangerName isEqualToString:@"暂无"]) {
+        
+        [self.speedChangerLabel setText:requireBrandM.speedChangerName];
+    }else {
+        [self.speedChangerLabel setText:nil];
+    }
+    
+    
+    
+    if (![requireBrandM.dateCreateName isEqualToString:@"暂无"]) {
+        
+        [self.dateCreateLabel setText:requireBrandM.dateCreateName];
+    }else {
+        [self.dateCreateLabel setText:nil];
+    }
+    
+    
+    
 }
-*/
+
 
 @end

@@ -105,7 +105,7 @@
         // 指标
         if (_jbInfoView.zhibiaoBut.checked) {
             [reqDic setObject:@"1" forKey:@"carTarget"];
-            if (![_jbInfoView.zhibiaoDateBut.titleLabel.text isEqualToString:@"暂无"]) {
+            if (![_jbInfoView.zhibiaoDateBut.titleLabel.text isEqualToString:@"过期时间"]) {
                 [reqDic setObject:_jbInfoView.zhibiaoDateBut.titleLabel.text forKey:@"carTargetEndDate"];
             }
             

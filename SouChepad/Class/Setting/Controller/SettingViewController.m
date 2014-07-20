@@ -9,6 +9,7 @@
 #import "SettingViewController.h"
 #import "LogInViewController.h"
 #import "KeyboardTool.h"
+#import "HttpManager.h"
 
 @interface SettingViewController () <UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,KeyboardToolDelegate,UITextFieldDelegate>
 {
@@ -245,9 +246,27 @@
         [confirmBtn setBackgroundImage:[UIImage imageNamed:@"denglu2"] forState:UIControlStateHighlighted];
         [confirmBtn setTitle:@"确认修改" forState:UIControlStateNormal];
         [sellInfoView addSubview:confirmBtn];
+        [confirmBtn addTarget:self action:@selector(changeSalerInfo) forControlEvents:UIControlEventTouchUpInside];
     }
     [titeLabel setText:@"个人资料"];
     [detailView addSubview:sellInfoView];
+}
+
+- (void)changeSalerInfo
+{
+    NSMutableDictionary *requstDic = [NSMutableDictionary dictionary];
+    [requstDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]forKey:@"userName"];
+    
+    [HttpManager updateSellerData:@{} Success:^(id obj) {
+        NSDictionary *infoObj = [NSDictionary dictionaryWithDictionary:obj];
+        if ([infoObj objectForKey:@"succeedMessage"]) {
+            
+        }else if ([infoObj objectForKey:@"errorMessage"]){
+            
+        }
+    } fail:^(id obj) {
+        
+    }];
 }
 
 

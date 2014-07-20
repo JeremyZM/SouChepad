@@ -47,7 +47,6 @@ static NSString *newUserCell = @"newUserCell";
     [self.view addSubview:headBar];
     
     
-    
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     phoneSearch = searchBar;
     [searchBar setFrame:CGRectMake(280, 40, 500, 40)];
@@ -160,6 +159,7 @@ static NSString *newUserCell = @"newUserCell";
         cell = otherCell;
         [otherCell.phoneNumberLabel setText:userM.phone];
         [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",userM.user]];
+        [otherCell setUserReserM:userM];
         return otherCell;
     }
 

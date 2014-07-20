@@ -16,8 +16,10 @@
 #import "TradeCarInfoCell.h"
 #import "LookOrDriveCarInfoCell.h"
 #import "ZBarController.h"
+#import "ZBarSDK.h"
+#import "CarDetailWebView.h"
 
-@interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate>
+@interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate,ZBarReaderDelegate>
 {
     UICollectionView *_collectionView;
     NSDictionary *intentionCars;    // 所有意向车辆
@@ -74,12 +76,64 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)scanErWeiMaBut:(UIButton*)seanBut
 {
-    ZBarController *zbarVC = [[ZBarController alloc] init];
-//    [self.navigationController pushViewController:zbarVC animated:YES];
-    [self presentViewController:zbarVC animated:YES completion:^{
     
+    ZBarReaderViewController *reader = [ZBarReaderViewController new];
+    reader.readerDelegate = self;
+    ZBarImageScanner *scanner = reader.scanner;
+    [scanner setSymbology: ZBAR_I25
+                   config: ZBAR_CFG_ENABLE
+                       to: 0];
+    
+    [self presentViewController:reader animated:YES completion:^{
+        
+        
+    }];
+    
+#warning ZBar--------------
+//    ZBarController *zbarVC = [[ZBarController alloc] init];
+//    [self presentViewController:zbarVC animated:YES completion:^{
+//    
+//    }];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [picker removeFromParentViewController];
     }];
 }
+
+
+- (void) imagePickerController: (UIImagePickerController*) reader
+ didFinishPickingMediaWithInfo: (NSDictionary*) info
+{
+    id<NSFastEnumeration> results =
+    [info objectForKey: ZBarReaderControllerResults];
+    ZBarSymbol *symbol = nil;
+    for(symbol in results)
+        break;
+    
+    [HttpManager getCarInVin:@{@"vin":symbol.data} Success:^(id obj) {
+        if (obj) {
+//            carID = obj;
+            [reader dismissViewControllerAnimated:YES completion:^{
+                // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
+                CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
+                [carDetailVC setCarID:obj];
+                //                [carDetailVC setDelegate:self];
+                //                [self.view addSubview:carDetailVC.view];
+                [self presentViewController:carDetailVC animated:YES completion:^{
+                }];
+                
+            }];
+
+        }
+    } fail:^(id obj) {
+        
+    }];
+}
+
 
 - (void)addCollectionView
 {

@@ -25,13 +25,13 @@
 {
     [super viewDidLoad];
     
-    UILabel *buxian = [[UILabel alloc] initWithFrame:CGRectMake(50, 30, 80, 30)];
-    [buxian setText:@"预算不限"];
-    [self.view addSubview:buxian];
-    
-    UISwitch *swi = [[UISwitch alloc] initWithFrame:CGRectMake(150, 30, 80, 30)];
-    [swi addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:swi];
+//    UILabel *buxian = [[UILabel alloc] initWithFrame:CGRectMake(50, 30, 80, 30)];
+//    [buxian setText:@"预算不限"];
+//    [self.view addSubview:buxian];
+//    
+//    UISwitch *swi = [[UISwitch alloc] initWithFrame:CGRectMake(150, 30, 80, 30)];
+//    [swi addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventValueChanged];
+//    [self.view addSubview:swi];
     
     self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 80, 0,0)];
     [self.pickerView setDataSource:self];
@@ -39,22 +39,22 @@
     [self.view addSubview:self.pickerView];
 }
 
-- (void)hidePicker:(UISwitch*)swit
-{
-    [self.pickerView setHidden:swit.on];
-    
-    if (swit.on) {
-        if ([_delegate respondsToSelector:@selector(liChengViewController:selectBut:selectDic:)]) {
-            [_delegate liChengViewController:self selectBut:self.selectButton selectDic:@{@"name":@"不限"}];
-        }
-    }else {
-        if ([_delegate respondsToSelector:@selector(liChengViewController:selectBut:selectDic:)]) {
-            NSDictionary *dic = self.dataArray[_row];
-            [_delegate liChengViewController:self selectBut:self.selectButton selectDic:dic];
-        }
-    }
-
-}
+//- (void)hidePicker:(UISwitch*)swit
+//{
+//    [self.pickerView setHidden:swit.on];
+//    
+//    if (swit.on) {
+//        if ([_delegate respondsToSelector:@selector(liChengViewController:selectBut:selectDic:)]) {
+//            [_delegate liChengViewController:self selectBut:self.selectButton selectDic:@{@"name":@"不限"}];
+//        }
+//    }else {
+//        if ([_delegate respondsToSelector:@selector(liChengViewController:selectBut:selectDic:)]) {
+//            NSDictionary *dic = self.dataArray[_row];
+//            [_delegate liChengViewController:self selectBut:self.selectButton selectDic:dic];
+//        }
+//    }
+//
+//}
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {

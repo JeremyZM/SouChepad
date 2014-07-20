@@ -17,10 +17,10 @@
 #import "HttpManager.h"
 #import "RequireBrandsModel.h"
 #import "RequireInfoModel.h"
-#import "AddUserCarBodyController.h"
+#import "ProgressHUD.h"
+#import "AddCarController.h"
 
-
-@interface LimitSearchView() <UICollectionViewDataSource,UICollectionViewDelegate,UIPopoverControllerDelegate,LiChengViewControllerDelegate,YushuanViewControllerDelegate>
+@interface LimitSearchView() <UICollectionViewDataSource,UICollectionViewDelegate,UIPopoverControllerDelegate,LiChengViewControllerDelegate,YushuanViewControllerDelegate,AddCarControllerDelegate>
 {
     UICollectionView *userCarCollection;
     UIButton *yushuanBut;
@@ -55,13 +55,13 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 - (void)upUserData
 {
-    [HttpManager requestUserRequirementInfo:@{@"user":@"18758188560"} Success:^(id obj) {
+    [HttpManager requestUserRequirementInfo:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:obj];
         reqBrandsArray = [obj objectForKey:@"requireBrands"];
         reqDeleteBrandArray = [NSArray arrayWithArray:[obj objectForKey:@"requireBrandsDelete"]];
         reqInfoModel = [dataDic objectForKey:@"requireInfo"];
         
-        [userCarCollection reloadData];
+//        [userCarCollection reloadData];
         [self layoutSubviews];
         
     } fail:^(id obj) {
@@ -98,31 +98,26 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [chexingLabel setText:@"车型"];
     [self addSubview:chexingLabel];
     
-    yushuanBut = [[UIButton alloc] initWithFrame:CGRectMake(70, 45, 230, 30)];
-    
-    [yushuanBut setNeedsLayout];
-    [yushuanBut addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
+    // 预算
+    yushuanBut = [self addButtonFrame:CGRectMake(70, 45, 230, 30)];
+    [yushuanBut setTag:2000];
     [self addSubview:yushuanBut];
     
-    lichengBut = [[UIButton alloc] initWithFrame:CGRectMake(370, 45, 230, 30)];
-    
-    [lichengBut setNeedsLayout];
-    [lichengBut addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
+    // 里程
+    lichengBut = [self addButtonFrame:CGRectMake(370, 45, 230, 30)];
     [self addSubview:lichengBut];
     
-    dateBut = [[UIButton alloc] initWithFrame:CGRectMake(710, 45, 200, 30)];
-    [dateBut setNeedsLayout];
-    [dateBut addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
+    // 上牌时间
+    dateBut = [self addButtonFrame:CGRectMake(710, 45, 200, 30)];
+    [dateBut setTag:2006];
     [self addSubview:dateBut];
     
-    guobieBut = [[UIButton alloc] initWithFrame:CGRectMake(70, 105, 230, 30)];
-    [guobieBut setNeedsLayout];
-    [guobieBut addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
+    // 国别
+    guobieBut = [self addButtonFrame:CGRectMake(70, 105, 230, 30)];
     [self addSubview:guobieBut];
     
-    chexingBut = [[UIButton alloc] initWithFrame:CGRectMake(370, 105, 230, 30)];
-    [chexingBut setNeedsLayout];
-    [chexingBut addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
+    // 车型
+    chexingBut = [self addButtonFrame:CGRectMake(370, 105, 230, 30)];
     [self addSubview:chexingBut];
     
     
@@ -136,8 +131,6 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [userCarCollection registerNib:[UINib nibWithNibName:@"DemandAddCell" bundle:nil] forCellWithReuseIdentifier:demandAddCellid];
     
     [userCarCollection registerNib:[UINib nibWithNibName:@"UserDemandCell" bundle:nil] forCellWithReuseIdentifier:userDemandCellid];
-    
-    //        [userCarCollection registerClass:[UserCarCollectionCell class] forCellWithReuseIdentifier:userUserCarCellid];
     
     userCarCollection.delegate = self;
     userCarCollection.dataSource = self;
@@ -163,30 +156,74 @@ static NSString *userDemandCellid = @"userDemandCellid";
 - (void)showAllPopoView:(UIButton*)button
 {
     UIViewController *controller = nil;
-    if (button == yushuanBut) {
+    if (button == yushuanBut) {  // 预算
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSInteger i = 1; i <= 100; i++) {
+            NSString *str = [NSString stringWithFormat:@"%d",i];
+            [array addObject:str];
+        }
+        [array insertObject:@"不限" atIndex:0];
+        [array addObject:@"不限"];
         YushuanViewController *YSvc = [[YushuanViewController alloc] init];
         controller = YSvc;
+        [YSvc setBeginSelect:reqInfoModel.startBudgetShow];
+        [YSvc setEndSelect:reqInfoModel.endBudgetShow];
+        [YSvc setArray:array];
+        [YSvc setSeleckBut:yushuanBut];
         [YSvc setDelegate:self];
-    }else if (button == dateBut) {
-        controller = [[DatePaiViewController alloc] init];
-    } else if (button == chexingBut) {
+    }else if (button == dateBut) { // 上牌时间
+        NSMutableArray *array = [NSMutableArray array];
+        NSDate *date = [NSDate date];
+        // NSDateFormatter 专门用来转换日期格式的 类
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        // 设置格式
+        [formatter setDateFormat:@"yyyy"];
+        // NSDateFormatter转换为NSString
+        NSString *dateStr = [formatter stringFromDate:date];
+        
+        
+        for (NSInteger i = 2006; i <= [dateStr integerValue]; i++) {
+            NSString *str = [NSString stringWithFormat:@"%d",i];
+            [array addObject:str];
+        }
+        [array insertObject:@"不限" atIndex:0];
+        [array addObject:@"不限"];
+        YushuanViewController *dateVC = [[YushuanViewController alloc] init];
+        controller = dateVC;
+        [dateVC setSeleckBut:dateBut];
+        [dateVC setDelegate:self];
+        [dateVC setBeginSelect:reqInfoModel.beginYear];
+        [dateVC setEndSelect:reqInfoModel.endYear];
+        [dateVC setArray:array];
+        
+    } else if (button == chexingBut) {  // 车型
         LiChengViewController *CXvc = [[LiChengViewController alloc] init];
         controller = CXvc;
         [CXvc setSelectButton:chexingBut];
         [CXvc setDelegate:self];
-        [CXvc setDataArray:[NSArray arrayWithContentsOfFile:KvehicleType]];
-    }else if (button == lichengBut) {
+        NSMutableArray *carType = [NSMutableArray arrayWithArray:[NSArray arrayWithContentsOfFile:KvehicleType]];
+        NSDictionary *buxian = @{@"code":@"",@"name":@"不限"};
+        [carType insertObject:buxian atIndex:0];
+        [CXvc setDataArray:carType];
+    }else if (button == lichengBut) {  // 里程
         LiChengViewController *LCvc = [[LiChengViewController alloc] init];
         [LCvc setSelectButton:lichengBut];
         [LCvc setDelegate:self];
         controller = LCvc;
-        [LCvc setDataArray:[NSArray arrayWithContentsOfFile:KmileageSimple]];
-    }else if (button == guobieBut) {
+        NSMutableArray *liChengType = [NSMutableArray arrayWithArray:[NSArray arrayWithContentsOfFile:KmileageSimple]];
+        NSDictionary *licheng = @{@"code":@"",@"name":@"不限"};
+        [liChengType insertObject:licheng atIndex:0];
+        [LCvc setDataArray:liChengType];
+        
+    }else if (button == guobieBut) {  // 国别
         LiChengViewController *GBvc = [[LiChengViewController alloc] init];
         [GBvc setSelectButton:guobieBut];
         [GBvc setDelegate:self];
         controller = GBvc;
-        [GBvc setDataArray:[NSArray arrayWithContentsOfFile:KcarCountrySimple]];
+        NSMutableArray *guobieType = [NSMutableArray arrayWithArray:[NSArray arrayWithContentsOfFile:KcarCountrySimple]];
+        NSDictionary *buxian = @{@"code":@"",@"name":@"不限"};
+        [guobieType insertObject:buxian atIndex:0];
+        [GBvc setDataArray:guobieType];
     }
     
     if (controller) {
@@ -203,87 +240,53 @@ static NSString *userDemandCellid = @"userDemandCellid";
 {
     [super layoutSubviews];
     
-    DLog(@"%@---%@----%@---%@----%@---%@",reqInfoModel.priceRange,reqInfoModel.miles,reqInfoModel.years,reqInfoModel.country,reqInfoModel.carbody,reqInfoModel.carUsed);
-    
+    DLog(@"%@---%@----%@---%@----%@---%@",reqInfoModel.beginYear,reqInfoModel.startBudgetShow,reqInfoModel.years,reqInfoModel.country,reqInfoModel.carbody,reqInfoModel.carUsed);
+//
     // 预算
-    if ([reqInfoModel.priceRange isEqualToString:@"暂无"]||reqInfoModel.priceRange == nil) {
-        [yushuanBut setBackgroundColor:[UIColor whiteColor]];
-        [yushuanBut setTitle:@"请选择" forState:UIControlStateNormal];
-        [yushuanBut setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [yushuanBut.layer setMasksToBounds:YES];
-        [yushuanBut.layer setCornerRadius:8.0];
-    }else {
-        [yushuanBut setTitle:reqInfoModel.purchaseCarBudget forState:UIControlStateNormal];
-        [yushuanBut setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [yushuanBut.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    [yushuanBut setTitle:reqInfoModel.purchaseCarBudget forState:UIControlStateNormal];
+    if ([reqInfoModel.purchaseCarBudget isEqualToString:@"暂无"]||!reqInfoModel.purchaseCarBudget) {
+        [yushuanBut setTitle:@"不限 - 不限" forState:UIControlStateNormal];
     }
     
     // 里程
-    if ([reqInfoModel.miles isEqualToString:@"暂无"]||reqInfoModel.miles == nil) {
-        [lichengBut setBackgroundColor:[UIColor whiteColor]];
-        [lichengBut setTitle:@"请选择" forState:UIControlStateNormal];
-        [lichengBut setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [lichengBut.layer setMasksToBounds:YES];
-        [lichengBut.layer setCornerRadius:8.0];
-    }else {
-        [lichengBut setTitle:reqInfoModel.milesName forState:UIControlStateNormal];
-        [lichengBut setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [lichengBut.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    [lichengBut setTitle:reqInfoModel.milesName forState:UIControlStateNormal];
+    if ([reqInfoModel.milesName isEqualToString:@"暂无"]||!reqInfoModel.milesName) {
+        [lichengBut setTitle:@"不限" forState:UIControlStateNormal];
     }
     
-    
     // 上牌时间
-    if ([reqInfoModel.years isEqualToString:@"暂无"]||reqInfoModel.years == nil) {
-        [dateBut setBackgroundColor:[UIColor whiteColor]];
-        [dateBut setTitle:@"请选择" forState:UIControlStateNormal];
-        [dateBut setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [dateBut.layer setMasksToBounds:YES];
-        [dateBut.layer setCornerRadius:8.0];
-
-    }else {
-        [dateBut setTitle:reqInfoModel.yearsName forState:UIControlStateNormal];
-        [dateBut setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [dateBut.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    [dateBut setTitle:reqInfoModel.yearsName forState:UIControlStateNormal];
+    if ([reqInfoModel.yearsName isEqualToString:@"暂无"]||!reqInfoModel.yearsName) {
+        [dateBut setTitle:@"不限" forState:UIControlStateNormal];
     }
     
     // 国别
-    if ([reqInfoModel.country isEqualToString:@"暂无"]||reqInfoModel.country == nil) {
-        [guobieBut setBackgroundColor:[UIColor whiteColor]];
-        [guobieBut setTitle:@"请选择" forState:UIControlStateNormal];
-        [guobieBut setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [guobieBut.layer setMasksToBounds:YES];
-        [guobieBut.layer setCornerRadius:8.0];
-
-    }else {
-    
-        [guobieBut setTitle:reqInfoModel.countryName forState:UIControlStateNormal];
-        [guobieBut setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [guobieBut.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    [guobieBut setTitle:reqInfoModel.countryName forState:UIControlStateNormal];
+    if ([reqInfoModel.countryName isEqualToString:@"暂无"]||!reqInfoModel.countryName) {
+        [guobieBut setTitle:@"不限" forState:UIControlStateNormal];
     }
-    
-    
-    // 车型
-    if ([reqInfoModel.carbody isEqualToString:@"暂无"]||reqInfoModel.carbody == nil) {
-        [chexingBut setBackgroundColor:[UIColor whiteColor]];
-        [chexingBut setTitle:@"请选择" forState:UIControlStateNormal];
-        [chexingBut setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [chexingBut.layer setMasksToBounds:YES];
-        [chexingBut.layer setCornerRadius:8.0];
 
-    }else {
-        [chexingBut setTitle:reqInfoModel.carbodyName forState:UIControlStateNormal];
-        [chexingBut setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [chexingBut.titleLabel setFont:[UIFont systemFontOfSize:22]];
-        
+    // 车型
+    [chexingBut setTitle:reqInfoModel.carbodyName forState:UIControlStateNormal];
+    if ([reqInfoModel.carbodyName isEqualToString:@"暂无"]||!reqInfoModel.carbodyName) {
+        [chexingBut setTitle:@"不限" forState:UIControlStateNormal];
     }
     
     [userCarCollection reloadData];
     
 }
 
-- (void)yuShuanViewController:(YushuanViewController *)yushuanVC selectCode:(NSString *)selectCode selectStr:(NSString *)selectStr
+- (void)yuShuanViewController:(YushuanViewController *)yushuanVC selectCode:(NSString *)selectCode selectBeginStr:(NSString *)selectBeginStr selectEndStr:(NSString *)selectEndStr
 {
-    [yushuanBut setTitle:selectStr forState:UIControlStateNormal];
+    if (yushuanVC.seleckBut == yushuanBut) {
+        reqInfoModel.startBudgetShow = selectBeginStr;
+        reqInfoModel.endBudgetShow = selectEndStr;
+        [yushuanVC.seleckBut setTitle:[NSString stringWithFormat:@"%@ - %@",selectBeginStr,selectEndStr] forState:UIControlStateNormal];
+    }else if (yushuanVC.seleckBut == dateBut){
+        reqInfoModel.beginYear = selectBeginStr;
+        reqInfoModel.endYear = selectEndStr;
+        [yushuanVC.seleckBut setTitle:[NSString stringWithFormat:@"%@ - %@",selectBeginStr,selectEndStr] forState:UIControlStateNormal];
+    }
 }
 
 - (void)liChengViewController:(LiChengViewController *)lichengVC selectBut:(UIButton *)button selectDic:(NSDictionary *)selectDic
@@ -298,8 +301,6 @@ static NSString *userDemandCellid = @"userDemandCellid";
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
 
-    
-    
     return YES;
 }
 
@@ -320,31 +321,50 @@ static NSString *userDemandCellid = @"userDemandCellid";
     if (indexPath.row==0) {
         DemandAddCell *addDemandCell = [collectionView dequeueReusableCellWithReuseIdentifier:demandAddCellid forIndexPath:indexPath];
         cell = addDemandCell;
+        [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+        
+        //圆角
+        cell.layer.cornerRadius = 8.0; // 圆角的弧度
+        cell.layer.masksToBounds = YES;
     }else {
         UserDemandCell *userDemandCell = [collectionView dequeueReusableCellWithReuseIdentifier:userDemandCellid forIndexPath:indexPath];
+        [userDemandCell.deleteDemandCarBut addTarget:self action:@selector(deleteUserDemandCar:) forControlEvents:UIControlEventTouchUpInside];
+        [userDemandCell.deleteDemandCarBut setTag:indexPath.row-1+122];
         cell = userDemandCell;
+        RequireBrandsModel *requireBrandM = reqBrandsArray[indexPath.row-1];
+        [userDemandCell setRequireBrandM:requireBrandM];
+        [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+        
+        //圆角
+        cell.layer.cornerRadius = 8.0; // 圆角的弧度
+        cell.layer.masksToBounds = YES;
     }
-    [cell.contentView setBackgroundColor:[UIColor whiteColor]];
-
-    //圆角
-    cell.layer.cornerRadius = 8.0; // 圆角的弧度
-    cell.layer.masksToBounds = YES;
-//    //边框
-//    cell.contentView.layer.borderWidth = 0.5;
-//    cell.contentView.layer.borderColor = [[UIColor hexStringToColor:KSeparatorColor] CGColor];
-
     
     return cell;
 }
 
+- (void)deleteUserDemandCar:(UIButton*)deleteBut
+{
+    RequireBrandsModel *requireBrandM = reqBrandsArray[deleteBut.tag-122];
+
+    [HttpManager delUserRequirementInfoBrand:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userRequirementInfoBrandId":requireBrandM._id} Success:^(id obj) {
+        
+        [self upUserData];
+        
+    } fail:^(id obj) {
+        
+    }];
+}
+
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        AddUserCarBodyController *addUserCarBodyVC = [[AddUserCarBodyController alloc] init];
+        AddCarController *addUserCarBodyVC = [[AddCarController alloc] init];
+        [addUserCarBodyVC setDelegate:self];
         UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:addUserCarBodyVC];
         
         [navVC setModalPresentationStyle:UIModalPresentationFormSheet];
-        
         [self.secrVC presentViewController:navVC animated:YES completion:^{
             
         }];
@@ -352,6 +372,11 @@ static NSString *userDemandCellid = @"userDemandCellid";
 //            
 //        }];
     }
+}
+
+- (void)addCarCotrollerDismiss:(AddCarController *)addCarVC
+{
+    [self upUserData];
 }
 
 
@@ -370,6 +395,18 @@ static NSString *userDemandCellid = @"userDemandCellid";
     }];
 }
 
+- (UIButton*)addButtonFrame:(CGRect)frame
+{
+    UIButton *but = [[UIButton alloc] initWithFrame:frame];
+    [but setBackgroundColor:[UIColor whiteColor]];
+    [but.layer setMasksToBounds:YES];
+    [but.layer setCornerRadius:8.0];
+    [but setNeedsLayout];
+    [but setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [but.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    [but addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
+    return but;
+}
 
 
 @end
