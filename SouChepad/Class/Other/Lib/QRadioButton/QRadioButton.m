@@ -37,6 +37,21 @@ static NSMutableDictionary *_groupRadioDic = nil;
     return self;
 }
 
+- (void)setGroupId:(NSString *)groupId
+{
+    _groupId = [groupId copy];
+    
+    [self addToGroup];
+    
+    self.exclusiveTouch = YES;
+    
+    [self setImage:[UIImage imageNamed:@"radio_unchecked.png"] forState:UIControlStateNormal];
+    [self setImage:[UIImage imageNamed:@"radio_checked.png"] forState:UIControlStateSelected];
+    [self.titleLabel setFont:KFont18];
+    [self addTarget:self action:@selector(radioBtnChecked) forControlEvents:UIControlEventTouchUpInside];
+}
+
+
 - (void)addToGroup {
     if(!_groupRadioDic){
         _groupRadioDic = [NSMutableDictionary dictionary];

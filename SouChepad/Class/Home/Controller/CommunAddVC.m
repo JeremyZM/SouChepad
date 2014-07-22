@@ -105,18 +105,19 @@
         userVOM = [dataInfoDic objectForKey:@"user"];
 
         NSString *messgeStr;
-        if ([userVOM.name isEqualToString:@"暂无"]) {
-            
-            messgeStr = [NSString stringWithFormat:@"您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
-        }else {
+        if (userVOM.name) {
             messgeStr = [NSString stringWithFormat:@"%@，您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+           
+        }else {
+
+             messgeStr = [NSString stringWithFormat:@"您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }
-        if ([userVOM.phone isEqualToString:@"暂无"]) {
-            [messgeSwitch setOn:NO];
+        if (userVOM.phone) {
+            [messgeSwitch setOn:YES];
             [self sendMessgaChangde:messgeSwitch];
         }else
         {
-            [messgeSwitch setOn:YES];
+            [messgeSwitch setOn:NO];
             [self sendMessgaChangde:messgeSwitch];
         }
         [messgeTextView setText:messgeStr];
@@ -224,7 +225,7 @@
             
         }
         
-        if (messgeSwitch.isOn && ![userVOM.phone isEqualToString:@"暂无"]) {
+        if (messgeSwitch.isOn && userVOM.phone) {
             [commDateDic setObject:@"1" forKey:@"isSendSMS"];
             [commDateDic setObject:userVOM.phone forKey:@"phoneSMS"];
             [commDateDic setObject:messgeTextView.text forKey:@"messageSMS"];

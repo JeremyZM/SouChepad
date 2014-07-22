@@ -36,7 +36,7 @@
         NSString *key = [self keyWithPropertyName:ivar.propertyName];
         id value = keyValues[key];
         if ([value isKindOfClass:[NSNull class]]) {
-            ivar.value = @"暂无";
+            ivar.value = nil;
         }else {
             // 2.获得成员变量类型
             if (ivar.type.typeClass && !ivar.type.fromFoundation) {

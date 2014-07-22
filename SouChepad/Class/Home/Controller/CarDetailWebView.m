@@ -9,6 +9,7 @@
 #import "CarDetailWebView.h"
 #import "ProgressHUD.h"
 #import "CarCQIInfoController.h"
+#import "LookCarRecordController.h"
 
 @interface CarDetailWebView () <UIWebViewDelegate>
 
@@ -32,6 +33,20 @@
     [infoCQI setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.headBar addSubview:infoCQI];
     
+    // 看车
+    UIButton *lookCarBut = [[UIButton alloc] initWithFrame:CGRectMake(700, 40, 50, 40)];
+    [lookCarBut setTitle:@"看车" forState:UIControlStateNormal];
+    [lookCarBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [lookCarBut addTarget:self action:@selector(addLookCarRecord:) forControlEvents:UIControlEventTouchUpInside];
+    [self.headBar addSubview:lookCarBut];
+    
+    // 试驾
+    UIButton *driveCarBut = [[UIButton alloc] initWithFrame:CGRectMake(800, 40, 50, 40)];
+    [driveCarBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [driveCarBut setTitle:@"试驾" forState:UIControlStateNormal];
+    [driveCarBut addTarget:self action:@selector(addDriveCarRecord:) forControlEvents:UIControlEventTouchUpInside];
+    [self.headBar addSubview:driveCarBut];
+    
     
     UIWebView *carWeb = [[UIWebView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100)];
     [carWeb setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -44,6 +59,25 @@
     NSURL *weburl = [NSURL URLWithString:encodedString];
     [carWeb loadRequest:[NSURLRequest requestWithURL:weburl]];
 }
+
+// 看车
+- (void)addLookCarRecord:(UIButton*)but
+{
+    LookCarRecordController *lookCarVC = [[LookCarRecordController alloc] init];
+    UINavigationController *lookNavVC = [[UINavigationController alloc] initWithRootViewController:lookCarVC];
+    [lookNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
+    [self presentViewController:lookNavVC animated:YES completion:^{
+        
+    }];
+}
+
+// 试驾
+- (void)addDriveCarRecord:(UIButton*)but
+{
+
+
+}
+
 
 - (void)showinfoCQI
 {

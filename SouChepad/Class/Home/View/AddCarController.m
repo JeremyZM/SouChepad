@@ -169,9 +169,12 @@
             }
         }
         if ([colorCodeStr hasSuffix:@","]) {
-            [colorCodeStr substringToIndex:([colorCodeStr length]-1)];
+//            colorCodeStr deleteCharactersInRange:<#(NSRange)#>
+            [reqCarDictionaryM setObject:[colorCodeStr substringToIndex:([colorCodeStr length]-1)] forKey:@"colors"];
+        }else {
+            [reqCarDictionaryM setObject:colorCodeStr forKey:@"colors"];
         }
-        [reqCarDictionaryM setObject:colorCodeStr forKey:@"color"];
+        
         
         // 备注
         [reqCarDictionaryM setObject:self.remarkTextView.text forKey:@"remarks"];

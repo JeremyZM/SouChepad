@@ -62,6 +62,8 @@
 //    // 4.逛店找车
     [self addOneInfoTabTitle:@"逛店找车" icon:@"tubiao_19" selectedIcon:@"tubiao_28" index:4];
     
+    [self addOneInfoTabTitle:@"客户轨迹" icon:@"" selectedIcon:@"" index:5];
+    
 }
 
 

@@ -114,30 +114,25 @@
     [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
         userVOM = [dataInfoDic objectForKey:@"user"];
-        if (![userVOM.name isEqualToString:@"暂无"]) {
-            
-            [nameTextF setText:userVOM.name];
-        }
-        if (![userVOM.phone isEqualToString:@"暂无"]) {
-            
-            [phoneTextF setText:userVOM.phone];
-        }
-        if (!([userVOM.userStatus isEqualToString:@"暂无"]||userVOM.userStatus==nil)) {
+        [nameTextF setText:userVOM.name];
+        [phoneTextF setText:userVOM.phone];
+        if (!(userVOM.userStatus||userVOM.userStatus==nil)) {
             [jibieBut setText:userVOM.userStatusName];
         }
         NSString *messgeStr;
-        if ([userVOM.name isEqualToString:@"暂无"]) {
-            messgeStr = [NSString stringWithFormat:@"您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+        if (userVOM.name) {
+           messgeStr = [NSString stringWithFormat:@"%@您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }else {
-            messgeStr = [NSString stringWithFormat:@"%@您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+             messgeStr = [NSString stringWithFormat:@"您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }
-        if ([userVOM.phone isEqualToString:@"暂无"]) {
-            [messgeSwitch setOn:NO];
+        if (userVOM.phone) {
+            [messgeSwitch setOn:YES];
             [self sendMessgaChangde:messgeSwitch];
         }else
         {
-            [messgeSwitch setOn:YES];
+            [messgeSwitch setOn:NO];
             [self sendMessgaChangde:messgeSwitch];
+           
         }
         [messgeTextView setText:messgeStr];
         
@@ -267,7 +262,7 @@
         [requDic setObject:leaveString forKey:@"comment"];
         
         
-    if ([self.userInfoM.phone isEqualToString:@"暂无"]&&phoneTextF.text.length) {
+    if (!self.userInfoM.phone&&phoneTextF.text.length) {
         [NSString phoneValidate:phoneTextF.text];
         [HttpManager requestUserHandleByType:@{@"phone":phoneTextF.text,@"userTag":userVOM.userTag} Success:^(id obj) {
             [requDic setObject:obj forKey:@"user"];

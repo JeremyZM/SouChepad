@@ -17,7 +17,7 @@
 }
 
 @property(nonatomic, weak)id<QRadioButtonDelegate>   delegate;
-@property(nonatomic, copy, readonly)NSString            *groupId;
+@property(nonatomic, copy)NSString            *groupId;
 @property(nonatomic, assign)BOOL checked;
 
 - (id)initWithDelegate:(id)delegate groupId:(NSString*)groupId;

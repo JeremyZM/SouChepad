@@ -17,6 +17,7 @@
 
 @interface YushuanViewController : UIViewController
 @property (nonatomic, strong) NSMutableArray *array;
+@property (nonatomic, strong) NSMutableArray *endArray;
 @property (nonatomic, strong) UIButton *seleckBut;
 /** 开始 */
 @property (copy, nonatomic) NSString *beginSelect;

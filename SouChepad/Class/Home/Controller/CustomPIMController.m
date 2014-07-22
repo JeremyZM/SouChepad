@@ -134,25 +134,14 @@
         }else if(_jbInfoView.haveNocarBut.checked){
             [reqDic setObject:@"0" forKey:@"isHaveCar"];
         }
-        if ([userVomodel.callPhone1 isEqualToString:@"暂无"]) {
-            userVomodel.callPhone1 = @"";
-        }
-        if ([userVomodel.callPhone2 isEqualToString:@"暂无"]) {
-            userVomodel.callPhone2 = @"";
-        }
-        if ([userVomodel.callPhone3 isEqualToString:@"暂无"]) {
-            userVomodel.callPhone3 = @"";
-        }
-        if ([userVomodel.callPhone4 isEqualToString:@"暂无"]) {
-            userVomodel.callPhone4 = @"";
-        }
-        [reqDic setObject:userVomodel.callPhone1 forKey:@"callPhone1"];
-        [reqDic setObject:userVomodel.callPhone2 forKey:@"callPhone2"];
-        [reqDic setObject:userVomodel.callPhone3 forKey:@"callPhone3"];
-        [reqDic setObject:userVomodel.callPhone4 forKey:@"callPhone4"];
+
+        [reqDic setObject:userVomodel.callPhone1?userVomodel.callPhone1:@"" forKey:@"callPhone1"];
+        [reqDic setObject:userVomodel.callPhone2?userVomodel.callPhone2:@"" forKey:@"callPhone2"];
+        [reqDic setObject:userVomodel.callPhone3?userVomodel.callPhone3:@"" forKey:@"callPhone3"];
+        [reqDic setObject:userVomodel.callPhone4?userVomodel.callPhone4:@"" forKey:@"callPhone4"];
         
-        if ([userVomodel.phone isEqualToString:@"暂无"]&&_jbInfoView.phoneText.text.length>0) {
-            [NSString phoneValidate:_jbInfoView.phoneText.text];
+        if (!userVomodel.phone&&_jbInfoView.phoneText.text.length>0) {
+            if (![NSString phoneValidate:_jbInfoView.phoneText.text]) return;
             [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
                 
                 [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
@@ -184,56 +173,7 @@
             } fail:^(id obj) {
                 
             }];
-        
         }
-        
-        
-        
-        
-//        if ([userVomodel.phone isEqualToString:@"暂无"]) {
-//            [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-//                if (_jbInfoView.phoneText.text.length) {
-//                    
-//                    if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
-//                        [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
-//                            [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
-//                            [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
-//                            [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-//                                dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
-//                                [_jbInfoView setDataDic:dataInfoDic];
-//                                [_fuzhuView setDataDic:dataInfoDic];
-//                            } fail:^(id obj) {
-//                                
-//                            }];
-//                        } fail:^(id obj) {
-//                            
-//                        }];
-//                    }
-//                }else {
-//                    
-//                }
-//            } fail:^(id obj) {
-//                
-//            }];
-//        }else{
-//            if (_jbInfoView.phoneText.text.length) {
-//                if ([NSString phoneValidate:_jbInfoView.phoneText.text]) {
-//                    [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
-//                    [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-//                        
-//                    } fail:^(id obj) {
-//                        
-//                    }];
-//                }
-//            }else
-//            {
-//                [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
-//                    
-//                } fail:^(id obj) {
-//                    
-//                }];
-//            }
-//        }
     }
 }
 

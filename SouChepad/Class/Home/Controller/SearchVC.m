@@ -125,9 +125,9 @@ static NSString *newUserCell = @"newUserCell";
     if (section ==1) return myself.count;
     if (section == 2) return otherSell.count;
 
-        return 1;
+        return 0;
 }
-
+static NSString *nothing = @"暂无";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DLog(@"%@",searchUserDic);
@@ -146,11 +146,11 @@ static NSString *newUserCell = @"newUserCell";
         CustomerListCell *myUserCell = [tableView dequeueReusableCellWithIdentifier:myselfCell];
         [myUserCell setUserReserM:userM];
         cell = myUserCell;
-        [myUserCell.NameCustomer setText:userM.user];
-        [myUserCell.SexCustomer setText:userM.sex];
-        [myUserCell.PhoneCustomer setText:userM.phone];
-        [myUserCell.GradeCustomer setText:userM.userLevel];
-        [myUserCell.TimeUpdate setTitle:userM.day forState:UIControlStateNormal];
+        [myUserCell.NameCustomer setText:userM.user?userM.user:nothing];
+        [myUserCell.SexCustomer setText:userM.sex?userM.sex:nothing];
+        [myUserCell.PhoneCustomer setText:userM.phone?userM.phone:nothing];
+        [myUserCell.GradeCustomer setText:userM.userLevel?userM.userLevel:nothing];
+        [myUserCell.TimeUpdate setTitle:userM.day?userM.day:nothing forState:UIControlStateNormal];
         return myUserCell;
     
     }else if (indexPath.section == 2){
@@ -158,7 +158,7 @@ static NSString *newUserCell = @"newUserCell";
         OtherSellUserCell *otherCell = [tableView dequeueReusableCellWithIdentifier:otherSellCell];
         cell = otherCell;
         [otherCell.phoneNumberLabel setText:userM.phone];
-        [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",userM.user]];
+        [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",userM.user?userM.user:nothing]];
         [otherCell setUserReserM:userM];
         return otherCell;
     }

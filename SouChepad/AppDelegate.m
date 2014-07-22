@@ -26,7 +26,7 @@
         NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
         NSString *versID = [verDic objectForKey:@"versionNumber"];
         NSString *commentInfo = [verDic objectForKey:@"comment"];
-        if ([versID isEqualToString:localVersion])
+        if (![versID isEqualToString:localVersion])
         {
             UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
             [createUserResponseAlert show];

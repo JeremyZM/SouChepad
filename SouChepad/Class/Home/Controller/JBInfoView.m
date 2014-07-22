@@ -78,19 +78,12 @@
         }
         
         self.nameText = [[UITextField alloc] initWithFrame:CGRectMake(150, 10, 600, 60)];
-//        if (![userVo.userName isEqualToString:@"暂无"]) {
-//            
-//            [self.nameText setText:userVo.userName];
-//        }
         [self.nameText setPlaceholder:@"填写名字"];
         [scrollView addSubview:self.nameText];
         
         self.phoneText = [[UITextField alloc] initWithFrame:CGRectMake(150, 70, 600, 60)];
         [self.phoneText setPlaceholder:@"填写手机号"];
-//        if (![userVo.phone isEqualToString:@"暂无"]) {
-//            
-//            [self.phoneText setText:userVo.phone];
-//        }
+
         [scrollView addSubview:self.phoneText];
         
         
@@ -98,11 +91,6 @@
         [scrollView addSubview:self.manBut];
         self.womanBut = [self QRbutWithFrame:CGRectMake(CGRectGetMaxX(self.manBut.frame)+30, 130, 60, 60) andtitle:@"女" groupId:@"1"];
         [scrollView addSubview:self.womanBut];
-//        if ([userVo.sex isEqualToString:@"man"]) {
-//            [self.manBut setChecked:YES];
-//        }else if ([userVo.sex isEqualToString:@"woman"]) {
-//            [self.womanBut setChecked:YES];
-//        }
         
         
         NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
@@ -203,14 +191,9 @@
     _dataDic = dataDic;
    UserVOModel *userVo = [dataDic objectForKey:@"user"];
    UserExtendModel *userExtendM = [dataDic objectForKey:@"userExtend"];
-    if (![userVo.userName isEqualToString:@"暂无"]) {
-        
-        [self.nameText setText:userVo.userName];
-    }
-    if (![userVo.phone isEqualToString:@"暂无"]) {
-        
-        [self.phoneText setText:userVo.phone];
-    }
+    [self.nameText setText:userVo.userName];
+    [self.phoneText setText:userVo.phone];
+    
     if ([userVo.sex isEqualToString:@"man"]) {
         [self.manBut setChecked:YES];
     }else if ([userVo.sex isEqualToString:@"woman"]) {
@@ -234,7 +217,7 @@
     if ([userExtendM.carTarget isEqualToString:@"1"]) {
         [self.zhibiaoBut setChecked:YES];
         [self.zhibiaoDateBut setHidden:NO];
-        [self.zhibiaoDateBut setTitle:userExtendM.carTargetEndDate forState:UIControlStateNormal];
+        [self.zhibiaoDateBut setTitle:userExtendM.carTargetEndDate?userExtendM.carTargetEndDate:@"过期时间" forState:UIControlStateNormal];
     }else if ([userExtendM.carTarget isEqualToString:@"0"]){
         [self.zhibiaoNOBut setChecked:YES];
         [self.zhibiaoDateBut setHidden:YES];
@@ -268,9 +251,7 @@
         [self.maicheNOBut setChecked:YES];
     }
     
-    if (![userExtendM.remark isEqualToString:@"暂无"]) {
-        [self.beizhuTextF setText:userExtendM.remark];
-    }
+    [self.beizhuTextF setText:userExtendM.remark];
 }
 
 - (void)chooseGuohuCity:(UIButton *)button

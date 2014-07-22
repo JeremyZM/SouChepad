@@ -35,10 +35,10 @@
     [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"上牌：%@",lookOrDriveCellM.firstLicensePlateDate]];
     
     // 车辆等级
-    if ([lookOrDriveCellM.level isEqualToString:@"暂无"]) {
-        [_levelImage setHidden:YES];
-    }else {
+    if (lookOrDriveCellM.level) {
         [_levelImage setImage:[UIImage imageNamed:lookOrDriveCellM.level]];
+    }else {
+        [_levelImage setHidden:YES];
     }
     
     // 车辆状态
@@ -62,20 +62,18 @@
     }
     
     // 降价
-    if ([lookOrDriveCellM.downPrice isEqualToString:@"暂无"]) {
-        [self.downPriceImage setHidden:YES];
-        [self.downPiceLabel setHidden:YES];
-    }else {
+    if (lookOrDriveCellM.downPrice) {
         [self.downPriceImage setHidden:NO];
         [self.downPiceLabel setHidden:NO];
         [self.downPiceLabel setText:lookOrDriveCellM.downPrice];
+    }else {
+        [self.downPriceImage setHidden:YES];
+        [self.downPiceLabel setHidden:YES];
     }
     
     // 车辆图片
     [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,lookOrDriveCellM.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
-    NSString*a = lookOrDriveCellM.carStatus;
-    DLog(@"------af-----------------%@",a);
     [_labelLabel setText:lookOrDriveCellM.lookORdrive];
     
     // 心里价位

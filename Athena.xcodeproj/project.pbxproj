@@ -101,6 +101,10 @@
 		B254239D190E651B00874878 /* ChangeTimePopoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B254239A190E651B00874878 /* ChangeTimePopoVC.m */; };
 		B254239E190E651B00874878 /* PopoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B254239C190E651B00874878 /* PopoTableViewController.m */; };
 		B255044A195BC54E0093107D /* ZBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2550449195BC54E0093107D /* ZBarController.m */; };
+		B25A3FB4197E0EFA001685F4 /* LookCarRecordController.m in Sources */ = {isa = PBXBuildFile; fileRef = B25A3FB2197E0EFA001685F4 /* LookCarRecordController.m */; };
+		B25A3FB5197E0EFA001685F4 /* LookCarRecordController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B25A3FB3197E0EFA001685F4 /* LookCarRecordController.xib */; };
+		B25A3FB8197E44CC001685F4 /* CarDetailBasicWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = B25A3FB7197E44CC001685F4 /* CarDetailBasicWebController.m */; };
+		B25A3FBB197E6E4C001685F4 /* UserOperationRecordVO.m in Sources */ = {isa = PBXBuildFile; fileRef = B25A3FBA197E6E4C001685F4 /* UserOperationRecordVO.m */; };
 		B25F71F9195FDADD00C746EF /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B25F71F8195FDADD00C746EF /* Settings.bundle */; };
 		B2711F29194C489300A65BDF /* A+.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1A194C489300A65BDF /* A+.png */; };
 		B2711F2A194C489300A65BDF /* A.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F1B194C489300A65BDF /* A.png */; };
@@ -499,6 +503,13 @@
 		B254239C190E651B00874878 /* PopoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoTableViewController.m; sourceTree = "<group>"; };
 		B2550448195BC54E0093107D /* ZBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBarController.h; sourceTree = "<group>"; };
 		B2550449195BC54E0093107D /* ZBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZBarController.m; sourceTree = "<group>"; };
+		B25A3FB1197E0EFA001685F4 /* LookCarRecordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookCarRecordController.h; sourceTree = "<group>"; };
+		B25A3FB2197E0EFA001685F4 /* LookCarRecordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookCarRecordController.m; sourceTree = "<group>"; };
+		B25A3FB3197E0EFA001685F4 /* LookCarRecordController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LookCarRecordController.xib; sourceTree = "<group>"; };
+		B25A3FB6197E44CC001685F4 /* CarDetailBasicWebController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarDetailBasicWebController.h; sourceTree = "<group>"; };
+		B25A3FB7197E44CC001685F4 /* CarDetailBasicWebController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarDetailBasicWebController.m; sourceTree = "<group>"; };
+		B25A3FB9197E6E4C001685F4 /* UserOperationRecordVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserOperationRecordVO.h; sourceTree = "<group>"; };
+		B25A3FBA197E6E4C001685F4 /* UserOperationRecordVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserOperationRecordVO.m; sourceTree = "<group>"; };
 		B25F71F8195FDADD00C746EF /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		B2711F1A194C489300A65BDF /* A+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+.png"; sourceTree = "<group>"; };
 		B2711F1B194C489300A65BDF /* A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = A.png; sourceTree = "<group>"; };
@@ -1052,6 +1063,9 @@
 				B2A656C71956AC77009CF193 /* New Group */,
 				B20CEEC01945DAF300A893E1 /* CarDetailWebView.h */,
 				B20CEEC11945DAF300A893E1 /* CarDetailWebView.m */,
+				B25A3FB1197E0EFA001685F4 /* LookCarRecordController.h */,
+				B25A3FB2197E0EFA001685F4 /* LookCarRecordController.m */,
+				B25A3FB3197E0EFA001685F4 /* LookCarRecordController.xib */,
 				B2B075A319667F4700A3057E /* CarCQIInfoController.h */,
 				B2B075A419667F4700A3057E /* CarCQIInfoController.m */,
 			);
@@ -1634,6 +1648,8 @@
 				B2459BB1192379A200C3D28B /* SearchVC.m */,
 				B2DDFF91190D49A200A71A4F /* InfoMainController.h */,
 				B2DDFF92190D49A200A71A4F /* InfoMainController.m */,
+				B25A3FB6197E44CC001685F4 /* CarDetailBasicWebController.h */,
+				B25A3FB7197E44CC001685F4 /* CarDetailBasicWebController.m */,
 				B2A656D21957D637009CF193 /* EndReceiveViewController.h */,
 				B2A656D31957D637009CF193 /* EndReceiveViewController.m */,
 				B2DDFF94190D4B3B00A71A4F /* DetailVC */,
@@ -1668,6 +1684,8 @@
 				B2AB255F195002F900D0253A /* RequireInfoModel.h */,
 				B2AB2560195002F900D0253A /* RequireInfoModel.m */,
 				B2AB255D194FFFC400D0253A /* RequireBrandsModel.m */,
+				B25A3FB9197E6E4C001685F4 /* UserOperationRecordVO.h */,
+				B25A3FBA197E6E4C001685F4 /* UserOperationRecordVO.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2181,6 +2199,7 @@
 				B2A656E01959974F009CF193 /* buy_60.png in Resources */,
 				B2711F39194C4C3E00A65BDF /* done_04.png in Resources */,
 				B22313D819767365004EF45C /* color_119.png in Resources */,
+				B25A3FB5197E0EFA001685F4 /* LookCarRecordController.xib in Resources */,
 				B22313C519767365004EF45C /* color_99.png in Resources */,
 				B2B3F98A197915A1004B893D /* pick_bg@2x.png in Resources */,
 				B22313A119766936004EF45C /* button_normal.png in Resources */,
@@ -2326,6 +2345,7 @@
 				B2E5CD93196D295D0006168E /* BiaoqainCell.m in Sources */,
 				B254238B190E5C9400874878 /* MJArgument.m in Sources */,
 				B24D56C01917597600D756A5 /* FZInfoView.m in Sources */,
+				B25A3FBB197E6E4C001685F4 /* UserOperationRecordVO.m in Sources */,
 				B254238D190E5C9400874878 /* MJMember.m in Sources */,
 				B254238E190E5C9400874878 /* MJMethod.m in Sources */,
 				B2DDFF78190C1C7000A71A4F /* MKNetworkOperation.m in Sources */,
@@ -2350,6 +2370,7 @@
 				B2DDFEA2190BB3F000A71A4F /* AppDelegate.m in Sources */,
 				B298AE43192D91DB00DCE795 /* MJRefreshHeaderView.m in Sources */,
 				B2062A401959AA8D007A0CCF /* BeginBut.m in Sources */,
+				B25A3FB4197E0EFA001685F4 /* LookCarRecordController.m in Sources */,
 				B2F185BF193ECEE200AEF90E /* UIColor+_6jinzhi.m in Sources */,
 				B254238C190E5C9400874878 /* MJIvar.m in Sources */,
 				B2542373190E592C00874878 /* UserReservationM.m in Sources */,
@@ -2477,6 +2498,7 @@
 				B2DDFFA0190D4D3D00A71A4F /* InfoDock.m in Sources */,
 				B2DDFF72190C1C7000A71A4F /* NSDate+RFC1123.m in Sources */,
 				B227B27F19334C8700A40EE4 /* SDWebImageManager.m in Sources */,
+				B25A3FB8197E44CC001685F4 /* CarDetailBasicWebController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

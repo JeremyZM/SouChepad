@@ -118,7 +118,7 @@
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.name forKey:KSellName];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.email forKey:KSellEmail];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.phone forKey:KSellPhone];
-            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.addressName forKey:KSellAddressName];
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.address forKey:KSellAddressName];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.qq forKey:KSellQQ];
             
             
@@ -725,6 +725,20 @@
     } reload:YES needHud:YES hudEnabled:YES];
 }
 
+
+#pragma mark - 修改密码
++ (void)updatePassword:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updatePassword.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        
+        success(dic);
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+
+}
 
 
 // 上传测试

@@ -20,7 +20,7 @@
 @property (copy, nonatomic) NSString *phone;
 
 /** 地址 */
-@property (copy, nonatomic) NSString *addressName;
+@property (copy, nonatomic) NSString *address;
 
 /** QQ */
 @property (copy, nonatomic) NSString *qq;

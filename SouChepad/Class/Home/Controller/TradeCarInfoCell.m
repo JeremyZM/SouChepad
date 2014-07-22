@@ -32,10 +32,10 @@
     [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"上牌：%@",tradeCarInfoM.firstLicensePlateDate]];
     
     // 车辆等级
-    if ([tradeCarInfoM.level isEqualToString:@"暂无"]) {
-        [_levelImage setHidden:YES];
-    }else {
+    if (tradeCarInfoM.level) {
         [_levelImage setImage:[UIImage imageNamed:tradeCarInfoM.level]];
+    }else {
+        [_levelImage setHidden:YES];
     }
     
     // 车辆状态
@@ -59,13 +59,13 @@
     }
     
     // 降价
-    if ([tradeCarInfoM.downPrice isEqualToString:@"暂无"]) {
-        [self.downPriceImage setHidden:YES];
-        [self.downPiceLabel setHidden:YES];
-    }else {
+    if (tradeCarInfoM.downPrice) {
         [self.downPriceImage setHidden:NO];
         [self.downPiceLabel setHidden:NO];
         [self.downPiceLabel setText:tradeCarInfoM.downPrice];
+    }else {
+        [self.downPriceImage setHidden:YES];
+        [self.downPiceLabel setHidden:YES];
     }
     
     // 车辆图片

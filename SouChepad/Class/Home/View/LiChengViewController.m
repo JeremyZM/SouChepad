@@ -33,7 +33,7 @@
 //    [swi addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventValueChanged];
 //    [self.view addSubview:swi];
     
-    self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 80, 0,0)];
+    self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 20, 0,0)];
     [self.pickerView setDataSource:self];
     [self.pickerView setDelegate:self];
     [self.view addSubview:self.pickerView];

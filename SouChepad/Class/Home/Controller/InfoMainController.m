@@ -20,6 +20,8 @@
 #import "EndReceiveViewController.h"
 #import "BeginBut.h"
 #import "ProgressHUD.h"
+#import "CarDetailBasicWebController.h"
+#import "NSString+MD5.h"
 
 
 typedef NS_ENUM(NSInteger, kTTCounter){
@@ -66,7 +68,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     
     
     
-    beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-200, 100, 100)];
+    beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-100, 100, 100)];
     [beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
     [beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
     [beginBtn setTitle:@"开始接待" forState:UIControlStateNormal];
@@ -125,7 +127,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==1) {
-        if (self.userInfoM.reservationId==nil||[self.userInfoM.reservationId isEqualToString:@"暂无"]) {
+        if (self.userInfoM.reservationId==nil || !self.userInfoM.reservationId) {
             [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
                 [beginBtn setSelected:YES];
                 beginDate = [NSDate date];
@@ -201,6 +203,17 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     
     SearchCarViewController *searchCarVC = [[SearchCarViewController alloc] init];
     [self addChildViewController:searchCarVC];
+    
+    CarDetailBasicWebController *carDetailWeb = [[CarDetailBasicWebController alloc] init];
+    NSString *crmid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    
+    NSString *tokensting = [NSString stringWithFormat:@"%@!@a#Vs31",crmid];
+    NSString *tokenMD5 = [tokensting md5];
+    
+    NSString *urlstring = [NSString stringWithFormat:@"http://data.souche.com/user/profile.do?crmid=%@&&token=%@",crmid,tokenMD5];
+    [carDetailWeb setURLString:urlstring];
+    [self addChildViewController:carDetailWeb];
+    
     
     [self InfoDock:nil tabChangeFrom:1 to:1];
 }

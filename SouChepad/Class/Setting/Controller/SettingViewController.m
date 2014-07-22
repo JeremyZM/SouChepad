@@ -10,6 +10,7 @@
 #import "LogInViewController.h"
 #import "KeyboardTool.h"
 #import "HttpManager.h"
+#import "ProgressHUD.h"
 
 @interface SettingViewController () <UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,KeyboardToolDelegate,UITextFieldDelegate>
 {
@@ -19,6 +20,10 @@
     UIView *changePWDView;
     
     UILabel *titeLabel;
+    
+    UITextField *oldPWDText;
+    UITextField *newPWDText;
+    UITextField *confirmPWDText;
 }
 // 键盘工具自定义视图
 @property (weak, nonatomic) KeyboardTool *keyboardTool;
@@ -195,6 +200,7 @@
         NSArray *sellInfoArray = @[@"昵称",@"邮箱",@"电话",@"地址",@"QQ"];
         NSMutableArray *textArrayM = [NSMutableArray arrayWithCapacity:5];
         for (NSInteger i = 0;i<sellInfoArray.count;i++) {
+            
             UILabel *tite = [[UILabel alloc] initWithFrame:CGRectMake(80, 40+(i*60), 100, 40)];
             [tite setFont:[UIFont systemFontOfSize:20]];
             [tite setTextAlignment:NSTextAlignmentRight];
@@ -214,29 +220,8 @@
             [sellInfoView addSubview:textF];
             
             [textArrayM addObject:textF];
-            switch (i) {
-                case 0:
-                    self.selectedTextField = textF;
-                    [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName]];
-                    break;
-                case 1:
-
-                    [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellEmail]];
-                    break;
-                case 2:
-                    [textF setKeyboardType:UIKeyboardTypeNumberPad];
-                    [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
-                    break;
-                case 3:
-                    [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellAddressName]];
-                    break;
-                case 4:
-
-                    [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellQQ]];
-                    [textF setKeyboardType:UIKeyboardTypeNumberPad];
-                    break;
-                default:
-                    break;
+            if (i==0) {
+                self.selectedTextField = textF;
             }
             
         }
@@ -247,22 +232,101 @@
         [confirmBtn setTitle:@"确认修改" forState:UIControlStateNormal];
         [sellInfoView addSubview:confirmBtn];
         [confirmBtn addTarget:self action:@selector(changeSalerInfo) forControlEvents:UIControlEventTouchUpInside];
+        [detailView addSubview:sellInfoView];
+    }
+    for (NSInteger i = 0; i<self.textFiledArray.count; i++) {
+        UITextField *textF = (UITextField*)self.textFiledArray[i];
+        switch (i) {
+            case 0:
+                [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName]];
+                break;
+            case 1:
+                
+                [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellEmail]];
+                break;
+            case 2:
+                [textF setKeyboardType:UIKeyboardTypeNumberPad];
+                [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+                break;
+            case 3:
+                [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellAddressName]];
+                break;
+            case 4:
+                
+                [textF setText:[[NSUserDefaults standardUserDefaults] objectForKey:KSellQQ]];
+                [textF setKeyboardType:UIKeyboardTypeNumberPad];
+                break;
+            default:
+                break;
+        }
+
     }
     [titeLabel setText:@"个人资料"];
-    [detailView addSubview:sellInfoView];
 }
 
 - (void)changeSalerInfo
 {
     NSMutableDictionary *requstDic = [NSMutableDictionary dictionary];
     [requstDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]forKey:@"userName"];
+    for (NSInteger i =0; i<self.textFiledArray.count; i++) {
+        UITextField *textf = (UITextField *)self.textFiledArray[i];
+        switch (i) {
+            case 0:
+                [requstDic setObject:textf.text forKey:@"name"];
+                break;
+            case 1:
+                [requstDic setObject:textf.text forKey:@"email"];
+                break;
+            case 2:
+                [requstDic setObject:textf.text forKey:@"phone"];
+                break;
+            case 3:
+                [requstDic setObject:textf.text forKey:@"address"];
+                break;
+            case 4:
+                [requstDic setObject:textf.text forKey:@"qq"];
+                break;
+            default:
+                break;
+        }
+    }
     
-    [HttpManager updateSellerData:@{} Success:^(id obj) {
+    [HttpManager updateSellerData:requstDic Success:^(id obj) {
         NSDictionary *infoObj = [NSDictionary dictionaryWithDictionary:obj];
         if ([infoObj objectForKey:@"succeedMessage"]) {
             
+            for (NSInteger i = 0; i<self.textFiledArray.count; i++) {
+                UITextField *textF = (UITextField*)self.textFiledArray[i];
+                switch (i) {
+                    case 0:
+                        [[NSUserDefaults standardUserDefaults] setObject:textF.text forKey:KSellName];
+                        
+                        break;
+                    case 1:
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:textF.text forKey:KSellEmail];
+                        
+                        break;
+                    case 2:
+                        [[NSUserDefaults standardUserDefaults] setObject:textF.text forKey:KSellPhone];
+                        
+                        break;
+                    case 3:
+                        [[NSUserDefaults standardUserDefaults] setObject:textF.text forKey:KSellAddressName];
+                        
+                        break;
+                    case 4:
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:textF.text forKey:KSellQQ];
+                        break;
+                    default:
+                        break;
+                }
+                
+            }
+            [ProgressHUD showSuccess:@"修改成功"];
         }else if ([infoObj objectForKey:@"errorMessage"]){
-            
+            [self addSellInfoView];
         }
     } fail:^(id obj) {
         
@@ -292,17 +356,50 @@
             [textF.layer setCornerRadius:5.0];
             [textF setPlaceholder:[NSString stringWithFormat:@"请填写%@",changePWDArray[i]]];
             [changePWDView addSubview:textF];
+            if (i==0) {
+                oldPWDText = textF;
+            }else if (i==1){
+                newPWDText = textF;
+            }else if(i==2){
+                confirmPWDText = textF;
+            }
+            
         }
         UIButton *confirmBtn = [[UIButton alloc] initWithFrame:CGRectMake(180, 40+(changePWDArray.count*60)+40, 250, 40)];
         [confirmBtn setBackgroundImage:[UIImage imageNamed:@"dengluanniu1_60"] forState:UIControlStateNormal];
         [confirmBtn setBackgroundImage:[UIImage imageNamed:@"denglu2"] forState:UIControlStateHighlighted];
+        [confirmBtn addTarget:self action:@selector(updatePassword) forControlEvents:UIControlEventTouchUpInside];
         [confirmBtn setTitle:@"确认修改" forState:UIControlStateNormal];
         [changePWDView addSubview:confirmBtn];
+    }
+}
+
+- (void)updatePassword
+{
+    if ([oldPWDText.text isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]]&&newPWDText.text.length>=6&&[newPWDText.text isEqualToString:confirmPWDText.text]) {
+        
+        [HttpManager updatePassword:@{@"userName":[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName], @"oldPassword":oldPWDText.text, @"newPassword":newPWDText.text, @"confirmPassword":confirmPWDText.text} Success:^(id obj) {
+            if ([obj objectForKey:@"succeedMessage"]) {
+                [[NSUserDefaults standardUserDefaults] setObject:newPWDText.text forKey:userDefaultsPWD];
+                [ProgressHUD showSuccess:@"修改成功！"];
+                [oldPWDText setText:nil];
+                [newPWDText setText:nil];
+                [confirmPWDText setText:nil];
+            }else {
+                [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
+            }
+        } fail:^(id obj) {
+            
+        }];
+    }else{
+        [ProgressHUD showError:@"请填写完整，密码不少于6位"];
         
     }
     
-//    [detailView addSubview:changePWDView];
 }
+
+
+
 
 
 #pragma mark textField代理方法

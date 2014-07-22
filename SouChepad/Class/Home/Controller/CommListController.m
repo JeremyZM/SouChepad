@@ -122,7 +122,7 @@ static NSString *CellIdentifier = @"communCell";
     CommunCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     CommunListM *communM = _dataArray[indexPath.row];
     [cell.dayLabel setText:communM.day];
-    [cell.handlerLabel setText:communM.handler];
+    [cell.handlerLabel setText:communM.handler?communM.handler:@"暂无"];
     
     CGSize size = [communM.comment boundingRectWithSize:CGSizeMake(460, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:[NSDictionary dictionaryWithObjectsAndKeys:cell.communLabel.font,NSFontAttributeName, nil]  context:nil].size;
     

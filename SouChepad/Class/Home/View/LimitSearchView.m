@@ -34,6 +34,8 @@
     NSArray *reqBrandsArray;
     NSArray *reqDeleteBrandArray;
     RequireInfoModel *reqInfoModel;
+    
+    NSMutableDictionary *basicRequstDicM;
 }
 
 @end
@@ -55,13 +57,34 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 - (void)upUserData
 {
+    basicRequstDicM = [NSMutableDictionary dictionary];
+    [basicRequstDicM setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
     [HttpManager requestUserRequirementInfo:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:obj];
         reqBrandsArray = [obj objectForKey:@"requireBrands"];
         reqDeleteBrandArray = [NSArray arrayWithArray:[obj objectForKey:@"requireBrandsDelete"]];
         reqInfoModel = [dataDic objectForKey:@"requireInfo"];
-        
-//        [userCarCollection reloadData];
+        if (reqInfoModel.miles) {
+            
+            [basicRequstDicM setObject:reqInfoModel.miles forKey:@"miles"];
+        }
+        if (reqInfoModel.years) {
+            
+            [basicRequstDicM setObject:reqInfoModel.years forKey:@"years"];
+        }
+        if (reqInfoModel.carbody) {
+            
+            [basicRequstDicM setObject:reqInfoModel.carbody forKey:@"carbody"];
+        }
+        if (reqInfoModel.startBudget) {
+            
+            [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
+        }
+        if (reqInfoModel.endBudget) {
+            
+            [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
+        }
+
         [self layoutSubviews];
         
     } fail:^(id obj) {
@@ -159,16 +182,24 @@ static NSString *userDemandCellid = @"userDemandCellid";
     if (button == yushuanBut) {  // 预算
         NSMutableArray *array = [NSMutableArray array];
         for (NSInteger i = 1; i <= 100; i++) {
-            NSString *str = [NSString stringWithFormat:@"%d",i];
+            NSString *str = [NSString stringWithFormat:@"%d万",i];
             [array addObject:str];
         }
         [array insertObject:@"不限" atIndex:0];
-        [array addObject:@"不限"];
+        
+        NSMutableArray *endArray = [NSMutableArray array];
+        for (NSInteger i = 1; i <= 100; i++) {
+            NSString *str = [NSString stringWithFormat:@"%d万",i];
+            [endArray addObject:str];
+        }
+        [endArray addObject:@"不限"];
+        
         YushuanViewController *YSvc = [[YushuanViewController alloc] init];
         controller = YSvc;
-        [YSvc setBeginSelect:reqInfoModel.startBudgetShow];
-        [YSvc setEndSelect:reqInfoModel.endBudgetShow];
+        [YSvc setBeginSelect:[NSString stringWithFormat:@"%@万",reqInfoModel.startBudgetShow]];
+        [YSvc setEndSelect:[NSString stringWithFormat:@"%@万",reqInfoModel.endBudgetShow]];
         [YSvc setArray:array];
+        [YSvc setEndArray:endArray];
         [YSvc setSeleckBut:yushuanBut];
         [YSvc setDelegate:self];
     }else if (button == dateBut) { // 上牌时间
@@ -187,7 +218,14 @@ static NSString *userDemandCellid = @"userDemandCellid";
             [array addObject:str];
         }
         [array insertObject:@"不限" atIndex:0];
-        [array addObject:@"不限"];
+        
+        NSMutableArray *endArray = [NSMutableArray array];
+        for (NSInteger i = 2006; i <= [dateStr integerValue]; i++) {
+            NSString *str = [NSString stringWithFormat:@"%d",i];
+            [endArray addObject:str];
+        }
+        [endArray addObject:@"不限"];
+        
         YushuanViewController *dateVC = [[YushuanViewController alloc] init];
         controller = dateVC;
         [dateVC setSeleckBut:dateBut];
@@ -195,6 +233,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
         [dateVC setBeginSelect:reqInfoModel.beginYear];
         [dateVC setEndSelect:reqInfoModel.endYear];
         [dateVC setArray:array];
+        [dateVC setEndArray:endArray];
         
     } else if (button == chexingBut) {  // 车型
         LiChengViewController *CXvc = [[LiChengViewController alloc] init];
@@ -230,7 +269,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
         popoVC = [[UIPopoverController alloc] initWithContentViewController:controller];
         [popoVC setDelegate:self];
         CGRect frame = [self convertRect:button.frame fromView:button.superview];
-        popoVC.popoverContentSize = CGSizeMake(320, 340);
+        popoVC.popoverContentSize = CGSizeMake(320, 280);
         [popoVC presentPopoverFromRect:frame inView:self permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 
@@ -240,37 +279,22 @@ static NSString *userDemandCellid = @"userDemandCellid";
 {
     [super layoutSubviews];
     
-    DLog(@"%@---%@----%@---%@----%@---%@",reqInfoModel.beginYear,reqInfoModel.startBudgetShow,reqInfoModel.years,reqInfoModel.country,reqInfoModel.carbody,reqInfoModel.carUsed);
-//
     // 预算
-    [yushuanBut setTitle:reqInfoModel.purchaseCarBudget forState:UIControlStateNormal];
-    if ([reqInfoModel.purchaseCarBudget isEqualToString:@"暂无"]||!reqInfoModel.purchaseCarBudget) {
-        [yushuanBut setTitle:@"不限 - 不限" forState:UIControlStateNormal];
-    }
+    [yushuanBut setTitle:reqInfoModel.purchaseCarBudget?reqInfoModel.purchaseCarBudget:@"不限 - 不限" forState:UIControlStateNormal];
+
     
     // 里程
-    [lichengBut setTitle:reqInfoModel.milesName forState:UIControlStateNormal];
-    if ([reqInfoModel.milesName isEqualToString:@"暂无"]||!reqInfoModel.milesName) {
-        [lichengBut setTitle:@"不限" forState:UIControlStateNormal];
-    }
+    [lichengBut setTitle:reqInfoModel.milesName?reqInfoModel.milesName:@"不限" forState:UIControlStateNormal];
     
     // 上牌时间
-    [dateBut setTitle:reqInfoModel.yearsName forState:UIControlStateNormal];
-    if ([reqInfoModel.yearsName isEqualToString:@"暂无"]||!reqInfoModel.yearsName) {
-        [dateBut setTitle:@"不限" forState:UIControlStateNormal];
-    }
+    [dateBut setTitle:reqInfoModel.yearsName?reqInfoModel.yearsName:@"不限" forState:UIControlStateNormal];
+
     
     // 国别
-    [guobieBut setTitle:reqInfoModel.countryName forState:UIControlStateNormal];
-    if ([reqInfoModel.countryName isEqualToString:@"暂无"]||!reqInfoModel.countryName) {
-        [guobieBut setTitle:@"不限" forState:UIControlStateNormal];
-    }
+    [guobieBut setTitle:reqInfoModel.countryName?reqInfoModel.countryName:@"不限" forState:UIControlStateNormal];
 
     // 车型
-    [chexingBut setTitle:reqInfoModel.carbodyName forState:UIControlStateNormal];
-    if ([reqInfoModel.carbodyName isEqualToString:@"暂无"]||!reqInfoModel.carbodyName) {
-        [chexingBut setTitle:@"不限" forState:UIControlStateNormal];
-    }
+    [chexingBut setTitle:reqInfoModel.carbodyName?reqInfoModel.carbodyName:@"不限" forState:UIControlStateNormal];
     
     [userCarCollection reloadData];
     
@@ -291,17 +315,24 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 - (void)liChengViewController:(LiChengViewController *)lichengVC selectBut:(UIButton *)button selectDic:(NSDictionary *)selectDic
 {
-
+    if (button == lichengBut) {
+        [basicRequstDicM setObject:[selectDic objectForKey:@"code"] forKey:@"miles"];
+    }
+    if (button == chexingBut) {
+        [basicRequstDicM setObject:[selectDic objectForKey:@"code"] forKey:@"carbody"];
+    }
+    if (button == guobieBut) {
+        [basicRequstDicM setObject:[selectDic objectForKey:@"code"] forKey:@"country"];
+    }
     [button setTitle:[selectDic objectForKey:@"name"] forState:UIControlStateNormal];
 
 }
 
-
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+// 开始搜索
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-
-    return YES;
+    
+    
 }
 
 
@@ -368,9 +399,6 @@ static NSString *userDemandCellid = @"userDemandCellid";
         [self.secrVC presentViewController:navVC animated:YES completion:^{
             
         }];
-//        [self presentViewController:navVC animated:YES completion:^{
-//            
-//        }];
     }
 }
 

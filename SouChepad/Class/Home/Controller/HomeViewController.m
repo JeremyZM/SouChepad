@@ -52,6 +52,7 @@
 @end
 
 static NSString *CellIdentifier = @"cellID";
+static NSString *nothing = @"暂无";
 @implementation HomeViewController
 
 - (void)viewDidAppear:(BOOL)animated
@@ -436,10 +437,10 @@ static NSString *CellIdentifier = @"cellID";
         
         // 预约客户
         UserReservationM *userReserM = userReserArray[indexPath.row];
-        [cell.NameCustomer setText:userReserM.user];
-        [cell.SexCustomer setText:userReserM.sex];
-        [cell.PhoneCustomer setText:userReserM.phone];
-        [cell.GradeCustomer setText:[NSString stringWithFormat:@"来自 %@",userReserM.handler]];
+        [cell.NameCustomer setText:userReserM.user?userReserM.user:nothing];
+        [cell.SexCustomer setText:userReserM.sex?userReserM.sex:nothing];
+        [cell.PhoneCustomer setText:userReserM.phone?userReserM.phone:nothing];
+        [cell.GradeCustomer setText:[NSString stringWithFormat:@"来自 %@",userReserM.handler?userReserM.handler:nothing]];
         [cell.TimeUpdate setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
         [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateNormal];
         [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateDisabled];
@@ -449,26 +450,23 @@ static NSString *CellIdentifier = @"cellID";
         }else{
             [cell.TimeUpdate setUserInteractionEnabled:YES];
             [cell.TimeUpdate setEnabled:YES];
-//            [cell.TimeUpdate setTitle:userReserM.day forState:UIControlStateSelected];
         }
 
         [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
         [cell.TimeUpdate setTag:(900+indexPath.row)];
-//        [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
         
     }else if (indexPath.section == 1){
         
         // 接待过的客户
         UserReservationM *usertoStore = usertoStoreArray[indexPath.row];
-        [cell.NameCustomer setText:usertoStore.user];
-        [cell.SexCustomer setText:usertoStore.sex];
-        [cell.PhoneCustomer setText:usertoStore.phone];
-        [cell.GradeCustomer setText:usertoStore.userLevel];
-        
+        [cell.NameCustomer setText:usertoStore.user?usertoStore.user:nothing];
+        [cell.SexCustomer setText:usertoStore.sex?usertoStore.sex:nothing];
+        [cell.PhoneCustomer setText:usertoStore.phone?usertoStore.phone:nothing];
+        [cell.GradeCustomer setText:usertoStore.userLevel?usertoStore.userLevel:nothing];
         [cell.TimeUpdate setEnabled:NO];
         [cell.TimeUpdate setUserInteractionEnabled:NO];
         [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
-        [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day] forState:UIControlStateDisabled];
+        [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day?usertoStore.day:nothing] forState:UIControlStateDisabled];
 //        DLog(@"%@------%d",cell.TimeUpdate.titleLabel.text,indexPath.row);
     }
     return cell;
