@@ -57,6 +57,17 @@ static HttpService * engine;
                 [ProgressHUD dismiss];
             }
         }
+        
+        NSString *paraString=@"";
+        NSArray *keyArray = [parameter allKeys];
+        int index = 0;
+        for (NSString *key in keyArray) {
+            NSString *value = [parameter objectForKey:key];
+            paraString = FormatStr(@"%@%@=%@%@",paraString,key,value, ++index == keyArray.count ? @"" : @"&");
+        }
+        NSString *api = FormatStr(@"====\n%@?%@\n=======", [completedOperation url],paraString);
+        DLog(@"api:%@", api);
+        
     successBlock(completedOperation);
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
 
@@ -86,7 +97,7 @@ static HttpService * engine;
 
     [engine enqueueOperation:operation forceReload:NO];
     
-    [self formatUrlAndParameters:parameter path:api];
+//    [self formatUrlAndParameters:parameter path:api];
     return operation;
 }
 

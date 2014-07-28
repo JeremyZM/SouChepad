@@ -82,7 +82,7 @@
     
     BiaoQianView *biaoqian = [[BiaoQianView alloc] initWithFrame:CGRectMake(130, 190, 400, 180)];
     [biaoqian setDelegate:self];
-    [biaoqian setBackgroundColor:[UIColor redColor]];
+//    [biaoqian setBackgroundColor:[UIColor redColor]];
     NSArray *dataArray = [NSArray arrayWithContentsOfFile:KdepartureReason];
     [biaoqian setDataArray:dataArray];
     [self.scorllView addSubview:biaoqian];
@@ -90,7 +90,7 @@
     otherCauseTextF = [[UITextField alloc] initWithFrame:CGRectMake(130, 330, 400, 40)];
     [otherCauseTextF setDelegate:self];
     [otherCauseTextF setBorderStyle:UITextBorderStyleRoundedRect];
-    [otherCauseTextF setPlaceholder:@"其他原因..."];
+    [otherCauseTextF setPlaceholder:@"沟通记录..."];
     [self.scorllView addSubview:otherCauseTextF];
     
     

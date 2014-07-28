@@ -20,7 +20,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
     
-//    [self.navigationController.interactivePopGestureRecognizer setDelegate:self];
+    self.navigationController.interactivePopGestureRecognizer.delegate =  (id<UIGestureRecognizerDelegate>)self;
 }
 
 

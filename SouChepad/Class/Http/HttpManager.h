@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HttpService.h"
+@class MKNetworkOperation;
 
 typedef void (^Success) (id obj);
 typedef void (^Fail) (id obj);
@@ -69,6 +69,24 @@ typedef void (^UploadProgress)(NSString *progress);
 
 #pragma mark - 客户需求
 + (void)requestUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+
+#pragma mark - 最后一条看车记录
++ (void)lastCarLookOrDrive:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 保存看车记录
++ (void)saveLookCarRecord:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+
+#pragma mark - 最后一条试驾记录
++ (void)lastUserDriveCarByData:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 保存并开始试驾
++ (void)saveDriveCarBegin:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 结束试驾
++ (void)saveDriveCarEnd:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
 
 #pragma mark - 添加客户意向车型
 + (void)updateUserRequirementBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;

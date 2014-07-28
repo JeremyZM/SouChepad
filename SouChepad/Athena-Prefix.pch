@@ -16,6 +16,6 @@
     #import "SendIFMacros.h"
     #import "UIColor+_6jinzhi.h"
     #import "BaseDtaModel.h"
-
+    #import "MobClick.h"
 #endif
 

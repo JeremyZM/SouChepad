@@ -19,6 +19,8 @@
 #import "RequireInfoModel.h"
 #import "ProgressHUD.h"
 #import "AddCarController.h"
+#import "RequireDeleteController.h"
+
 
 @interface LimitSearchView() <UICollectionViewDataSource,UICollectionViewDelegate,UIPopoverControllerDelegate,LiChengViewControllerDelegate,YushuanViewControllerDelegate,AddCarControllerDelegate>
 {
@@ -166,6 +168,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
     UIButton *deleteCarBut = [[UIButton alloc] initWithFrame:CGRectMake(40, 680, 60, 60)];
     [deleteCarBut setBackgroundColor:[UIColor redColor]];
     [self addSubview:deleteCarBut];
+    [deleteCarBut addTarget:self action:@selector(showRequireDelete) forControlEvents:UIControlEventTouchUpInside];
     
     self.searchBut = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.searchBut setFrame:CGRectMake(340, 690, 280, 40)];
@@ -174,6 +177,19 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [self addSubview:self.searchBut];
 
 }
+
+- (void)showRequireDelete
+{
+    RequireDeleteController *requireDeleteVC = [[RequireDeleteController alloc] initWithStyle:UITableViewStylePlain];
+    [requireDeleteVC setReqDeleteBrandArray:reqDeleteBrandArray];
+    UINavigationController *requireDeleteNavVC = [[UINavigationController alloc] initWithRootViewController:requireDeleteVC];
+    [requireDeleteNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
+    
+    [self.secrVC presentViewController:requireDeleteNavVC animated:YES completion:^{
+        
+    }];
+}
+
 
 
 - (void)showAllPopoView:(UIButton*)button

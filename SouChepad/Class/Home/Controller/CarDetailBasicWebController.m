@@ -43,6 +43,7 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSURL *url = [request URL];
+    DLog(@"%@",url);
     NSString *urlstring = [url absoluteString];
     
     NSArray *components = [urlstring componentsSeparatedByString:@"?"];

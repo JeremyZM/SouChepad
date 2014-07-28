@@ -32,6 +32,7 @@ static NSMutableDictionary *_groupRadioDic = nil;
         [self setImage:[UIImage imageNamed:@"radio_unchecked.png"] forState:UIControlStateNormal];
         [self setImage:[UIImage imageNamed:@"radio_checked.png"] forState:UIControlStateSelected];
         [self.titleLabel setFont:KFont18];
+        [self setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateSelected];
         [self addTarget:self action:@selector(radioBtnChecked) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
@@ -48,6 +49,7 @@ static NSMutableDictionary *_groupRadioDic = nil;
     [self setImage:[UIImage imageNamed:@"radio_unchecked.png"] forState:UIControlStateNormal];
     [self setImage:[UIImage imageNamed:@"radio_checked.png"] forState:UIControlStateSelected];
     [self.titleLabel setFont:KFont18];
+    [self setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateSelected];
     [self addTarget:self action:@selector(radioBtnChecked) forControlEvents:UIControlEventTouchUpInside];
 }
 

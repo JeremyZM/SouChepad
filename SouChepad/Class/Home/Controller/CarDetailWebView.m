@@ -10,6 +10,10 @@
 #import "ProgressHUD.h"
 #import "CarCQIInfoController.h"
 #import "LookCarRecordController.h"
+#import "DriveCarRecordController.h"
+#import "HttpManager.h"
+#import "DriveCarLastData.h"
+#import "OverDriveCarController.h"
 
 @interface CarDetailWebView () <UIWebViewDelegate>
 
@@ -64,6 +68,7 @@
 - (void)addLookCarRecord:(UIButton*)but
 {
     LookCarRecordController *lookCarVC = [[LookCarRecordController alloc] init];
+    [lookCarVC setCarID:self.carID];
     UINavigationController *lookNavVC = [[UINavigationController alloc] initWithRootViewController:lookCarVC];
     [lookNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
     [self presentViewController:lookNavVC animated:YES completion:^{
@@ -74,6 +79,34 @@
 // 试驾
 - (void)addDriveCarRecord:(UIButton*)but
 {
+    
+    NSString *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    [HttpManager lastUserDriveCarByData:@{@"user":userID,@"carId":self.carID} Success:^(id obj) {
+        UINavigationController *driveNavVC;
+        DriveCarLastData *driveDataM = obj;
+        if ([driveDataM.isDriveCar isEqualToString:@"0"]) {
+            DriveCarRecordController *driveCarVC = [[DriveCarRecordController alloc] init];
+            driveNavVC  = [[UINavigationController alloc] initWithRootViewController:driveCarVC];
+            [driveCarVC setCarId:self.carID];
+            [driveCarVC setDriveCarDataM:driveDataM];
+        }else if ([driveDataM.isDriveCar isEqualToString:@"1"]){
+            OverDriveCarController *overDriveCarVC = [[OverDriveCarController alloc] init];
+            driveNavVC = [[UINavigationController alloc] initWithRootViewController:overDriveCarVC];
+            [overDriveCarVC setCarId:self.carID];
+            [overDriveCarVC setDriveCarDataM:driveDataM];
+        }
+        
+        [driveNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
+        if (driveNavVC) {
+            [self presentViewController:driveNavVC animated:YES completion:^{
+                [ProgressHUD dismiss];
+            }];
+        }
+        
+    } fail:^(id obj) {
+        
+    }];
+    
 
 
 }

@@ -129,6 +129,8 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     if (buttonIndex==1) {
         if (self.userInfoM.reservationId==nil || !self.userInfoM.reservationId) {
             [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
+//                [MobClick event:<#(NSString *)#> attributes:<#(NSDictionary *)#>]
+                
                 [beginBtn setSelected:YES];
                 beginDate = [NSDate date];
                 [self.counterLabel start];

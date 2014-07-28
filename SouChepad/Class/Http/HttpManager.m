@@ -7,6 +7,7 @@
 //
 
 #import "HttpManager.h"
+#import "HttpService.h"
 #import "ProgressHUD.h"
 #import "UserReservationM.h"
 #import "NSObject+MJKeyValue.h"
@@ -24,6 +25,8 @@
 #import "PinYin4Objc.h"
 #import "ChineseString.h"
 #import "UsertoStore.h"
+#import "UserOperationRecordVO.h"
+#import "DriveCarLastData.h"
 
 @implementation HttpManager
 
@@ -532,6 +535,111 @@
     } reload:YES needHud:YES hudEnabled:NO];
 }
 
+
+#pragma mark - 最后一条看车记录
++ (void)lastCarLookOrDrive:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/lastCarLookOrDrive.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        NSDictionary *vo = [dataDic objectForKey:@"vo"];
+        UserOperationRecordVO *userOperVO = [[UserOperationRecordVO alloc] init];
+        if ([vo isKindOfClass:[NSDictionary class]]) {
+            
+            [userOperVO setKeyValues:vo];
+        }
+        if ([[dataDic objectForKey:@"name"] isKindOfClass:[NSString class]]) {
+            
+            [userOperVO setName:[dataDic objectForKey:@"name"]];
+        }
+        if ([[dataDic objectForKey:@"salerPrice"] isKindOfClass:[NSString class]]) {
+            [userOperVO setSalerPrice:[dataDic objectForKey:@"salerPrice"]];
+        }
+        success(userOperVO);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:NO];
+
+}
+
+
+
+#pragma mark - 保存看车记录
++ (void)saveLookCarRecord:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/saveLookCar.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        
+        NSDictionary *objDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([objDic objectForKey:@"succeedMessage"]) {
+            success(objDic);
+        }else{
+            [ProgressHUD showError:[objDic objectForKey:@"errorMessage"]];
+        }
+        DLog(@"%@",[obj responseJSON]);
+        
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+}
+
+
+
+#pragma mark - 最后一条试驾记录
++ (void)lastUserDriveCarByData:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/lastUserDriveCarByData.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        DriveCarLastData *driveCarM = [[DriveCarLastData alloc] init];
+        if ([obj responseJSON]) {
+            
+            [driveCarM setKeyValues:dataDic];
+        }
+        success(driveCarM);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:NO];
+    
+}
+
+#pragma mark - 保存并开始试驾
++ (void)saveDriveCarBegin:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/saveDriveCarBegin.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([dic objectForKey:@"succeedMessage"]) {
+            success(dic);
+        }else {
+            [ProgressHUD showError:[dic objectForKey:@"errorMessage"]];
+        }
+        DLog(@"%@",[obj responseJSON]);
+        
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 结束试驾
++ (void)saveDriveCarEnd:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/saveDriveCarEnd.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([dic objectForKey:@"succeedMessage"]) {
+            success(dic);
+        }else {
+            [ProgressHUD showError:[dic objectForKey:@"errorMessage"]];
+        }
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+
+
+}
+
+
 #pragma mark - 添加客户意向车型
 + (void)updateUserRequirementBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
@@ -747,13 +855,19 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setObject:[NSString stringWithFormat:@"%d", index] forKey:@"pic"];
     
-    NSData *data = UIImagePNGRepresentation(image);
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+    DLog(@"%u",data.length/1024/1024);
+
+//    NSData *dataaa = UIImagePNGRepresentation(image);
+//    DLog(@"%ld",(unsigned long)dataaa.length);
+    
+    
     MKNetworkOperation *op = [[HttpService sharedService] requestUploadFile:data
                                                                         api:path
                                                                       paras:dic];
     // 上传
     [op addCompletionHandler:^(MKNetworkOperation* completedOperation) {
-        NSString *xmlString = [completedOperation responseString];
+        NSDictionary *xmlString = [completedOperation responseJSON];
         DLog(@"%@", xmlString);
         success(xmlString);
     }errorHandler:^(MKNetworkOperation *errorOp, NSError* error) {
@@ -762,8 +876,8 @@
     
     // 进度
     [op onUploadProgressChanged:^(double progress) {
-        NSString *strProgress = [NSString stringWithFormat:@"%.2f", progress*100.0];
-        DLog(@"Upload file progress: %@", strProgress);
+        NSString *strProgress = [NSString stringWithFormat:@"%.0f", progress*100.0];
+        DLog(@"Upload file progress: %f", progress);
         uploadProgress(strProgress);
     }];
     

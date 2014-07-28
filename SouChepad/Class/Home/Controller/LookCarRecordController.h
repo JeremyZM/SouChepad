@@ -7,17 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "QRadioButton.h"
-#import "BiaoQianView.h"
+@class QRadioButton;
+@class ASValueTrackingSlider;
+@class BiaoQianView;
 
-@class UserOperationRecordVO;
 
 @interface LookCarRecordController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 
 @property (weak, nonatomic) IBOutlet UITextField *nameTextF;
 
 
-@property (weak, nonatomic) IBOutlet UITextField *priceTextF;
+@property (weak, nonatomic) IBOutlet ASValueTrackingSlider *priceSlider;
 
 
 @property (weak, nonatomic) IBOutlet QRadioButton *highBut;
@@ -27,11 +30,11 @@
 
 @property (weak, nonatomic) IBOutlet QRadioButton *lowBut;
 
-@property (weak, nonatomic) IBOutlet BiaoQianView *appraiseView;
+@property (strong, nonatomic) BiaoQianView *appraiseView;
 
-@property (weak, nonatomic) IBOutlet UITextField *otherAppraiseTextF;
+@property (strong, nonatomic) UITextView *otherAppraiseTextV;
 
-@property (nonatomic, strong) UserOperationRecordVO *userOperVO;
 
+@property (nonatomic, copy) NSString *carID;
 
 @end

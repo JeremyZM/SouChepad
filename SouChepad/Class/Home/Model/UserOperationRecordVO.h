@@ -10,6 +10,12 @@
 
 @interface UserOperationRecordVO : NSObject
 
+/** 车辆价格 */
+@property (copy, nonatomic) NSString *salerPrice;
+
+/** 客户姓名 */
+@property (copy, nonatomic) NSString *name;
+
 /** 用户id */
 @property (copy, nonatomic) NSString *user;
 
