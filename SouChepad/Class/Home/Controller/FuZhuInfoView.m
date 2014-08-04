@@ -12,6 +12,8 @@
 #import "ImageViewController.h"
 #import "ProgressHUD.h"
 #import "UIImageView+WebCache.h"
+#import "MBProgressHUD.h"
+#import "HttpManager.h"
 
 @interface FuZhuInfoView()<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -148,10 +150,44 @@
     }
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
+- (void)uploadImage
 {
-    DLog(@"%d",buttonIndex);
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+    [hud setMode:MBProgressHUDModeAnnularDeterminate];
+    
+    [HttpManager requestUploadImage:selectImage.image imageIndex:0 success:^(id obj) {
+        NSDictionary *pathDic = obj;
+        DLog(@"%@",pathDic);
+        if ([pathDic objectForKey:@"status"]) {
+            NSString *pathStr = [[pathDic objectForKey:@"path"] stringByReplacingOccurrencesOfString:@"http://res.souche.com/" withString:@""];
+//            [driveDicData setObject:pathStr forKey:@"drivelicense"];
+            [hud setMode:MBProgressHUDModeCustomView];
+            [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_SUCCESS]];
+            sleep(1);
+            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+        }else {
+            [hud setMode:MBProgressHUDModeCustomView];
+            [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
+            [hud setLabelText:@"上传照片失败"];
+            sleep(1);
+            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+            [selectImage setImage:nil];
+        }
+    } uploadProgress:^(NSString *progress) {
+        [hud setLabelText:[NSString stringWithFormat:@"%@%@",progress,@"%"]];
+        [hud setProgress:([progress floatValue]/100)];
+        
+    } fail:^(id obj) {
+        [hud setMode:MBProgressHUDModeCustomView];
+        [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
+        [hud setLabelText:@"上传照片失败"];
+        sleep(1);
+        [MBProgressHUD hideAllHUDsForView:self animated:YES];
+        [selectImage setImage:nil];
+    }];
+    
 }
+
 
 
 #pragma mark - 

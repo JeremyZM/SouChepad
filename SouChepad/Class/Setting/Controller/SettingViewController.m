@@ -327,6 +327,7 @@
             [ProgressHUD showSuccess:@"修改成功"];
             [self addSellInfoView];
         }else if ([infoObj objectForKey:@"errorMessage"]){
+            [ProgressHUD showError:[infoObj objectForKey:@"errorMessage"]];
             [self addSellInfoView];
         }
     } fail:^(id obj) {

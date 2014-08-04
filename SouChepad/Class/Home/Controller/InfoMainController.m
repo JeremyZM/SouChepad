@@ -50,6 +50,8 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 {
     [super viewDidLoad];
     [[NSUserDefaults standardUserDefaults] setObject:self.userInfoM.crmUserId forKey:@"userID"];
+    DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]);
+    
     // 1.添加dock栏
     [self addInfoDockView];
     

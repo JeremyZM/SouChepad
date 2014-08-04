@@ -51,12 +51,12 @@
                   symbolName = "-[CustomPIMController saveUserInfoClickt]"
                   moduleName = "Athena"
                   urlString = "file:///Users/zhangyandong/Desktop/SouChepad/SouChepad/Class/Home/Controller/CustomPIMController.m"
-                  timestampString = "428811239.926193"
+                  timestampString = "428828016.533931"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "145"
                   endingLineNumber = "145"
-                  offsetFromSymbolStart = "5547">
+                  offsetFromSymbolStart = "3474">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -65,12 +65,12 @@
                   symbolName = "__41-[CustomPIMController saveUserInfoClickt]_block_invoke"
                   moduleName = "Athena"
                   urlString = "file:///Users/zhangyandong/Desktop/SouChepad/SouChepad/Class/Home/Controller/CustomPIMController.m"
-                  timestampString = "428811239.926671"
+                  timestampString = "428828016.534398"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "147"
                   endingLineNumber = "147"
-                  offsetFromSymbolStart = "32">
+                  offsetFromSymbolStart = "20">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -88,86 +88,6 @@
             startingLineNumber = "860"
             endingLineNumber = "860"
             landmarkName = "+requestUploadImage:imageIndex:success:uploadProgress:fail:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Http/HttpManager.m"
-            timestampString = "428657783.918246"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "802"
-            endingLineNumber = "802"
-            landmarkName = "+requestUserOutStore:Success:fail:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Home/Controller/SearchVC.m"
-            timestampString = "428810072.216126"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Home/Controller/SearchVC.m"
-            timestampString = "428810093.623808"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Home/Controller/SearchVC.m"
-            timestampString = "428810094.969614"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Home/Controller/InfoMainController.m"
-            timestampString = "428810186.603862"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "-addInfoDockView"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
