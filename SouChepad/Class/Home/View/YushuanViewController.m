@@ -41,20 +41,23 @@
     
 
     for (NSInteger i = 0 ; i<self.array.count; i++) {
-        if ([self.array[i] isEqualToString:self.beginSelect]) {
+        if ([self.array[i] isEqualToString:[NSString stringWithFormat:@"%@万",self.beginSelect]]) {
             [self.minPicker selectRow:i inComponent:0 animated:NO];
             break;
         }
     }
+    NSInteger a = 0;
     for (NSInteger j = 0; j<self.endArray.count; j++) {
-        if ([self.endArray[j] isEqualToString:self.endSelect]) {
+        if ([self.endArray[j] isEqualToString:[NSString stringWithFormat:@"%@万",self.endSelect]]) {
             [self.maxPicker selectRow:j inComponent:0 animated:NO];
+            a = 1;
             break;
         }
     }
-
+    if (0==a) {
+        [self.maxPicker selectRow:self.endArray.count-1 inComponent:0 animated:NO];
+    }
 }
-
 
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView

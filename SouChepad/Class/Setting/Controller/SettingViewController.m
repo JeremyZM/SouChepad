@@ -290,7 +290,7 @@
                 break;
         }
     }
-    
+    DLog(@"%@",requstDic);
     [HttpManager updateSellerData:requstDic Success:^(id obj) {
         NSDictionary *infoObj = [NSDictionary dictionaryWithDictionary:obj];
         if ([infoObj objectForKey:@"succeedMessage"]) {
@@ -325,6 +325,7 @@
                 
             }
             [ProgressHUD showSuccess:@"修改成功"];
+            [self addSellInfoView];
         }else if ([infoObj objectForKey:@"errorMessage"]){
             [self addSellInfoView];
         }
@@ -376,7 +377,11 @@
 
 - (void)updatePassword
 {
-    if ([oldPWDText.text isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]]&&newPWDText.text.length>=6&&[newPWDText.text isEqualToString:confirmPWDText.text]) {
+    if (![oldPWDText.text isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]]) {
+        [ProgressHUD showError:@"原密码错误！"];
+        return;
+    }
+    if (newPWDText.text.length>=6&&[newPWDText.text isEqualToString:confirmPWDText.text]) {
         
         [HttpManager updatePassword:@{@"userName":[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName], @"oldPassword":oldPWDText.text, @"newPassword":newPWDText.text, @"confirmPassword":confirmPWDText.text} Success:^(id obj) {
             if ([obj objectForKey:@"succeedMessage"]) {
@@ -392,7 +397,7 @@
             
         }];
     }else{
-        [ProgressHUD showError:@"请填写完整，密码不少于6位"];
+        [ProgressHUD showError:@"请填写完整，并密码不少于6位"];
         
     }
     

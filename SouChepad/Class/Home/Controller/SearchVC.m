@@ -170,7 +170,7 @@ static NSString *nothing = @"暂无";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    InfoMainController *infoMVC = [[InfoMainController alloc] init];
+
     UserReservationM *userReserM=nil;
     if (indexPath.section==0) {
         SearchNewUserCell *newCell = (SearchNewUserCell*)[tableView cellForRowAtIndexPath:indexPath];
@@ -182,6 +182,7 @@ static NSString *nothing = @"暂无";
         OtherSellUserCell *otherCell = (OtherSellUserCell*)[tableView cellForRowAtIndexPath:indexPath];
         userReserM = otherCell.userReserM;
     }
+    InfoMainController *infoMVC = [[InfoMainController alloc] init];
 //    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [infoMVC setUserInfoM:userReserM];
     [self.navigationController pushViewController:infoMVC animated:YES];

@@ -53,7 +53,6 @@
     searchDisplay.searchResultsDataSource = self;
     searchDisplay.searchResultsDelegate = self;
     
-
 }
 
 - (void)viewDidLoad

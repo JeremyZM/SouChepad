@@ -18,6 +18,9 @@
 #import "ZBarController.h"
 #import "ZBarSDK.h"
 #import "CarDetailWebView.h"
+#import "LookOrDriveCarInfoModel.h"
+#import "OverDriveCarController.h"
+
 
 @interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate,ZBarReaderDelegate>
 {
@@ -47,7 +50,9 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(RefreshViewControlEventValueChanged) name:@"userIDchange" object:nil];
     [self addCollectionView];
     [self addToolbar];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(RefreshViewControlEventValueChanged) name:@"update" object:nil];
+    
     [self RefreshViewControlEventValueChanged];
 }
 
@@ -69,8 +74,6 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
     [scanBut setTitle:@"扫描车辆二维码" forState:UIControlStateNormal];
     [scanBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.headBar addSubview:scanBut];
-    
-    
 }
 
 
@@ -270,35 +273,61 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 {
     UICollectionViewCell *cell = nil;
     
-        if (indexPath.section==0) {
-            cell = [collectionView dequeueReusableCellWithReuseIdentifier:TradeCarInfoCellid forIndexPath:indexPath];
-            TradeCarInfoCell *tradeCarCell = (TradeCarInfoCell*)cell;
-            [tradeCarCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-            [tradeCarCell setTradeCarInfoM:tradesCars[indexPath.row]];
+    if (indexPath.section==0) {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:TradeCarInfoCellid forIndexPath:indexPath];
+        TradeCarInfoCell *tradeCarCell = (TradeCarInfoCell*)cell;
+        [tradeCarCell setTradeCarInfoM:tradesCars[indexPath.row]];
+        [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
     }else if (indexPath.section == 1){
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:LookOrDriveCarInfoCellid forIndexPath:indexPath];
         LookOrDriveCarInfoCell *lookOrDriveCell = (LookOrDriveCarInfoCell*)cell;
-            [lookOrDriveCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-        [lookOrDriveCell setLookOrDriveCellM:driveCars[indexPath.row]];
+        LookOrDriveCarInfoModel *lookOrDriveM = driveCars[indexPath.row];
+        [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
+        if ([lookOrDriveM.isDriveCar isEqualToString:@"1"]) {
+            [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KBaseColo].CGColor];
+        }
+        [lookOrDriveCell.endDriveBut setTag:(333+indexPath.row)];
+        [lookOrDriveCell.endDriveBut addTarget:self action:@selector(endDrvie:) forControlEvents:UIControlEventTouchUpInside];
+        [lookOrDriveCell setLookOrDriveCellM:lookOrDriveM];
     }else if (indexPath.section == 2){
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
         CollectCarCell *collectCell = (CollectCarCell*)cell;
-        [collectCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
         [collectCell setCarModel:readyseeCars[indexPath.row]];
-        
+        [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
     }else {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
         CollectCarCell *collectCell = (CollectCarCell*)cell;
-        [collectCell.labelView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
         [collectCell setCarModel:collectCars[indexPath.row]];
+        [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
     }
     
-    
     [cell.contentView.layer setBorderWidth:1.0];
-    [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
     [cell.contentView.layer setCornerRadius:2.0];
     
     return cell;
+}
+
+#pragma mark - 结束接待
+- (void)endDrvie:(UIButton*)but
+{
+    NSString *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    LookOrDriveCarInfoModel *lookOrDriveM = driveCars[but.tag-333];
+    NSString *carID = lookOrDriveM.carId;
+    [HttpManager lastUserDriveCarByData:@{@"user":userID,@"carId":carID} Success:^(id obj) {
+        
+        DriveCarLastData *driveDataM = obj;
+        OverDriveCarController *overDriveCarVC = [[OverDriveCarController alloc] init];
+        UINavigationController *driveNavVC = [[UINavigationController alloc] initWithRootViewController:overDriveCarVC];
+        [overDriveCarVC setCarId:carID];
+        [overDriveCarVC setDriveCarDataM:driveDataM];
+        [driveNavVC setModalPresentationStyle:UIModalPresentationFormSheet];
+        [self presentViewController:driveNavVC animated:YES completion:^{
+
+        }];
+        
+    } fail:^(id obj) {
+        
+    }];
 }
 
 
@@ -318,11 +347,16 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
     CarDetailWebView *car = [[CarDetailWebView alloc] init];
     [car setCarID:carmodel.carId];
+    if ([carmodel.carStatus isEqualToString:@"在售"]) {
+        [car setCarStatusType:CarStatusTypeSelling];
+    }else if ([carmodel.carStatus isEqualToString:@"预售"]){
+        [car setCarStatusType:CarStatusTypePresell];
+    }else {
+        [car setCarStatusType:CarStatusTypeSellout];
+    }
     [self presentViewController:car animated:YES completion:^{
         
     }];
-    
-    
     
 
 }
@@ -333,6 +367,11 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 }
 
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"update" object:nil];
+}
 /*
 #pragma mark - Navigation
 

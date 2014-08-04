@@ -165,7 +165,7 @@
             }];
         }else{
             if (_jbInfoView.phoneText.text.length>0) {
-                [NSString phoneValidate:_jbInfoView.phoneText.text];
+                if (![NSString phoneValidate:_jbInfoView.phoneText.text])  return;
             }
             [reqDic setObject:_jbInfoView.phoneText.text forKey:@"phone"];
             [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {

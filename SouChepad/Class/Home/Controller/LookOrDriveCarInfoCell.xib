@@ -63,14 +63,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="看车" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JBC-0B-u3V">
-                                <rect key="frame" x="93" y="9" width="52" height="21"/>
+                                <rect key="frame" x="69" y="9" width="100" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.098039217293262482" green="0.098039217293262482" blue="0.098039217293262482" alpha="0.5" colorSpace="calibratedRGB"/>
                     </view>
                     <view contentMode="scaleToFill" id="OTZ-t5-S2I">
                         <rect key="frame" x="298" y="50" width="580" height="1"/>
@@ -154,6 +154,29 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view hidden="YES" contentMode="scaleToFill" id="7ve-8S-O9W">
+                        <rect key="frame" x="266" y="0.0" width="609" height="286"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sUM-87-m7U" customClass="YLImageView">
+                                <rect key="frame" x="250" y="40" width="93" height="69"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lBm-9b-R07">
+                                <rect key="frame" x="220" y="139" width="150" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <state key="normal" title="结束试驾" backgroundImage="dengluanniu1_60.png">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <state key="highlighted" backgroundImage="denglu2.png">
+                                    <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
@@ -165,6 +188,9 @@
                 <outlet property="downPiceLabel" destination="EPX-mp-kUv" id="ezn-Gb-CpB"/>
                 <outlet property="downPriceImage" destination="mPq-Jx-oYZ" id="nKV-o8-HxW"/>
                 <outlet property="driveRemarkLabel" destination="dQS-w7-5iL" id="mX2-Qn-eOb"/>
+                <outlet property="driveingBackView" destination="7ve-8S-O9W" id="gHs-cd-1CV"/>
+                <outlet property="driveingGIF" destination="sUM-87-m7U" id="YF9-jf-x61"/>
+                <outlet property="endDriveBut" destination="lBm-9b-R07" id="c0n-BF-dRh"/>
                 <outlet property="firstLicensePlateDateLabel" destination="1vh-Oj-Lun" id="dJS-Si-op6"/>
                 <outlet property="infoLabel" destination="SsY-sV-SJ3" id="28f-8j-7kX"/>
                 <outlet property="labelLabel" destination="JBC-0B-u3V" id="0Dg-HG-4Xu"/>
@@ -177,4 +203,8 @@
             </connections>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="denglu2.png" width="300" height="44"/>
+        <image name="dengluanniu1_60.png" width="300" height="44"/>
+    </resources>
 </document>

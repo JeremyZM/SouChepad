@@ -18,7 +18,6 @@
 {
     NSMutableDictionary *requestDic;
     NSString *outcomeStr;
-
 }
 @property (strong, nonatomic) BiaoQianView *appraiseView;
 
@@ -41,7 +40,6 @@
     self.priceSlider.font = KBoldFont18;
     [self.priceSlider showPopUpView];
     [self.priceSlider setDataSource:self];
-    
     
     [self.highBut setGroupId:@"1"];
     [self.highBut setDelegate:self];
@@ -111,7 +109,7 @@
 
 - (void)saveOverDriveCarRecord:(UIBarButtonItem*)item
 {
-    if (self.endMileTextF.text.length) {
+    if ([self.endMileTextF.text integerValue]>=[self.driveCarDataM.driveBeginMile integerValue]) {
         
         [requestDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
         [requestDic setObject:[NSString stringWithFormat:@"%.2f",self.priceSlider.value] forKey:@"userPrice"];
@@ -127,21 +125,25 @@
             [requestDic setObject:self.lowBut.titleLabel.text forKey:@"satisfaction"];
         }
         
-        NSString *outcome = [NSString stringWithFormat:@"%@%@",outcomeStr,self.otherAppraiseTextV.text];
         if (outcomeStr||self.otherAppraiseTextV.text.length) {
-            
-            [requestDic setObject:outcome forKey:@"outcome"];
+            if (outcomeStr) {
+                NSString *outcome = [outcomeStr stringByAppendingString:self.otherAppraiseTextV.text];
+                [requestDic setObject:outcome forKey:@"outcome"];
+            }else{
+                [requestDic setObject:self.otherAppraiseTextV.text forKey:@"outcome"];
+            }
         }
         [HttpManager saveDriveCarEnd:requestDic Success:^(id obj) {
             [self.navigationController dismissViewControllerAnimated:YES completion:^{
                 [ProgressHUD showSuccess:@"保存成功"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"update" object:nil];
             }];
         } fail:^(id obj) {
             
         }];
 
     }else {
-        [ProgressHUD showError:@"结束里程必填!"];
+        [ProgressHUD showError:@"结束里程错误！"];
     }
     
 }

@@ -14,7 +14,12 @@
 //输出详细log,显示方法及所在的行数
 // 2.日志输出宏定义
 #ifdef DEBUG
-// 调试状态
+// 发布状态
+#define DLog(...)
+
+#else
+
+// 调试
 #define DLog(format, ...) do {                                              \
 fprintf(stderr, ">------------------------------\n<%s : %d> %s\n",                                           \
 [[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String],  \
@@ -22,9 +27,7 @@ __LINE__, __func__);                                                        \
 (NSLog)((format), ##__VA_ARGS__);                                           \
 fprintf(stderr, "-----------------------------------\n");                                               \
 } while (0)
-#else
-// 发布状态
-#define DLog(...)
+
 #endif
 
 //当前系统版本
@@ -49,7 +52,7 @@ fprintf(stderr, "-----------------------------------\n");                       
 #define KShowDockNotification @"ShowDockNotification"
 
 
-#define KHttpBaseURL  @"manage.souche.com"
+#define KHttpBaseURL  @"app.souche.com"
 
 #define Khttp @"115.29.10.121:11080/soucheweb   122.224.68.242:8081/soucheweb  192.168.0.250:8088/soucheweb  121.199.21.232:10080//soucheweb "
 

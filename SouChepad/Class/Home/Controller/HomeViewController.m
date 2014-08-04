@@ -261,8 +261,6 @@ static NSString *nothing = @"暂无";
          } fail:^(id obj) {
              
          }];
-
-        
     }
     
 }

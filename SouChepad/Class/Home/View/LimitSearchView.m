@@ -197,23 +197,22 @@ static NSString *userDemandCellid = @"userDemandCellid";
     UIViewController *controller = nil;
     if (button == yushuanBut) {  // 预算
         NSMutableArray *array = [NSMutableArray array];
-        for (NSInteger i = 1; i <= 100; i++) {
+        for (NSInteger i = 0; i <= 200; i++) {
             NSString *str = [NSString stringWithFormat:@"%d万",i];
             [array addObject:str];
         }
-        [array insertObject:@"不限" atIndex:0];
         
         NSMutableArray *endArray = [NSMutableArray array];
-        for (NSInteger i = 1; i <= 100; i++) {
+        for (NSInteger i = 1; i <= 200; i++) {
             NSString *str = [NSString stringWithFormat:@"%d万",i];
             [endArray addObject:str];
         }
-        [endArray addObject:@"不限"];
+//        [endArray addObject:@"不限"];
         
         YushuanViewController *YSvc = [[YushuanViewController alloc] init];
         controller = YSvc;
-        [YSvc setBeginSelect:[NSString stringWithFormat:@"%@万",reqInfoModel.startBudgetShow]];
-        [YSvc setEndSelect:[NSString stringWithFormat:@"%@万",reqInfoModel.endBudgetShow]];
+        [YSvc setBeginSelect:[NSString stringWithFormat:@"%@",reqInfoModel.startBudgetShow]];
+        [YSvc setEndSelect:[NSString stringWithFormat:@"%@",reqInfoModel.endBudgetShow]];
         [YSvc setArray:array];
         [YSvc setEndArray:endArray];
         [YSvc setSeleckBut:yushuanBut];
@@ -228,19 +227,16 @@ static NSString *userDemandCellid = @"userDemandCellid";
         // NSDateFormatter转换为NSString
         NSString *dateStr = [formatter stringFromDate:date];
         
-        
         for (NSInteger i = 2006; i <= [dateStr integerValue]; i++) {
             NSString *str = [NSString stringWithFormat:@"%d",i];
             [array addObject:str];
         }
-        [array insertObject:@"不限" atIndex:0];
         
         NSMutableArray *endArray = [NSMutableArray array];
         for (NSInteger i = 2006; i <= [dateStr integerValue]; i++) {
             NSString *str = [NSString stringWithFormat:@"%d",i];
             [endArray addObject:str];
         }
-        [endArray addObject:@"不限"];
         
         YushuanViewController *dateVC = [[YushuanViewController alloc] init];
         controller = dateVC;
@@ -304,7 +300,6 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
     // 上牌时间
     [dateBut setTitle:reqInfoModel.yearsName?reqInfoModel.yearsName:@"不限" forState:UIControlStateNormal];
-
     
     // 国别
     [guobieBut setTitle:reqInfoModel.countryName?reqInfoModel.countryName:@"不限" forState:UIControlStateNormal];
@@ -316,16 +311,20 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
 }
 
+
+
 - (void)yuShuanViewController:(YushuanViewController *)yushuanVC selectCode:(NSString *)selectCode selectBeginStr:(NSString *)selectBeginStr selectEndStr:(NSString *)selectEndStr
 {
     if (yushuanVC.seleckBut == yushuanBut) {
         reqInfoModel.startBudgetShow = selectBeginStr;
         reqInfoModel.endBudgetShow = selectEndStr;
         [yushuanVC.seleckBut setTitle:[NSString stringWithFormat:@"%@ - %@",selectBeginStr,selectEndStr] forState:UIControlStateNormal];
+        
     }else if (yushuanVC.seleckBut == dateBut){
         reqInfoModel.beginYear = selectBeginStr;
         reqInfoModel.endYear = selectEndStr;
         [yushuanVC.seleckBut setTitle:[NSString stringWithFormat:@"%@ - %@",selectBeginStr,selectEndStr] forState:UIControlStateNormal];
+        [basicRequstDicM setObject:[NSString stringWithFormat:@"%@-%@",selectBeginStr,selectEndStr] forKey:@"years"];
     }
 }
 

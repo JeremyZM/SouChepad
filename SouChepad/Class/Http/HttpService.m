@@ -115,14 +115,17 @@ static HttpService * engine;
 }
 
 // upload
-- (MKNetworkOperation*)requestUploadFile:(NSData*)data api:(NSString*)api paras:(NSMutableDictionary*)paras{
-    MKNetworkOperation *op = [[HttpService sharedService] operationWithPath:api
-                                                                        params:paras
-                                                                    httpMethod:@"POST"];
+- (MKNetworkOperation*)requestUploadFile:(NSData*)data api:(NSString*)api paras:(NSMutableDictionary*)paras{ 
+    MKNetworkEngine *engineimage = [[MKNetworkEngine alloc] initWithHostName:@"http://res.souche.com" ];
+    MKNetworkOperation *op = [engineimage operationWithPath:api
+                                                     params:paras
+                                                 httpMethod:@"POST"];
+
     [op addData:data forKey:@"uploadData"];
     
     // setFreezable uploads your images after connection is restored!
     [op setFreezable:YES];
+    DLog(@"%@",op);
     return op;
 }
 @end

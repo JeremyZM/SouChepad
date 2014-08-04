@@ -13,7 +13,7 @@
 #import "SearchCarViewController.h"
 #import "UserReservationM.h"
 #import "CommListController.h"
-#import "CarDetailWebView.h"
+//#import "CarDetailWebView.h"
 #import "SCDockItem.h"
 #import "TTCounterLabel.h"
 #import "HttpManager.h"
@@ -65,8 +65,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     [userInfoDock setBackgroundColor:[UIColor whiteColor]];
     [userInfoDock setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:userInfoDock];
-    
-    
     
     beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-100, 100, 100)];
     [beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
@@ -202,9 +200,9 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     commListVC.userResM = self.userInfoM;
     [self addChildViewController:commListVC];
 
-    
-    SearchCarViewController *searchCarVC = [[SearchCarViewController alloc] init];
-    [self addChildViewController:searchCarVC];
+    // 需求分析
+//    SearchCarViewController *searchCarVC = [[SearchCarViewController alloc] init];
+//    [self addChildViewController:searchCarVC];
     
     CarDetailBasicWebController *carDetailWeb = [[CarDetailBasicWebController alloc] init];
     NSString *crmid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];

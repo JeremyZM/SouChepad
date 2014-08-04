@@ -13,6 +13,9 @@
 /** 看车试驾id */
 @property (copy, nonatomic) NSString *driveAndLookId;
 
+/** 是否在试驾1:试驾，0：没试驾 */
+@property (copy, nonatomic) NSString *isDriveCar;
+
 /** 看车试驾状态 lookcar 看车， testdrive 试驾 */
 @property (copy, nonatomic) NSString *status;
 
