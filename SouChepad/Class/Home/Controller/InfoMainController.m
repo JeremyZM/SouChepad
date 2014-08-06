@@ -203,8 +203,8 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     [self addChildViewController:commListVC];
 
     // 需求分析
-//    SearchCarViewController *searchCarVC = [[SearchCarViewController alloc] init];
-//    [self addChildViewController:searchCarVC];
+    SearchCarViewController *searchCarVC = [[SearchCarViewController alloc] init];
+    [self addChildViewController:searchCarVC];
     
     CarDetailBasicWebController *carDetailWeb = [[CarDetailBasicWebController alloc] init];
     NSString *crmid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];

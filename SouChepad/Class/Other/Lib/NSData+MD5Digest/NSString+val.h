@@ -23,4 +23,7 @@
 + (BOOL)validateIdentityCard: (NSString *)identityCard;
 //邮箱
 + (BOOL)emailValidate:(NSString *)email;
+
+- (void)phoneString:(NSString *)phoneNum;
+
 @end

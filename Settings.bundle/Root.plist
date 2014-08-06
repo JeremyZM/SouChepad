@@ -12,7 +12,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>app.souche.com</string>
+			<string>manage.souche.com</string>
 			<key>Key</key>
 			<string>httpServerIP</string>
 			<key>KeyboardType</key>

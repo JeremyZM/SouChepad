@@ -110,6 +110,15 @@
     }
     return [identityCardPredicate evaluateWithObject:identityCard];
 }
+
+- (void)phoneString:(NSString *)phoneNum
+{
+    if (![NSString phoneValidate:phoneNum]) {
+        [ProgressHUD showError:@"请填写正确的手机号！"];
+        return;
+    }
+}
+
 //邮箱
 + (BOOL)emailValidate:(NSString *)email{
     

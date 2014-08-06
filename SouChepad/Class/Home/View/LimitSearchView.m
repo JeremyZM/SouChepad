@@ -66,28 +66,8 @@ static NSString *userDemandCellid = @"userDemandCellid";
         reqBrandsArray = [obj objectForKey:@"requireBrands"];
         reqDeleteBrandArray = [NSArray arrayWithArray:[obj objectForKey:@"requireBrandsDelete"]];
         reqInfoModel = [dataDic objectForKey:@"requireInfo"];
-        if (reqInfoModel.miles) {
-            
-            [basicRequstDicM setObject:reqInfoModel.miles forKey:@"miles"];
-        }
-        if (reqInfoModel.years) {
-            
-            [basicRequstDicM setObject:reqInfoModel.years forKey:@"years"];
-        }
-        if (reqInfoModel.carbody) {
-            
-            [basicRequstDicM setObject:reqInfoModel.carbody forKey:@"carbody"];
-        }
-        if (reqInfoModel.startBudget) {
-            
-            [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
-        }
-        if (reqInfoModel.endBudget) {
-            
-            [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
-        }
-
-        [self layoutSubviews];
+        
+        [self setViewData];
         
     } fail:^(id obj) {
         
@@ -97,7 +77,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 - (void)addUI
 {
-    
+
     UILabel *yushuanLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 60, 40)];
     [yushuanLabel setText:@"预算"];
     [yushuanLabel setFont:[UIFont systemFontOfSize:20]];
@@ -198,21 +178,21 @@ static NSString *userDemandCellid = @"userDemandCellid";
     if (button == yushuanBut) {  // 预算
         NSMutableArray *array = [NSMutableArray array];
         for (NSInteger i = 0; i <= 200; i++) {
-            NSString *str = [NSString stringWithFormat:@"%d万",i];
+            NSString *str = [NSString stringWithFormat:@"%d",i];
             [array addObject:str];
         }
         
         NSMutableArray *endArray = [NSMutableArray array];
-        for (NSInteger i = 1; i <= 200; i++) {
-            NSString *str = [NSString stringWithFormat:@"%d万",i];
+        for (NSInteger i = 0; i <= 200; i++) {
+            NSString *str = [NSString stringWithFormat:@"%d",i];
             [endArray addObject:str];
         }
 //        [endArray addObject:@"不限"];
         
         YushuanViewController *YSvc = [[YushuanViewController alloc] init];
         controller = YSvc;
-        [YSvc setBeginSelect:[NSString stringWithFormat:@"%@",reqInfoModel.startBudgetShow]];
-        [YSvc setEndSelect:[NSString stringWithFormat:@"%@",reqInfoModel.endBudgetShow]];
+        [YSvc setBeginSelect:reqInfoModel.startBudgetShow];
+        [YSvc setEndSelect:reqInfoModel.endBudgetShow];
         [YSvc setArray:array];
         [YSvc setEndArray:endArray];
         [YSvc setSeleckBut:yushuanBut];
@@ -287,9 +267,8 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 }
 
-- (void)layoutSubviews
+- (void)setViewData
 {
-    [super layoutSubviews];
     
     // 预算
     [yushuanBut setTitle:reqInfoModel.purchaseCarBudget?reqInfoModel.purchaseCarBudget:@"不限 - 不限" forState:UIControlStateNormal];
@@ -318,13 +297,20 @@ static NSString *userDemandCellid = @"userDemandCellid";
     if (yushuanVC.seleckBut == yushuanBut) {
         reqInfoModel.startBudgetShow = selectBeginStr;
         reqInfoModel.endBudgetShow = selectEndStr;
-        [yushuanVC.seleckBut setTitle:[NSString stringWithFormat:@"%@ - %@",selectBeginStr,selectEndStr] forState:UIControlStateNormal];
+        [yushuanVC.seleckBut setTitle:selectCode forState:UIControlStateNormal];
+        [reqInfoModel setStartBudget:[NSString stringWithFormat:@"%lld",([selectBeginStr longLongValue]*10000)]];
+        [reqInfoModel setEndBudget:[NSString stringWithFormat:@"%lld",([selectEndStr longLongValue]*10000)]];
+//        [basicRequstDicM setObject:selectBeginStr forKey:@"startBudget"];
+//        [basicRequstDicM setObject:selectEndStr forKey:@"endBudget"];
         
     }else if (yushuanVC.seleckBut == dateBut){
         reqInfoModel.beginYear = selectBeginStr;
         reqInfoModel.endYear = selectEndStr;
-        [yushuanVC.seleckBut setTitle:[NSString stringWithFormat:@"%@ - %@",selectBeginStr,selectEndStr] forState:UIControlStateNormal];
-        [basicRequstDicM setObject:[NSString stringWithFormat:@"%@-%@",selectBeginStr,selectEndStr] forKey:@"years"];
+        [yushuanVC.seleckBut setTitle:selectCode forState:UIControlStateNormal];
+        [reqInfoModel setBeginYear:selectBeginStr];
+        [reqInfoModel setEndYear:selectEndStr];
+        [reqInfoModel setYears:selectCode];
+//        [basicRequstDicM setObject:[NSString stringWithFormat:@"%@-%@",selectBeginStr,selectEndStr] forKey:@"years"];
     }
 }
 
@@ -346,7 +332,35 @@ static NSString *userDemandCellid = @"userDemandCellid";
 // 开始搜索
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    
+    if (reqInfoModel.miles) {
+        
+        [basicRequstDicM setObject:reqInfoModel.miles forKey:@"miles"];
+    }
+    if (reqInfoModel.years) {
+        
+        [basicRequstDicM setObject:reqInfoModel.years forKey:@"years"];
+    }
+    if (reqInfoModel.carbody) {
+        
+        [basicRequstDicM setObject:reqInfoModel.carbody forKey:@"carbody"];
+    }
+    if (reqInfoModel.startBudget) {
+        
+        [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
+    }
+    if (reqInfoModel.endBudget) {
+        
+        [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
+    }
+    if (reqInfoModel.country) {
+        [basicRequstDicM setObject:reqInfoModel.country forKey:@"country"];
+    }
+
+    [HttpManager updateUserRequirementInfo:basicRequstDicM Success:^(id obj) {
+        
+    } fail:^(id obj) {
+        
+    }];
     
 }
 

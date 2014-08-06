@@ -482,7 +482,7 @@
             if ([dataReqDic objectForKey:@"id"]) {
                 [dataReqDic setObject:[dataReqDic objectForKey:@"id"] forKey:@"_id"];
                 [dataReqDic removeObjectForKey:@"id"];
-                break;
+//                break;
             }
 
             RequireBrandsModel *requBranM = [[RequireBrandsModel alloc] init];
@@ -499,7 +499,7 @@
             if ([dataReqDic objectForKey:@"id"]) {
                 [dataReqDic setObject:[dataReqDic objectForKey:@"id"] forKey:@"_id"];
                 [dataReqDic removeObjectForKey:@"id"];
-                break;
+//                break;
             }
 
             RequireBrandsModel *reqDeleteM = [[RequireBrandsModel alloc] init];

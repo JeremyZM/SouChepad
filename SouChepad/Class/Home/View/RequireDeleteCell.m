@@ -22,7 +22,7 @@
     [self.seriesNameLabel setText:requireDeleteM.seriesName];
     [self.displacementLabel setText:requireDeleteM.displacementName];
     [self.colorsLabel setText:requireDeleteM.colorsName];
-    [self.dateDeleteLabel setText:requireDeleteM.dateDelete];
+    [self.dateDeleteLabel setText:requireDeleteM.dateCreateName];
 
 }
 
