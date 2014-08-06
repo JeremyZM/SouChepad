@@ -136,6 +136,7 @@ static NSString *nothing = @"暂无";
         SearchNewUserCell *newCell = [tableView dequeueReusableCellWithIdentifier:newUserCell];
         cell = newCell;
         UserReservationM *userReserM = [newUser firstObject];
+        
         userReserM.crmUserId = phoneSearch.text;
         [newCell setUserRM:userReserM];
         [newCell.PhoneLabel setText:phoneSearch.text];
@@ -170,21 +171,37 @@ static NSString *nothing = @"暂无";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    InfoMainController *infoMVC = [[InfoMainController alloc] init];
-    UserReservationM *userReserM=nil;
+
     if (indexPath.section==0) {
         SearchNewUserCell *newCell = (SearchNewUserCell*)[tableView cellForRowAtIndexPath:indexPath];
-        userReserM = newCell.userRM;
+//        UserReservationM *userRM = [[UserReservationM alloc] init];
+//        [userRM setCrmUserId:newCell.PhoneLabel.text];
+//        userReserM = userRM;
+        DLog(@"%@",newCell.PhoneLabel.text);
+        [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":newCell.PhoneLabel.text} Success:^(id obj) {
+            InfoMainController *infoMVC = [[InfoMainController alloc] init];
+            UserReservationM *userReserM = [[UserReservationM alloc] init];
+            userReserM.crmUserId = obj;
+            [infoMVC setUserInfoM:userReserM];
+            [self.navigationController pushViewController:infoMVC animated:YES];
+        } fail:^(id obj) {
+            
+        }];
+
     }else if (indexPath.section ==1){
         CustomerListCell *cell = (CustomerListCell*)[tableView cellForRowAtIndexPath:indexPath];
-        userReserM = cell.userReserM;
+        UserReservationM *userReserM = cell.userReserM;
+        InfoMainController *infoMVC = [[InfoMainController alloc] init];
+        [infoMVC setUserInfoM:userReserM];
+        [self.navigationController pushViewController:infoMVC animated:YES];
     }else if (indexPath.section ==2){
         OtherSellUserCell *otherCell = (OtherSellUserCell*)[tableView cellForRowAtIndexPath:indexPath];
-        userReserM = otherCell.userReserM;
+        UserReservationM *userReserM = otherCell.userReserM;
+        InfoMainController *infoMVC = [[InfoMainController alloc] init];
+        [infoMVC setUserInfoM:userReserM];
+        [self.navigationController pushViewController:infoMVC animated:YES];
     }
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [infoMVC setUserInfoM:userReserM];
-    [self.navigationController pushViewController:infoMVC animated:YES];
+    
 }
 
 

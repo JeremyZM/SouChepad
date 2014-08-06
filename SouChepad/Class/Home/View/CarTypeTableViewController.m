@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationItem setTitle:@"车型车系选择"];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"仅选择品牌" style:UIBarButtonItemStyleBordered target:self action:@selector(onlyCarType:)];
     carCodeDic = [NSMutableDictionary dictionary];

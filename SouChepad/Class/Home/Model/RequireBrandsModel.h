@@ -76,6 +76,7 @@
 /** 用户 */
 @property (copy, nonatomic) NSString *user;
 
-
+/** 精准匹配车辆数 */
+@property (copy, nonatomic) NSString *countCar;
 
 @end

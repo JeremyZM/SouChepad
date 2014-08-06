@@ -45,7 +45,7 @@
         
         [scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(self.contentLabel.frame))];
         
-        if (![messageM.image  isEqual: @"NULL"]) {
+        if (messageM.image) {
 
             
             if (self.imageView == nil) {
@@ -56,8 +56,8 @@
             }
             [self.imageView setFrame:CGRectMake(30, CGRectGetMaxY(self.contentLabel.frame)+20, 200, 200)];
 
-            [SDWebImageManager.sharedManager.imageCache clearMemory];
-            [SDWebImageManager.sharedManager.imageCache clearDisk];
+//            [SDWebImageManager.sharedManager.imageCache clearMemory];
+//            [SDWebImageManager.sharedManager.imageCache clearDisk];
             NSURL *url =[NSURL URLWithString:[NSString stringWithFormat:@"http://res.souche.com/%@",messageM.image]];
 //            [self.imageView setImageWithURL:[NSURL URLWithString:@"http://imgsrc.baidu.com/forum/pic/item/eb058794a4c27d1e6b6ad74019d5ad6edcc438a4.jpg"] placeholderImage:[UIImage imageNamed:@"remind_noimage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
 //                [self.imageView sizeToFit];

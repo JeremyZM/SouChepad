@@ -70,7 +70,7 @@
         NSMutableString *stringM = [NSMutableString string];
         for (BiaoqainCell *cella in self.cellArrayM) {
             if (cella.burt.selected) {
-                [stringM appendFormat:@"%@，",cella.burt.titleLabel.text];
+                [stringM appendFormat:@"%@     ",cella.burt.titleLabel.text];
             }
         }
         [_delegate biaoQianView:self selectBiaoqian:stringM];

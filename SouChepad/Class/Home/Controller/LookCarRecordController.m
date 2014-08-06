@@ -149,15 +149,20 @@
     }
     [requestDic setObject:self.carID forKey:@"carId"];
     [requestDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
-    NSString *outcome = [NSString stringWithFormat:@"%@%@",outcomeStr,self.otherAppraiseTextV.text];
+    
     if (outcomeStr||self.otherAppraiseTextV.text.length) {
-        
-        [requestDic setObject:outcome forKey:@"outcome"];
+        if (outcomeStr) {
+            NSString *outcome = [outcomeStr stringByAppendingString:self.otherAppraiseTextV.text];
+            [requestDic setObject:outcome forKey:@"outcome"];
+        }else{
+             [requestDic setObject:self.otherAppraiseTextV.text forKey:@"outcome"];
+        }
     }
     
     [HttpManager saveLookCarRecord:requestDic Success:^(id obj) {
         [self.navigationController dismissViewControllerAnimated:YES completion:^{
             [ProgressHUD showSuccess:@"保存成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"update" object:nil];
         }];
     } fail:^(id obj) {
         

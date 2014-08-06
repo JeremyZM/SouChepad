@@ -46,15 +46,18 @@
             break;
         }
     }
+    NSInteger a = 0;
     for (NSInteger j = 0; j<self.endArray.count; j++) {
         if ([self.endArray[j] isEqualToString:self.endSelect]) {
             [self.maxPicker selectRow:j inComponent:0 animated:NO];
+            a = 1;
             break;
         }
     }
-
+    if (0==a) {
+        [self.maxPicker selectRow:self.endArray.count-1 inComponent:0 animated:NO];
+    }
 }
-
 
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -78,10 +81,19 @@
 
     NSString *str;
     if (pickerView == self.minPicker) {
-        
-        str = [NSString stringWithFormat:@"%@",self.array[row]];
+        if (self.seleckBut.tag == 2000) {
+            
+            str = [NSString stringWithFormat:@"%@万",self.array[row]];
+        }else if(self.seleckBut.tag == 2006){
+            str = [NSString stringWithFormat:@"%@",self.array[row]];
+        }
     }else if (pickerView == self.maxPicker) {
-        str = [NSString stringWithFormat:@"%@",self.endArray[row]];
+        if (self.seleckBut.tag == 2000) {
+            str = [NSString stringWithFormat:@"%@万",self.endArray[row]];
+        }else if (self.seleckBut.tag == 2006){
+        
+            str = [NSString stringWithFormat:@"%@",self.endArray[row]];
+        }
     }
 
     return str;
@@ -91,11 +103,11 @@
 {
     if (pickerView == self.minPicker) {
         if (row>[self.maxPicker selectedRowInComponent:0]) {
-            [self.maxPicker selectRow:row-1 inComponent:0 animated:YES];
+            [self.maxPicker selectRow:row inComponent:0 animated:YES];
         }
     }else if (pickerView == self.maxPicker){
         if (row<[self.minPicker selectedRowInComponent:0]) {
-            [self.minPicker selectRow:row+1 inComponent:0 animated:YES];
+            [self.minPicker selectRow:row inComponent:0 animated:YES];
         }
     }
     if ([_delegate respondsToSelector:@selector(yuShuanViewController:selectCode:selectBeginStr:selectEndStr:)]) {
@@ -103,7 +115,12 @@
         self.beginSelect = startBudget;
         NSString *endBudget = [self.endArray objectAtIndex:[self.maxPicker selectedRowInComponent:0]];
         self.endSelect = endBudget;
+        if (self.seleckBut.tag == 2000) {
+            [_delegate yuShuanViewController:self selectCode:[NSString stringWithFormat:@"%@万-%@万",startBudget,endBudget] selectBeginStr:startBudget selectEndStr:endBudget];
+        }else if (self.seleckBut.tag == 2006){
         [_delegate yuShuanViewController:self selectCode:[NSString stringWithFormat:@"%@-%@",startBudget,endBudget] selectBeginStr:startBudget selectEndStr:endBudget];
+        }
+        
 
     }
     

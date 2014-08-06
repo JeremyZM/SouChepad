@@ -70,6 +70,8 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 客户需求
 + (void)requestUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 更新客户基本需求
++ (void)updateUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
 #pragma mark - 最后一条看车记录
 + (void)lastCarLookOrDrive:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;

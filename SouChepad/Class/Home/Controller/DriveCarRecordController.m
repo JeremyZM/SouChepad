@@ -197,7 +197,12 @@
 
 - (void)saveDriveCarRecord:(UIBarButtonItem*)item
 {
-    if (self.nameTextF.text.length && [NSString phoneValidate:self.phoneTextF.text] && self.startMileTextF.text.length && [driveDicData objectForKey:@"drivelicense"]) {
+    if (![NSString phoneValidate:self.phoneTextF.text]) return;
+    if ([self.startMileTextF.text integerValue] < [self.driveCarDataM.mile integerValue]) {
+        [ProgressHUD showError:@"开始公里填写错误"];
+        return;
+    }
+    if (self.nameTextF.text.length && [driveDicData objectForKey:@"drivelicense"]) {
         [driveDicData setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
         [driveDicData setObject:self.carId forKey:@"carId"];
         [driveDicData setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
@@ -209,6 +214,9 @@
         [HttpManager saveDriveCarBegin:driveDicData Success:^(id obj) {
             [self.navigationController dismissViewControllerAnimated:YES completion:^{
                 [ProgressHUD showSuccess:@"开始试驾成功！"];
+                if ([_delegate respondsToSelector:@selector(driveCarBeginRecordController:)]) {
+                    [_delegate driveCarBeginRecordController:self];
+                }
             }];
         } fail:^(id obj) {
             
@@ -227,6 +235,7 @@
     
     [HttpManager requestUploadImage:self.drivingLicenseImage.image imageIndex:0 success:^(id obj) {
         NSDictionary *pathDic = obj;
+        DLog(@"%@",pathDic);
         if ([pathDic objectForKey:@"status"]) {
             NSString *pathStr = [[pathDic objectForKey:@"path"] stringByReplacingOccurrencesOfString:@"http://res.souche.com/" withString:@""];
             [driveDicData setObject:pathStr forKey:@"drivelicense"];

@@ -9,7 +9,8 @@
 #import "LookOrDriveCarInfoCell.h"
 #import "LookOrDriveCarInfoModel.h"
 #import "UIImageView+WebCache.h"
-
+#import "YLImageView.h"
+#import "YLGIFImage.h"
 
 @implementation LookOrDriveCarInfoCell
 
@@ -26,6 +27,16 @@
 - (void)setLookOrDriveCellM:(LookOrDriveCarInfoModel *)lookOrDriveCellM
 {
     _lookOrDriveCellM = lookOrDriveCellM;
+    
+    if ([lookOrDriveCellM.isDriveCar isEqualToString:@"1"]) {
+        [self.driveingBackView setHidden:NO];
+
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(nostring)];
+        [self.driveingBackView addGestureRecognizer:tapRecognizer];
+        [self.driveingGIF setImage:[YLGIFImage imageNamed:@"shaohouchuli.gif"]];
+    }else {
+        [self.driveingBackView setHidden:YES];
+    }
     
     // 车辆名称
     [_carNameLable setText:lookOrDriveCellM.carName];
@@ -84,13 +95,26 @@
     
     // 看车评价
     [_lookRemarkLabel setText:lookOrDriveCellM.lookRemark];
-    
+//    lookcar 看车， testdrive
     // 试驾评价
-    [_driveRemarkLabel setText:lookOrDriveCellM.driveRemark];
+    if ([lookOrDriveCellM.status isEqualToString:@"lookcar"]) {
+        [_driveRemarkLabel setText:@"未试驾"];
+        [_infoLabel setText:[NSString stringWithFormat:@"看车于%@",lookOrDriveCellM.day]];
+    }else if ([lookOrDriveCellM.status isEqualToString:@"testdrive"]){
+
+        [_driveRemarkLabel setText:lookOrDriveCellM.driveRemark];
+        // 详细信息
+        [_infoLabel setText:[NSString stringWithFormat:@"试驾于 %@    负责人 %@     试驾里程 %@公里    试驾耗时 %@分钟",lookOrDriveCellM.day,lookOrDriveCellM.seller,lookOrDriveCellM.driveMile?lookOrDriveCellM.driveMile:@"",lookOrDriveCellM.driveTime?lookOrDriveCellM.driveTime:@""]];
+    }
     
-    // 详细信息
-    [_infoLabel setText:[NSString stringWithFormat:@"试驾于 %@    负责人 %@  试驾里程%@公里   试驾耗时 %@",lookOrDriveCellM.day,lookOrDriveCellM.seller,lookOrDriveCellM.driveMile,lookOrDriveCellM.driveTime]];
     
+    
+    
+}
+
+- (void)nostring
+{
+    return;
 }
 
 

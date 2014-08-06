@@ -14,7 +14,7 @@
 //输出详细log,显示方法及所在的行数
 // 2.日志输出宏定义
 #ifdef DEBUG
-// 调试状态
+// 调试
 #define DLog(format, ...) do {                                              \
 fprintf(stderr, ">------------------------------\n<%s : %d> %s\n",                                           \
 [[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String],  \
@@ -22,9 +22,15 @@ __LINE__, __func__);                                                        \
 (NSLog)((format), ##__VA_ARGS__);                                           \
 fprintf(stderr, "-----------------------------------\n");                                               \
 } while (0)
+
+
 #else
+
 // 发布状态
 #define DLog(...)
+
+
+
 #endif
 
 //当前系统版本

@@ -187,12 +187,6 @@ static NSString *seconCellID = @"seconCell";
 
 
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-
-}
-
 #pragma mark - 代理方法
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {

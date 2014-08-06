@@ -14,8 +14,9 @@
 #import "HttpManager.h"
 #import "DriveCarLastData.h"
 #import "OverDriveCarController.h"
+#import "BeginBut.h"
 
-@interface CarDetailWebView () <UIWebViewDelegate>
+@interface CarDetailWebView () <UIWebViewDelegate,DriveCarBeginDelegate>
 
 @end
 
@@ -31,21 +32,27 @@
     [disBut addTarget:self action:@selector(dismisSelf) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:disBut];
     
-    UIButton *infoCQI = [[UIButton alloc] initWithFrame:CGRectMake(850, 40, 150, 40)];
+    UIButton *infoCQI = [[UIButton alloc] initWithFrame:CGRectMake(700, 40, 82, 40)];
+    [infoCQI setImage:[UIImage imageNamed:@"zhijian_64"] forState:UIControlStateNormal];
     [infoCQI addTarget:self action:@selector(showinfoCQI) forControlEvents:UIControlEventTouchUpInside];
-    [infoCQI setTitle:@"详细质检报告" forState:UIControlStateNormal];
+    [infoCQI setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
+    [infoCQI setTitle:@"报告" forState:UIControlStateNormal];
     [infoCQI setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.headBar addSubview:infoCQI];
     
     // 看车
-    UIButton *lookCarBut = [[UIButton alloc] initWithFrame:CGRectMake(700, 40, 50, 40)];
+    UIButton *lookCarBut = [[UIButton alloc] initWithFrame:CGRectMake(800, 40, 82, 40)];
     [lookCarBut setTitle:@"看车" forState:UIControlStateNormal];
+    [lookCarBut setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
+    [lookCarBut setImage:[UIImage imageNamed:@"anniu_43"] forState:UIControlStateNormal];
     [lookCarBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [lookCarBut addTarget:self action:@selector(addLookCarRecord:) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:lookCarBut];
     
     // 试驾
-    UIButton *driveCarBut = [[UIButton alloc] initWithFrame:CGRectMake(800, 40, 50, 40)];
+    UIButton *driveCarBut = [[UIButton alloc] initWithFrame:CGRectMake(900, 40, 82, 40)];
+     [driveCarBut setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
+    [driveCarBut setImage:[UIImage imageNamed:@"anniu_45"] forState:UIControlStateNormal];
     [driveCarBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [driveCarBut setTitle:@"试驾" forState:UIControlStateNormal];
     [driveCarBut addTarget:self action:@selector(addDriveCarRecord:) forControlEvents:UIControlEventTouchUpInside];
@@ -57,8 +64,22 @@
     [self.view addSubview:carWeb];
     [carWeb setScalesPageToFit:YES];
     [carWeb setDelegate:self];
+    NSString *url = url = [NSString stringWithFormat:@"http://souche.com/pages/choosecarpage/choose-car-detail.html?carId=%@&isapp=1",self.carID];
+    
+    if (self.carStatusType == CarStatusTypePresell) {
+        url = [NSString stringWithFormat:@"http://souche.com/pages/yushou/yushoudetail.html?carId=%@&isapp=1",self.carID];
+        
+        [lookCarBut setHidden:YES];
+        [driveCarBut setHidden:YES];
+        [infoCQI setHidden:YES];
+    }else if(self.carStatusType == CarStatusTypeSellout){
 
-    NSString *url = [NSString stringWithFormat:@"http://souche.com/pages/choosecarpage/choose-car-detail.html?carId=%@&isapp=1",self.carID];
+        [lookCarBut setHidden:YES];
+        [driveCarBut setHidden:YES];
+        [infoCQI setFrame:CGRectMake(900, 40, 82, 40)];
+    }else if (self.carStatusType == CarStatusTypeSelling){
+        
+    }
     NSString *encodedString=[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *weburl = [NSURL URLWithString:encodedString];
     [carWeb loadRequest:[NSURLRequest requestWithURL:weburl]];
@@ -87,6 +108,7 @@
         if ([driveDataM.isDriveCar isEqualToString:@"0"]) {
             DriveCarRecordController *driveCarVC = [[DriveCarRecordController alloc] init];
             driveNavVC  = [[UINavigationController alloc] initWithRootViewController:driveCarVC];
+            [driveCarVC setDelegate:self];
             [driveCarVC setCarId:self.carID];
             [driveCarVC setDriveCarDataM:driveDataM];
         }else if ([driveDataM.isDriveCar isEqualToString:@"1"]){
@@ -106,9 +128,12 @@
     } fail:^(id obj) {
         
     }];
-    
+}
 
-
+- (void)driveCarBeginRecordController:(DriveCarRecordController *)driveCarController
+{
+    [self addDriveCarRecord:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"update" object:nil];
 }
 
 
@@ -135,8 +160,20 @@
     }];
 }
 
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSURL *url = [request URL];
+    DLog(@"%@",[url absoluteString]);
+    return YES;
+    
+}
+
+
+
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
+    
     [ProgressHUD show:@"努力加载中"];
 }
 

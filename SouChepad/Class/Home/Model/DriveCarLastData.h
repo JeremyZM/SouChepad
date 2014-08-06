@@ -10,6 +10,9 @@
 
 @interface DriveCarLastData : NSObject
 
+/** 开始试驾填写的里程（公里） */
+@property (copy, nonatomic) NSString *driveBeginMile;
+
 /** 是否有过该车的试驾记录(1:有;0:无) */
 @property (copy, nonatomic) NSString *isDriveCar;
 

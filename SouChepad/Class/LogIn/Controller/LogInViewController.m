@@ -12,6 +12,7 @@
 #import "SCTextfield.h"
 #import "ProgressHUD.h"
 #import "UIColor+_6jinzhi.h"
+#import "NSString+val.h"
 
 @interface LogInViewController () <UITextFieldDelegate>
 {
@@ -148,8 +149,6 @@
 
 - (void)logInClick:(UIButton*)button
 {
-
-
     if (nameTextField.text.length>0&&PWDTextField.text.length>0) {
         [imageView setHighlighted:YES];
         [logInBtn setSelected:YES];

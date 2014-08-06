@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 @class LookOrDriveCarInfoModel;
+@class YLImageView;
 
 @interface LookOrDriveCarInfoCell : UICollectionViewCell
+
+@property (weak, nonatomic) IBOutlet UIView *driveingBackView;
+
+@property (weak, nonatomic) IBOutlet YLImageView *driveingGIF;
+
+@property (weak, nonatomic) IBOutlet UIButton *endDriveBut;
+
 
 /**
  *  降价通知，限时特价
