@@ -37,6 +37,14 @@
     [self.pickerView setDataSource:self];
     [self.pickerView setDelegate:self];
     [self.view addSubview:self.pickerView];
+    
+    for (NSInteger i = 0; i<self.dataArray.count; i++) {
+        NSDictionary *dic = self.dataArray[i];
+        if ([self.selectButton.titleLabel.text isEqualToString:[dic objectForKey:@"name"]]) {
+            [self.pickerView selectRow:i inComponent:0 animated:NO];
+            break;
+        }
+    }
 }
 
 //- (void)hidePicker:(UISwitch*)swit
