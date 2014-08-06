@@ -19,7 +19,6 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
     [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
     [MobClick setLogEnabled:YES];
     
