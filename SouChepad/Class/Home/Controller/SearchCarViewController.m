@@ -10,8 +10,9 @@
 #import "LimitSearchView.h"
 #import "HttpManager.h"
 #import "CollectCarCell.h"
+#import "MJRefresh.h"
 
-@interface SearchCarViewController () <UICollectionViewDataSource,UICollectionViewDelegate,LimitSearchViewDelegate>
+@interface SearchCarViewController () <UICollectionViewDataSource,UICollectionViewDelegate,LimitSearchViewDelegate,MJRefreshBaseViewDelegate>
 {
     UICollectionView *_collectionView;
 //    UIToolbar *_headview;
@@ -23,6 +24,13 @@
     CGFloat newContentOffsetY;
     
     LimitSearchView *_limitView;
+    
+    MJRefreshHeaderView *_header;
+    MJRefreshFooterView *_footer;
+    NSInteger _page;
+    
+    NSString *totalNumber;
+    
 }
 @end
 static NSString *seconCellID = @"seconCell";
@@ -54,6 +62,13 @@ static NSString *seconCellID = @"seconCell";
         [self addCollectionView];
     }
 
+//    [self refreshViewBeginRefreshing:_header];
+    
+//    [HttpManager queryUserRequirementInfoCarMH:@{@"type":@"yushou",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+//        
+//    } fail:^(id obj) {
+//        
+//    }];
 }
 
 
@@ -65,11 +80,12 @@ static NSString *seconCellID = @"seconCell";
     
     UILabel *gong = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 20, 20)];
     [gong setText:@"共搜索到车辆"];
+    [gong setTextColor:[UIColor whiteColor]];
     [gong sizeToFit];
     [self.headBar addSubview:gong];
     
     UILabel *carNumbar = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(gong.frame)+5, 35, 20, 20)];
-    [carNumbar setTextColor:[UIColor redColor]];
+    [carNumbar setTextColor:[UIColor whiteColor]];
     [carNumbar setText:@"28"];
     [carNumbar setFont:[UIFont systemFontOfSize:28]];
     [carNumbar sizeToFit];
@@ -78,6 +94,7 @@ static NSString *seconCellID = @"seconCell";
 
     
     UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(carNumbar.frame)+30, 40, 20, 20)];
+    [xian setTextColor:[UIColor whiteColor]];
     [xian setText:@"显示预售车"];
     [xian sizeToFit];
     [self.headBar addSubview:xian];
@@ -85,7 +102,6 @@ static NSString *seconCellID = @"seconCell";
     UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 40, 30)];
 
     [self.headBar addSubview:switchPresell];
-    
     
     
     UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.frame.size.width-100, 20, 80, 80)];
@@ -184,14 +200,93 @@ static NSString *seconCellID = @"seconCell";
     [_collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     
     [self.view insertSubview:_collectionView atIndex:0];
+    
+    // 1.添加下拉刷新
+    _header = [MJRefreshHeaderView header];
+    _header.delegate = self;
+    _header.scrollView = _collectionView;
+    // 自动进入刷新状态
+    [_header beginRefreshing];
+    
+    // 2.添加上拉加载
+    _footer = [MJRefreshFooterView footer];
+    _footer.delegate = self;
+    _footer.scrollView = _collectionView;
 }
+
+
+#pragma mark - 刷新的代理方法
+/**
+ *  当控件进入刷新状态的时候就会调用
+ *
+ *  @param refreshView 哪个控件进入了刷新状态
+ */
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) { // 下拉
+        _page = 1;
+        [HttpManager queryUserRequirementInfoCarZJ:@{@"type":@"yushou",@"index":[NSString stringWithFormat:@"%d",_page],@"pageSize":@"15",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            if ([dataDic objectForKey:@"currentIndex"]==[dataDic objectForKey:@"totalPage"]) {
+                [HttpManager queryUserRequirementInfoCarMH:@{@"type":@"yushou",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+                    [_header endRefreshing];
+                    [_footer endRefreshing];
+                    [_footer setHidden:YES];
+                } fail:^(id obj) {
+                    [_header endRefreshing];
+                    [_footer endRefreshing];
+                }];
+            }else {
+                [_header endRefreshing];
+                [_footer endRefreshing];
+            }
+        } fail:^(id obj) {
+            [_header endRefreshing];
+            [_footer endRefreshing];
+        }];
+        
+    }else { // 上拉加载更多
+        _page++;
+        [HttpManager queryUserRequirementInfoCarZJ:@{@"type":@"yushou",@"index":[NSString stringWithFormat:@"%d",_page],@"pageSize":@"15",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            if ([dataDic objectForKey:@"currentIndex"]==[dataDic objectForKey:@"totalPage"]) {
+                
+                [HttpManager queryUserRequirementInfoCarMH:@{@"type":@"yushou",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+                    
+                    [_footer endRefreshing];
+                    [_footer setHidden:YES];
+                } fail:^(id obj) {
+                    [_header endRefreshing];
+                    [_footer endRefreshing];
+                }];
+            }else {
+                [_header endRefreshing];
+                [_footer endRefreshing];
+            }
+        } fail:^(id obj) {
+            [_header endRefreshing];
+            [_footer endRefreshing];
+        }];
+    }
+    
+    
+
+    
+}
+
+- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
+{
+    NSLog(@"aa");
+}
+
 
 
 
 #pragma mark - 代理方法
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 28;
+    return 0;
     
 }
 

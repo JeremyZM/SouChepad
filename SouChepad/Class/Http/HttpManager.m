@@ -534,6 +534,51 @@
     } reload:YES needHud:YES hudEnabled:YES];
 }
 
+#pragma mark - 匹配车辆精准
++ (void)queryUserRequirementInfoCarZJ:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/queryUserRequirementInfoCarJZ.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        NSMutableDictionary *dicobj = [NSMutableDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([dicobj objectForKey:@"errorMessage"]) {
+            [ProgressHUD showError:[dicobj objectForKey:@"errorMessage"]];
+            return;
+        }
+        
+        NSArray *carArray = [dicobj objectForKey:@"jz"];
+        NSMutableArray *carArrayM = [NSMutableArray array];
+        if (carArray.count) {
+            for (NSDictionary *carDic in carArray) {
+                CarBaseModel *carModel = [[CarBaseModel alloc] init];
+                [carModel setKeyValues:carDic];
+                [carArrayM addObject:carModel];
+            }
+        }
+        [dicobj setObject:carArrayM forKey:@"jz"];
+        success (dicobj);
+        
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+
+        fail(error);
+        
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+
+#pragma mark - 匹配模糊车辆
++ (void)queryUserRequirementInfoCarMH:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/queryUserRequirementInfoCarMH.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([dicobj objectForKey:@"err"]) {
+            [ProgressHUD showError:[dicobj objectForKey:@"err"]];
+            return;
+        }
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail (error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
 
 
 #pragma mark - 最后一条看车记录
