@@ -272,7 +272,6 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
     // 预算
     [yushuanBut setTitle:reqInfoModel.purchaseCarBudget?reqInfoModel.purchaseCarBudget:@"不限 - 不限" forState:UIControlStateNormal];
-
     
     // 里程
     [lichengBut setTitle:reqInfoModel.milesName?reqInfoModel.milesName:@"不限" forState:UIControlStateNormal];
@@ -317,13 +316,13 @@ static NSString *userDemandCellid = @"userDemandCellid";
 - (void)liChengViewController:(LiChengViewController *)lichengVC selectBut:(UIButton *)button selectDic:(NSDictionary *)selectDic
 {
     if (button == lichengBut) {
-        [basicRequstDicM setObject:[selectDic objectForKey:@"code"] forKey:@"miles"];
+        [reqInfoModel setMiles:[selectDic objectForKey:@"code"]];
     }
     if (button == chexingBut) {
-        [basicRequstDicM setObject:[selectDic objectForKey:@"code"] forKey:@"carbody"];
+        [reqInfoModel setCarbody:[selectDic objectForKey:@"code"]];
     }
     if (button == guobieBut) {
-        [basicRequstDicM setObject:[selectDic objectForKey:@"code"] forKey:@"country"];
+        [reqInfoModel setCountry:[selectDic objectForKey:@"code"]];
     }
     [button setTitle:[selectDic objectForKey:@"name"] forState:UIControlStateNormal];
 

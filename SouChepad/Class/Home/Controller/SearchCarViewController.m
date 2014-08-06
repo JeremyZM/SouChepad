@@ -9,6 +9,7 @@
 #import "SearchCarViewController.h"
 #import "LimitSearchView.h"
 #import "HttpManager.h"
+#import "CollectCarCell.h"
 
 @interface SearchCarViewController () <UICollectionViewDataSource,UICollectionViewDelegate,LimitSearchViewDelegate>
 {
@@ -173,7 +174,7 @@ static NSString *seconCellID = @"seconCell";
     _collectionView = [[UICollectionView alloc]initWithFrame:self.view.bounds collectionViewLayout:layout];
     [_collectionView setContentInset:UIEdgeInsetsMake(100, 0, 0, 0)];
     // 注册cell
-//    [_collectionView registerClass:[seconCell class] forCellWithReuseIdentifier:seconCellID];
+    [_collectionView registerClass:[CollectCarCell class] forCellWithReuseIdentifier:seconCellID];
     
     // 注册头部view
 //    [_collectionView registerClass:[SearchHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderIdentifier];
@@ -197,7 +198,7 @@ static NSString *seconCellID = @"seconCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize size = CGSizeMake(self.view.frame.size.width*0.3+5, 300);
+    CGSize size = CGSizeMake(278, 286);
     return size;
 }
 
@@ -206,7 +207,7 @@ static NSString *seconCellID = @"seconCell";
 {
 
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:seconCellID forIndexPath:indexPath];
-    
+    [cell setBackgroundColor:[UIColor orangeColor]];
     return cell;
 }
 
