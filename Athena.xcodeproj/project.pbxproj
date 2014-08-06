@@ -338,6 +338,8 @@
 		7B7EE24D1991F5C80033B599 /* LookOrDriveCarInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B29FC270194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib */; };
 		7B7EE24E1991F5C80033B599 /* 标准车辆卡片小图标_20.png in Resources */ = {isa = PBXBuildFile; fileRef = B2711F28194C489300A65BDF /* 标准车辆卡片小图标_20.png */; };
 		7B7EE24F1991F5C80033B599 /* DemandAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2A7035F19519A9A00DD5D3B /* DemandAddCell.xib */; };
+		7B7EE2591992141E0033B599 /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7EE2581992141E0033B599 /* PushManager.m */; };
+		7B7EE25A1992141E0033B599 /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7EE2581992141E0033B599 /* PushManager.m */; };
 		B2062A401959AA8D007A0CCF /* BeginBut.m in Sources */ = {isa = PBXBuildFile; fileRef = B2062A3F1959AA8D007A0CCF /* BeginBut.m */; };
 		B20CEEB11945887C00A893E1 /* BaseDtaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B20CEEB01945887C00A893E1 /* BaseDtaModel.m */; };
 		B20CEEB31945CA9E00A893E1 /* loading_03.png in Resources */ = {isa = PBXBuildFile; fileRef = B20CEEB21945CA9E00A893E1 /* loading_03.png */; };
@@ -689,6 +691,8 @@
 /* Begin PBXFileReference section */
 		7B7EE2531991F5C80033B599 /* Athena copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Athena copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B7EE2541991F5C90033B599 /* Athena copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Athena copy-Info.plist"; path = "/Volumes/hdd/work/git/SouChepad/Athena copy-Info.plist"; sourceTree = "<absolute>"; };
+		7B7EE2571992141E0033B599 /* PushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushManager.h; sourceTree = "<group>"; };
+		7B7EE2581992141E0033B599 /* PushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushManager.m; sourceTree = "<group>"; };
 		B2062A3E1959AA8D007A0CCF /* BeginBut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeginBut.h; sourceTree = "<group>"; };
 		B2062A3F1959AA8D007A0CCF /* BeginBut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeginBut.m; sourceTree = "<group>"; };
 		B20CEEAF1945887C00A893E1 /* BaseDtaModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDtaModel.h; sourceTree = "<group>"; };
@@ -1283,6 +1287,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B7EE2561992140D0033B599 /* pushManager */ = {
+			isa = PBXGroup;
+			children = (
+				7B7EE2571992141E0033B599 /* PushManager.h */,
+				7B7EE2581992141E0033B599 /* PushManager.m */,
+			);
+			path = pushManager;
+			sourceTree = "<group>";
+		};
 		B222760719448B4F00FD2A2C /* Knowledge */ = {
 			isa = PBXGroup;
 			children = (
@@ -2244,6 +2257,7 @@
 		B2DDFED2190BB62000A71A4F /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				7B7EE2561992140D0033B599 /* pushManager */,
 				B2DDFED3190BB62000A71A4F /* Lib */,
 			);
 			path = Other;
@@ -2958,6 +2972,7 @@
 				7B7EE11D1991F5C80033B599 /* MJRefreshHeaderView.m in Sources */,
 				7B7EE11E1991F5C80033B599 /* BeginBut.m in Sources */,
 				7B7EE11F1991F5C80033B599 /* LookCarRecordController.m in Sources */,
+				7B7EE25A1992141E0033B599 /* PushManager.m in Sources */,
 				7B7EE1201991F5C80033B599 /* ASValueTrackingSlider.m in Sources */,
 				7B7EE1211991F5C80033B599 /* UIColor+_6jinzhi.m in Sources */,
 				7B7EE1221991F5C80033B599 /* MJIvar.m in Sources */,
@@ -3126,6 +3141,7 @@
 				B298AE43192D91DB00DCE795 /* MJRefreshHeaderView.m in Sources */,
 				B2062A401959AA8D007A0CCF /* BeginBut.m in Sources */,
 				B25A3FB4197E0EFA001685F4 /* LookCarRecordController.m in Sources */,
+				7B7EE2591992141E0033B599 /* PushManager.m in Sources */,
 				B2B216811980FEE4004D9EFE /* ASValueTrackingSlider.m in Sources */,
 				B2F185BF193ECEE200AEF90E /* UIColor+_6jinzhi.m in Sources */,
 				B254238C190E5C9400874878 /* MJIvar.m in Sources */,
@@ -3306,7 +3322,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3323,7 +3339,7 @@
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/UMAnalytics_Sdk_3.1.2",
 				);
 				PRODUCT_NAME = "Athena copy";
-				PROVISIONING_PROFILE = "39FA4559-6158-459B-BEBB-E22F6712A23B";
+				PROVISIONING_PROFILE = "CF8546BD-46AD-4754-A5A0-C1A357A03F5A";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3334,7 +3350,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3352,7 +3368,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "Athena copy";
-				PROVISIONING_PROFILE = "39FA4559-6158-459B-BEBB-E22F6712A23B";
+				PROVISIONING_PROFILE = "CF8546BD-46AD-4754-A5A0-C1A357A03F5A";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

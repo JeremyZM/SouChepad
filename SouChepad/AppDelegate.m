@@ -10,12 +10,15 @@
 #import "LogInViewController.h"
 #import "MainViewController.h"
 #import "HttpManager.h"
-
+#import "PushManager.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // 注册推送
+    [PushManager registerPushNotification];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -98,4 +101,21 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+
+#pragma mark - 推送代理
+// 注册token 成功
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    [PushManager uploadDeviceToken:deviceToken];
+}
+
+// 注册token 失败
+-(void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error{
+    NSLog(@"注册失败，无法获取设备ID, 具体错误: %@", error);
+}
+
+// 搜到推送消息
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didReceiveRemoteNotification" object:nil];
+    DLog(@"%@", userInfo);
+}
 @end
