@@ -7,13 +7,17 @@
 //
 
 #import "PushManager.h"
+#import "APService.h"
 
 @implementation PushManager
 
 // 注册推送
-+ (void)registerPushNotification{
++ (void)registerPushNotificationWithOptions:(NSDictionary *)launchOptions{
     // 注册推送
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert)];
+    
+    // Required
+    [APService setupWithOption:launchOptions];
 }
 
 // 上传设备token
@@ -23,10 +27,24 @@
                        stringByReplacingOccurrencesOfString:@" "
                        withString:@""];
     DLog(@"device token: %@", token);
+    // 极光注册
+    [APService registerDeviceToken:deviceToken];
     // 保存token到ud中
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:kUserDefaultsToken];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     //TODO.... 调用上传接口
+}
+
+// 处理收到的消息
++ (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    // Required
+    [APService handleRemoteNotification:userInfo];
+}
+
+// 处理收到的消息
++ (void)handleRemoteNotification:(NSDictionary *)userInfo{
+    // IOS 7 Support Required
+    [APService handleRemoteNotification:userInfo];
 }
 @end

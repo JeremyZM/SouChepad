@@ -340,6 +340,12 @@
 		7B7EE24F1991F5C80033B599 /* DemandAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2A7035F19519A9A00DD5D3B /* DemandAddCell.xib */; };
 		7B7EE2591992141E0033B599 /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7EE2581992141E0033B599 /* PushManager.m */; };
 		7B7EE25A1992141E0033B599 /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7EE2581992141E0033B599 /* PushManager.m */; };
+		7B7EE263199232850033B599 /* libPushSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7EE262199232850033B599 /* libPushSDK.a */; };
+		7B7EE264199232850033B599 /* libPushSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7EE262199232850033B599 /* libPushSDK.a */; };
+		7B7EE266199232E10033B599 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE265199232E10033B599 /* PushConfig.plist */; };
+		7B7EE267199232E10033B599 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE265199232E10033B599 /* PushConfig.plist */; };
+		7B7EE269199235C70033B599 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7EE268199235C70033B599 /* CoreTelephony.framework */; };
+		7B7EE26A199235D30033B599 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7EE268199235C70033B599 /* CoreTelephony.framework */; };
 		B2062A401959AA8D007A0CCF /* BeginBut.m in Sources */ = {isa = PBXBuildFile; fileRef = B2062A3F1959AA8D007A0CCF /* BeginBut.m */; };
 		B20CEEB11945887C00A893E1 /* BaseDtaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B20CEEB01945887C00A893E1 /* BaseDtaModel.m */; };
 		B20CEEB31945CA9E00A893E1 /* loading_03.png in Resources */ = {isa = PBXBuildFile; fileRef = B20CEEB21945CA9E00A893E1 /* loading_03.png */; };
@@ -693,6 +699,10 @@
 		7B7EE2541991F5C90033B599 /* Athena copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Athena copy-Info.plist"; path = "/Volumes/hdd/work/git/SouChepad/Athena copy-Info.plist"; sourceTree = "<absolute>"; };
 		7B7EE2571992141E0033B599 /* PushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushManager.h; sourceTree = "<group>"; };
 		7B7EE2581992141E0033B599 /* PushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushManager.m; sourceTree = "<group>"; };
+		7B7EE261199232850033B599 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
+		7B7EE262199232850033B599 /* libPushSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPushSDK.a; sourceTree = "<group>"; };
+		7B7EE265199232E10033B599 /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
+		7B7EE268199235C70033B599 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		B2062A3E1959AA8D007A0CCF /* BeginBut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeginBut.h; sourceTree = "<group>"; };
 		B2062A3F1959AA8D007A0CCF /* BeginBut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeginBut.m; sourceTree = "<group>"; };
 		B20CEEAF1945887C00A893E1 /* BaseDtaModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDtaModel.h; sourceTree = "<group>"; };
@@ -1232,6 +1242,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B7EE269199235C70033B599 /* CoreTelephony.framework in Frameworks */,
+				7B7EE1B11991F5C80033B599 /* CFNetwork.framework in Frameworks */,
 				7B7EE1A51991F5C80033B599 /* libz.dylib in Frameworks */,
 				7B7EE1A61991F5C80033B599 /* libzbar.a in Frameworks */,
 				7B7EE1A71991F5C80033B599 /* Foundation.framework in Frameworks */,
@@ -1244,8 +1256,8 @@
 				7B7EE1AE1991F5C80033B599 /* libMobClickLibrary.a in Frameworks */,
 				7B7EE1AF1991F5C80033B599 /* Security.framework in Frameworks */,
 				7B7EE1B01991F5C80033B599 /* SystemConfiguration.framework in Frameworks */,
-				7B7EE1B11991F5C80033B599 /* CFNetwork.framework in Frameworks */,
 				7B7EE1B21991F5C80033B599 /* CoreGraphics.framework in Frameworks */,
+				7B7EE264199232850033B599 /* libPushSDK.a in Frameworks */,
 				7B7EE1B31991F5C80033B599 /* libzbar.a in Frameworks */,
 				7B7EE1B41991F5C80033B599 /* UIKit.framework in Frameworks */,
 			);
@@ -1255,6 +1267,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2DDFF7B190C1CBF00A71A4F /* CFNetwork.framework in Frameworks */,
+				7B7EE26A199235D30033B599 /* CoreTelephony.framework in Frameworks */,
 				B2B0CB7A1981E91F00EF8FDD /* libz.dylib in Frameworks */,
 				B2A08843197BAF870081E984 /* libzbar.a in Frameworks */,
 				B2B3F99919791848004B893D /* Foundation.framework in Frameworks */,
@@ -1267,8 +1281,8 @@
 				B2B0CB781981E55700EF8FDD /* libMobClickLibrary.a in Frameworks */,
 				B2DDFF7F190C1CDC00A71A4F /* Security.framework in Frameworks */,
 				B2DDFF7D190C1CCD00A71A4F /* SystemConfiguration.framework in Frameworks */,
-				B2DDFF7B190C1CBF00A71A4F /* CFNetwork.framework in Frameworks */,
 				B2DDFE94190BB3F000A71A4F /* CoreGraphics.framework in Frameworks */,
+				7B7EE263199232850033B599 /* libPushSDK.a in Frameworks */,
 				B2DA050419864BB600D76F31 /* libzbar.a in Frameworks */,
 				B2DDFE96190BB3F000A71A4F /* UIKit.framework in Frameworks */,
 			);
@@ -1294,6 +1308,15 @@
 				7B7EE2581992141E0033B599 /* PushManager.m */,
 			);
 			path = pushManager;
+			sourceTree = "<group>";
+		};
+		7B7EE260199232850033B599 /* jiguangPush */ = {
+			isa = PBXGroup;
+			children = (
+				7B7EE261199232850033B599 /* APService.h */,
+				7B7EE262199232850033B599 /* libPushSDK.a */,
+			);
+			path = jiguangPush;
 			sourceTree = "<group>";
 		};
 		B222760719448B4F00FD2A2C /* Knowledge */ = {
@@ -1938,6 +1961,7 @@
 		B2DDFE90190BB3F000A71A4F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B7EE268199235C70033B599 /* CoreTelephony.framework */,
 				B2B0CB791981E91F00EF8FDD /* libz.dylib */,
 				B2A08842197BAF870081E984 /* libzbar.a */,
 				B2B3F99719791820004B893D /* CoreFoundation.framework */,
@@ -1984,6 +2008,7 @@
 				B2DDFE9A190BB3F000A71A4F /* InfoPlist.strings */,
 				B2DDFE9D190BB3F000A71A4F /* main.m */,
 				B2DDFE9F190BB3F000A71A4F /* Athena-Prefix.pch */,
+				7B7EE265199232E10033B599 /* PushConfig.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2266,6 +2291,7 @@
 		B2DDFED3190BB62000A71A4F /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				7B7EE260199232850033B599 /* jiguangPush */,
 				B2DA05091987954300D76F31 /* YLGIFImage */,
 				B2DA04E619864BB600D76F31 /* ZBarSDK */,
 				B2B0CB741981E55700EF8FDD /* UMAnalytics_Sdk_3.1.2 */,
@@ -2744,6 +2770,7 @@
 				7B7EE2391991F5C80033B599 /* anniu_31.png in Resources */,
 				7B7EE23A1991F5C80033B599 /* buy_64.png in Resources */,
 				7B7EE23B1991F5C80033B599 /* area.plist in Resources */,
+				7B7EE267199232E10033B599 /* PushConfig.plist in Resources */,
 				7B7EE23C1991F5C80033B599 /* RequireDeleteCell.xib in Resources */,
 				7B7EE23D1991F5C80033B599 /* outOfPrint.png in Resources */,
 				7B7EE23E1991F5C80033B599 /* tubiao_05.png in Resources */,
@@ -2905,6 +2932,7 @@
 				B2C4618D195AB7F700D933D7 /* anniu_31.png in Resources */,
 				B2A656E21959974F009CF193 /* buy_64.png in Resources */,
 				B2A656BF1956ABF5009CF193 /* area.plist in Resources */,
+				7B7EE266199232E10033B599 /* PushConfig.plist in Resources */,
 				B2FA834C197F574500A00277 /* RequireDeleteCell.xib in Resources */,
 				B2711F2F194C489300A65BDF /* outOfPrint.png in Resources */,
 				B2F185F9193F1E6400AEF90E /* tubiao_05.png in Resources */,
@@ -3337,6 +3365,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/ZBarSDK",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/UMAnalytics_Sdk_3.1.2",
+					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/jiguangPush",
 				);
 				PRODUCT_NAME = "Athena copy";
 				PROVISIONING_PROFILE = "CF8546BD-46AD-4754-A5A0-C1A357A03F5A";
@@ -3365,6 +3394,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/ZBarSDK",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/UMAnalytics_Sdk_3.1.2",
+					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/jiguangPush",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "Athena copy";
@@ -3475,6 +3505,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/ZBarSDK",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/UMAnalytics_Sdk_3.1.2",
+					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/jiguangPush",
 				);
 				PRODUCT_NAME = Athena;
 				PROVISIONING_PROFILE = "AD659190-154D-41C2-975F-2839B93B4914";
@@ -3503,6 +3534,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/ZBarSDK",
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/UMAnalytics_Sdk_3.1.2",
+					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/jiguangPush",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Athena;
