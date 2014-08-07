@@ -40,12 +40,16 @@
 
 - (void)setMessageDetail:(id)message{
     MyMessage *msg = (MyMessage*)message;
-    [self loadMessageTitle:msg.title subTitle:msg.dateCreate content:msg.comment imageUrl:msg.image];
+    if (msg) {
+        [self loadMessageTitle:msg.title subTitle:msg.dateCreate content:msg.comment imageUrl:msg.image];
+    }else{
+        [self loadMessageTitle:@"" subTitle:@"" content:@"" imageUrl:@""];
+    }
+
 }
 
 // 组装js中changeMessage所需要的参数
 - (void)loadMessageTitle:(NSString*)title subTitle:(NSString*)subtitle content:(NSString*)content imageUrl:(NSString*)imgUrl{
-//    content = [NSString stringWithCString:[content UTF8String] encoding:NSUTF8StringEncoding];
     content = [content stringByReplacingOccurrencesOfString:@"\x0a" withString:@"</br>"];//换行
     content = [content stringByReplacingOccurrencesOfString:@"\x0d" withString:@""];//回车
     messageArguments = [NSString stringWithFormat:@"'%@','%@','%@', '%@'", title, subtitle, content, imgUrl];

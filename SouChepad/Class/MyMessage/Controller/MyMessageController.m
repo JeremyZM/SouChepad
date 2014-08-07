@@ -15,6 +15,7 @@
     NSMutableArray *_messageArray;
     UISearchBar *mySearchBar;
     NSMutableArray *filteredContentList;
+    int page;//请求第一页消息
 //    BOOL isSearching;
 }
 @property (nonatomic, strong) UITableView *tableView;
@@ -28,28 +29,30 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    [HttpManager requestMyMessageWithParamDic:nil Success:^(id obj) {
+    [self addMessageUI];
+    [self requestMessageWithType:0];
+}
+
+// 获取系统消息或者我的消息
+- (void)requestMessageWithType:(int)type{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    // 页
+    [dic setObject:[NSNumber numberWithInt:page] forKey:@"index"];
+    // 条
+    [dic setObject:@"20" forKey:@"pageSize"];
+    // 类型（系统信息：system）
+    [dic setObject:@"system" forKey:@"readType"];
+    //销售ID
+    [dic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
+    
+    [HttpManager requestMyMessageWithParamDic:dic messageType:type Success:^(id obj) {
         _messageArray = [NSMutableArray arrayWithArray:obj];
         [self.tableView reloadData];
     } fail:^(id obj) {
         
     }];
-    
-//    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 340, self.view.bounds.size.height) style:UITableViewStylePlain];
-//    [self.tableView setDataSource:self];
-//    [self.tableView setDelegate:self];
-//    [self.tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleTopMargin];
-//    [self.view addSubview:self.tableView];
-//
-//    
-//    mySearchBar = [[UISearchBar alloc] init];
-//    [mySearchBar sizeToFit];
-//    mySearchBar.delegate = self;
-//    self.tableView.tableHeaderView = mySearchBar;
-
-    
-    [self addMessageUI];
 }
+
 
 - (void)addMessageUI
 {

@@ -15,13 +15,12 @@
 
 @interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate,MJRefreshBaseViewDelegate>
 {
-    NSArray *_messageArray;
+    NSMutableArray *_messageArray;
     UISearchBar *mySearchBar;
-    UISearchDisplayController *searchDisplay;
+    UISegmentedControl *messageTypeSegment;
     NSArray *filteredContentList;
-    
-    CoreDateManager *coreManager;
-//     MJRefreshHeaderView *_refreshControl; // 下拉刷新
+    int messageType;//消息类型
+    int page;//请求第一页消息
 }
 @property (nonatomic, strong) DetailViewController *detailViewController;
 
@@ -29,6 +28,11 @@
 
 @implementation MasterTableViewController
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 - (void)navigationset
 {
@@ -36,23 +40,14 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithImage:[UIImage imageNamed:@"tubiao_36"] style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"筛选" style:UIBarButtonItemStyleBordered target:self action:@selector(iconShowDock)];
-}
-
-- (void)addsearchDisplay
-{
-    mySearchBar = [[UISearchBar alloc] init];
-    [mySearchBar sizeToFit];
-    mySearchBar.delegate = self;
-    [mySearchBar setPlaceholder:@"搜索消息"];
-    //    [self.navigationItem setTitleView:mySearchBar];
-    [self.tableView setTableHeaderView:mySearchBar];
     
-    searchDisplay = [[UISearchDisplayController alloc] initWithSearchBar:mySearchBar contentsController:self];
-    searchDisplay.delegate = self;
-    searchDisplay.searchResultsDataSource = self;
-    searchDisplay.searchResultsDelegate = self;
-    
+    // 消息类型选择的segment
+    messageTypeSegment = [[UISegmentedControl alloc] initWithItems:@[@"个人消息", @"系统消息"]];
+    messageTypeSegment.frame = CGRectMake(70, 0, 210, 35);
+    [[UISegmentedControl appearance] setTintColor:[UIColor whiteColor]];
+    messageTypeSegment.selectedSegmentIndex = 0;
+    [messageTypeSegment addTarget:self action:@selector(messageTypeChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.navigationController.navigationBar addSubview:messageTypeSegment];
 }
 
 - (void)viewDidLoad
@@ -60,12 +55,7 @@
     [super viewDidLoad];
     
     [self navigationset];
-    
-    [self addsearchDisplay];
-    
-    coreManager = [[CoreDateManager alloc]init];
-    
-    
+
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
     [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
@@ -73,7 +63,7 @@
     [self.tableView addSubview:self.refreshControl];
     
     [self.refreshControl beginRefreshing];
-    [self writeDate];
+    
 //    // 1.添加下拉刷新
 //    _refreshControl = [MJRefreshHeaderView header];
 //    _refreshControl.delegate = self;
@@ -82,7 +72,8 @@
 //    // 自动进入刷新状态
 //    [_refreshControl beginRefreshing];
 
-    
+    messageType = 0;
+    [self requestMessageWithType:messageType];
 }
 
 //// 开始刷新
@@ -99,29 +90,51 @@
 
 - (void)RefreshViewControlEventValueChanged
 {
-    [self writeDate];
+    [self requestMessageWithType:messageType];
 }
 
--(void)writeDate
-{
-    [HttpManager requestMyMessageWithParamDic:nil Success:^(id obj) {
-//        [_refreshControl endRefreshing];
-        [self.refreshControl endRefreshing];
-        _messageArray = [NSArray arrayWithArray:obj];
-        [coreManager deleteData];
-        //把数据写到数据库
-        [coreManager insertCoreData:_messageArray];
-        
-        [self.tableView reloadData];
-    } fail:^(id obj) {
-        _messageArray = [coreManager selectData:100 andOffset:0];
-        [self.tableView reloadData];
-        [self.refreshControl endRefreshing];
-//        [_refreshControl endRefreshing];
-    }];
+// 消息类型改变监听
+- (void)messageTypeChanged:(UISegmentedControl*)control{
+    page = 0;
+    messageType = control.selectedSegmentIndex;
+    [_messageArray removeAllObjects];
+    [self requestMessageWithType:messageType];
+}
+
+// 获取系统消息或者我的消息
+- (void)requestMessageWithType:(int)type{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    // 页
+    [dic setObject:[NSNumber numberWithInt:page] forKey:@"index"];
+    // 条
+    [dic setObject:@"40" forKey:@"pageSize"];
+    // 类型（系统信息：system）
+    [dic setObject:@"system" forKey:@"readType"];
+    //销售ID
+    [dic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
     
+    [HttpManager requestMyMessageWithParamDic:dic messageType:type Success:^(id obj) {
+        
+        _messageArray = [NSMutableArray arrayWithArray:obj];
+        [self.tableView reloadData];
+        //默认显示第一条详情
+        [self showMessageDetailWithIndex:0];
+        [self.refreshControl endRefreshing];
+    } fail:^(id obj) {
+        [self.refreshControl endRefreshing];
+    }];
 }
 
+// 显示消息详情
+- (void)showMessageDetailWithIndex:(int)msgIndex{
+    if (_messageArray.count > 0) {
+        MyMessage *message = [_messageArray objectAtIndex:msgIndex];
+        self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+        [self.detailViewController setMessageM:message];
+    }else{
+        [self.detailViewController setMessageM:nil];
+    }
+}
 
 - (void)iconShowDock
 {
@@ -136,12 +149,6 @@
     return YES;
 }
 
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -182,42 +189,8 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    MyMessage *message;
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        message = filteredContentList[indexPath.row];
-    } else {
-        message = _messageArray[indexPath.row];
-    }
-    
-    self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-    [self.detailViewController setMessageM:message];
-//    [self.detailViewController.view setNeedsLayout];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self showMessageDetailWithIndex:indexPath.row];
 }
-
-
--(BOOL)searchDisplayController:(UISearchDisplayController *)controller  shouldReloadTableForSearchString:(NSString *)searchString {
-    //根据用户的输入的关键字searchString，处理出搜索结果（可以是本地搜索，可以是从服务器请求过来的数据）到数组
-    filteredContentList = [self siftArray:_messageArray orderWithKey:searchString];
-    
-    return YES; //返回yes，重新加载tableView对象
-}
-
-// 模糊搜索
--(NSArray *)siftArray:(NSArray*)dicArray orderWithKey:(NSString *)key{
-    
-    NSPredicate *predicateString = [NSPredicate predicateWithFormat:@"title contains[cd] %@", key];
-//    NSPredicate *pre = [NSPredicate predicateWithFormat:@"title=%@",key];
-    NSArray *array = [dicArray filteredArrayUsingPredicate:predicateString];
-    
-    return array;
-}
-
-
-//- (void)dealloc
-//{
-//    [_refreshControl free];
-//}
 
 @end
