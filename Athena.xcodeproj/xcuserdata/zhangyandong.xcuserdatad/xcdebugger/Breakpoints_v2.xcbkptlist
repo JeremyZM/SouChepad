@@ -19,22 +19,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SouChepad/Class/Home/Controller/DriveCarRecordController.m"
-            timestampString = "428650851.460846"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
-            landmarkName = "-uploadImage"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "SouChepad/Class/Home/Controller/CustomPIMController.m"
             timestampString = "428653149.198909"
             startingColumnNumber = "9223372036854775807"
@@ -49,9 +33,9 @@
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "-[CustomPIMController saveUserInfoClickt]"
-                  moduleName = "Athena"
+                  moduleName = "Athena copy"
                   urlString = "file:///Users/zhangyandong/Desktop/SouChepad/SouChepad/Class/Home/Controller/CustomPIMController.m"
-                  timestampString = "428994659.325298"
+                  timestampString = "429013288.840731"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "145"
@@ -63,9 +47,9 @@
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "__41-[CustomPIMController saveUserInfoClickt]_block_invoke"
-                  moduleName = "Athena"
+                  moduleName = "Athena copy"
                   urlString = "file:///Users/zhangyandong/Desktop/SouChepad/SouChepad/Class/Home/Controller/CustomPIMController.m"
-                  timestampString = "428994659.325743"
+                  timestampString = "429013288.841222"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "145"
@@ -82,13 +66,59 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SouChepad/Class/Http/HttpManager.m"
-            timestampString = "428653705.508411"
+            timestampString = "429013288.309939"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "860"
-            endingLineNumber = "860"
+            startingLineNumber = "905"
+            endingLineNumber = "905"
             landmarkName = "+requestUploadImage:imageIndex:success:uploadProgress:fail:"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SouChepad/Class/Http/HttpManager.m"
+            timestampString = "429013288.309939"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "577"
+            endingLineNumber = "577"
+            landmarkName = "+queryUserRequirementInfoCarMH:Success:fail:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__58+[HttpManager queryUserRequirementInfoCarMH:Success:fail:]_block_invoke"
+                  moduleName = "Athena copy"
+                  urlString = "file:///Users/zhangyandong/Desktop/SouChepad/SouChepad/Class/Http/HttpManager.m"
+                  timestampString = "429013288.850725"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "577"
+                  endingLineNumber = "577"
+                  offsetFromSymbolStart = "328">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__58+[HttpManager queryUserRequirementInfoCarMH:Success:fail:]_block_invoke"
+                  moduleName = "Athena copy"
+                  urlString = "file:///Users/zhangyandong/Desktop/SouChepad/SouChepad/Class/Http/HttpManager.m"
+                  timestampString = "429013288.851267"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "577"
+                  endingLineNumber = "577"
+                  offsetFromSymbolStart = "691">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
