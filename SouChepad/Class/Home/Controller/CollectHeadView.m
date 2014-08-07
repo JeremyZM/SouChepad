@@ -14,9 +14,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-
-        _stateCarLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 150, 34)];
+        [self setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
+        _stateCarLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 34)];
         [_stateCarLabel setFont:[UIFont systemFontOfSize:20]];
+        [_stateCarLabel setTextColor:[UIColor hexStringToColor:KBaseColo]];
         [self addSubview:_stateCarLabel];
     }
     return self;

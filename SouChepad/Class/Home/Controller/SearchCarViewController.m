@@ -11,6 +11,9 @@
 #import "HttpManager.h"
 #import "CollectCarCell.h"
 #import "MJRefresh.h"
+#import "CarBaseModel.h"
+#import "CarDetailWebView.h"
+#import "CollectHeadView.h"
 
 @interface SearchCarViewController () <UICollectionViewDataSource,UICollectionViewDelegate,LimitSearchViewDelegate,MJRefreshBaseViewDelegate>
 {
@@ -31,6 +34,15 @@
     
     NSString *totalNumber;
     
+    NSDictionary *dataDic;
+    
+    NSMutableArray *jzCarArrayM;
+    NSMutableArray *mhCarArrayM;
+    
+    NSString *yushouOrzaishou;
+    
+    NSMutableDictionary *requstDic;
+    
 }
 @end
 static NSString *seconCellID = @"seconCell";
@@ -40,6 +52,9 @@ static NSString *seconCellID = @"seconCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    yushouOrzaishou = @"zaishou";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitSearch:withDic:) name:@"userIDchange" object:nil];
+    requstDic = [NSMutableDictionary dictionary];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self addLimitSearchView];
     
@@ -56,19 +71,24 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)limitSearch:(LimitSearchView *)limitSearchView withDic:(NSDictionary *)searchDic
 {
+    [requstDic removeAllObjects];
+    _page = 1;
     if (_collectionView == nil) {
         
         [self addHeadToobar];
         [self addCollectionView];
     }
-
-//    [self refreshViewBeginRefreshing:_header];
+    [requstDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
+    [requstDic setObject:yushouOrzaishou forKey:@"type"];
+    [requstDic setObject:@"15" forKey:@"pageSize"];
     
-//    [HttpManager queryUserRequirementInfoCarMH:@{@"type":@"yushou",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-//        
-//    } fail:^(id obj) {
-//        
-//    }];
+    if ([searchDic objectForKey:@"requirementBrandId"]) {
+    
+        [requstDic setObject:[searchDic objectForKey:@"requirementBrandId"] forKey:@"requirementBrandId"];
+        
+    }
+    [self refreshViewBeginRefreshing:_header];
+    
 }
 
 
@@ -76,31 +96,16 @@ static NSString *seconCellID = @"seconCell";
 - (void)addHeadToobar
 {
 
-    [self.view insertSubview:self.headBar belowSubview:_limitView];
-    
-    UILabel *gong = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 20, 20)];
-    [gong setText:@"共搜索到车辆"];
-    [gong setTextColor:[UIColor whiteColor]];
-    [gong sizeToFit];
-    [self.headBar addSubview:gong];
-    
-    UILabel *carNumbar = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(gong.frame)+5, 35, 20, 20)];
-    [carNumbar setTextColor:[UIColor whiteColor]];
-    [carNumbar setText:@"28"];
-    [carNumbar setFont:[UIFont systemFontOfSize:28]];
-    [carNumbar sizeToFit];
-    [self.headBar addSubview:carNumbar];
-    
-
-    
-    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(carNumbar.frame)+30, 40, 20, 20)];
+    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(30, 40, 20, 20)];
     [xian setTextColor:[UIColor whiteColor]];
     [xian setText:@"显示预售车"];
+    [xian setFont:[UIFont boldSystemFontOfSize:22]];
     [xian sizeToFit];
     [self.headBar addSubview:xian];
     
     UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 40, 30)];
-
+    [switchPresell setOn:YES];
+    [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:switchPresell];
     
     
@@ -109,6 +114,17 @@ static NSString *seconCellID = @"seconCell";
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:limitBut];
     
+}
+
+#pragma mark - 显示预售车
+- (void)hideOrShowYushouCar:(UISwitch*)swit
+{
+    if (swit.on) {
+        yushouOrzaishou = @"zaishou-yushou";
+    }else{
+        yushouOrzaishou = @"zaishou";
+    }
+    [self refreshViewBeginRefreshing:_header];
 }
 
 
@@ -185,19 +201,24 @@ static NSString *seconCellID = @"seconCell";
 - (void)addCollectionView
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
-    [layout setSectionInset:UIEdgeInsetsMake(20, 20, 20, 20)];
-//    [layout setHeaderReferenceSize:CGSizeMake(self.view.frame.size.width, 100)];
+    [layout setSectionInset:UIEdgeInsetsMake(10, 20, 20, 30)];
+    [layout setMinimumLineSpacing:20.0];
+    [layout setHeaderReferenceSize:CGSizeMake(self.view.bounds.size.width, 34)];
+    
     _collectionView = [[UICollectionView alloc]initWithFrame:self.view.bounds collectionViewLayout:layout];
     [_collectionView setContentInset:UIEdgeInsetsMake(100, 0, 0, 0)];
-    // 注册cell
-    [_collectionView registerClass:[CollectCarCell class] forCellWithReuseIdentifier:seconCellID];
     
+    
+    // 注册cell
+    [_collectionView registerNib:[UINib nibWithNibName:@"CollectCarCell" bundle:nil] forCellWithReuseIdentifier:seconCellID];
     // 注册头部view
-//    [_collectionView registerClass:[SearchHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderIdentifier];
+    [_collectionView registerClass:[CollectHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"collectionView"];
+    
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     _collectionView.backgroundColor = [UIColor whiteColor];
     [_collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+    _collectionView.alwaysBounceVertical = YES;
     
     [self.view insertSubview:_collectionView atIndex:0];
     
@@ -206,7 +227,7 @@ static NSString *seconCellID = @"seconCell";
     _header.delegate = self;
     _header.scrollView = _collectionView;
     // 自动进入刷新状态
-    [_header beginRefreshing];
+//    [_header beginRefreshing];
     
     // 2.添加上拉加载
     _footer = [MJRefreshFooterView footer];
@@ -223,21 +244,32 @@ static NSString *seconCellID = @"seconCell";
  */
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    
+
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) { // 下拉
         _page = 1;
-        [HttpManager queryUserRequirementInfoCarZJ:@{@"type":@"yushou",@"index":[NSString stringWithFormat:@"%d",_page],@"pageSize":@"15",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:obj];
-            if ([dataDic objectForKey:@"currentIndex"]==[dataDic objectForKey:@"totalPage"]) {
-                [HttpManager queryUserRequirementInfoCarMH:@{@"type":@"yushou",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-                    [_header endRefreshing];
-                    [_footer endRefreshing];
-                    [_footer setHidden:YES];
+        [requstDic setObject:[NSString stringWithFormat:@"%d",_page] forKey:@"index"];
+        [_footer setHidden:NO];
+        [HttpManager queryUserRequirementInfoCarZJ:requstDic Success:^(id obj) {
+            jzCarArrayM = nil;
+            mhCarArrayM = nil;
+            dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            jzCarArrayM = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"jz"]];
+            
+            if ([[dataDic objectForKey:@"currentIndex"] isEqualToString:[dataDic objectForKey:@"totalPage"]]) {
+                
+                [_footer setHidden:YES];
+                [HttpManager queryUserRequirementInfoCarMH:@{@"type":yushouOrzaishou,@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+                    mhCarArrayM = [NSMutableArray arrayWithArray:obj];
+                    [_header endRefreshingWithoutIdle];
+                    [_footer endRefreshingWithoutIdle];
+                    [_collectionView reloadData];
                 } fail:^(id obj) {
                     [_header endRefreshing];
                     [_footer endRefreshing];
                 }];
             }else {
+                _page++;
+                [_collectionView reloadData];
                 [_header endRefreshing];
                 [_footer endRefreshing];
             }
@@ -247,46 +279,49 @@ static NSString *seconCellID = @"seconCell";
         }];
         
     }else { // 上拉加载更多
-        _page++;
-        [HttpManager queryUserRequirementInfoCarZJ:@{@"type":@"yushou",@"index":[NSString stringWithFormat:@"%d",_page],@"pageSize":@"15",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-            NSDictionary *dataDic = [NSDictionary dictionaryWithDictionary:obj];
-            if ([dataDic objectForKey:@"currentIndex"]==[dataDic objectForKey:@"totalPage"]) {
+        [requstDic setObject:[NSString stringWithFormat:@"%d",_page] forKey:@"index"];
+        [HttpManager queryUserRequirementInfoCarZJ:requstDic Success:^(id obj) {
+            dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            NSArray *moreA = [dataDic objectForKey:@"jz"];
+            for (CarBaseModel *carM in moreA) {
+                [jzCarArrayM addObject:carM];
+            }
+            if ([[dataDic objectForKey:@"currentIndex"] isEqualToString:[dataDic objectForKey:@"totalPage"]]) {
                 
-                [HttpManager queryUserRequirementInfoCarMH:@{@"type":@"yushou",@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-                    
+                [_footer setHidden:YES];
+                [HttpManager queryUserRequirementInfoCarMH:@{@"type":yushouOrzaishou,@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+                    mhCarArrayM = [NSMutableArray arrayWithArray:obj];
                     [_footer endRefreshing];
-                    [_footer setHidden:YES];
+                    [_collectionView reloadData];
                 } fail:^(id obj) {
                     [_header endRefreshing];
                     [_footer endRefreshing];
                 }];
             }else {
+                _page++;
                 [_header endRefreshing];
                 [_footer endRefreshing];
+                [_collectionView reloadData];
             }
+
         } fail:^(id obj) {
             [_header endRefreshing];
             [_footer endRefreshing];
         }];
     }
     
-    
-
-    
 }
 
-- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    NSLog(@"aa");
+    return mhCarArrayM.count?2:1;
 }
-
-
-
 
 #pragma mark - 代理方法
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 0;
+    return section?mhCarArrayM.count:jzCarArrayM.count;
     
 }
 
@@ -298,14 +333,74 @@ static NSString *seconCellID = @"seconCell";
 }
 
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    CollectHeadView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"collectionView" forIndexPath:indexPath];
+//    [headView setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
+    switch (indexPath.section) {
+        case 0:
+
+            [headView.stateCarLabel setText:[NSString stringWithFormat:@"搜索车辆   %d/%@",jzCarArrayM?jzCarArrayM.count:0,[dataDic objectForKey:@"totalNumber"]?[dataDic objectForKey:@"totalNumber"]:@"0"]];
+            break;
+        case 1:
+            [headView.stateCarLabel setText:[NSString stringWithFormat:@"猜你喜欢  15"]];
+            break;
+        default:
+            break;
+    }
+    
+    return headView;
+}
+
+
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
 
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:seconCellID forIndexPath:indexPath];
-    [cell setBackgroundColor:[UIColor orangeColor]];
+    CollectCarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:seconCellID forIndexPath:indexPath];
+    [cell.labelView setHidden:YES];
+    [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
+    [cell.contentView.layer setBorderWidth:1.0];
+    [cell.contentView.layer setCornerRadius:2.0];
+    if (indexPath.section==0) {
+        [cell setCarModel:jzCarArrayM[indexPath.row]];
+    }else if (indexPath.section ==1){
+        [cell setCarModel:mhCarArrayM[indexPath.row]];
+    }
     return cell;
 }
 
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    
+    CarDetailWebView *car = [[CarDetailWebView alloc] init];
+    CarBaseModel *carmodel= nil;
+    if (indexPath.section==0) {
+        carmodel  = jzCarArrayM[indexPath.row];
+
+    }else if (indexPath.section ==1){
+        carmodel = mhCarArrayM[indexPath.row];
+    }
+    [car setCarID:carmodel.carId];
+    if ([carmodel.carStatus isEqualToString:@"在售"]) {
+        [car setCarStatusType:CarStatusTypeSelling];
+    }else if ([carmodel.carStatus isEqualToString:@"预售"]){
+        [car setCarStatusType:CarStatusTypePresell];
+    }else {
+        [car setCarStatusType:CarStatusTypeSellout];
+    }
+    [self presentViewController:car animated:YES completion:^{
+        
+    }];
+    
+}
+
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"userIDchange" object:nil];
+}
 
 @end

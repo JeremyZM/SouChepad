@@ -199,6 +199,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     CollectHeadView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"collectionView" forIndexPath:indexPath];
+//    [headView setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
     switch (indexPath.section) {
         case 0:
             [headView.stateCarLabel setText:[NSString stringWithFormat:@"成交车辆%d",tradesCars.count]];
@@ -370,6 +371,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"userIDchange" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"update" object:nil];
 }
 /*

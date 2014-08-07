@@ -36,6 +36,7 @@
     NSArray *reqBrandsArray;
     NSArray *reqDeleteBrandArray;
     RequireInfoModel *reqInfoModel;
+    UIButton *deleteCarBut;
     
     NSMutableDictionary *basicRequstDicM;
 }
@@ -67,6 +68,8 @@ static NSString *userDemandCellid = @"userDemandCellid";
         reqDeleteBrandArray = [NSArray arrayWithArray:[obj objectForKey:@"requireBrandsDelete"]];
         reqInfoModel = [dataDic objectForKey:@"requireInfo"];
         
+        [self.searchBut setTitle:[NSString stringWithFormat:@"场馆内共%@辆车",[dataDic objectForKey:@"number"]] forState:UIControlStateNormal];
+        [deleteCarBut setTitle:[NSString stringWithFormat:@"%d",reqDeleteBrandArray.count] forState:UIControlStateNormal];
         [self setViewData];
         
     } fail:^(id obj) {
@@ -145,15 +148,20 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [self insertSubview:userCarCollection atIndex:0];
     
     
-    UIButton *deleteCarBut = [[UIButton alloc] initWithFrame:CGRectMake(40, 680, 60, 60)];
-    [deleteCarBut setBackgroundColor:[UIColor redColor]];
+    deleteCarBut = [[UIButton alloc] initWithFrame:CGRectMake(40, 680, 60, 60)];
     [self addSubview:deleteCarBut];
+    [deleteCarBut setBackgroundImage:[UIImage imageNamed:@"dengluanniu1_60"] forState:UIControlStateNormal];
+    [deleteCarBut setBackgroundImage:[UIImage imageNamed:@"denglu2"] forState:UIControlStateHighlighted];
+    [deleteCarBut setTitle:@"0" forState:UIControlStateNormal];
     [deleteCarBut addTarget:self action:@selector(showRequireDelete) forControlEvents:UIControlEventTouchUpInside];
     
     self.searchBut = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.searchBut setFrame:CGRectMake(340, 690, 280, 40)];
     [self.searchBut addTarget:self action:@selector(hidLimitView) forControlEvents:UIControlEventTouchUpInside];
-    [self.searchBut setBackgroundColor:[UIColor redColor]];
+    [self.searchBut setTitle:@"场馆内共0辆车" forState:UIControlStateNormal];
+    [self.searchBut setBackgroundImage:[UIImage imageNamed:@"dengluanniu1_60"] forState:UIControlStateNormal];
+    [self.searchBut setBackgroundImage:[UIImage imageNamed:@"denglu2"] forState:UIControlStateHighlighted];
+//    [self.searchBut setBackgroundColor:[UIColor redColor]];
     [self addSubview:self.searchBut];
 
 }
@@ -356,7 +364,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
     }
 
     [HttpManager updateUserRequirementInfo:basicRequstDicM Success:^(id obj) {
-        
+        [self.searchBut setTitle:[NSString stringWithFormat:@"场馆内共%@辆车",[obj objectForKey:@"number"]] forState:UIControlStateNormal];
     } fail:^(id obj) {
         
     }];
@@ -427,6 +435,20 @@ static NSString *userDemandCellid = @"userDemandCellid";
         [self.secrVC presentViewController:navVC animated:YES completion:^{
             
         }];
+    }else {
+        RequireBrandsModel *requireBrandM = reqBrandsArray[indexPath.row-1];
+        
+        CGRect frme = self.frame;
+        frme.origin.y -= frme.size.height;
+        [UIView animateWithDuration:0.25 animations:^{
+            [self setFrame:frme];
+            
+        } completion:^(BOOL finished) {
+            if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
+                [_limitDelegate limitSearch:self withDic:@{@"requirementBrandId":requireBrandM._id}];
+            }
+        }];
+        
     }
 }
 
@@ -442,12 +464,11 @@ static NSString *userDemandCellid = @"userDemandCellid";
     frme.origin.y -= frme.size.height;
     [UIView animateWithDuration:0.25 animations:^{
         [self setFrame:frme];
-        
-        if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
-            [_limitDelegate limitSearch:self withDic:@{}];
-        }
 
     } completion:^(BOOL finished) {
+        if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
+            [_limitDelegate limitSearch:self withDic:nil];
+        }
     }];
 }
 

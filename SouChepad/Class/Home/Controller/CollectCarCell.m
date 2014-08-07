@@ -42,6 +42,7 @@
         [_levelImage setHidden:YES];
     }
     
+//    DLog(@"%@",carModel.carStatus);
     // 车辆状态
     if ([carModel.carStatus isEqualToString:@"在售"]) {
         [_carStatusImage setHidden:YES];

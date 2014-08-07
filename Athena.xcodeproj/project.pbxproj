@@ -10,14 +10,12 @@
 		7B7EE1031991F5C80033B599 /* CustomPIMController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFF96190D4B8200A71A4F /* CustomPIMController.m */; };
 		7B7EE1041991F5C80033B599 /* BiaoqainCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5CD92196D295D0006168E /* BiaoqainCell.m */; };
 		7B7EE1051991F5C80033B599 /* MJArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = B2542379190E5C9400874878 /* MJArgument.m */; };
-		7B7EE1061991F5C80033B599 /* FZInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56BF1917597600D756A5 /* FZInfoView.m */; };
 		7B7EE1071991F5C80033B599 /* UserOperationRecordVO.m in Sources */ = {isa = PBXBuildFile; fileRef = B25A3FBA197E6E4C001685F4 /* UserOperationRecordVO.m */; };
 		7B7EE1081991F5C80033B599 /* MJMember.m in Sources */ = {isa = PBXBuildFile; fileRef = B254237E190E5C9400874878 /* MJMember.m */; };
 		7B7EE1091991F5C80033B599 /* MJMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = B2542380190E5C9400874878 /* MJMethod.m */; };
 		7B7EE10A1991F5C80033B599 /* MKNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFF6D190C1C7000A71A4F /* MKNetworkOperation.m */; };
 		7B7EE10B1991F5C80033B599 /* NSData+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = B227B25E19334C8700A40EE4 /* NSData+GIF.m */; };
 		7B7EE10C1991F5C80033B599 /* CommListController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A7883C191A173000AE55BC /* CommListController.m */; };
-		7B7EE10D1991F5C80033B599 /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335451922FD7500499F31 /* MessageVC.m */; };
 		7B7EE10E1991F5C80033B599 /* UIImageView+LK.m in Sources */ = {isa = PBXBuildFile; fileRef = B227B2571933491C00A40EE4 /* UIImageView+LK.m */; };
 		7B7EE10F1991F5C80033B599 /* UserExtendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B29FC1DB1949B55F00AAE7E2 /* UserExtendModel.m */; };
 		7B7EE1101991F5C80033B599 /* LogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFEE0190BB6C100A71A4F /* LogInViewController.m */; };
@@ -62,7 +60,6 @@
 		7B7EE1371991F5C80033B599 /* MultiTablesView.m in Sources */ = {isa = PBXBuildFile; fileRef = B277DCA9195549F60017192A /* MultiTablesView.m */; };
 		7B7EE1381991F5C80033B599 /* ChangePasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B20CEEB51945D00300A893E1 /* ChangePasswordVC.m */; };
 		7B7EE1391991F5C80033B599 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = B227B26019334C8700A40EE4 /* NSData+ImageContentType.m */; };
-		7B7EE13A1991F5C80033B599 /* MyMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = B293353F1921C9D300499F31 /* MyMessageController.m */; };
 		7B7EE13B1991F5C80033B599 /* CollectHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2227603194479DC00FD2A2C /* CollectHeadView.m */; };
 		7B7EE13C1991F5C80033B599 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DDFF70190C1C7000A71A4F /* Reachability.m */; };
 		7B7EE13D1991F5C80033B599 /* CarCQIInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B075A419667F4700A3057E /* CarCQIInfoController.m */; };
@@ -414,7 +411,6 @@
 		B2459BB2192379A200C3D28B /* SearchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB1192379A200C3D28B /* SearchVC.m */; };
 		B2459BB71924A75800C3D28B /* LimitSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB61924A75800C3D28B /* LimitSearchView.m */; };
 		B2459BBA1924AAF200C3D28B /* SearchHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2459BB91924AAF200C3D28B /* SearchHeadView.m */; };
-		B24D56C01917597600D756A5 /* FZInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56BF1917597600D756A5 /* FZInfoView.m */; };
 		B24D56C319176F7400D756A5 /* JBInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56C219176F7400D756A5 /* JBInfoView.m */; };
 		B24D56CB1917920900D756A5 /* KeyboardTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B24D56C91917920900D756A5 /* KeyboardTool.m */; };
 		B24D56CC1917920900D756A5 /* KeyboardTool.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24D56CA1917920900D756A5 /* KeyboardTool.xib */; };
@@ -477,8 +473,6 @@
 		B28130D1195E61F500184F0D /* shenfengzheng1.png in Resources */ = {isa = PBXBuildFile; fileRef = B28130CE195E61F500184F0D /* shenfengzheng1.png */; };
 		B28130D2195E61F500184F0D /* shenfengzheng2.png in Resources */ = {isa = PBXBuildFile; fileRef = B28130CF195E61F500184F0D /* shenfengzheng2.png */; };
 		B28130D6195E620900184F0D /* buy_60.png in Resources */ = {isa = PBXBuildFile; fileRef = B28130D3195E620900184F0D /* buy_60.png */; };
-		B29335401921C9D300499F31 /* MyMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = B293353F1921C9D300499F31 /* MyMessageController.m */; };
-		B29335461922FD7500499F31 /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335451922FD7500499F31 /* MessageVC.m */; };
 		B29335491922FDBE00499F31 /* MasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B29335481922FDBE00499F31 /* MasterTableViewController.m */; };
 		B293354C1922FDDF00499F31 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B293354B1922FDDF00499F31 /* DetailViewController.m */; };
 		B298AE3F192D91DB00DCE795 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B298AE35192D91DB00DCE795 /* MJRefresh.bundle */; };
@@ -810,8 +804,6 @@
 		B2459BB91924AAF200C3D28B /* SearchHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchHeadView.m; sourceTree = "<group>"; };
 		B2459BBB1925A70400C3D28B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		B2459BBC1925A70400C3D28B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		B24D56BE1917597600D756A5 /* FZInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FZInfoView.h; sourceTree = "<group>"; };
-		B24D56BF1917597600D756A5 /* FZInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FZInfoView.m; sourceTree = "<group>"; };
 		B24D56C119176F7400D756A5 /* JBInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JBInfoView.h; sourceTree = "<group>"; };
 		B24D56C219176F7400D756A5 /* JBInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JBInfoView.m; sourceTree = "<group>"; };
 		B24D56C81917920900D756A5 /* KeyboardTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardTool.h; sourceTree = "<group>"; };
@@ -904,10 +896,6 @@
 		B28130CE195E61F500184F0D /* shenfengzheng1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shenfengzheng1.png; sourceTree = "<group>"; };
 		B28130CF195E61F500184F0D /* shenfengzheng2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shenfengzheng2.png; sourceTree = "<group>"; };
 		B28130D3195E620900184F0D /* buy_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buy_60.png; sourceTree = "<group>"; };
-		B293353E1921C9D300499F31 /* MyMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMessageController.h; sourceTree = "<group>"; };
-		B293353F1921C9D300499F31 /* MyMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMessageController.m; sourceTree = "<group>"; };
-		B29335441922FD7500499F31 /* MessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageVC.h; sourceTree = "<group>"; };
-		B29335451922FD7500499F31 /* MessageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageVC.m; sourceTree = "<group>"; };
 		B29335471922FDBE00499F31 /* MasterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterTableViewController.h; sourceTree = "<group>"; };
 		B29335481922FDBE00499F31 /* MasterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterTableViewController.m; sourceTree = "<group>"; };
 		B293354A1922FDDF00499F31 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -1465,8 +1453,6 @@
 				B29FC270194AF9B500AAE7E2 /* LookOrDriveCarInfoCell.xib */,
 				B2227602194479DC00FD2A2C /* CollectHeadView.h */,
 				B2227603194479DC00FD2A2C /* CollectHeadView.m */,
-				B24D56BE1917597600D756A5 /* FZInfoView.h */,
-				B24D56BF1917597600D756A5 /* FZInfoView.m */,
 				B2A78835191885E500AE55BC /* FuZhuInfoView.h */,
 				B2A78836191885E500AE55BC /* FuZhuInfoView.m */,
 				B2A656CF1957BA1A009CF193 /* ImageViewController.h */,
@@ -1618,10 +1604,6 @@
 		B293353B1921C90D00499F31 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				B293353E1921C9D300499F31 /* MyMessageController.h */,
-				B293353F1921C9D300499F31 /* MyMessageController.m */,
-				B29335441922FD7500499F31 /* MessageVC.h */,
-				B29335451922FD7500499F31 /* MessageVC.m */,
 				B29335471922FDBE00499F31 /* MasterTableViewController.h */,
 				B29335481922FDBE00499F31 /* MasterTableViewController.m */,
 				B293354A1922FDDF00499F31 /* DetailViewController.h */,
@@ -2598,6 +2580,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = souche;
 				TargetAttributes = {
+					7B7EE1011991F5C80033B599 = {
+						DevelopmentTeam = JY6DUL599C;
+					};
 					B2DDFE8D190BB3F000A71A4F = {
 						DevelopmentTeam = XH2Z24LF5H;
 						SystemCapabilities = {
@@ -2974,14 +2959,12 @@
 				7B7EE1031991F5C80033B599 /* CustomPIMController.m in Sources */,
 				7B7EE1041991F5C80033B599 /* BiaoqainCell.m in Sources */,
 				7B7EE1051991F5C80033B599 /* MJArgument.m in Sources */,
-				7B7EE1061991F5C80033B599 /* FZInfoView.m in Sources */,
 				7B7EE1071991F5C80033B599 /* UserOperationRecordVO.m in Sources */,
 				7B7EE1081991F5C80033B599 /* MJMember.m in Sources */,
 				7B7EE1091991F5C80033B599 /* MJMethod.m in Sources */,
 				7B7EE10A1991F5C80033B599 /* MKNetworkOperation.m in Sources */,
 				7B7EE10B1991F5C80033B599 /* NSData+GIF.m in Sources */,
 				7B7EE10C1991F5C80033B599 /* CommListController.m in Sources */,
-				7B7EE10D1991F5C80033B599 /* MessageVC.m in Sources */,
 				7B7EE10E1991F5C80033B599 /* UIImageView+LK.m in Sources */,
 				7B7EE10F1991F5C80033B599 /* UserExtendModel.m in Sources */,
 				7B7EE1101991F5C80033B599 /* LogInViewController.m in Sources */,
@@ -3027,7 +3010,6 @@
 				7B7EE1371991F5C80033B599 /* MultiTablesView.m in Sources */,
 				7B7EE1381991F5C80033B599 /* ChangePasswordVC.m in Sources */,
 				7B7EE1391991F5C80033B599 /* NSData+ImageContentType.m in Sources */,
-				7B7EE13A1991F5C80033B599 /* MyMessageController.m in Sources */,
 				7B7EE13B1991F5C80033B599 /* CollectHeadView.m in Sources */,
 				7B7EE13C1991F5C80033B599 /* Reachability.m in Sources */,
 				7B7EE13D1991F5C80033B599 /* CarCQIInfoController.m in Sources */,
@@ -3143,14 +3125,12 @@
 				B2DDFF97190D4B8200A71A4F /* CustomPIMController.m in Sources */,
 				B2E5CD93196D295D0006168E /* BiaoqainCell.m in Sources */,
 				B254238B190E5C9400874878 /* MJArgument.m in Sources */,
-				B24D56C01917597600D756A5 /* FZInfoView.m in Sources */,
 				B25A3FBB197E6E4C001685F4 /* UserOperationRecordVO.m in Sources */,
 				B254238D190E5C9400874878 /* MJMember.m in Sources */,
 				B254238E190E5C9400874878 /* MJMethod.m in Sources */,
 				B2DDFF78190C1C7000A71A4F /* MKNetworkOperation.m in Sources */,
 				B227B27819334C8700A40EE4 /* NSData+GIF.m in Sources */,
 				B2A7883D191A173000AE55BC /* CommListController.m in Sources */,
-				B29335461922FD7500499F31 /* MessageVC.m in Sources */,
 				B227B25B1933491C00A40EE4 /* UIImageView+LK.m in Sources */,
 				B29FC1DC1949B55F00AAE7E2 /* UserExtendModel.m in Sources */,
 				B2DDFEE1190BB6C100A71A4F /* LogInViewController.m in Sources */,
@@ -3196,7 +3176,6 @@
 				B277DCAC195549F60017192A /* MultiTablesView.m in Sources */,
 				B20CEEB61945D00300A893E1 /* ChangePasswordVC.m in Sources */,
 				B227B27919334C8700A40EE4 /* NSData+ImageContentType.m in Sources */,
-				B29335401921C9D300499F31 /* MyMessageController.m in Sources */,
 				B2227604194479DC00FD2A2C /* CollectHeadView.m in Sources */,
 				B2DDFF79190C1C7000A71A4F /* Reachability.m in Sources */,
 				B2B075A519667F4700A3057E /* CarCQIInfoController.m in Sources */,
@@ -3350,8 +3329,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SouChepad/Athena-Prefix.pch";
@@ -3368,7 +3347,7 @@
 					"$(PROJECT_DIR)/SouChepad/Class/Other/Lib/jiguangPush",
 				);
 				PRODUCT_NAME = "Athena copy";
-				PROVISIONING_PROFILE = "CF8546BD-46AD-4754-A5A0-C1A357A03F5A";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3379,8 +3358,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ding Chen (Y2KRQ628FM)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SouChepad/Athena-Prefix.pch";
@@ -3398,7 +3377,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "Athena copy";
-				PROVISIONING_PROFILE = "CF8546BD-46AD-4754-A5A0-C1A357A03F5A";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
