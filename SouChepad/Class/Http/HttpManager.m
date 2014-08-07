@@ -667,13 +667,17 @@
 }
 
 
-#pragma mark - 我的消息
-+ (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+#pragma mark - 我的消息 type:消息类型，1==系统消息，0==个人消息
++ (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic messageType:(int)type Success:(Success)success
+                                fail:(Fail)fail
 {
+    NSString *api = @"pages/sellManageAction/getSalerMessageByType.json";
+    if (type == 1) {
+        api = @"pages/sellManageAction/getSellHint.json";
+    }
     [[HttpService sharedService]
-                              requestWithApi:@"pages/sellManageAction/getSellHint.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+                              requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
                                   DLog(@"%@",[obj responseJSON]);
-                                  
                                   NSDictionary *dataDic = [obj responseJSON];
                                   NSArray *array = [dataDic objectForKey:@"baseHint"];
                                   NSMutableArray *arrayM = [NSMutableArray arrayWithCapacity:array.count];

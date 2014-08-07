@@ -99,8 +99,8 @@ typedef void (^UploadProgress)(NSString *progress);
 
 
 #pragma mark - 我的消息
-+ (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
-
++ (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic messageType:(int)type Success:(Success)success
+                                fail:(Fail)fail;
 
 #pragma mark - 获取所有车型
 + (void)getDictionaryByTypeAndLevel:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
