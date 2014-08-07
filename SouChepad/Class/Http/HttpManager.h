@@ -105,7 +105,7 @@ typedef void (^UploadProgress)(NSString *progress);
 + (void)delUserRequirementInfoBrand:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
 
-#pragma mark - 我的消息
+#pragma mark - 我的消息和系统消息
 + (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic messageType:(int)type Success:(Success)success
                                 fail:(Fail)fail;
 

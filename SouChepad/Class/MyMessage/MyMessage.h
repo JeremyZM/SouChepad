@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *dateDelete;
 @property (nonatomic, strong) NSString *dateUpdate;
 @property (nonatomic, strong) NSString *image;
+@property (nonatomic, strong) NSString *imageURL;
 @property (nonatomic, strong) NSString *title;
 
 @end
