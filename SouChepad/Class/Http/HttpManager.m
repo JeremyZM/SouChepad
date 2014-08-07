@@ -516,7 +516,7 @@
         [requireInfoModel setKeyValues:requireInfoDic];
         
         
-        success(@{@"requireBrands":[NSArray arrayWithArray:reqBrandArrayM],@"requireBrandsDelete":[NSArray arrayWithArray:reqBranDeleteArrayM],@"requireInfo":requireInfoModel});
+        success(@{@"requireBrands":[NSArray arrayWithArray:reqBrandArrayM],@"requireBrandsDelete":[NSArray arrayWithArray:reqBranDeleteArrayM],@"requireInfo":requireInfoModel,@"number":[NSString stringWithFormat:@"%@",[objDic objectForKey:@"number"]]});
         
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
@@ -527,7 +527,13 @@
 + (void)updateUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateUserRequirementInfo.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([dic objectForKey:@"errorMessage"]) {
+            [ProgressHUD showError:[dic objectForKey:@"errorMessage"]];
+            return ;
+        }
+
+        success (dic);
         DLog(@"%@",[obj responseJSON]);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
@@ -537,7 +543,13 @@
 #pragma mark - 匹配车辆精准
 + (void)queryUserRequirementInfoCarZJ:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
-    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/queryUserRequirementInfoCarJZ.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+    NSString *api = nil;
+    if ([paramDic objectForKey:@"requirementBrandId"]) {
+        api = @"/pages/sellManageAction/queryUserRequirementBrandCarJZ.json";
+    }else{
+        api = @"/pages/sellManageAction/queryUserRequirementInfoCarJZ.json";
+    }
+    [[HttpService sharedService] requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
         NSMutableDictionary *dicobj = [NSMutableDictionary dictionaryWithDictionary:[obj responseJSON]];
         if ([dicobj objectForKey:@"errorMessage"]) {
             [ProgressHUD showError:[dicobj objectForKey:@"errorMessage"]];
@@ -568,18 +580,53 @@
 #pragma mark - 匹配模糊车辆
 + (void)queryUserRequirementInfoCarMH:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
-    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/queryUserRequirementInfoCarMH.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+    NSString *api = nil;
+    if ([paramDic objectForKey:@"requirementBrandId"]) {
+        api = @"/pages/sellManageAction/queryUserRequirementBrandCarMH.json";
+    }else {
+        api = @"/pages/sellManageAction/queryUserRequirementInfoCarMH.json";
+    }
+    
+    [[HttpService sharedService] requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
         NSDictionary *dicobj = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
-        if ([dicobj objectForKey:@"err"]) {
-            [ProgressHUD showError:[dicobj objectForKey:@"err"]];
+        if ([dicobj objectForKey:@"errorMessage"]) {
+            [ProgressHUD showError:[dicobj objectForKey:@"errorMessage"]];
             return;
         }
+        NSArray *dataArray = [dicobj objectForKey:@"mh"];
+        NSMutableArray *mhCarArrayM = [NSMutableArray array];
+        for (NSDictionary *mhCarDic in dataArray) {
+            CarBaseModel *carM = [[CarBaseModel alloc] init];
+            [carM setKeyValues:mhCarDic];
+            [mhCarArrayM addObject:carM];
+        }
+        success(mhCarArrayM);
         DLog(@"%@",[obj responseJSON]);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         fail (error);
     } reload:YES needHud:YES hudEnabled:NO];
 }
 
+
+//#pragma mark - 品牌需求匹配车辆精准
+//+ (void)queryUserRequirementBrandCarZJ:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+//{
+//    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/queryUserRequirementBrandCarJZ.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+//        DLog(@"%@",[obj responseJSON]);
+//    } fail:^(MKNetworkOperation *obj, NSError *error) {
+//
+//    } reload:YES needHud:YES hudEnabled:NO];
+//}
+//
+//#pragma mark - 品牌需求匹配车辆模糊
+//+ (void)queryUserRequirementBrandCarMH:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
+//{
+//    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/queryUserRequirementBrandCarMH.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+//        DLog(@"%@",[obj responseJSON]);
+//    } fail:^(MKNetworkOperation *obj, NSError *error) {
+//        
+//    } reload:YES needHud:YES hudEnabled:NO];
+//}
 
 #pragma mark - 最后一条看车记录
 + (void)lastCarLookOrDrive:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail

@@ -80,6 +80,12 @@ typedef void (^UploadProgress)(NSString *progress);
 + (void)queryUserRequirementInfoCarMH:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
 
+#pragma mark - 品牌需求匹配车辆精准
++ (void)queryUserRequirementBrandCarZJ:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 品牌需求匹配车辆模糊
++ (void)queryUserRequirementBrandCarMH:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+
 #pragma mark - 最后一条看车记录
 + (void)lastCarLookOrDrive:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
 
