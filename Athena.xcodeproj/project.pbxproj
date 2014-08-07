@@ -346,6 +346,12 @@
 		7B7EE267199232E10033B599 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE265199232E10033B599 /* PushConfig.plist */; };
 		7B7EE269199235C70033B599 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7EE268199235C70033B599 /* CoreTelephony.framework */; };
 		7B7EE26A199235D30033B599 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7EE268199235C70033B599 /* CoreTelephony.framework */; };
+		7B7EE2B319932D5E0033B599 /* MessageDetail.html in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE2B019932D5E0033B599 /* MessageDetail.html */; };
+		7B7EE2B419932D5E0033B599 /* MessageDetail.html in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE2B019932D5E0033B599 /* MessageDetail.html */; };
+		7B7EE2B519932D5E0033B599 /* MessageDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7EE2B219932D5E0033B599 /* MessageDetailView.m */; };
+		7B7EE2B619932D5E0033B599 /* MessageDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7EE2B219932D5E0033B599 /* MessageDetailView.m */; };
+		7B7EE2C519935CBB0033B599 /* webBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE2C419935CBB0033B599 /* webBg.png */; };
+		7B7EE2C619935CBB0033B599 /* webBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B7EE2C419935CBB0033B599 /* webBg.png */; };
 		B2062A401959AA8D007A0CCF /* BeginBut.m in Sources */ = {isa = PBXBuildFile; fileRef = B2062A3F1959AA8D007A0CCF /* BeginBut.m */; };
 		B20CEEB11945887C00A893E1 /* BaseDtaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B20CEEB01945887C00A893E1 /* BaseDtaModel.m */; };
 		B20CEEB31945CA9E00A893E1 /* loading_03.png in Resources */ = {isa = PBXBuildFile; fileRef = B20CEEB21945CA9E00A893E1 /* loading_03.png */; };
@@ -703,6 +709,10 @@
 		7B7EE262199232850033B599 /* libPushSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPushSDK.a; sourceTree = "<group>"; };
 		7B7EE265199232E10033B599 /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
 		7B7EE268199235C70033B599 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		7B7EE2B019932D5E0033B599 /* MessageDetail.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MessageDetail.html; sourceTree = "<group>"; };
+		7B7EE2B119932D5E0033B599 /* MessageDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDetailView.h; sourceTree = "<group>"; };
+		7B7EE2B219932D5E0033B599 /* MessageDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailView.m; sourceTree = "<group>"; };
+		7B7EE2C419935CBB0033B599 /* webBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = webBg.png; sourceTree = "<group>"; };
 		B2062A3E1959AA8D007A0CCF /* BeginBut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeginBut.h; sourceTree = "<group>"; };
 		B2062A3F1959AA8D007A0CCF /* BeginBut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeginBut.m; sourceTree = "<group>"; };
 		B20CEEAF1945887C00A893E1 /* BaseDtaModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDtaModel.h; sourceTree = "<group>"; };
@@ -1319,6 +1329,17 @@
 			path = jiguangPush;
 			sourceTree = "<group>";
 		};
+		7B7EE2AF19932D5E0033B599 /* messageDetail */ = {
+			isa = PBXGroup;
+			children = (
+				7B7EE2B019932D5E0033B599 /* MessageDetail.html */,
+				7B7EE2C419935CBB0033B599 /* webBg.png */,
+				7B7EE2B119932D5E0033B599 /* MessageDetailView.h */,
+				7B7EE2B219932D5E0033B599 /* MessageDetailView.m */,
+			);
+			path = messageDetail;
+			sourceTree = "<group>";
+		};
 		B222760719448B4F00FD2A2C /* Knowledge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1618,6 +1639,7 @@
 		B293353B1921C90D00499F31 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7B7EE2AF19932D5E0033B599 /* messageDetail */,
 				B293353E1921C9D300499F31 /* MyMessageController.h */,
 				B293353F1921C9D300499F31 /* MyMessageController.m */,
 				B29335441922FD7500499F31 /* MessageVC.h */,
@@ -2696,6 +2718,7 @@
 				7B7EE1EF1991F5C80033B599 /* tubiao_50.png in Resources */,
 				7B7EE1F01991F5C80033B599 /* tubiao_32.png in Resources */,
 				7B7EE1F11991F5C80033B599 /* CustomerListCell.xib in Resources */,
+				7B7EE2C619935CBB0033B599 /* webBg.png in Resources */,
 				7B7EE1F21991F5C80033B599 /* tubiao_13.png in Resources */,
 				7B7EE1F31991F5C80033B599 /* tubiao_46.png in Resources */,
 				7B7EE1F41991F5C80033B599 /* TradeCarInfoCell.xib in Resources */,
@@ -2737,6 +2760,7 @@
 				7B7EE2181991F5C80033B599 /* tubiao_16.png in Resources */,
 				7B7EE2191991F5C80033B599 /* color_112.png in Resources */,
 				7B7EE21A1991F5C80033B599 /* 标准车辆卡片小图标_17.png in Resources */,
+				7B7EE2B419932D5E0033B599 /* MessageDetail.html in Resources */,
 				7B7EE21B1991F5C80033B599 /* MJRefresh.bundle in Resources */,
 				7B7EE21C1991F5C80033B599 /* 标准车辆卡片小图标_14.png in Resources */,
 				7B7EE21D1991F5C80033B599 /* Images.xcassets in Resources */,
@@ -2858,6 +2882,7 @@
 				B2F18623193F1E6400AEF90E /* tubiao_50.png in Resources */,
 				B2F18612193F1E6400AEF90E /* tubiao_32.png in Resources */,
 				B2542398190E646D00874878 /* CustomerListCell.xib in Resources */,
+				7B7EE2C519935CBB0033B599 /* webBg.png in Resources */,
 				B2F18600193F1E6400AEF90E /* tubiao_13.png in Resources */,
 				B2F1861F193F1E6400AEF90E /* tubiao_46.png in Resources */,
 				B29FC26A194AEBB900AAE7E2 /* TradeCarInfoCell.xib in Resources */,
@@ -2899,6 +2924,7 @@
 				B2F18603193F1E6400AEF90E /* tubiao_16.png in Resources */,
 				B22313D219767365004EF45C /* color_112.png in Resources */,
 				B2711F35194C489300A65BDF /* 标准车辆卡片小图标_17.png in Resources */,
+				7B7EE2B319932D5E0033B599 /* MessageDetail.html in Resources */,
 				B298AE3F192D91DB00DCE795 /* MJRefresh.bundle in Resources */,
 				B2711F34194C489300A65BDF /* 标准车辆卡片小图标_14.png in Resources */,
 				B2DDFEA4190BB3F000A71A4F /* Images.xcassets in Resources */,
@@ -3025,6 +3051,7 @@
 				7B7EE1351991F5C80033B599 /* HanyuPinyinOutputFormat.m in Sources */,
 				7B7EE1361991F5C80033B599 /* JDStatusBarStyle.m in Sources */,
 				7B7EE1371991F5C80033B599 /* MultiTablesView.m in Sources */,
+				7B7EE2B619932D5E0033B599 /* MessageDetailView.m in Sources */,
 				7B7EE1381991F5C80033B599 /* ChangePasswordVC.m in Sources */,
 				7B7EE1391991F5C80033B599 /* NSData+ImageContentType.m in Sources */,
 				7B7EE13A1991F5C80033B599 /* MyMessageController.m in Sources */,
@@ -3194,6 +3221,7 @@
 				B2D0CF6019540F8100182D02 /* HanyuPinyinOutputFormat.m in Sources */,
 				B2B2977419348BF9000AF928 /* JDStatusBarStyle.m in Sources */,
 				B277DCAC195549F60017192A /* MultiTablesView.m in Sources */,
+				7B7EE2B519932D5E0033B599 /* MessageDetailView.m in Sources */,
 				B20CEEB61945D00300A893E1 /* ChangePasswordVC.m in Sources */,
 				B227B27919334C8700A40EE4 /* NSData+ImageContentType.m in Sources */,
 				B29335401921C9D300499F31 /* MyMessageController.m in Sources */,
