@@ -1,0 +1,60 @@
+<!DOCTYPE html> 
+
+<html> 
+    <head> 
+	    <style >
+	    	*{margin: 0;padding: 0;}
+	    	body{}
+	    	#bodyContent{width: 96%;margin-left: 2%;}
+	    	#messageTitle{color: black;font-size: 40pt;}
+	    	#messageSubTitle{color: gray;font:16pt; }
+	    	#content{margin-top: 15px;}
+	    	#image{padding-top: 100px;width: 100%;}
+	    	img{max-width:100%;margin-top:10px;}
+	    </style>
+	    
+	    <script type="text/javascript">
+	    	
+	    	function changeMessage(title, subtitle,content,imageUrl){
+		    	//// 修改标题
+		    	document.getElementById("messageTitle").innerHTML = title;
+		    	// 修改该子标题和时间
+		    	document.getElementById("messageSubTitle").innerHTML = subtitle;
+		    	// 修改文章内容		    	
+		    	document.getElementById("msgText").innerHTML = content;
+                // 修改图片
+                if(imageUrl.indexof("http://") > 0){
+                    document.getElementById("msgImage").src = imageUrl;
+                }
+	    	}
+	    </script>
+    </head> 
+    
+    <body> 
+    	
+    	<div id="bodyContent">
+    	
+	        <div id="header"> 
+	            <div id="messageTitle"></div> 
+	            <div id="messageSubTitle"></div> 
+	        </div> 
+	        
+	        <div id="content"> 
+	            <div id="msgText">
+		            		  
+	            </div>
+	            
+	            <div id="iamge">
+	            	<img id="msgImage" src="./webBg.png" />
+	            </div>
+	        </div> 
+	        
+	        
+	        <div id="footer"> 
+	
+	        </div> 
+        
+    	</div>
+    </body> 
+    
+</html> 
