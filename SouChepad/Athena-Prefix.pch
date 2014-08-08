@@ -18,5 +18,6 @@
     #import "BaseDtaModel.h"
     #import "MobClick.h"
     #import "SCMacro.h"
+    #import "HttpManager.h"
 #endif
 
