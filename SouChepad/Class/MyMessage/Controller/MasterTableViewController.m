@@ -12,6 +12,8 @@
 #import "DetailViewController.h"
 #import "CoreDateManager.h"
 #import "MJRefresh.h"
+#import "UIImageView+WebCache.h"
+#import "MyMessageCell.h"
 
 @interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate,MJRefreshBaseViewDelegate>
 {
@@ -21,6 +23,7 @@
     NSArray *filteredContentList;
     int messageType;//消息类型
     int page;//请求第一页消息
+    int pageSize;
 }
 @property (nonatomic, strong) DetailViewController *detailViewController;
 
@@ -32,6 +35,28 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // 初始化数据
+    page = 0;
+    pageSize = 40;// 每页显示40条
+    
+    [self navigationset];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+    
+    [self.refreshControl beginRefreshing];
+
+    messageType = 0;
+    [self requestMessageWithType:messageType];
 }
 
 - (void)navigationset
@@ -49,44 +74,6 @@
     [messageTypeSegment addTarget:self action:@selector(messageTypeChanged:) forControlEvents:UIControlEventValueChanged];
     [self.navigationController.navigationBar addSubview:messageTypeSegment];
 }
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self navigationset];
-
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
-    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
-    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:self.refreshControl];
-    
-    [self.refreshControl beginRefreshing];
-    
-//    // 1.添加下拉刷新
-//    _refreshControl = [MJRefreshHeaderView header];
-//    _refreshControl.delegate = self;
-//    _refreshControl.scrollView = self.tableView;
-//    [_refreshControl setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
-//    // 自动进入刷新状态
-//    [_refreshControl beginRefreshing];
-
-    messageType = 0;
-    [self requestMessageWithType:messageType];
-}
-
-//// 开始刷新
-//- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
-//{
-//    [self writeDate];
-//}
-//
-//// 结束刷新
-//- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
-//{
-//
-//}
 
 - (void)RefreshViewControlEventValueChanged
 {
@@ -163,31 +150,30 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 100;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    static NSString *CellIdentifier = @"MyMessageCell";
+    MyMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell = [[MyMessageCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    MyMessage *message;
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        message = filteredContentList[indexPath.row];
-        DLog(@"1112121212121");
-    } else {
-        DLog(@"------------------");
-        message = _messageArray[indexPath.row];
-    }
-    
-    
-    [cell.textLabel setText:message.title];
-    [cell.detailTextLabel setText:message.dateCreate];
-    
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)_cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    MyMessageCell *cell = (MyMessageCell*)_cell;
+    MyMessage *msg = [_messageArray objectAtIndex:indexPath.row];
+    [cell fillValueWithMessage:msg];
+    
+    // 加载到最后一条的时候自动加载下一页
+    if ((indexPath.row == _messageArray.count-1) && (_messageArray.count%pageSize == 0)) {
+        page++;
+        [self requestMessageWithType:messageType];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self showMessageDetailWithIndex:indexPath.row];

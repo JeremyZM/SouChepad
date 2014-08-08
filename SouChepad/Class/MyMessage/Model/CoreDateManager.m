@@ -100,8 +100,8 @@
         newsInfo.title = info.title;
         newsInfo.commentShwo = info.commentShwo;
         newsInfo.dateCreate = info.dateCreate;
-        newsInfo.dateDelete = info.dateDelete;
-        newsInfo.dateUpdate = info.dateUpdate;
+//        newsInfo.dateDelete = info.dateDelete;
+//        newsInfo.dateUpdate = info.dateUpdate;
         newsInfo.image = info.image;
     
         NSError *error;
