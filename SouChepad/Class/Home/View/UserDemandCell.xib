@@ -27,7 +27,7 @@
                         <rect key="frame" x="250" y="0.0" width="30" height="40"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <state key="normal" image="tubiao_48.png">
+                        <state key="normal">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -38,7 +38,7 @@
                             <constraint firstAttribute="height" constant="33" id="ZeR-OR-H6A"/>
                             <constraint firstAttribute="width" constant="30" id="n80-X0-4pC"/>
                         </constraints>
-                        <state key="normal" image="tubiao_11.png">
+                        <state key="normal" image="xuqiushouji_54.png">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -171,7 +171,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="tubiao_11.png" width="36" height="36"/>
-        <image name="tubiao_48.png" width="20" height="20"/>
+        <image name="xuqiushouji_54.png" width="20" height="20"/>
     </resources>
 </document>

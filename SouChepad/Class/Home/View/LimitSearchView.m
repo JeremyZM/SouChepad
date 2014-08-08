@@ -150,9 +150,9 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
     deleteCarBut = [[UIButton alloc] initWithFrame:CGRectMake(40, 680, 60, 60)];
     [self addSubview:deleteCarBut];
-    [deleteCarBut setBackgroundImage:[UIImage imageNamed:@"dengluanniu1_60"] forState:UIControlStateNormal];
-    [deleteCarBut setBackgroundImage:[UIImage imageNamed:@"denglu2"] forState:UIControlStateHighlighted];
+    [deleteCarBut setBackgroundImage:[UIImage imageNamed:@"xuqiushouji_76"] forState:UIControlStateNormal];
     [deleteCarBut setTitle:@"0" forState:UIControlStateNormal];
+    [deleteCarBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
     [deleteCarBut addTarget:self action:@selector(showRequireDelete) forControlEvents:UIControlEventTouchUpInside];
     
     self.searchBut = [UIButton buttonWithType:UIButtonTypeCustom];
