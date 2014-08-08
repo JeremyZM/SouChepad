@@ -7,7 +7,7 @@
 //
 
 #import "MyMessageCell.h"
-#import "MyMessage.h"
+#import "SystermMessage.h"
 #import "UIImageView+WebCache.h"
 
 @interface MyMessageCell(){
@@ -16,7 +16,6 @@
     __weak IBOutlet UILabel *title;
     __weak IBOutlet UILabel *time;
     __weak IBOutlet UILabel *subTitle;
-    __weak IBOutlet UIImageView *imgView;
 }
 
 @end
@@ -41,11 +40,10 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)fillValueWithMessage:(MyMessage*)msg{
+- (void)fillValueWithMessage:(SystermMessage*)msg{
     title.text = strNoNull(msg.title);
     time.text = strNoNull(msg.dateCreate);
     subTitle.text = strNoNull(msg.comment);
-    [imgView setImageWithURL:[NSURL URLWithString:strNoNull(msg.imageURL)] placeholderImage:nil];
 }
 
 - (void)markMessageAsRead:(BOOL)read{

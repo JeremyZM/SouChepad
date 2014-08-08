@@ -8,7 +8,7 @@
 
 #import "MasterTableViewController.h"
 #import "HttpManager.h"
-#import "MyMessage.h"
+#import "SystermMessage.h"
 #import "DetailViewController.h"
 #import "CoreDateManager.h"
 #import "MJRefresh.h"
@@ -95,8 +95,11 @@
     [dic setObject:[NSNumber numberWithInt:page] forKey:@"index"];
     // 条
     [dic setObject:@"40" forKey:@"pageSize"];
-    // 类型（系统信息：system）
-    [dic setObject:@"system" forKey:@"readType"];
+    // 0 个人
+    if (type == 1) {
+        // 类型（系统信息：system）
+        [dic setObject:@"system" forKey:@"readType"];
+    }
     //销售ID
     [dic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
     
@@ -115,7 +118,7 @@
 // 显示消息详情
 - (void)showMessageDetailWithIndex:(int)msgIndex{
     if (_messageArray.count > 0) {
-        MyMessage *message = [_messageArray objectAtIndex:msgIndex];
+        SystermMessage *message = [_messageArray objectAtIndex:msgIndex];
         self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
         [self.detailViewController setMessageM:message];
     }else{
@@ -150,7 +153,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    return 80;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -165,7 +168,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)_cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     MyMessageCell *cell = (MyMessageCell*)_cell;
-    MyMessage *msg = [_messageArray objectAtIndex:indexPath.row];
+    SystermMessage *msg = [_messageArray objectAtIndex:indexPath.row];
     [cell fillValueWithMessage:msg];
     
     // 加载到最后一条的时候自动加载下一页

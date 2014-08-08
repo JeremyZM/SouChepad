@@ -6,10 +6,10 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
-#import "MyMessage.h"
+#import "SystermMessage.h"
 
 
-@implementation MyMessage
+@implementation SystermMessage
 
 
 

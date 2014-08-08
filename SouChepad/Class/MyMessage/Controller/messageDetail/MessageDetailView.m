@@ -7,7 +7,7 @@
 //
 
 #import "MessageDetailView.h"
-#import "MyMessage.h"
+#import "SystermMessage.h"
 
 @interface MessageDetailView ()<UIWebViewDelegate>{
     UIWebView *webView;
@@ -39,7 +39,7 @@
 
 
 - (void)setMessageDetail:(id)message{
-    MyMessage *msg = (MyMessage*)message;
+    SystermMessage *msg = (SystermMessage*)message;
     if (msg) {
         [self loadMessageTitle:msg.title subTitle:msg.dateCreate content:msg.comment imageUrl:msg.image];
     }else{

@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class  MyMessage;
+@class  SystermMessage;
 
 @interface MyMessageCell : UITableViewCell
-- (void)fillValueWithMessage:(MyMessage*)msg;
+- (void)fillValueWithMessage:(SystermMessage*)msg;
 - (void)markMessageAsRead:(BOOL)read;
 @end

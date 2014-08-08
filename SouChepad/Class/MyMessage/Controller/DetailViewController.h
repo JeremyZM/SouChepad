@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MyMessage.h"
+#import "SystermMessage.h"
 
 @interface DetailViewController : UIViewController
 
@@ -16,6 +16,6 @@
 @property (nonatomic, strong) UILabel *contentLabel;
 @property (nonatomic, strong) UIImageView *imageView;
 
-@property (nonatomic, strong) MyMessage *messageM;
+@property (nonatomic, strong) SystermMessage *messageM;
 
 @end

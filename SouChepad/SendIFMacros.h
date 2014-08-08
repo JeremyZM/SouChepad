@@ -55,7 +55,7 @@ fprintf(stderr, "-----------------------------------\n");                       
 #define KShowDockNotification @"ShowDockNotification"
 
 
-#define KHttpBaseURL  @"manage.souche.com"
+#define KHttpBaseURL  @"115.29.10.121:13080/soucheweb"
 
 #define Khttp @"115.29.10.121:11080/soucheweb   122.224.68.242:8081/soucheweb  192.168.0.250:8088/soucheweb  121.199.21.232:10080//soucheweb "
 

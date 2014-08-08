@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface MyMessage : NSObject
+@interface SystermMessage : NSObject
 
 @property (nonatomic, strong) NSString *comment;
 @property (nonatomic, strong) NSString *commentShwo;

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "MyMessage.h"
+#import "SystermMessage.h"
 
 #define TableName @"MyMessage"
 
