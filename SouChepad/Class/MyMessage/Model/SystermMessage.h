@@ -11,6 +11,7 @@
 
 @interface SystermMessage : NSObject
 
+@property (nonatomic, strong) NSString *id;//
 @property (nonatomic, strong) NSString *comment;
 @property (nonatomic, strong) NSString *commentShwo;
 @property (nonatomic, strong) NSString *dateCreate;
