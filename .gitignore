@@ -19,6 +19,7 @@ profile
 *.moved-aside
 DerivedData
 .idea/
-Athena.xcodeproj/project.pbxproj
-Athena.xcodeproj/project.xcworkspace/
-Athena.xcodeproj/xcuserdata/
+
+#This ignores everything inside a *.xcodeproj except the project.pbxproj
+*.xcodeproj/
+!*.xcodeproj/project.pbxproj
