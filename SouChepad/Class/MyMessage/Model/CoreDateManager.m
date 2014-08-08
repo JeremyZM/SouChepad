@@ -93,15 +93,15 @@
 - (void)insertCoreData:(NSArray*)dataArray
 {
     NSManagedObjectContext *context = [self managedObjectContext];
-    for (MyMessage *info in dataArray) {
-        MyMessage *newsInfo = [NSEntityDescription insertNewObjectForEntityForName:TableName inManagedObjectContext:context];
+    for (SystermMessage *info in dataArray) {
+        SystermMessage *newsInfo = [NSEntityDescription insertNewObjectForEntityForName:TableName inManagedObjectContext:context];
         
         newsInfo.comment = info.comment;
         newsInfo.title = info.title;
         newsInfo.commentShwo = info.commentShwo;
         newsInfo.dateCreate = info.dateCreate;
-        newsInfo.dateDelete = info.dateDelete;
-        newsInfo.dateUpdate = info.dateUpdate;
+//        newsInfo.dateDelete = info.dateDelete;
+//        newsInfo.dateUpdate = info.dateUpdate;
         newsInfo.image = info.image;
     
         NSError *error;
@@ -179,7 +179,7 @@
     //https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/Predicates/Articles/pCreating.html
     NSError *error = nil;
     NSArray *result = [context executeFetchRequest:request error:&error];//这里获取到的是一个数组，你需要取出你要更新的那个obj
-    for (MyMessage *info in result) {
+    for (SystermMessage *info in result) {
         info.title = islook;
     }
     

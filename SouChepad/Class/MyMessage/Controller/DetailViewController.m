@@ -34,7 +34,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
-- (void)setMessageM:(MyMessage *)messageM
+- (void)setMessageM:(SystermMessage *)messageM
 {
     CGRect frame = self.view.bounds;
     frame.origin.y = 66;

@@ -8,10 +8,13 @@
 
 #import "MasterTableViewController.h"
 #import "HttpManager.h"
-#import "MyMessage.h"
+#import "SystermMessage.h"
 #import "DetailViewController.h"
 #import "CoreDateManager.h"
 #import "MJRefresh.h"
+#import "UIImageView+WebCache.h"
+#import "MyMessageCell.h"
+#import "MessageType.h"
 
 @interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate,MJRefreshBaseViewDelegate>
 {
@@ -21,6 +24,7 @@
     NSArray *filteredContentList;
     int messageType;//消息类型
     int page;//请求第一页消息
+    int pageSize;
 }
 @property (nonatomic, strong) DetailViewController *detailViewController;
 
@@ -32,6 +36,28 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // 初始化数据
+    page = 0;
+    pageSize = 40;// 每页显示40条
+    
+    [self navigationset];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
+    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+    
+    [self.refreshControl beginRefreshing];
+
+    messageType = kMyMessage;
+    [self requestMessageWithType:messageType];
 }
 
 - (void)navigationset
@@ -50,44 +76,6 @@
     [self.navigationController.navigationBar addSubview:messageTypeSegment];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self navigationset];
-
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
-    [self.refreshControl setTintColor:[UIColor hexStringToColor:KBaseColo]];
-    [self.refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:self.refreshControl];
-    
-    [self.refreshControl beginRefreshing];
-    
-//    // 1.添加下拉刷新
-//    _refreshControl = [MJRefreshHeaderView header];
-//    _refreshControl.delegate = self;
-//    _refreshControl.scrollView = self.tableView;
-//    [_refreshControl setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
-//    // 自动进入刷新状态
-//    [_refreshControl beginRefreshing];
-
-    messageType = 0;
-    [self requestMessageWithType:messageType];
-}
-
-//// 开始刷新
-//- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
-//{
-//    [self writeDate];
-//}
-//
-//// 结束刷新
-//- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
-//{
-//
-//}
-
 - (void)RefreshViewControlEventValueChanged
 {
     [self requestMessageWithType:messageType];
@@ -96,8 +84,9 @@
 // 消息类型改变监听
 - (void)messageTypeChanged:(UISegmentedControl*)control{
     page = 0;
-    messageType = control.selectedSegmentIndex;
     [_messageArray removeAllObjects];
+    
+    messageType = control.selectedSegmentIndex == 0 ? kMyMessage : kSystermMessage;
     [self requestMessageWithType:messageType];
 }
 
@@ -108,27 +97,44 @@
     [dic setObject:[NSNumber numberWithInt:page] forKey:@"index"];
     // 条
     [dic setObject:@"40" forKey:@"pageSize"];
-    // 类型（系统信息：system）
-    [dic setObject:@"system" forKey:@"readType"];
     //销售ID
     [dic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
     
-    [HttpManager requestMyMessageWithParamDic:dic messageType:type Success:^(id obj) {
+    // 获取系统消息
+    if (type == kSystermMessage) {
+        // 类型（系统信息：system）
+        [dic setObject:@"system" forKey:@"readType"];
         
-        _messageArray = [NSMutableArray arrayWithArray:obj];
-        [self.tableView reloadData];
-        //默认显示第一条详情
-        [self showMessageDetailWithIndex:0];
-        [self.refreshControl endRefreshing];
-    } fail:^(id obj) {
-        [self.refreshControl endRefreshing];
-    }];
+        [HttpManager requestSystermMessage:dic Success:^(id obj) {
+            [self showMessages:obj];
+        } fail:^(id obj) {
+            [self.refreshControl endRefreshing];
+        }];
+    }else{
+        // 获取个人消息
+        [HttpManager requestMyMessageWithParamDic:dic Success:^(id obj) {
+            [self showMessages:obj];
+        } fail:^(id obj) {
+            [self.refreshControl endRefreshing];
+        }];
+        
+    }
+}
+
+
+// 数据请求完后显示消息
+- (void)showMessages:(id)obj{
+    _messageArray = [NSMutableArray arrayWithArray:obj];
+    [self.tableView reloadData];
+    //默认显示第一条详情
+    [self showMessageDetailWithIndex:0];
+    [self.refreshControl endRefreshing];
 }
 
 // 显示消息详情
 - (void)showMessageDetailWithIndex:(int)msgIndex{
     if (_messageArray.count > 0) {
-        MyMessage *message = [_messageArray objectAtIndex:msgIndex];
+        SystermMessage *message = [_messageArray objectAtIndex:msgIndex];
         self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
         [self.detailViewController setMessageM:message];
     }else{
@@ -145,7 +151,6 @@
 {
     [self.tableView reloadData];
     [mySearchBar setShowsCancelButton:YES animated:YES];
-//    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     return YES;
 }
 
@@ -163,31 +168,30 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 80;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    static NSString *CellIdentifier = @"MyMessageCell";
+    MyMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell = [[MyMessageCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    MyMessage *message;
-    if ([tableView isEqual:self.searchDisplayController.searchResultsTableView]) {
-        message = filteredContentList[indexPath.row];
-        DLog(@"1112121212121");
-    } else {
-        DLog(@"------------------");
-        message = _messageArray[indexPath.row];
-    }
-    
-    
-    [cell.textLabel setText:message.title];
-    [cell.detailTextLabel setText:message.dateCreate];
-    
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)_cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    MyMessageCell *cell = (MyMessageCell*)_cell;
+    SystermMessage *msg = [_messageArray objectAtIndex:indexPath.row];
+    [cell fillValueWithMessage:msg type:messageType];
+    
+    // 加载到最后一条的时候自动加载下一页
+    if ((indexPath.row == _messageArray.count-1) && (_messageArray.count%pageSize == 0)) {
+        page++;
+        [self requestMessageWithType:messageType];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self showMessageDetailWithIndex:indexPath.row];
