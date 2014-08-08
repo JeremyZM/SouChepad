@@ -27,6 +27,7 @@
 #import "UsertoStore.h"
 #import "UserOperationRecordVO.h"
 #import "DriveCarLastData.h"
+#import "MyMessage.h"
 
 @implementation HttpManager
 
@@ -767,10 +768,10 @@
                               requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
                                   DLog(@"%@",[obj responseJSON]);
                                   NSDictionary *dataDic = [obj responseJSON];
-                                  NSArray *array = [dataDic objectForKey:@"baseHint"];
+                                  NSArray *array = [dataDic objectForKey:@"salerMessage"];
                                   NSMutableArray *arrayM = [NSMutableArray arrayWithCapacity:array.count];
                                   for (NSDictionary *dic in array) {
-                                      SystermMessage *myMessage = [[SystermMessage alloc] init];
+                                      MyMessage *myMessage = [[MyMessage alloc] init];
                                       [myMessage setKeyValues:dic];
                                       [arrayM addObject:myMessage];
                                   }
@@ -780,9 +781,8 @@
                               } reload:YES needHud:YES hudEnabled:NO];
 }
 
-// 获取系统消息
-+ (void)requestSystermMessage:(NSDictionary*)dic Success:(Success)success
-                         fail:(Fail)fail{
+#pragma mark -  获取系统消息
++ (void)requestSystermMessage:(NSDictionary*)dic Success:(Success)success fail:(Fail)fail{
     NSString *api = @"pages/sellManageAction/getSellHint.json";
     [[HttpService sharedService] requestWithApi:api parameters:dic success:^(MKNetworkOperation *obj) {
             DLog(@"%@",[obj responseJSON]);

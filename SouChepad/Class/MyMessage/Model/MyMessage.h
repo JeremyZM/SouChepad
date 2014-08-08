@@ -10,11 +10,11 @@
 
 @interface MyMessage : NSObject
 
-@property (nonatomic,strong) NSString *carId;//
-@property (nonatomic,strong) NSString *dateCreate;//"2014-08-06 17:34:19",
-@property (nonatomic,strong) NSString *dateDelete;//
-@property (nonatomic,strong) NSString *displayTime;//"昨天",
-@property (nonatomic,strong) NSString *message;////"this is test!",
-@property (nonatomic,strong) NSString *status;//
-@property (nonatomic,strong) NSString *title;//"客户被接待",
+@property (nonatomic,copy) NSString *carId;//
+@property (nonatomic,copy) NSString *dateCreate;//"2014-08-06 17:34:19",
+@property (nonatomic,copy) NSString *dateDelete;//
+@property (nonatomic,copy) NSString *displayTime;//"昨天",
+@property (nonatomic,copy) NSString *message;////"this is test!",
+@property (nonatomic,strong) NSNumber *status;//
+@property (nonatomic,copy) NSString *title;//"客户被接待",
 @end

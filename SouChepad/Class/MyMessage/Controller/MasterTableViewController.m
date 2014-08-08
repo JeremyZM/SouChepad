@@ -14,6 +14,7 @@
 #import "MJRefresh.h"
 #import "UIImageView+WebCache.h"
 #import "MyMessageCell.h"
+#import "MessageType.h"
 
 @interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate,MJRefreshBaseViewDelegate>
 {
@@ -55,7 +56,7 @@
     
     [self.refreshControl beginRefreshing];
 
-    messageType = 0;
+    messageType = kMyMessage;
     [self requestMessageWithType:messageType];
 }
 
@@ -83,8 +84,9 @@
 // 消息类型改变监听
 - (void)messageTypeChanged:(UISegmentedControl*)control{
     page = 0;
-    messageType = control.selectedSegmentIndex;
     [_messageArray removeAllObjects];
+    
+    messageType = control.selectedSegmentIndex == 0 ? kMyMessage : kSystermMessage;
     [self requestMessageWithType:messageType];
 }
 
@@ -95,24 +97,38 @@
     [dic setObject:[NSNumber numberWithInt:page] forKey:@"index"];
     // 条
     [dic setObject:@"40" forKey:@"pageSize"];
-    // 0 个人
-    if (type == 1) {
-        // 类型（系统信息：system）
-        [dic setObject:@"system" forKey:@"readType"];
-    }
     //销售ID
     [dic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
     
-    [HttpManager requestMyMessageWithParamDic:dic messageType:type Success:^(id obj) {
+    // 获取系统消息
+    if (type == kSystermMessage) {
+        // 类型（系统信息：system）
+        [dic setObject:@"system" forKey:@"readType"];
         
-        _messageArray = [NSMutableArray arrayWithArray:obj];
-        [self.tableView reloadData];
-        //默认显示第一条详情
-        [self showMessageDetailWithIndex:0];
-        [self.refreshControl endRefreshing];
-    } fail:^(id obj) {
-        [self.refreshControl endRefreshing];
-    }];
+        [HttpManager requestSystermMessage:dic Success:^(id obj) {
+            [self showMessages:obj];
+        } fail:^(id obj) {
+            [self.refreshControl endRefreshing];
+        }];
+    }else{
+        // 获取个人消息
+        [HttpManager requestMyMessageWithParamDic:dic Success:^(id obj) {
+            [self showMessages:obj];
+        } fail:^(id obj) {
+            [self.refreshControl endRefreshing];
+        }];
+        
+    }
+}
+
+
+// 数据请求完后显示消息
+- (void)showMessages:(id)obj{
+    _messageArray = [NSMutableArray arrayWithArray:obj];
+    [self.tableView reloadData];
+    //默认显示第一条详情
+    [self showMessageDetailWithIndex:0];
+    [self.refreshControl endRefreshing];
 }
 
 // 显示消息详情
@@ -135,7 +151,6 @@
 {
     [self.tableView reloadData];
     [mySearchBar setShowsCancelButton:YES animated:YES];
-//    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     return YES;
 }
 
@@ -169,7 +184,7 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)_cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     MyMessageCell *cell = (MyMessageCell*)_cell;
     SystermMessage *msg = [_messageArray objectAtIndex:indexPath.row];
-    [cell fillValueWithMessage:msg];
+    [cell fillValueWithMessage:msg type:messageType];
     
     // 加载到最后一条的时候自动加载下一页
     if ((indexPath.row == _messageArray.count-1) && (_messageArray.count%pageSize == 0)) {

@@ -8,6 +8,7 @@
 
 #import "MessageDetailView.h"
 #import "SystermMessage.h"
+#import "MyMessage.h"
 
 @interface MessageDetailView ()<UIWebViewDelegate>{
     UIWebView *webView;
@@ -39,13 +40,17 @@
 
 
 - (void)setMessageDetail:(id)message{
-    SystermMessage *msg = (SystermMessage*)message;
-    if (msg) {
-        [self loadMessageTitle:msg.title subTitle:msg.dateCreate content:msg.comment imageUrl:msg.image];
+    if ([message isKindOfClass:[SystermMessage class]]) {
+        SystermMessage *msg = (SystermMessage*)message;
+        if (msg) {
+            [self loadMessageTitle:msg.title subTitle:msg.dateCreate content:msg.comment imageUrl:msg.image];
+        }else{
+            [self loadMessageTitle:@"" subTitle:@"" content:@"" imageUrl:@""];
+        }
     }else{
-        [self loadMessageTitle:@"" subTitle:@"" content:@"" imageUrl:@""];
+        MyMessage *mymsg = message;
+        [self loadMessageTitle:strNoNull(mymsg.title) subTitle:strNoNull(mymsg.dateCreate) content:strNoNull(mymsg.message) imageUrl:nil];
     }
-
 }
 
 // 组装js中changeMessage所需要的参数

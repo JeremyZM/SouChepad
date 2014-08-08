@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class  SystermMessage;
-
 @interface MyMessageCell : UITableViewCell
-- (void)fillValueWithMessage:(SystermMessage*)msg;
-- (void)markMessageAsRead:(BOOL)read;
+- (void)fillValueWithMessage:(id)msg type:(int)msgType;
 @end
