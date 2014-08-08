@@ -113,9 +113,13 @@ typedef void (^UploadProgress)(NSString *progress);
 
 #pragma mark - 我的消息
 + (void)requestMyMessageWithParamDic:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
+#pragma mark - 我的消息（销售）标记为已读
++ (void)requestMarkMyMessageAsReadWithDic:(NSDictionary*)paramDic;
 
 #pragma mark -和系统消息
 + (void)requestSystermMessage:(NSDictionary*)dic Success:(Success)success fail:(Fail)fail;
+#pragma mark - 系统消息标记为已读
++ (void)requestMarkSystermMessageAsReadWithDic:(NSDictionary*)paramDic;
 
 #pragma mark - 获取所有车型
 + (void)getDictionaryByTypeAndLevel:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail;
