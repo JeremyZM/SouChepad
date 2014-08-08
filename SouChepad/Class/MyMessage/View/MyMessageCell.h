@@ -10,4 +10,6 @@
 
 @interface MyMessageCell : UITableViewCell
 - (void)fillValueWithMessage:(id)msg type:(int)msgType;
+// 数据上标记为已读
+- (void)markMessageStatusForData;
 @end

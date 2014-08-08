@@ -106,14 +106,14 @@
         [dic setObject:@"system" forKey:@"readType"];
         
         [HttpManager requestSystermMessage:dic Success:^(id obj) {
-            [self showMessages:obj];
+            [self showFirstMessages:obj];
         } fail:^(id obj) {
             [self.refreshControl endRefreshing];
         }];
     }else{
         // 获取个人消息
         [HttpManager requestMyMessageWithParamDic:dic Success:^(id obj) {
-            [self showMessages:obj];
+            [self showFirstMessages:obj];
         } fail:^(id obj) {
             [self.refreshControl endRefreshing];
         }];
@@ -123,7 +123,7 @@
 
 
 // 数据请求完后显示消息
-- (void)showMessages:(id)obj{
+- (void)showFirstMessages:(id)obj{
     _messageArray = [NSMutableArray arrayWithArray:obj];
     [self.tableView reloadData];
     //默认显示第一条详情
@@ -185,6 +185,10 @@
     MyMessageCell *cell = (MyMessageCell*)_cell;
     SystermMessage *msg = [_messageArray objectAtIndex:indexPath.row];
     [cell fillValueWithMessage:msg type:messageType];
+    if (indexPath.row == 0) {
+        [cell markMessageStatusForData];
+    }
+
     
     // 加载到最后一条的时候自动加载下一页
     if ((indexPath.row == _messageArray.count-1) && (_messageArray.count%pageSize == 0)) {

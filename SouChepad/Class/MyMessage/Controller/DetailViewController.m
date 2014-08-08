@@ -22,6 +22,8 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self.navigationController.navigationBar setBarTintColor:[UIColor hexStringToColor:KBaseColo]];
+    
+    [self MsgViewFrame];
 }
 
 - (void)didReceiveMemoryWarning{
@@ -32,20 +34,30 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self performSelector:@selector(aaa) withObject:nil afterDelay:4];
+}
+
+-(void)aaa{
+    DLog(@"frame %@",self.view);
 }
 
 - (void)setMessageM:(SystermMessage *)messageM
 {
-    CGRect frame = self.view.bounds;
-    frame.origin.y = 66;
-    frame.size.height -= 66;
-    
     if (msgView == nil) {
-        msgView = [[MessageDetailView alloc] initWithMessage:messageM frame:frame];
+        msgView = [[MessageDetailView alloc] initWithMessage:messageM frame:[self MsgViewFrame]];
         msgView.frame = self.view.bounds;
         [self.view addSubview:msgView];
     }else{
         [msgView setMessageDetail:messageM];
     }
+}
+
+// 修改msgView 的frame
+- (CGRect)MsgViewFrame{
+    CGRect frame = self.view.bounds;
+//    frame.origin.y = 66;
+//    frame.size.height -= 66;
+    msgView.frame = self.view.bounds;
+    return frame;
 }
 @end

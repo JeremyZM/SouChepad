@@ -13,6 +13,7 @@
 #import "SystermMessage.h"
 #import "MessageType.h"
 
+
 @interface MyMessageCell(){
     __weak IBOutlet UILabel *unreadFlag;
     __weak IBOutlet UILabel *title;
@@ -40,17 +41,11 @@
     [super setSelected:selected animated:animated];
     
     if (selected == YES) {
-        if (messageType == kSystermMessage) {
-            SystermMessage *sysMsg = message;
-            sysMsg.isRead = @"1";
-        }else{
-            MyMessage *myMsg = message;
-            myMsg.status = [NSNumber numberWithInt:1];
-        }
-        [self markMessageStatus];
+        [self markMessageStatusForData];
     }
 }
 
+// 填充消息
 - (void)fillValueWithMessage:(id)msg type:(int)msgType{
     message = msg;
     messageType = msgType;
@@ -71,6 +66,7 @@
     [self markMessageStatus];
 }
 
+// ui上展示未读状态
 - (void)markMessageStatus{
     if (messageType == kSystermMessage) {
         SystermMessage *sysMsg = message;
@@ -87,5 +83,29 @@
             unreadFlag.hidden = NO;
         }
     }
+}
+
+// 数据上标记为已读
+- (void)markMessageStatusForData{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    
+    if (messageType == kSystermMessage) {
+        SystermMessage *sysMsg = message;
+        sysMsg.isRead = @"1";
+        
+        //向服务器请求标记为已读
+        [dic setValue:sysMsg.id forKey:@"hintId"];
+        [dic setValue:[UserDefaults objectForKey:userDefaultsName] forKey:@"userName"];
+        [dic setValue:@"system" forKey:@"readType"];
+        [HttpManager requestMarkSystermMessageAsReadWithDic:dic];
+    }else{
+        MyMessage *myMsg = message;
+        myMsg.status = [NSNumber numberWithInt:1];
+        
+        //向服务器请求标记为已读
+        [dic setValue:myMsg.id forKey:@"salerMessageId"];
+        [HttpManager requestMarkMyMessageAsReadWithDic:dic];
+    }
+    [self markMessageStatus];
 }
 @end

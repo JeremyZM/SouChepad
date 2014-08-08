@@ -781,6 +781,17 @@
                               } reload:YES needHud:YES hudEnabled:NO];
 }
 
+#pragma mark - 我的消息（销售）标记为已读
++ (void)requestMarkMyMessageAsReadWithDic:(NSDictionary*)paramDic{
+    NSString *api = @"pages/sellManageAction/updateSalerMessageIsRead.json";
+    [[HttpService sharedService]
+     requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
+         DLog(@"我的消息 标记为已读:%@",obj);
+     }fail:^(MKNetworkOperation *obj, NSError *error) {
+         DLog(@"我的消息 标记失败:%@",error);
+     } reload:YES needHud:YES hudEnabled:NO];
+}
+
 #pragma mark -  获取系统消息
 + (void)requestSystermMessage:(NSDictionary*)dic Success:(Success)success fail:(Fail)fail{
     NSString *api = @"pages/sellManageAction/getSellHint.json";
@@ -798,6 +809,17 @@
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
     } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 系统消息标记为已读
++ (void)requestMarkSystermMessageAsReadWithDic:(NSDictionary*)paramDic{
+    NSString *api = @"pages/sellManageAction/saveReadHint.json";
+    [[HttpService sharedService]
+     requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
+         
+     }fail:^(MKNetworkOperation *obj, NSError *error) {
+         
+     } reload:YES needHud:YES hudEnabled:NO];
 }
 
 #pragma mark - 获取所有车型

@@ -10,6 +10,7 @@
 
 @interface MyMessage : NSObject
 
+@property (nonatomic,copy) NSString *id;
 @property (nonatomic,copy) NSString *carId;//
 @property (nonatomic,copy) NSString *dateCreate;//"2014-08-06 17:34:19",
 @property (nonatomic,copy) NSString *dateDelete;//
