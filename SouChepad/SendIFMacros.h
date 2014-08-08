@@ -44,6 +44,7 @@ fprintf(stderr, "-----------------------------------\n");                       
 // 文字的高度比例
 #define kTitleRatio 0.4
 
+
 #define ratBtnTag 100  // 按等级排序按钮tag
 #define nameBtnTag 101  // 按时间排序按钮tag
 
