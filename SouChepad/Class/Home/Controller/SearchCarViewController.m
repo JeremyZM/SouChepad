@@ -96,23 +96,30 @@ static NSString *seconCellID = @"seconCell";
 - (void)addHeadToobar
 {
 
-    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(30, 40, 20, 20)];
+    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(30, 50, 20, 20)];
     [xian setTextColor:[UIColor whiteColor]];
     [xian setText:@"显示预售车"];
-    [xian setFont:[UIFont boldSystemFontOfSize:22]];
+    [xian setFont:[UIFont boldSystemFontOfSize:20]];
     [xian sizeToFit];
     [self.headBar addSubview:xian];
     
-    UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 40, 30)];
+    UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 55, 30)];
     [switchPresell setOn:YES];
     [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:switchPresell];
     
     
-    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.frame.size.width-100, 20, 80, 80)];
-    [limitBut setBackgroundColor:[UIColor yellowColor]];
+    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.center.x-105, 0, 144, 46)];
+    [limitBut setImage:[UIImage imageNamed:@"xuqiushouji_78"] forState:UIControlStateNormal];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:limitBut];
+    
+    UILabel *biaoti = [[UILabel alloc] initWithFrame:CGRectMake(self.headBar.center.x-105, 50, 144, 30)];
+    [biaoti setText:@"需求车辆"];
+    [biaoti setTextAlignment:NSTextAlignmentCenter];
+    [biaoti setTextColor:[UIColor whiteColor]];
+    [biaoti setFont:[UIFont boldSystemFontOfSize:22]];
+    [self.headBar addSubview:biaoti];
     
 }
 
