@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ZBarController;
+
+@protocol ZBarControllerDelegate <NSObject>
+
+- (void)zBarController:(ZBarController*)zbarVC didFinishPickingMediaWithInfo: (NSDictionary*) info;
+
+@end
+
 
 @interface ZBarController : UIViewController
+
+@property (weak, nonatomic) id<ZBarControllerDelegate> delegate;
 
 @end
