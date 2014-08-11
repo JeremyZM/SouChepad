@@ -18,6 +18,7 @@
 #import "KnowledgeVC.h"
 #import "SellInfoVC.h"
 #import "ChangePasswordVC.h"
+#import "MessageVC.h"
 
 @interface MainViewController () <SCDockDelegate>
 {
@@ -102,9 +103,7 @@
     
     
     // 我的消息
-//    MyMessageController *messageVC = [[MyMessageController alloc] init];
-//    [self addChildViewController:messageVC];
-//    UINavigationController *messageNav = [[UINavigationController alloc] initWithRootViewController:messageVC];
+    /*
     UISplitViewController *messageNav = [[UISplitViewController alloc] init];
     MasterTableViewController *masterCtrl = [[MasterTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
@@ -113,6 +112,10 @@
     UINavigationController *detailNav = [[UINavigationController alloc] initWithRootViewController:detailCtrl];
     [messageNav setViewControllers:@[masterNav,detailNav]];
     [self addChildViewController:messageNav];
+    */
+    MessageVC *msgVC = [MessageVC new];
+    UINavigationController *msgNav = [[UINavigationController alloc] initWithRootViewController:msgVC];
+    [self addChildViewController:msgNav];
     
     // 我的车辆
     MyCarsViewController *myCarsVC = [[MyCarsViewController alloc] init];
@@ -129,18 +132,6 @@
     KnowledgeVC *knowlegeVC = [[KnowledgeVC alloc] init];
     UINavigationController *knowlegeNav = [[UINavigationController alloc] initWithRootViewController:knowlegeVC];
     [self addChildViewController:knowlegeNav];
-    
-    // 设置
-//    UISplitViewController *settingSplitVC = [[UISplitViewController alloc] init];
-//    SettingViewController *settingVC = [[SettingViewController alloc] initWithStyle:UITableViewStyleGrouped];
-//    
-//    
-//    
-//    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:masterCtrl];
-//    UINavigationController *detailNav = [[UINavigationController alloc] initWithRootViewController:detailCtrl];
-//    [messageNav setViewControllers:@[masterNav,detailNav]];
-//    [self addChildViewController:messageNav];
-
     
     
     

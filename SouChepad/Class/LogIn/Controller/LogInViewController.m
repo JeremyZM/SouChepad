@@ -154,7 +154,11 @@
         [logInBtn setSelected:YES];
         [nameTextField resignFirstResponder];
         [PWDTextField resignFirstResponder];
-        NSDictionary *dic = @{@"loginName":nameTextField.text,@"password":PWDTextField.text,@"type":@"saler",@"token":[UserDefaults objectForKey:@"jpushid"]};
+        NSDictionary *dic = @{@"loginName":nameTextField.text,
+                              @"password":PWDTextField.text,
+                              @"type":@"saler",
+                              @"token":[UserDefaults objectForKey:@"jpushid"],
+                              @"jPushId":[UserDefaults objectForKey:@"jpushid"]};
         [HttpManager requestLoginWithParamDic:dic Success:^(id obj) {
             NSDictionary *isok = [NSDictionary dictionaryWithDictionary:obj];
             if ([isok objectForKey:@"login"]) {

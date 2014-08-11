@@ -16,8 +16,7 @@
 #import "MyMessageCell.h"
 #import "MessageType.h"
 
-@interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate,MJRefreshBaseViewDelegate>
-{
+@interface MasterTableViewController () <UISearchBarDelegate,UISearchDisplayDelegate>{
     NSMutableArray *_messageArray;
     UISearchBar *mySearchBar;
     UISegmentedControl *messageTypeSegment;

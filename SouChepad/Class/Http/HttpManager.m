@@ -778,7 +778,7 @@
                                   success(arrayM);
                               } fail:^(MKNetworkOperation *obj, NSError *error) {
                                   fail([error localizedDescription]);
-                              } reload:YES needHud:YES hudEnabled:NO];
+                              } reload:YES needHud:NO hudEnabled:NO];
 }
 
 #pragma mark - 我的消息（销售）标记为已读
@@ -808,7 +808,7 @@
             success(arrayM);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
-    } reload:YES needHud:YES hudEnabled:NO];
+    } reload:YES needHud:NO hudEnabled:NO];
 }
 
 #pragma mark - 系统消息标记为已读

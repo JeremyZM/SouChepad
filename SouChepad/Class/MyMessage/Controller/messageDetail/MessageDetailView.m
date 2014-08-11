@@ -20,11 +20,11 @@
 @implementation MessageDetailView
 
 - (id)initWithMessage:(id)message frame:(CGRect)frame{
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self) {
         [self setMessageDetail:message];
         
-        webView = [[UIWebView alloc] initWithFrame:frame];
+        webView = [[UIWebView alloc] initWithFrame:self.bounds];
         webView.delegate = self;
         webView.backgroundColor = [UIColor whiteColor];
         [self addSubview:webView];
@@ -40,6 +40,11 @@
 
 
 - (void)setMessageDetail:(id)message{
+    if (message == nil) {
+        [self loadMessageTitle:@"" subTitle:@"" content:@"" imageUrl:@""];
+        return;
+    }
+    
     if ([message isKindOfClass:[SystermMessage class]]) {
         SystermMessage *msg = (SystermMessage*)message;
         if (msg) {

@@ -63,6 +63,7 @@ static PushManager *_mamager;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Required
     [APService handleRemoteNotification:userInfo];
+    [self showNotiAlert:userInfo];
 }
 
 // 处理收到的消息
@@ -78,8 +79,20 @@ static PushManager *_mamager;
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"推送消息" message:content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
     [alert show];
-    
 }
+
+- (void)showNotiAlert:(NSDictionary *)userInfo{
+    // 取得 APNs 标准信息内容
+    NSDictionary *aps = [userInfo valueForKey:@"aps"];
+    NSString *content = [aps valueForKey:@"alert"]; //推送显示的内容
+    //    NSInteger badge = [[aps valueForKey:@"badge"] integerValue]; //badge数量
+    //    NSString *sound = [aps valueForKey:@"sound"]; //播放的声音
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"推送消息" message:content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
+    [alert show];
+    NSLog(@"....%@",userInfo);
+}
+
 
 // 清除icon上未读消息的数字
 - (void)cleanAppBage{
@@ -118,6 +131,8 @@ static PushManager *_mamager;
 //    [_infoLabel setText:[NSString stringWithFormat:@"收到消息\ndate:%@\ntitle:%@\ncontent:%@", [dateFormatter stringFromDate:[NSDate date]],title,content]];
 //    
 //    [dateFormatter release];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
+    [alert show];
 }
 
 - (void)tagsAliasCallback:(int)iResCode tags:(NSSet*)tags alias:(NSString*)alias {
