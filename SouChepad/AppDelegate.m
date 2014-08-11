@@ -17,7 +17,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // 注册推送
-    [PushManager registerPushNotificationWithOptions:launchOptions];
+    [[PushManager manaer] registerPushNotificationWithOptions:launchOptions];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -58,6 +58,9 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    // 清除icon上未读消息的数字
+    [[PushManager manaer] cleanAppBage];
     return YES;
 }
 
@@ -105,7 +108,7 @@
 #pragma mark - 推送代理
 // 注册token 成功
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
-    [PushManager uploadDeviceToken:deviceToken];
+    [[PushManager manaer] uploadDeviceToken:deviceToken];
 }
 
 // 注册token 失败
@@ -115,12 +118,12 @@
 
 // 搜到推送消息
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
-    [PushManager didReceiveRemoteNotification:userInfo];
-    DLog(@"%@", userInfo);
+    [[PushManager manaer] didReceiveRemoteNotification:userInfo];
+
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [PushManager handleRemoteNotification:userInfo];
-    completionHandler(UIBackgroundFetchResultNewData);
+    [[PushManager manaer] handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);    
 }
 @end
