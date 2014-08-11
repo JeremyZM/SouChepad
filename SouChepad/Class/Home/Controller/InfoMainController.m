@@ -223,6 +223,9 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)InfoDock:(InfoDock *)dock tabChangeFrom:(NSInteger)from to:(NSInteger)to
 {
     if (to ==0) {
+        CustomPIMController *old = self.childViewControllers[to];
+        [old saveUserInfoClickt];
+        
         [self.navigationController popViewControllerAnimated:YES];
         
     }else{
