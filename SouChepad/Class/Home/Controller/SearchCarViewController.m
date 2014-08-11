@@ -79,7 +79,6 @@ static NSString *seconCellID = @"seconCell";
         [self addCollectionView];
     }
     [requstDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
-    [requstDic setObject:yushouOrzaishou forKey:@"type"];
     [requstDic setObject:@"15" forKey:@"pageSize"];
     
     if ([searchDic objectForKey:@"requirementBrandId"]) {
@@ -104,7 +103,6 @@ static NSString *seconCellID = @"seconCell";
     [self.headBar addSubview:xian];
     
     UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 55, 30)];
-    [switchPresell setOn:YES];
     [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:switchPresell];
     
@@ -252,6 +250,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
 
+ [requstDic setObject:yushouOrzaishou forKey:@"type"];
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) { // 下拉
         _page = 1;
         [requstDic setObject:[NSString stringWithFormat:@"%d",_page] forKey:@"index"];

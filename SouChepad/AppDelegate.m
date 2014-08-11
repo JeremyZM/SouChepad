@@ -70,7 +70,7 @@
 
     if (buttonIndex == 0)
     {
-        NSString *iTunesLink = @"http:app.souche.com/app/athena";
+        NSString *iTunesLink = @"http://fir.im/athena";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
     }
 }

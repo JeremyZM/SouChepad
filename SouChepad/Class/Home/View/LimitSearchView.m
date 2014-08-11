@@ -150,6 +150,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
     deleteCarBut = [[UIButton alloc] initWithFrame:CGRectMake(40, 680, 60, 60)];
     [self addSubview:deleteCarBut];
+    [deleteCarBut.titleLabel setFont:[UIFont boldSystemFontOfSize:22]];
     [deleteCarBut setBackgroundImage:[UIImage imageNamed:@"xuqiushouji_76"] forState:UIControlStateNormal];
     [deleteCarBut setTitle:@"0" forState:UIControlStateNormal];
     [deleteCarBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
@@ -364,6 +365,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
     }
 
     [HttpManager updateUserRequirementInfo:basicRequstDicM Success:^(id obj) {
+        [self upUserData];
         [self.searchBut setTitle:[NSString stringWithFormat:@"场馆内共%@辆车",[obj objectForKey:@"number"]] forState:UIControlStateNormal];
     } fail:^(id obj) {
         

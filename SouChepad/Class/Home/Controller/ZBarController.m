@@ -11,7 +11,7 @@
 #import "HttpManager.h"
 #import "CarDetailWebView.h"
 
-@interface ZBarController () <AVCaptureMetadataOutputObjectsDelegate,CarDetailVCDelegate>
+@interface ZBarController () <AVCaptureMetadataOutputObjectsDelegate>
 {
 //    CarDetailWebView *carDetailVC;
 }
@@ -135,30 +135,29 @@ static AVCaptureVideoOrientation avOrientationForInterfaceOrientation(UIInterfac
     [self.session stopRunning];
     // 2. 删除预览图层
     [self.previewLayer removeFromSuperlayer];
-    NSLog(@"%@", metadataObjects);
     
     // 3. 设置界面显示扫描结果
     if (metadataObjects.count > 0) {
         AVMetadataMachineReadableCodeObject *objAV = metadataObjects[0];
-        // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
-        [HttpManager getCarInVin:@{@"vin":objAV.stringValue} Success:^(id obj) {
-            if (obj) {
-                CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
-                [carDetailVC setCarID:obj];
-                [carDetailVC setDelegate:self];
-//                [self.view addSubview:carDetailVC.view];
-                [self presentViewController:carDetailVC animated:YES completion:^{
-                }];
-            }
-        } fail:^(id obj) {
-            
-        }];
+        if ([_delegate respondsToSelector:@selector(zBarController:didFinishPickingMediaWithInfo:)]) {
+            [_delegate zBarController:self didFinishPickingMediaWithInfo:@{@"dataString": objAV.stringValue}];
+        }
+        
+        
+//        // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
+//        [HttpManager getCarInVin:@{@"vin":objAV.stringValue} Success:^(id obj) {
+//            if (obj) {
+//                CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
+//                [carDetailVC setCarID:obj];
+//                [carDetailVC setDelegate:self];
+////                [self.view addSubview:carDetailVC.view];
+//                [self presentViewController:carDetailVC animated:YES completion:^{
+//                }];
+//            }
+//        } fail:^(id obj) {
+//            
+//        }];
     }
-}
-
-- (void)dismissViewAllController:(CarDetailWebView *)carDetailVC
-{
-    [self dismiselfVC];
 }
 
 @end

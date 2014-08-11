@@ -37,6 +37,7 @@
 - (void)dismisSelf
 {
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
+
         [ProgressHUD dismiss];
     }];
 }

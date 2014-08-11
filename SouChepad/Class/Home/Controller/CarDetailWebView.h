@@ -14,14 +14,6 @@ typedef enum {
 
 
 #import "SCBasicController.h"
-@class CarDetailWebView;
-
-
-@protocol CarDetailVCDelegate <NSObject>
-
-- (void)dismissViewAllController:(CarDetailWebView*)carDetailVC;
-
-@end
 
 @interface CarDetailWebView : SCBasicController
 
@@ -33,9 +25,5 @@ typedef enum {
  *  是否预售车辆
  */
 @property (assign, nonatomic) CarStatusType carStatusType;
-
-@property (weak, nonatomic) id<CarDetailVCDelegate> delegate;
-
-
 
 @end

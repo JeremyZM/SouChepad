@@ -29,7 +29,7 @@
     
     UIButton *disBut = [[UIButton alloc] initWithFrame:CGRectMake(30, 30, 40, 40)];
     [disBut setImage:[UIImage imageNamed:@"tubiao_37"] forState:UIControlStateNormal];
-    [disBut addTarget:self action:@selector(dismisSelf) forControlEvents:UIControlEventTouchUpInside];
+    [disBut addTarget:self action:@selector(dismisSelfDetail) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:disBut];
     
     UIButton *infoCQI = [[UIButton alloc] initWithFrame:CGRectMake(700, 40, 82, 40)];
@@ -150,13 +150,10 @@
     
 }
 
-- (void)dismisSelf
+- (void)dismisSelfDetail
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [ProgressHUD dismiss];
-        if ([_delegate respondsToSelector:@selector(dismissViewAllController:)]) {
-            [_delegate dismissViewAllController:self];
-        }
     }];
 }
 

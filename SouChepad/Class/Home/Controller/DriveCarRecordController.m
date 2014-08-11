@@ -202,7 +202,8 @@
         [ProgressHUD showError:@"开始公里填写错误"];
         return;
     }
-    if (self.nameTextF.text.length && [driveDicData objectForKey:@"drivelicense"]) {
+#warning 试驾图片上传.... && [driveDicData objectForKey:@"drivelicense"]
+    if (self.nameTextF.text.length) {
         [driveDicData setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
         [driveDicData setObject:self.carId forKey:@"carId"];
         [driveDicData setObject:[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName] forKey:@"userName"];
