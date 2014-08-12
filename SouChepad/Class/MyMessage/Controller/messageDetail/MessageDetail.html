@@ -6,7 +6,7 @@
 	    	*{margin: 0;padding: 0;}
 	    	body{}
 	    	#bodyContent{width: 96%;margin-left: 2%;}
-	    	#messageTitle{color: black;font-size: 40pt;}
+	    	#messageTitle{color: black;font-size: 30pt;}
 	    	#messageSubTitle{color: gray;font:16pt; }
 	    	#content{margin-top: 15px;}
 	    	#image{padding-top: 100px;width: 100%;}
@@ -23,8 +23,10 @@
 		    	// 修改文章内容		    	
 		    	document.getElementById("msgText").innerHTML = content;
                 // 修改图片
-                if(imageUrl.indexof("http://") > 0){
+                if(imageUrl.toLowerCase().indexOf("http") >= 0){
                     document.getElementById("msgImage").src = imageUrl;
+                }else{
+                    document.getElementById("msgImage").src = "./webBg.png";
                 }
 	    	}
 	    </script>

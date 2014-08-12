@@ -158,18 +158,22 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)_cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    MyMessageCell *cell = (MyMessageCell*)_cell;
-    SystermMessage *msg = [_messageArray objectAtIndex:indexPath.row];
-    [cell fillValueWithMessage:msg type:messageType];
-    if (indexPath.row == 0) {
-        [cell markMessageStatusForData];
-    }
+    if (_messageArray && _messageArray.count > indexPath.row) {
     
-    
-    // 加载到最后一条的时候自动加载下一页
-    if ((indexPath.row == _messageArray.count-1) && (_messageArray.count%pageSize == 0)) {
-        page++;
-        [self requestMessageWithType:messageType];
+        MyMessageCell *cell = (MyMessageCell*)_cell;
+        SystermMessage *msg = [_messageArray objectAtIndex:indexPath.row];
+        [cell fillValueWithMessage:msg type:messageType];
+        if (indexPath.row == 0) {
+            [cell markMessageStatusForData];
+        }
+        
+        
+        // 加载到最后一条的时候自动加载下一页
+        if ((indexPath.row == _messageArray.count-1) && (_messageArray.count%pageSize == 0)) {
+            page++;
+            [self requestMessageWithType:messageType];
+        }
+        
     }
 }
 

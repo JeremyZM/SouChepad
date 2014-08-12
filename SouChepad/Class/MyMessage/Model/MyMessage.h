@@ -18,4 +18,5 @@
 @property (nonatomic,copy) NSString *message;////"this is test!",
 @property (nonatomic,strong) NSNumber *status;//
 @property (nonatomic,copy) NSString *title;//"客户被接待",
+@property (nonatomic,copy) NSString *imageURL;//图片
 @end
