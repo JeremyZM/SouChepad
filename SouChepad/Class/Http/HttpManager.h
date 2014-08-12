@@ -138,6 +138,9 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 修改密码
 + (void)updatePassword:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma 图片上传url
++ (void)upImageURL:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
 
 // 上传图片，成功后返回dictionary
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;

@@ -106,7 +106,6 @@ static NSString *seconCellID = @"seconCell";
     [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:switchPresell];
     
-    
     UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.center.x-105, 0, 144, 46)];
     [limitBut setImage:[UIImage imageNamed:@"xuqiushouji_78"] forState:UIControlStateNormal];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
@@ -146,59 +145,59 @@ static NSString *seconCellID = @"seconCell";
 
 #pragma mark --  拖拽视图
 
-//开始拖拽视图
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-
-{
-    
-    contentOffsetY = scrollView.contentOffset.y;
-    
-}
-
-// 滚动时调用此方法(手指离开屏幕后)
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-
-{
-    
-    newContentOffsetY = scrollView.contentOffset.y;
-    
-    CGRect frame = self.headBar.frame;
-    
-    if (scrollView.dragging) {  // 拖拽
-        
-        
-        if ((scrollView.contentOffset.y - contentOffsetY) > 5.0f) {  // 向上拖拽
-            
-            if (self.headBar.frame.origin.y == 0) {
-            
-                frame.origin.y -= self.headBar.frame.size.height;
-            }
-            
-                  } else if ((contentOffsetY - scrollView.contentOffset.y) > 5.0f) {   // 向下拖拽
-            
-            if (self.headBar.frame.origin.y!=0) {
-                frame.origin.y+= self.headBar.frame.size.height;
-            }
-            
-        }
-    }
-    [UIView animateWithDuration:0.25 animations:^{
-
-        [self.headBar setFrame:frame];
-    } completion:^(BOOL finished) {
-        
-    }];
-    
-}
-
-// 完成拖拽(滚动停止时调用此方法，手指离开屏幕前)
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-
-{
-    oldContentOffsetY = scrollView.contentOffset.y;
-}
+////开始拖拽视图
+//
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//
+//{
+//    
+//    contentOffsetY = scrollView.contentOffset.y;
+//    
+//}
+//
+//// 滚动时调用此方法(手指离开屏幕后)
+//
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//
+//{
+//    
+//    newContentOffsetY = scrollView.contentOffset.y;
+//    
+//    CGRect frame = self.headBar.frame;
+//    
+//    if (scrollView.dragging) {  // 拖拽
+//        
+//        
+//        if ((scrollView.contentOffset.y - contentOffsetY) > 5.0f) {  // 向上拖拽
+//            
+//            if (self.headBar.frame.origin.y == 0) {
+//            
+//                frame.origin.y -= self.headBar.frame.size.height;
+//            }
+//            
+//                  } else if ((contentOffsetY - scrollView.contentOffset.y) > 5.0f) {   // 向下拖拽
+//            
+//            if (self.headBar.frame.origin.y!=0) {
+//                frame.origin.y+= self.headBar.frame.size.height;
+//            }
+//            
+//        }
+//    }
+//    [UIView animateWithDuration:0.25 animations:^{
+//
+//        [self.headBar setFrame:frame];
+//    } completion:^(BOOL finished) {
+//        
+//    }];
+//    
+//}
+//
+//// 完成拖拽(滚动停止时调用此方法，手指离开屏幕前)
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+//
+//{
+//    oldContentOffsetY = scrollView.contentOffset.y;
+//}
 
 
 
