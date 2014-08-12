@@ -51,6 +51,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 {
     self = [super initWithFrame:frame];
     if (self) {
+//        [self setBackgroundColor:[UIColor whiteColor]];
         [self addUI];
         [self upUserData];
         

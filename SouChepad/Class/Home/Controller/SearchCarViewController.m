@@ -56,8 +56,10 @@ static NSString *seconCellID = @"seconCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitSearch:withDic:) name:@"userIDchange" object:nil];
     requstDic = [NSMutableDictionary dictionary];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    [self addLimitSearchView];
-    
+    if (nil == _limitView) {
+        
+        [self addLimitSearchView];
+    }
 }
 
 - (void)addLimitSearchView
@@ -95,7 +97,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)addHeadToobar
 {
 
-    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(30, 50, 20, 20)];
+    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(700, 40, 20, 20)];
     [xian setTextColor:[UIColor whiteColor]];
     [xian setText:@"显示预售车"];
     [xian setFont:[UIFont boldSystemFontOfSize:20]];
@@ -106,12 +108,15 @@ static NSString *seconCellID = @"seconCell";
     [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:switchPresell];
     
-    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(self.headBar.center.x-105, 0, 144, 46)];
-    [limitBut setImage:[UIImage imageNamed:@"xuqiushouji_78"] forState:UIControlStateNormal];
+    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(30, 20, 160, 60)];
+    [limitBut setTitle:@"更新客户需求" forState:UIControlStateNormal];
+    [limitBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+//    [limitBut setImage:[UIImage imageNamed:@"xuqiushouji_78"] forState:UIControlStateNormal];
+    [limitBut setBackgroundColor:[UIColor whiteColor]];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:limitBut];
     
-    UILabel *biaoti = [[UILabel alloc] initWithFrame:CGRectMake(self.headBar.center.x-105, 50, 144, 30)];
+    UILabel *biaoti = [[UILabel alloc] initWithFrame:CGRectMake(self.headBar.center.x-120, 40, 144, 30)];
     [biaoti setText:@"需求车辆"];
     [biaoti setTextAlignment:NSTextAlignmentCenter];
     [biaoti setTextColor:[UIColor whiteColor]];
@@ -348,7 +353,7 @@ static NSString *seconCellID = @"seconCell";
             [headView.stateCarLabel setText:[NSString stringWithFormat:@"搜索车辆   %d/%@",jzCarArrayM?jzCarArrayM.count:0,[dataDic objectForKey:@"totalNumber"]?[dataDic objectForKey:@"totalNumber"]:@"0"]];
             break;
         case 1:
-            [headView.stateCarLabel setText:[NSString stringWithFormat:@"猜你喜欢  15"]];
+            [headView.stateCarLabel setText:[NSString stringWithFormat:@"猜你喜欢"]];
             break;
         default:
             break;
