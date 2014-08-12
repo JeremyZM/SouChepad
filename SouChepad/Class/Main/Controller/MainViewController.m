@@ -12,8 +12,6 @@
 #import "SettingViewController.h"
 #import "ToolViewController.h"
 #import "SCDock.h"
-#import "MasterTableViewController.h"
-#import "DetailViewController.h"
 #import "HttpManager.h"
 #import "KnowledgeVC.h"
 #import "SellInfoVC.h"
