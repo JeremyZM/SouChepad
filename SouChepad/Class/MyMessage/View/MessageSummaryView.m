@@ -34,10 +34,10 @@
     if (self) {
         
         // 初始化数据
-        page = 0;
+        page = 1;
         pageSize = 40;// 每页显示40条
         messageType = kMyMessage;
-        [self requestMessageWithType:messageType];
+        _messageArray = [NSMutableArray array];
         [self showTableView];
     }
     return self;
@@ -69,6 +69,14 @@
 - (void)endRefresh{
     [_header endRefreshing];
     [_footer endRefreshing];
+}
+
+// 清空消息
+- (void)cleanMessage{
+    page = 1;
+    pageSize = 40;// 每页显示40条
+    messageType = kMyMessage;
+    [_messageArray removeAllObjects];
 }
 
 // 获取系统消息或者我的消息
@@ -105,10 +113,10 @@
 
 // 数据请求完后显示消息
 - (void)showFirstMessages:(id)obj{
-    _messageArray = [NSMutableArray arrayWithArray:obj];
+    [_messageArray addObjectsFromArray:obj];// = [NSMutableArray arrayWithArray:obj];
     [tbView reloadData];
     //默认显示第一条详情
-    if (page == 0) {
+    if (page == 1) {
         [self showMessageDetailWithIndex:0];
     }
     [self endRefresh];
@@ -130,6 +138,7 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView{
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         // 下拉刷新
+        page = 1;
        [_messageArray removeAllObjects];
         [self requestMessageWithType:messageType];
     }

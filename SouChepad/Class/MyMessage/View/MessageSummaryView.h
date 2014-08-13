@@ -18,6 +18,8 @@
 @interface MessageSummaryView : UIView
 
 @property (nonatomic,assign) id<MessageSummaryViewDelegate> cellDelegate;
+// 清空消息
+- (void)cleanMessage;
 // 获取系统消息或者我的消息
 - (void)requestMessageWithType:(int)type;
 @end

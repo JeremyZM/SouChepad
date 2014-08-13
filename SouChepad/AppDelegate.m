@@ -151,7 +151,7 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[PushManager manaer] handleRemoteNotification:userInfo];
-    completionHandler(UIBackgroundFetchResultNewData);    
+//    [[PushManager manaer] handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 @end
