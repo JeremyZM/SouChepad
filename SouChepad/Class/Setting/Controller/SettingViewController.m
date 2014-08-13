@@ -113,6 +113,7 @@
 {
  
     if (buttonIndex) {
+        [HttpManager requestLogout];
         
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsName];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsPWD];

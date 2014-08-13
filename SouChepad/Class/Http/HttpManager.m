@@ -982,6 +982,18 @@
 
 }
 
+
+#pragma mark - 退出登录
++ (void)requestLogout{
+    NSString *api = @"/pages/sellManageAction/logout.json";
+    NSDictionary *dic = @{@"userName":[UserDefaults objectForKey:userDefaultsName]};
+    [[HttpService sharedService] requestWithApi:api parameters:dic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:YES hudEnabled:YES];
+}
+
 // 上传测试
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail{
     NSString *path = @"pages/app/yushou/carAction/uploadImage.upload";
