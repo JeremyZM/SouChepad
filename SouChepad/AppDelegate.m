@@ -12,6 +12,13 @@
 #import "HttpManager.h"
 #import "PushManager.h"
 
+@interface AppDelegate()
+{
+    NSString *_refreshAddress;
+}
+
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -26,21 +33,22 @@
     [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
     [MobClick setLogEnabled:YES];
     
-//    [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
-//        
-//        NSDictionary *verDic = obj;
-//        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-//        NSString *versID = [verDic objectForKey:@"versionNumber"];
-//        NSString *commentInfo = [verDic objectForKey:@"comment"];
-//        if (![versID isEqualToString:localVersion])
-//        {
-//            UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
-//            [createUserResponseAlert show];
-//        }
-//        
-//    } fail:^(id obj) {
-//        
-//    }];
+    [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
+        
+        NSDictionary *verDic = obj;
+        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+        NSString *versID = [verDic objectForKey:@"versionNumber"];
+        NSString *commentInfo = [verDic objectForKey:@"comment"];
+        _refreshAddress = [verDic objectForKey:@"refreshAddress"];
+        if (![versID isEqualToString:localVersion])
+        {
+            UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
+            [createUserResponseAlert show];
+        }
+        
+    } fail:^(id obj) {
+        
+    }];
     
        DLog(@"%@--%@",[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
     DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]);
@@ -81,8 +89,14 @@
 
     if (buttonIndex == 0)
     {
-        NSString *iTunesLink = @"http://fir.im/athena";
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+        if (_refreshAddress) {
+            if (![_refreshAddress hasPrefix:@"http://"]) {
+                _refreshAddress = [NSString stringWithFormat:@"http://%@",_refreshAddress];
+            }
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_refreshAddress]];
+        }else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://fir.im/athena"]];
+        }
     }
 }
 
