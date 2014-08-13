@@ -967,6 +967,21 @@
 }
 
 
+#pragma 图片上传url
++ (void)upImageURL:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/upImage.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *dic = [obj responseJSON];
+        
+        success (dic);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:YES];
+
+}
+
 // 上传测试
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail{
     NSString *path = @"pages/app/yushou/carAction/uploadImage.upload";

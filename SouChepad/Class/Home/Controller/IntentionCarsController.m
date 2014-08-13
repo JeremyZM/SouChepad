@@ -16,7 +16,7 @@
 #import "TradeCarInfoCell.h"
 #import "LookOrDriveCarInfoCell.h"
 #import "ZBarController.h"
-#import "ZBarSDK.h"
+//#import "ZBarSDK.h"
 #import "CarDetailWebView.h"
 #import "LookOrDriveCarInfoModel.h"
 #import "OverDriveCarController.h"
@@ -129,31 +129,31 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 }
 
 
-- (void) imagePickerController: (UIImagePickerController*) reader
- didFinishPickingMediaWithInfo: (NSDictionary*) info
-{
-    id<NSFastEnumeration> results =
-    [info objectForKey: ZBarReaderControllerResults];
-    ZBarSymbol *symbol = nil;
-    for(symbol in results)
-        break;
-    
-    NSArray *components = [symbol.data componentsSeparatedByString:@"?"];
-    for (NSString *str in components) {
-        NSArray *comArray = [str componentsSeparatedByString:@"&"];
-        for (NSString *carid in comArray) {
-            if ([carid hasPrefix:@"carId"]) {
-                [reader dismissViewControllerAnimated:YES completion:^{
-                    CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
-                    [carDetailVC setCarID:[carid substringFromIndex:6]];
-                    [self presentViewController:carDetailVC animated:YES completion:^{
-                        
-                    }];
-                }];
-                
-            }
-        }
-    }
+//- (void) imagePickerController: (UIImagePickerController*) reader
+// didFinishPickingMediaWithInfo: (NSDictionary*) info
+//{
+//    id<NSFastEnumeration> results =
+//    [info objectForKey: ZBarReaderControllerResults];
+//    ZBarSymbol *symbol = nil;
+//    for(symbol in results)
+//        break;
+//    
+//    NSArray *components = [symbol.data componentsSeparatedByString:@"?"];
+//    for (NSString *str in components) {
+//        NSArray *comArray = [str componentsSeparatedByString:@"&"];
+//        for (NSString *carid in comArray) {
+//            if ([carid hasPrefix:@"carId"]) {
+//                [reader dismissViewControllerAnimated:YES completion:^{
+//                    CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
+//                    [carDetailVC setCarID:[carid substringFromIndex:6]];
+//                    [self presentViewController:carDetailVC animated:YES completion:^{
+//                        
+//                    }];
+//                }];
+//                
+//            }
+//        }
+//    }
 
     
 //    
@@ -175,7 +175,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 //    } fail:^(id obj) {
 //        
 //    }];
-}
+//}
 
 
 - (void)addCollectionView

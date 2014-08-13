@@ -83,6 +83,10 @@
         [pickView addSubview:cardIDdown];
         [cardIDdown setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_62.png"]]];
         [cardIDdown setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardBack]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        UILongPressGestureRecognizer *cardIDdownPressGesture = [[UILongPressGestureRecognizer alloc]
+                                                                   initWithTarget:self
+                                                                   action:@selector(handleLongPressGestures:)];
+        [cardIDdown addGestureRecognizer:cardIDdownPressGesture];
         
         
         driveCard = [[UIImageView alloc] initWithFrame:CGRectMake(510, 20, 120, 120*768/1024)];
@@ -161,10 +165,8 @@
         if ([pathDic objectForKey:@"status"]) {
             NSString *pathStr = [[pathDic objectForKey:@"path"] stringByReplacingOccurrencesOfString:@"http://res.souche.com/" withString:@""];
 //            [driveDicData setObject:pathStr forKey:@"drivelicense"];
-            [hud setMode:MBProgressHUDModeCustomView];
-            [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_SUCCESS]];
-            sleep(1);
-            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+            [self upImageDataURL:pathStr withHUD:hud];
+            
         }else {
             [hud setMode:MBProgressHUDModeCustomView];
             [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
@@ -188,9 +190,49 @@
     
 }
 
+- (void)upImageDataURL:(NSString*)pathStrURL withHUD:(MBProgressHUD*)hud
+{
+    NSMutableDictionary *reqstDicM = [NSMutableDictionary dictionary];
+    [reqstDicM setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"userId"];
+    if (selectImage == cardIDup) {
+        [reqstDicM setObject:@"image_cardFront" forKey:@"type"];
+        [reqstDicM setObject:pathStrURL forKey:@"cardFront"];
+    }else if (selectImage == cardIDdown) {
+        [reqstDicM setObject:@"image_cardBack" forKey:@"type"];
+        [reqstDicM setObject:pathStrURL forKey:@"cardBack"];
+    }else if (selectImage == driveCard) {
+        [reqstDicM setObject:@"image_drivelicense" forKey:@"type"];
+        [reqstDicM setObject:pathStrURL forKey:@"drivelicense"];
+    }
+    
+    [HttpManager upImageURL:reqstDicM Success:^(id obj) {
+        if ([obj objectForKey:@"succeedMessage"]) {
+            [hud setMode:MBProgressHUDModeCustomView];
+            [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_SUCCESS]];
+            sleep(1);
+            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+        }else{
+            [hud setMode:MBProgressHUDModeCustomView];
+            [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
+            [hud setLabelText:[obj objectForKey:@"errorMessage"]];
+            sleep(1);
+            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+            [selectImage setImage:nil];
+            
+        }
+        
+    } fail:^(id obj) {
+        [hud setMode:MBProgressHUDModeCustomView];
+        [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
+        sleep(1);
+        [MBProgressHUD hideAllHUDsForView:self animated:YES];
+        [selectImage setImage:nil];
+    }];
+
+}
 
 
-#pragma mark - 
+#pragma mark -
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
@@ -245,8 +287,11 @@
     }else if (actionSheet.tag==222)
     {
 
-        if (buttonIndex==0) {
+        if (buttonIndex==0) {  // 删除图片
             [selectImage setImage:nil];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+            [hud setMode:MBProgressHUDModeAnnularDeterminate];
+            [self upImageDataURL:@"" withHUD:hud];
         }
     }
 }
@@ -264,20 +309,20 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [selectImage setImage:image];
     if (picker.sourceType==UIImagePickerControllerSourceTypePhotoLibrary) {
-        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [selectImage setImage:image];
+        
         [popoVC dismissPopoverAnimated:YES];
     }else{
         [picker dismissViewControllerAnimated:YES completion:^{
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            [selectImage setImage:image];
             UIImageWriteToSavedPhotosAlbum(image, self,
                                            @selector(imageWasSavedSuccessfully:didFinishSavingWithError:contextInfo:), nil);
         }];
         
     }
+    
+    [self uploadImage];
     
 }
 

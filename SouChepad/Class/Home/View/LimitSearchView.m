@@ -51,6 +51,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 {
     self = [super initWithFrame:frame];
     if (self) {
+//        [self setBackgroundColor:[UIColor whiteColor]];
         [self addUI];
         [self upUserData];
         
@@ -280,7 +281,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 {
     
     // 预算
-    [yushuanBut setTitle:reqInfoModel.purchaseCarBudget?reqInfoModel.purchaseCarBudget:@"不限 - 不限" forState:UIControlStateNormal];
+    [yushuanBut setTitle:reqInfoModel.purchaseCarBudget && ![reqInfoModel.priceRange isEqualToString:@"0-100000"]?reqInfoModel.purchaseCarBudget:@"不限 - 不限" forState:UIControlStateNormal];
     
     // 里程
     [lichengBut setTitle:reqInfoModel.milesName?reqInfoModel.milesName:@"不限" forState:UIControlStateNormal];
@@ -303,6 +304,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 - (void)yuShuanViewController:(YushuanViewController *)yushuanVC selectCode:(NSString *)selectCode selectBeginStr:(NSString *)selectBeginStr selectEndStr:(NSString *)selectEndStr
 {
     if (yushuanVC.seleckBut == yushuanBut) {
+
         reqInfoModel.startBudgetShow = selectBeginStr;
         reqInfoModel.endBudgetShow = selectEndStr;
         [yushuanVC.seleckBut setTitle:selectCode forState:UIControlStateNormal];
@@ -352,17 +354,21 @@ static NSString *userDemandCellid = @"userDemandCellid";
         
         [basicRequstDicM setObject:reqInfoModel.carbody forKey:@"carbody"];
     }
-    if (reqInfoModel.startBudget) {
-        
-        [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
-    }
-    if (reqInfoModel.endBudget) {
-        
-        [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
+    
+    if (![reqInfoModel.priceRange isEqualToString:@"0-100000"]) {
+        if (reqInfoModel.startBudget) {
+            
+            [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
+        }
+        if (reqInfoModel.endBudget) {
+            
+            [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
+        }
     }
     if (reqInfoModel.country) {
         [basicRequstDicM setObject:reqInfoModel.country forKey:@"country"];
     }
+
 
     [HttpManager updateUserRequirementInfo:basicRequstDicM Success:^(id obj) {
         [self upUserData];

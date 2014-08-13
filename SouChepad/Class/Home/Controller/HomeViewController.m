@@ -58,19 +58,22 @@ static NSString *nothing = @"暂无";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
-        if (obj) {
-            dataDic = [NSDictionary dictionaryWithDictionary:obj];
-            userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
-            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
-            [table reloadData];
-        }
-        [_header endRefreshing];
-        [_footer endRefreshing];
-    } fail:^(id obj) {
-        [_header endRefreshing];
-        [_footer endRefreshing];
-    }];
+    if (table) {
+        
+        [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
+            if (obj) {
+                dataDic = [NSDictionary dictionaryWithDictionary:obj];
+                userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
+                [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
+                [table reloadData];
+            }
+            [_header endRefreshing];
+            [_footer endRefreshing];
+        } fail:^(id obj) {
+            [_header endRefreshing];
+            [_footer endRefreshing];
+        }];
+    }
 
 }
 
