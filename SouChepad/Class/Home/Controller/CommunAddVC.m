@@ -87,7 +87,7 @@
     [messgeLabel setText:@"自动发短信/微信"];
     [self.scorllView addSubview:messgeLabel];
     messgeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(460, CGRectGetMaxY(timeBut.frame)+40, 30, 30)];
-    [messgeSwitch setOn:YES];
+//    [messgeSwitch setOn:YES];
     [messgeSwitch addTarget:self action:@selector(sendMessgaChangde:) forControlEvents:UIControlEventValueChanged];
     [self.scorllView addSubview:messgeSwitch];
     

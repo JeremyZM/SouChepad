@@ -68,7 +68,7 @@
     [self.scorllView addSubview:phoneTextF];
     
     jibieBut = [[UITextField alloc] initWithFrame:CGRectMake(130, 120, 350, 60)];
-    [jibieBut setPlaceholder:@"请选择"];
+    [jibieBut setPlaceholder:@"请选择（必填）"];
     [jibieBut setDelegate:self];
     [self.scorllView addSubview:jibieBut];
     
@@ -87,7 +87,7 @@
     [biaoqian setDataArray:dataArray];
     [self.scorllView addSubview:biaoqian];
     
-    otherCauseTextF = [[UITextField alloc] initWithFrame:CGRectMake(130, 330, 400, 40)];
+    otherCauseTextF = [[UITextField alloc] initWithFrame:CGRectMake(20, 330, 500, 40)];
     [otherCauseTextF setDelegate:self];
     [otherCauseTextF setBorderStyle:UITextBorderStyleRoundedRect];
     [otherCauseTextF setPlaceholder:@"沟通记录..."];
@@ -98,7 +98,7 @@
     [messgeLabel setText:@"自动发短信/微信"];
     [self.scorllView addSubview:messgeLabel];
     messgeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(450, 390, 30, 30)];
-    [messgeSwitch setOn:YES];
+//    [messgeSwitch setOn:YES];
     [messgeSwitch addTarget:self action:@selector(sendMessgaChangde:) forControlEvents:UIControlEventValueChanged];
     [self.scorllView addSubview:messgeSwitch];
     

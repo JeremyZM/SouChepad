@@ -72,8 +72,8 @@
 - (void)setDriveCarDataM:(DriveCarLastData *)driveCarDataM
 {
     _driveCarDataM = driveCarDataM;
+    [self.endMileTextF setText:[NSString stringWithFormat:@"%@",driveCarDataM.driveBeginMile]];
     if (driveCarDataM.salerPrice) {
-        
         [self.priceSlider setMaximumValue:[driveCarDataM.salerPrice floatValue]];
         [self.priceSlider setMinimumValue:[driveCarDataM.salerPrice floatValue]*0.9];
     }
