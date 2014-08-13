@@ -362,12 +362,7 @@ static NSOperationQueue *_sharedNetworkQueue;
     DLog(@"Hostname is nil, use operationWithURLString: method to create absolute URL operations");
     return nil;
   }
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeIP) name:@"NSUserDefaultsDidChangeNotification" object:nil];
-#warning  httppppp----------
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]) {
-        
-        self.hostName = [[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"];
-    }
+
   NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@://%@", useSSL ? @"https" : @"http", self.hostName];
   
   if(self.portNumber != 0)

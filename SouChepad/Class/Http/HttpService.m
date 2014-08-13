@@ -23,7 +23,7 @@ static HttpService * engine;
      if (engine == nil) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            engine = [[self alloc] initWithHostName:KHttpBaseURL];
+            engine = [[self alloc] initWithHostName:[UserDefaults objectForKey:@"httpServerIP"]];
         });
      }
     return engine;

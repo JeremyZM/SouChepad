@@ -16,6 +16,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self adaptServerip];
     // 注册推送
     [[PushManager manaer] registerPushNotificationWithOptions:launchOptions];
     
@@ -25,21 +26,21 @@
     [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
     [MobClick setLogEnabled:YES];
     
-    [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
-        
-        NSDictionary *verDic = obj;
-        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-        NSString *versID = [verDic objectForKey:@"versionNumber"];
-        NSString *commentInfo = [verDic objectForKey:@"comment"];
-        if (![versID isEqualToString:localVersion])
-        {
-            UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
-            [createUserResponseAlert show];
-        }
-        
-    } fail:^(id obj) {
-        
-    }];
+//    [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
+//        
+//        NSDictionary *verDic = obj;
+//        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+//        NSString *versID = [verDic objectForKey:@"versionNumber"];
+//        NSString *commentInfo = [verDic objectForKey:@"comment"];
+//        if (![versID isEqualToString:localVersion])
+//        {
+//            UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
+//            [createUserResponseAlert show];
+//        }
+//        
+//    } fail:^(id obj) {
+//        
+//    }];
     
        DLog(@"%@--%@",[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
     DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]);
@@ -64,6 +65,16 @@
     return YES;
 }
 
+
+// 适配服务器
+- (void)adaptServerip{
+    NSString *sysIp = [UserDefaults objectForKey:@"httpServerIP"];
+    if (sysIp == nil) {
+        NSString *domain = replaceNil([UserDefaults objectForKey:@"httpServerIP"], KHttpBaseURL);
+        [UserDefaults setObject:domain forKey:@"httpServerIP"];
+        syncUserDefaults;
+    }
+}
 
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -97,6 +108,9 @@
 {
     
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
