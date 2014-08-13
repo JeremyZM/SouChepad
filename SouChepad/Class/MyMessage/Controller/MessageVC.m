@@ -27,6 +27,16 @@
     
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    if (messageTypeSegment) {
+        [messageTypeSegment setSelectedSegmentIndex:0];
+    }
+    if (msgSummaryView) {
+        [msgSummaryView cleanMessage];
+    }
+    [self showMessageSummaryView];
+    [self showMessageDetailWihtMessage:nil];
+}
 
 - (void)viewDidLoad{
     [super viewDidLoad];
@@ -34,8 +44,6 @@
     self.view.backgroundColor = [UIColor grayColor];
     
     [self setNavbar];
-    [self showMessageSummaryView];
-    [self showMessageDetailWihtMessage:nil];
 }
 
 // 设置导航栏
@@ -70,13 +78,14 @@
 // 消息类型改变监听
 - (void)messageTypeChanged:(UISegmentedControl*)control{
     int messageType = control.selectedSegmentIndex == 0 ? kMyMessage : kSystermMessage;
+    [msgSummaryView cleanMessage];
     [msgSummaryView requestMessageWithType:messageType];
 }
 
 // 左边消息概要table
 - (void)showMessageSummaryView{
     if (msgSummaryView == nil) {
-        msgSummaryView = [[MessageSummaryView alloc] initWithFrame:CGRectMake(0, 100, 390, CGRectGetWidth(self.view.frame)-100)];
+        msgSummaryView = [[MessageSummaryView alloc] initWithFrame:CGRectMake(0, 100, 390, CGRectGetHeight(self.view.frame)-100)];
         msgSummaryView.cellDelegate = self;
         [self.view addSubview:msgSummaryView];
     }
@@ -85,13 +94,14 @@
 
 // 右边消息详情
 - (void)showMessageDetailWihtMessage:(id)msg{
+    CGFloat originX = CGRectGetMaxX(msgSummaryView.frame)+1;
+    CGRect frame = CGRectMake(originX, 100, CGRectGetWidth(self.view.frame)-originX, CGRectGetHeight(self.view.frame)-100);
     if (msgDetailView == nil) {
-        CGFloat originX = CGRectGetMaxX(msgSummaryView.frame)+1;
-        CGRect frame = CGRectMake(originX, 100, CGRectGetHeight(self.view.frame)-originX, CGRectGetWidth(self.view.frame)-100);
         msgDetailView = [[MessageDetailView alloc] initWithMessage:msg frame:frame];
         [self.view addSubview:msgDetailView];
         [self.view bringSubviewToFront:msgDetailView];
     }else{
+        msgDetailView.frame = frame;
         [msgDetailView setMessageDetail:msg];
     }
 }

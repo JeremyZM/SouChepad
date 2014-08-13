@@ -49,7 +49,7 @@
 - (void)fillValueWithMessage:(id)msg type:(int)msgType{
     message = msg;
     messageType = msgType;
-    if (msgType == kSystermMessage) {
+    if ([msg isKindOfClass:[SystermMessage class]]) {
         // 系统消息
         SystermMessage *sysMsg = msg;
         title.text = strNoNull(sysMsg.title);
@@ -68,7 +68,7 @@
 
 // ui上展示未读状态
 - (void)markMessageStatus{
-    if (messageType == kSystermMessage) {
+    if ([message isKindOfClass:[SystermMessage class]]) {
         SystermMessage *sysMsg = message;
         if ([sysMsg.isRead isEqualToString:@"1"]) {
             unreadFlag.hidden = YES;

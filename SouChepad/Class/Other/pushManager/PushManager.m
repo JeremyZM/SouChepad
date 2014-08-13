@@ -63,7 +63,6 @@ static PushManager *_mamager;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Required
     [APService handleRemoteNotification:userInfo];
-    [self showNotiAlert:userInfo];
 }
 
 // 处理收到的消息
@@ -72,13 +71,11 @@ static PushManager *_mamager;
     [APService handleRemoteNotification:userInfo];
     
     // 取得 APNs 标准信息内容
-    NSDictionary *aps = [userInfo valueForKey:@"aps"];
-    NSString *content = [aps valueForKey:@"alert"]; //推送显示的内容
+//    NSDictionary *aps = [userInfo valueForKey:@"aps"];
+//    NSString *content = [aps valueForKey:@"alert"]; //推送显示的内容
 //    NSInteger badge = [[aps valueForKey:@"badge"] integerValue]; //badge数量
 //    NSString *sound = [aps valueForKey:@"sound"]; //播放的声音
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"推送消息" message:content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
-    [alert show];
+    [self showNotiAlert:userInfo];
 }
 
 - (void)showNotiAlert:(NSDictionary *)userInfo{

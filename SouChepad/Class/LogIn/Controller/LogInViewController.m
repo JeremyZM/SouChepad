@@ -50,6 +50,7 @@
     [nameTextField setCenter:CGPointMake(center.y, center.x-130)];
     [nameTextField setDelegate:self];
     [nameTextField setPlaceholder:@"账号"];
+    nameTextField.text = @"salertest";
     [nameTextField setReturnKeyType:UIReturnKeyNext];
 
     [nameTextField setlaybyRoundingCorners:(UIRectCornerTopLeft|UIRectCornerTopRight) cornerRadii:CGSizeMake(5, 5)];
@@ -61,7 +62,7 @@
     [PWDTextField setReturnKeyType:UIReturnKeyJoin];
 //    [PWDTextField setKeyboardType:UIKeyboardTypePhonePad];
     [PWDTextField setPlaceholder:@"密码"];
-//    [PWDTextField setText:@"1234567890"];
+    [PWDTextField setText:@"1234567"];
     [PWDTextField setSecureTextEntry:YES];
     [PWDTextField setDelegate:self];
 
@@ -154,11 +155,15 @@
         [logInBtn setSelected:YES];
         [nameTextField resignFirstResponder];
         [PWDTextField resignFirstResponder];
+        
+        NSString *token = strNoNull([UserDefaults objectForKey:@"kUserDefaultsToken"]);
+        NSString *pushid = strNoNull([UserDefaults objectForKey:@"jpushid"]);
+        
         NSDictionary *dic = @{@"loginName":nameTextField.text,
                               @"password":PWDTextField.text,
                               @"type":@"saler",
-                              @"token":[UserDefaults objectForKey:@"jpushid"],
-                              @"jPushId":[UserDefaults objectForKey:@"jpushid"]};
+                              @"token":token,
+                              @"jPushId":pushid};
         [HttpManager requestLoginWithParamDic:dic Success:^(id obj) {
             NSDictionary *isok = [NSDictionary dictionaryWithDictionary:obj];
             if ([isok objectForKey:@"login"]) {
