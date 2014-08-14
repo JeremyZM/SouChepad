@@ -41,10 +41,13 @@
 
 - (void)onlyCarType:(UIBarButtonItem*)item
 {
-    if ([_delegate respondsToSelector:@selector(carTypeTableView:selectCarDic:)]) {
-        [_delegate carTypeTableView:self selectCarDic:carCodeDic];
+    if ([carCodeDic objectForKey:@"brandCode"]) {
+        if ([_delegate respondsToSelector:@selector(carTypeTableView:selectCarDic:)]) {
+            [_delegate carTypeTableView:self selectCarDic:carCodeDic];
+        }
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 #pragma mark - Table view data source

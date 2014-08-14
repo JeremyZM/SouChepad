@@ -40,6 +40,7 @@
 {
     [super viewDidLoad];
     biaoqianString = @"";
+    [self.navigationController.navigationBar setTranslucent:NO];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.scorllView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     [self.scorllView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -189,7 +190,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField == otherCauseTextF) {
-       [self.scorllView setContentOffset:CGPointMake(0, -44) animated:YES];
+       [self.scorllView setContentOffset:CGPointZero animated:YES];
         [textField resignFirstResponder];
     }
 }
