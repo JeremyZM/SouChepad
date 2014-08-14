@@ -113,7 +113,7 @@
              messgeStr = [NSString stringWithFormat:@"您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }
         if (userVOM.phone) {
-            [messgeSwitch setOn:YES];
+//            [messgeSwitch setOn:YES];
             [self sendMessgaChangde:messgeSwitch];
         }else
         {

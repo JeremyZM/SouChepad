@@ -52,6 +52,8 @@
         [_levelImage setHidden:YES];
     }
     
+//    DLog(@"%@",lookOrDriveCellM.carStatus);
+    
     // 车辆状态
     if ([lookOrDriveCellM.carStatus isEqualToString:@"在售"]) {
         [_carStatusImage setHidden:YES];

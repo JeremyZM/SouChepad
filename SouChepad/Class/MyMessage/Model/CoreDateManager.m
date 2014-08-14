@@ -26,7 +26,6 @@
     if (_managedContext != nil) {
         if ([_managedContext hasChanges] && ![_managedContext save:&error]) {
 
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
     }
@@ -74,7 +73,7 @@
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        DLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
     

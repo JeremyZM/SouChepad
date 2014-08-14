@@ -87,7 +87,7 @@ static PushManager *_mamager;
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"推送消息" message:content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
     [alert show];
-    NSLog(@"....%@",userInfo);
+    DLog(@"....%@",userInfo);
 }
 
 
@@ -133,7 +133,7 @@ static PushManager *_mamager;
 }
 
 - (void)tagsAliasCallback:(int)iResCode tags:(NSSet*)tags alias:(NSString*)alias {
-    NSLog(@"rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, tags , alias);
+    DLog(@"rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, tags , alias);
 }
 
 

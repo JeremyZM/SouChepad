@@ -89,7 +89,7 @@
 
     if (buttonIndex == 0)
     {
-        if (_refreshAddress) {
+        if (_refreshAddress&&[_refreshAddress isKindOfClass:[NSString class]]) {
             if (![_refreshAddress hasPrefix:@"http://"]) {
                 _refreshAddress = [NSString stringWithFormat:@"http://%@",_refreshAddress];
             }

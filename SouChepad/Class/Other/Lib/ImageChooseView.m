@@ -55,6 +55,7 @@
 {
     
     UIImageView *image = (UIImageView *)tap.view;
+    
     if (image.image) {
 //        ImageViewController *imageVC = [[ImageViewController alloc] init];
 //        [imageVC setAvatarImageView:image];

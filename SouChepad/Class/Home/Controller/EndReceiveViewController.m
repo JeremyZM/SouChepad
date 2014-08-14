@@ -126,7 +126,7 @@
              messgeStr = [NSString stringWithFormat:@"您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }
         if (userVOM.phone) {
-            [messgeSwitch setOn:YES];
+//            [messgeSwitch setOn:YES];
             [self sendMessgaChangde:messgeSwitch];
         }else
         {

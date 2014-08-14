@@ -978,7 +978,7 @@
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
         fail(error);
-    } reload:YES needHud:YES hudEnabled:YES];
+    } reload:YES needHud:NO hudEnabled:NO];
 
 }
 
@@ -1000,8 +1000,8 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setObject:[NSString stringWithFormat:@"%d", index] forKey:@"pic"];
     
-    NSData *data = UIImageJPEGRepresentation(image, 1.0);
-    DLog(@"%u",data.length/1024/1024);
+    NSData *data = UIImageJPEGRepresentation(image, 0.8);
+    DLog(@"%u",data.length/1024);
 
 //    NSData *dataaa = UIImagePNGRepresentation(image);
 //    DLog(@"%ld",(unsigned long)dataaa.length);
@@ -1023,7 +1023,7 @@
     // 进度
     [op onUploadProgressChanged:^(double progress) {
         NSString *strProgress = [NSString stringWithFormat:@"%.0f", progress*100.0];
-        DLog(@"Upload file progress: %f", progress);
+//        DLog(@"Upload file progress: %f", progress);
         uploadProgress(strProgress);
     }];
     

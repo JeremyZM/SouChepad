@@ -68,7 +68,6 @@
 //获取到选中的数据
 -(void)returnChoosedPickerString:(NSMutableArray *)selectedEntriesArr
 {
-    NSLog(@"selectedArray=%@",selectedEntriesArr);
     
     // 再次初始化选中的数据
     _entriesSelected = [NSArray arrayWithArray:selectedEntriesArr];

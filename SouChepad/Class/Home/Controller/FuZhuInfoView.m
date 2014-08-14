@@ -64,6 +64,7 @@
         
         
         cardIDup = [[UIImageView alloc] initWithFrame:CGRectMake(150, 20, 120, 120*768/1024)];
+        [cardIDup setTag:1024+1];
         [cardIDup setUserInteractionEnabled:YES];
         UITapGestureRecognizer *oneTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseImage:)];
         [cardIDup addGestureRecognizer:oneTap];
@@ -77,6 +78,7 @@
         
         
         cardIDdown = [[UIImageView alloc] initWithFrame:CGRectMake(330, 20, 120, 120*768/1024)];
+        [cardIDdown setTag:1024+2];
         [cardIDdown setUserInteractionEnabled:YES];
         UITapGestureRecognizer *twoTap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseImage:)];
         [cardIDdown addGestureRecognizer:twoTap];
@@ -90,6 +92,7 @@
         
         
         driveCard = [[UIImageView alloc] initWithFrame:CGRectMake(510, 20, 120, 120*768/1024)];
+        [driveCard setTag:1024+3];
         [driveCard setUserInteractionEnabled:YES];
         [driveCard setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_64.png"]]];
         [driveCard setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
@@ -122,8 +125,8 @@
 - (void) handleLongPressGestures:(UILongPressGestureRecognizer *)paramSender{
     if ([paramSender state] == UIGestureRecognizerStateBegan) {
         UIImageView *imageView = (UIImageView*)paramSender.view;
+        selectImage = imageView;
         if (imageView.image) {
-            selectImage = imageView;
             UIActionSheet *deleSheet = [[UIActionSheet alloc] initWithTitle:@"删除照片" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"确认删除" otherButtonTitles:nil, nil];
             [deleSheet setTag:222];
             [deleSheet showFromRect:imageView.frame inView:imageView.superview animated:YES];
@@ -137,6 +140,7 @@
 {
     
     UIImageView *image = (UIImageView *)tap.view;
+    selectImage = image;
     if (image.image) {
         ImageViewController *imageVC = [[ImageViewController alloc] init];
         [imageVC setAvatarImageView:image];
@@ -147,7 +151,6 @@
         
     }else{
         
-        selectImage = image;
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从相册选择",nil];
         [sheet setTag:221];
         [sheet showFromRect:image.frame inView:image.superview animated:YES];
@@ -156,10 +159,10 @@
 
 - (void)uploadImage
 {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:selectImage.superview animated:YES];
     [hud setMode:MBProgressHUDModeAnnularDeterminate];
-    
-    [HttpManager requestUploadImage:selectImage.image imageIndex:0 success:^(id obj) {
+
+    [HttpManager requestUploadImage:selectImage.image imageIndex:selectImage.tag-1024 success:^(id obj) {
         NSDictionary *pathDic = obj;
         DLog(@"%@",pathDic);
         if ([pathDic objectForKey:@"status"]) {
@@ -171,8 +174,7 @@
             [hud setMode:MBProgressHUDModeCustomView];
             [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
             [hud setLabelText:@"上传照片失败"];
-            sleep(1);
-            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+            [hud hide:YES afterDelay:1.0];
             [selectImage setImage:nil];
         }
     } uploadProgress:^(NSString *progress) {
@@ -183,8 +185,7 @@
         [hud setMode:MBProgressHUDModeCustomView];
         [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
         [hud setLabelText:@"上传照片失败"];
-        sleep(1);
-        [MBProgressHUD hideAllHUDsForView:self animated:YES];
+        [hud hide:YES afterDelay:1.0];
         [selectImage setImage:nil];
     }];
     
@@ -209,14 +210,12 @@
         if ([obj objectForKey:@"succeedMessage"]) {
             [hud setMode:MBProgressHUDModeCustomView];
             [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_SUCCESS]];
-            sleep(1);
-            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+            [hud hide:YES afterDelay:1.0];
         }else{
             [hud setMode:MBProgressHUDModeCustomView];
             [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
             [hud setLabelText:[obj objectForKey:@"errorMessage"]];
-            sleep(1);
-            [MBProgressHUD hideAllHUDsForView:self animated:YES];
+            [hud hide:YES afterDelay:1.0];
             [selectImage setImage:nil];
             
         }
@@ -224,8 +223,7 @@
     } fail:^(id obj) {
         [hud setMode:MBProgressHUDModeCustomView];
         [hud setCustomView:[[UIImageView alloc] initWithImage:IOS6HUD_IMAGE_ERROR]];
-        sleep(1);
-        [MBProgressHUD hideAllHUDsForView:self animated:YES];
+        [hud hide:YES afterDelay:1.0];
         [selectImage setImage:nil];
     }];
 
@@ -289,7 +287,7 @@
 
         if (buttonIndex==0) {  // 删除图片
             [selectImage setImage:nil];
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:selectImage.superview animated:YES];
             [hud setMode:MBProgressHUDModeAnnularDeterminate];
             [self upImageDataURL:@"" withHUD:hud];
         }
@@ -299,7 +297,7 @@
 // 保存图片后到相册后，调用的相关方法，查看是否保存成功
 - (void) imageWasSavedSuccessfully:(UIImage *)paramImage didFinishSavingWithError:(NSError *)paramError contextInfo:(void *)paramContextInfo{
     if (paramError == nil){
-        [ProgressHUD showSuccess:@"保存成功"];
+        [ProgressHUD showSuccess:@"保存相册成功"];
     } else {
         [ProgressHUD showSuccess:@"保存失败"];
         
