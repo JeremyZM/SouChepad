@@ -36,8 +36,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 {
     UIView *_contentView;
     BeginBut *beginBtn;
-    NSDate *beginDate;
-    NSDate *endDate;
 }
 @property (strong, nonatomic) TTCounterLabel *counterLabel;
 @end
@@ -129,10 +127,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     if (buttonIndex==1) {
         if (self.userInfoM.reservationId==nil || !self.userInfoM.reservationId) {
             [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
-//                [MobClick event:<#(NSString *)#> attributes:<#(NSDictionary *)#>]
-                
                 [beginBtn setSelected:YES];
-                beginDate = [NSDate date];
                 [self.counterLabel start];
                 [self updateUIForState:kTTCounterRunning];
                 [ProgressHUD showSuccess:@""];
@@ -142,7 +137,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
             
         }else {
             [HttpManager requestUpdateBeginReservationById:@{@"reservationId":self.userInfoM.reservationId,@"userName":KUserName} Success:^(id obj) {
-                beginDate = [NSDate date];
                 [self.counterLabel start];
                 [beginBtn setSelected:YES];
                 [self updateUIForState:kTTCounterRunning];

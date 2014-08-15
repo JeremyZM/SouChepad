@@ -145,14 +145,13 @@
     }else {
         [ProgressHUD showError:@"结束里程错误！"];
     }
-    
 }
 
 
 - (void)dismissSelfController:(UIBarButtonItem*)item
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        
+        [ProgressHUD showSuccess:@"请在意向车辆查看！"];
     }];
 }
 

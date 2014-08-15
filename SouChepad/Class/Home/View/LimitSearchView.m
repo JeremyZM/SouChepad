@@ -54,10 +54,10 @@ static NSString *userDemandCellid = @"userDemandCellid";
 //        [self setBackgroundColor:[UIColor whiteColor]];
         [self addUI];
         [self upUserData];
-        
     }
     return self;
 }
+
 
 - (void)upUserData
 {
@@ -492,6 +492,5 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [but addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
     return but;
 }
-
 
 @end

@@ -146,7 +146,7 @@
                 
                 [HttpManager requestUserHandleByType:@{@"phone":_jbInfoView.phoneText.text,@"userTag":userVomodel.userTag} Success:^(id obj) {
                     [[NSUserDefaults standardUserDefaults] setObject:obj forKey:@"userID"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
+                    syncUserDefaults;
                     [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
                         dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
                         userVomodel = [dataInfoDic objectForKey:@"user"];
@@ -156,6 +156,7 @@
                     } fail:^(id obj) {
                         
                     }];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"userIDchange" object:nil];
                 } fail:^(id obj) {
                     
                 }];

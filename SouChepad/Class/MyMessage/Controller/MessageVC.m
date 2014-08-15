@@ -49,7 +49,7 @@
 // 设置导航栏
 - (void)setNavbar{
     // 返回按钮
-    UIButton *backBtn = [[UIButton alloc] initWithFrame:CGRectMake(30,(CGRectGetHeight(self.headBar.frame)-20)/2, 20, 20)];
+    UIButton *backBtn = [[UIButton alloc] initWithFrame:CGRectMake(10,(CGRectGetHeight(self.headBar.frame)-20)/2, 80, 40)];
     [backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.headBar addSubview:backBtn];
     [backBtn addTarget:self action:@selector(showDockCilck) forControlEvents:UIControlEventTouchUpInside];
@@ -57,7 +57,7 @@
     
     // 消息类型选择的segment
     messageTypeSegment = [[UISegmentedControl alloc] initWithItems:@[@"个人消息", @"系统消息"]];
-    messageTypeSegment.frame = CGRectMake((390-210)/2, (CGRectGetHeight(self.headBar.frame)-35)/2, 210, 35);
+    messageTypeSegment.frame = CGRectMake((390-160)/2, (CGRectGetHeight(self.headBar.frame)-20)/2, 210, 35);
     [[UISegmentedControl appearance] setTintColor:[UIColor whiteColor]];
     messageTypeSegment.selectedSegmentIndex = 0;
     [messageTypeSegment addTarget:self action:@selector(messageTypeChanged:) forControlEvents:UIControlEventValueChanged];

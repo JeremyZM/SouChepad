@@ -161,7 +161,7 @@
     
     [HttpManager saveLookCarRecord:requestDic Success:^(id obj) {
         [self.navigationController dismissViewControllerAnimated:YES completion:^{
-            [ProgressHUD showSuccess:@"保存成功"];
+            [ProgressHUD showSuccess:@"保存成功，请在意向车辆查看！"];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"update" object:nil];
         }];
     } fail:^(id obj) {

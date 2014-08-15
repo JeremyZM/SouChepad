@@ -49,12 +49,19 @@ static NSString *seconCellID = @"seconCell";
 //static NSString * const HeaderIdentifier = @"HeaderIdentifier";
 @implementation SearchCarViewController
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_limitView) {
+        [_limitView upUserData];
+    }
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     yushouOrzaishou = @"zaishou";
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitSearch:withDic:) name:@"userIDchange" object:nil];
     requstDic = [NSMutableDictionary dictionary];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self addHeadToobar];
@@ -62,6 +69,7 @@ static NSString *seconCellID = @"seconCell";
         
         [self addLimitSearchView];
     }
+
 }
 
 - (void)addLimitSearchView
@@ -76,7 +84,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)limitSearch:(LimitSearchView *)limitSearchView withDic:(NSDictionary *)searchDic
 {
     if (_limitView.alpha==0.0) {
-        [UIView animateWithDuration:0.4 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             [_limitView setAlpha:1];
             //        [_limitView setCenter:self.view.center];
             [_limitView setTransform:CGAffineTransformIdentity];
@@ -87,7 +95,7 @@ static NSString *seconCellID = @"seconCell";
         CGAffineTransform lation =  CGAffineTransformMakeTranslation(300, -350);
         CGAffineTransform rotation = CGAffineTransformScale(lation, 0.15, 0.1);
         
-        [UIView animateWithDuration:0.4 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
             [_limitView setAlpha:0];
             [_limitView setTransform:rotation];
         } completion:^(BOOL finished) {
@@ -427,10 +435,5 @@ static NSString *seconCellID = @"seconCell";
     
 }
 
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"userIDchange" object:nil];
-}
 
 @end
