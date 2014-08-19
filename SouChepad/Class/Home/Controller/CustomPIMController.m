@@ -60,6 +60,13 @@
 - (void)saveUserInfoClickt
 {
     if (_jbInfoView) {
+        for (UIView *view in _jbInfoView.subviews) {
+            for (UIView *viewSub in view.subviews) {
+                if ([viewSub isKindOfClass:[UITextField class]]) {
+                    [viewSub resignFirstResponder];
+                }
+            }
+        }
         NSMutableDictionary *reqDic = [NSMutableDictionary dictionary];
         [reqDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"userId"];
         [reqDic setObject:_jbInfoView.nameText.text forKey:@"name"];
@@ -135,10 +142,10 @@
             [reqDic setObject:@"0" forKey:@"isHaveCar"];
         }
 
-        [reqDic setObject:userVomodel.callPhone1?userVomodel.callPhone1:@"" forKey:@"callPhone1"];
-        [reqDic setObject:userVomodel.callPhone2?userVomodel.callPhone2:@"" forKey:@"callPhone2"];
-        [reqDic setObject:userVomodel.callPhone3?userVomodel.callPhone3:@"" forKey:@"callPhone3"];
-        [reqDic setObject:userVomodel.callPhone4?userVomodel.callPhone4:@"" forKey:@"callPhone4"];
+        [reqDic setObject:_jbInfoView.phoneText1.text forKey:@"callPhone1"];
+        [reqDic setObject:_jbInfoView.phoneText2.text forKey:@"callPhone2"];
+        [reqDic setObject:_jbInfoView.phoneText3.text forKey:@"callPhone3"];
+        [reqDic setObject:_jbInfoView.phoneText4.text forKey:@"callPhone4"];
         
         if (!userVomodel.phone&&_jbInfoView.phoneText.text.length>0) {
             if (![NSString phoneValidate:_jbInfoView.phoneText.text]) return;

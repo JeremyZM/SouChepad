@@ -357,7 +357,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
         [basicRequstDicM setObject:reqInfoModel.carbody forKey:@"carbody"];
     }
     
-    if (![reqInfoModel.priceRange isEqualToString:@"0-100000"]) {
+//    if (![reqInfoModel.priceRange isEqualToString:@"0-100000"]) {
         if (reqInfoModel.startBudget) {
             
             [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
@@ -366,7 +366,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
             
             [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
         }
-    }
+//    }
     if (reqInfoModel.country) {
         [basicRequstDicM setObject:reqInfoModel.country forKey:@"country"];
     }

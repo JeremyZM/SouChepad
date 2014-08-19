@@ -377,7 +377,6 @@ static NSString *seconCellID = @"seconCell";
 //    [headView setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
     switch (indexPath.section) {
         case 0:
-
             [headView.stateCarLabel setText:[NSString stringWithFormat:@"搜索车辆   %d/%@",jzCarArrayM?jzCarArrayM.count:0,[dataDic objectForKey:@"totalNumber"]?[dataDic objectForKey:@"totalNumber"]:@"0"]];
             break;
         case 1:
@@ -411,8 +410,6 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
     CarDetailWebView *car = [[CarDetailWebView alloc] init];
     CarBaseModel *carmodel= nil;
     if (indexPath.section==0) {

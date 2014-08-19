@@ -9,6 +9,8 @@
 #import "JBInfoView.h"
 #import "CityPickViewController.h"
 #import "DatePickViewController.h"
+#import "NSString+val.h"
+#import "ProgressHUD.h"
 
 @interface JBInfoView ()<QRadioButtonDelegate,CitypickViewDelegate,DatePickerVCdelegate,UITextFieldDelegate>
 {
@@ -18,6 +20,7 @@
     UIButton *guohuCityBut;
     UIPopoverController *popoVC;
     UIScrollView *scrollView;
+    UIButton *haveCarTypeBut;
 }
 @end
 
@@ -81,11 +84,25 @@
         [self.nameText setPlaceholder:@"填写名字"];
         [scrollView addSubview:self.nameText];
         
-        self.phoneText = [[UITextField alloc] initWithFrame:CGRectMake(150, 70, 600, 60)];
-        [self.phoneText setPlaceholder:@"填写手机号"];
-
+        
+        self.phoneText = [self phoneTextFieldFrame:CGRectMake(150, 70, 130, 60) placeholder:@"填写主号码"];
+        [self.phoneText setLeftViewMode:UITextFieldViewModeNever];
         [scrollView addSubview:self.phoneText];
         
+        
+        self.phoneText1 = [self phoneTextFieldFrame:CGRectMake(300, 70, 130, 60) placeholder:@"备用手机号1"];
+        [scrollView addSubview:self.phoneText1];
+        
+        
+        self.phoneText2 = [self phoneTextFieldFrame:CGRectMake(450, 70, 130, 60) placeholder:@"备用手机号2"];
+        [scrollView addSubview:self.phoneText2];
+        
+        
+        self.phoneText3 = [self phoneTextFieldFrame:CGRectMake(600, 70, 130, 60) placeholder:@"备用手机号3"];
+        [scrollView addSubview:self.phoneText3];
+        
+        self.phoneText4 = [self phoneTextFieldFrame:CGRectMake(750, 70, 155, 60) placeholder:@"备用手机号4"];
+        [scrollView addSubview:self.phoneText4];
         
         self.manBut = [self QRbutWithFrame:CGRectMake(150, 130, 60, 60) andtitle:@"男" groupId:@"1"];
         [scrollView addSubview:self.manBut];
@@ -126,7 +143,7 @@
         [guohuCityBut addTarget:self action:@selector(chooseGuohuCity:) forControlEvents:UIControlEventTouchUpInside];
         [guohuCityBut setHidden:YES];
 #warning 过户**__*_*__*_*_*_*_*___*_*_*_*_*
-//        [scrollView addSubview:guohuCityBut];
+        [scrollView addSubview:guohuCityBut];
         
         
         
@@ -150,6 +167,11 @@
         [scrollView addSubview:self.haveCarBut];
         self.haveNocarBut = [self QRbutWithFrame:CGRectMake(240, 520, 90, 60) andtitle:@"无" groupId:@"7"];
         [scrollView addSubview:self.haveNocarBut];
+        haveCarTypeBut = [self buttonChooes:CGRectMake(600, 520, 200, 30) andtitle:@""];
+        [haveCarTypeBut setHidden:YES];
+        [haveCarTypeBut addTarget:self action:@selector(showAllCarType:) forControlEvents:UIControlEventTouchUpInside];
+        [scrollView addSubview:haveCarTypeBut];
+        
         
         self.maicheBut = [self QRbutWithFrame:CGRectMake(150, 580, 90, 60) andtitle:@"是" groupId:@"8"];
         [scrollView addSubview:self.maicheBut];
@@ -171,6 +193,12 @@
     return self;
 }
 
+- (void)showAllCarType:(UIButton *)but
+{
+    
+}
+
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if (textField == self.beizhuTextF) {
@@ -184,6 +212,11 @@
     if (textField == self.beizhuTextF) {
         [scrollView setContentOffset:CGPointMake(0, 50) animated:YES];
     }
+    if ((textField == self.phoneText||textField == self.phoneText1||textField == self.phoneText2|| textField == self.phoneText3 ||textField == self.phoneText4)&&textField.text.length) {
+        if (![NSString phoneValidate:textField.text]) {
+//            [textField setText:nil];
+        }
+    }
 }
 
 - (void)setDataDic:(NSDictionary *)dataDic
@@ -193,6 +226,11 @@
    UserExtendModel *userExtendM = [dataDic objectForKey:@"userExtend"];
     [self.nameText setText:userVo.userName];
     [self.phoneText setText:userVo.phone];
+    [self.phoneText1 setText:userVo.callPhone1];
+    [self.phoneText2 setText:userVo.callPhone2];
+    [self.phoneText3 setText:userVo.callPhone3];
+    [self.phoneText4 setText:userVo.callPhone4];
+    
     
     if ([userVo.sex isEqualToString:@"man"]) {
         [self.manBut setChecked:YES];
@@ -294,7 +332,7 @@
             [self.zhibiaoDateBut setHidden:YES];
         }
     }else if ([groupId isEqualToString:@"4"]){
-        if ([radio.titleLabel.text isEqualToString:@"外市"]) {
+        if ([radio.titleLabel.text isEqualToString:@"外迁"]) {
             [guohuCityBut setHidden:NO];
         }else{
             [guohuCityBut setHidden:YES];
@@ -333,6 +371,34 @@
     [womanBut setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [womanBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateSelected];
     return womanBut;
+}
+
+
+- (UITextField *)phoneTextFieldFrame:(CGRect)frame placeholder:(NSString *)placeholder
+{
+    UITextField *phoneText = [[UITextField alloc] initWithFrame:frame];
+    [phoneText setDelegate:self];
+    [phoneText setKeyboardType:UIKeyboardTypePhonePad];
+//    [phoneText setClearButtonMode:UITextFieldViewModeWhileEditing];
+    [phoneText setPlaceholder:placeholder];
+    UIView *vei1 = [[UIView alloc] initWithFrame:CGRectMake(0, 10, 1, 40)];
+    [vei1 setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
+    [phoneText setRightViewMode:UITextFieldViewModeAlways];
+    [phoneText setRightView:vei1];
+//    [phoneText setLeftViewMode:UITextFieldViewModeAlways];
+//    [phoneText setLeftView:vei1];
+    return phoneText;
+
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ((textField == self.phoneText||textField == self.phoneText1||textField == self.phoneText2|| textField == self.phoneText3 ||textField == self.phoneText4)&&range.location > 10) {
+
+            return NO;
+        }
+    
+    return YES;
 }
 
 

@@ -14,6 +14,7 @@
 #import "UIImageView+WebCache.h"
 #import "MBProgressHUD.h"
 #import "HttpManager.h"
+#import "ALAssetsLibrary+CustomPhotoAlbum.h"
 
 @interface FuZhuInfoView()<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -29,6 +30,7 @@
     
     UserVOModel *userVoModel;
     UserExtendModel *userExtendModel;
+    ALAssetsLibrary *_alassets;
 }
 
 @end
@@ -104,6 +106,8 @@
                                                                 action:@selector(handleLongPressGestures:)];
         [driveCard addGestureRecognizer:driveCardlongPressGesture];
         
+        
+        _alassets = [[ALAssetsLibrary alloc] init];
         
     }
     return self;
@@ -294,16 +298,6 @@
     }
 }
 
-// 保存图片后到相册后，调用的相关方法，查看是否保存成功
-- (void) imageWasSavedSuccessfully:(UIImage *)paramImage didFinishSavingWithError:(NSError *)paramError contextInfo:(void *)paramContextInfo{
-    if (paramError == nil){
-        [ProgressHUD showSuccess:@"保存相册成功"];
-    } else {
-        [ProgressHUD showSuccess:@"保存失败"];
-        
-    }
-}
-
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -314,10 +308,16 @@
         [popoVC dismissPopoverAnimated:YES];
     }else{
         [picker dismissViewControllerAnimated:YES completion:^{
-            UIImageWriteToSavedPhotosAlbum(image, self,
-                                           @selector(imageWasSavedSuccessfully:didFinishSavingWithError:contextInfo:), nil);
+            
         }];
-        
+        // 保存图片到相册，调用的相关方法，查看是否保存成功
+        [_alassets saveImage:image toAlbum:@"客户证件" withCompletionBlock:^(NSError *error) {
+            if (error == nil){
+                [ProgressHUD showSuccess:@"保存至相册成功"];
+            } else {
+                [ProgressHUD showSuccess:@"保存至相册失败"];
+            }
+        }];
     }
     
     [self uploadImage];

@@ -30,8 +30,9 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
-    [MobClick setLogEnabled:YES];
+#warning  友盟统计-----------
+//    [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
+//    [MobClick setLogEnabled:YES];
     
     [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
         
@@ -43,7 +44,7 @@
         if (![versID isEqualToString:localVersion])
         {
             UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
-            [createUserResponseAlert show];
+//            [createUserResponseAlert show];
         }
         
     } fail:^(id obj) {
