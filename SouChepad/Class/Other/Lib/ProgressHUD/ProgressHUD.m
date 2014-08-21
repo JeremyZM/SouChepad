@@ -219,7 +219,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	CGRect labelRect = CGRectZero;
-	CGFloat hudWidth = 100, hudHeight = 100;
+	CGFloat hudWidth = 120, hudHeight = 120;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if (label.text != nil)
 	{
@@ -241,11 +241,11 @@
 		hudWidth = labelRect.size.width + 24;
 		hudHeight = labelRect.size.height + 80;
 
-		if (hudWidth < 100)
+		if (hudWidth < 120)
 		{
-			hudWidth = 100;
+			hudWidth = 120;
 			labelRect.origin.x = 0;
-			labelRect.size.width = 100;
+			labelRect.size.width = 120;
 		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------
@@ -310,7 +310,7 @@
 	@autoreleasepool
 	{
 		double length = label.text.length;
-		NSTimeInterval sleep = length * 0.1 + 1.0;
+		NSTimeInterval sleep = length * 0.15 + 1.0;
 		
 		[NSThread sleepForTimeInterval:sleep];
 		[self hudHide];

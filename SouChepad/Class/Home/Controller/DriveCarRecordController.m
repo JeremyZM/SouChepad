@@ -203,6 +203,10 @@
         return;
     }
 #warning 试驾图片上传.... && [driveDicData objectForKey:@"drivelicense"]
+    
+    if (![driveDicData objectForKey:@"drivelicense"]) {
+        [driveDicData setObject:@"" forKey:@"drivelicense"];
+    }
     if (self.nameTextF.text.length) {
         [driveDicData setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
         [driveDicData setObject:self.carId forKey:@"carId"];

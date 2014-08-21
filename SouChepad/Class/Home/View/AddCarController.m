@@ -23,7 +23,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationItem setTitle:@"添加意向车型"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelBar)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStyleBordered target:self action:@selector(saveBar)];
@@ -101,7 +101,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
 
 }
 

@@ -284,7 +284,7 @@
             
             success([obj responseJSON]);
         }else{
-            [ProgressHUD showError:@""];
+            [ProgressHUD showError:[dic objectForKey:@"succeedMessage"]];
         }
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         DLog(@"%@",obj);
@@ -914,7 +914,7 @@
 + (void)requestUserHandleByType:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/userHandleByType.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        DLog(@"%@",[obj responseJSON]);
+        DLog(@"%@",obj);
         NSDictionary *objDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
         if ([objDic objectForKey:@"userId"]) {
 
@@ -933,7 +933,16 @@
 {
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/userOutStore.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
         DLog(@"%@",[obj responseJSON]);
-        success([obj responseJSON]);
+        NSDictionary *objDic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        if ([objDic objectForKey:@"errorMessage"]) {
+
+            [ProgressHUD showError:[objDic objectForKey:@"errorMessage"]];
+        }else{
+            success([obj responseJSON]);
+        }
+
+        
+
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
     } reload:YES needHud:YES hudEnabled:YES];

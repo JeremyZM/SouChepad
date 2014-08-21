@@ -19,6 +19,10 @@
 
 @property (nonatomic, strong) UITextField *nameText;
 @property (nonatomic, strong) UITextField *phoneText;
+@property (nonatomic, strong) UITextField *phoneText1;
+@property (nonatomic, strong) UITextField *phoneText2;
+@property (nonatomic, strong) UITextField *phoneText3;
+@property (nonatomic, strong) UITextField *phoneText4;
 
 @property (nonatomic, strong) QRadioButton *manBut;
 @property (nonatomic, strong) QRadioButton *womanBut;
@@ -43,6 +47,10 @@
 
 @property (nonatomic, strong) QRadioButton *haveCarBut;
 @property (nonatomic, strong) QRadioButton *haveNocarBut;
+/** 车型 */
+@property (copy, nonatomic) NSString *cardBank;
+/** 车系 */
+@property (copy, nonatomic) NSString *carSeris;
 
 @property (nonatomic, strong) QRadioButton *maicheBut;
 @property (nonatomic, strong) QRadioButton *maicheNOBut;

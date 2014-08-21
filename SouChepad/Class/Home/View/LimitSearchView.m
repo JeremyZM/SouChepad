@@ -54,10 +54,10 @@ static NSString *userDemandCellid = @"userDemandCellid";
 //        [self setBackgroundColor:[UIColor whiteColor]];
         [self addUI];
         [self upUserData];
-        
     }
     return self;
 }
+
 
 - (void)upUserData
 {
@@ -166,6 +166,8 @@ static NSString *userDemandCellid = @"userDemandCellid";
 //    [self.searchBut setBackgroundColor:[UIColor redColor]];
     [self addSubview:self.searchBut];
 
+    
+    
 }
 
 - (void)showRequireDelete
@@ -355,7 +357,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
         [basicRequstDicM setObject:reqInfoModel.carbody forKey:@"carbody"];
     }
     
-    if (![reqInfoModel.priceRange isEqualToString:@"0-100000"]) {
+//    if (![reqInfoModel.priceRange isEqualToString:@"0-100000"]) {
         if (reqInfoModel.startBudget) {
             
             [basicRequstDicM setObject:reqInfoModel.startBudget forKey:@"startBudget"];
@@ -364,7 +366,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
             
             [basicRequstDicM setObject:reqInfoModel.endBudget forKey:@"endBudget"];
         }
-    }
+//    }
     if (reqInfoModel.country) {
         [basicRequstDicM setObject:reqInfoModel.country forKey:@"country"];
     }
@@ -438,25 +440,15 @@ static NSString *userDemandCellid = @"userDemandCellid";
         AddCarController *addUserCarBodyVC = [[AddCarController alloc] init];
         [addUserCarBodyVC setDelegate:self];
         UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:addUserCarBodyVC];
-        
         [navVC setModalPresentationStyle:UIModalPresentationFormSheet];
         [self.secrVC presentViewController:navVC animated:YES completion:^{
             
         }];
     }else {
         RequireBrandsModel *requireBrandM = reqBrandsArray[indexPath.row-1];
-        
-        CGRect frme = self.frame;
-        frme.origin.y -= frme.size.height;
-        [UIView animateWithDuration:0.25 animations:^{
-            [self setFrame:frme];
-            
-        } completion:^(BOOL finished) {
-            if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
-                [_limitDelegate limitSearch:self withDic:@{@"requirementBrandId":requireBrandM._id}];
-            }
-        }];
-        
+        if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
+            [_limitDelegate limitSearch:self withDic:@{@"requirementBrandId":requireBrandM._id}];
+        }
     }
 }
 
@@ -468,15 +460,24 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 - (void)hidLimitView
 {
-    CGRect frme = self.frame;
-    frme.origin.y -= frme.size.height;
-    [UIView animateWithDuration:0.25 animations:^{
-        [self setFrame:frme];
-    } completion:^(BOOL finished) {
         if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
             [_limitDelegate limitSearch:self withDic:nil];
         }
-    }];
+
+    
+//    if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
+//        [_limitDelegate limitSearch:self withDic:nil];
+//    }
+    
+//    CGRect frme = self.frame;
+//    frme.origin.y -= frme.size.height;
+//    [UIView animateWithDuration:0.25 animations:^{
+//        [self setFrame:frme];
+//    } completion:^(BOOL finished) {
+//        if ([_limitDelegate respondsToSelector:@selector(limitSearch:withDic:)]) {
+//            [_limitDelegate limitSearch:self withDic:nil];
+//        }
+//    }];
 }
 
 - (UIButton*)addButtonFrame:(CGRect)frame
@@ -491,6 +492,5 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [but addTarget:self action:@selector(showAllPopoView:) forControlEvents:UIControlEventTouchUpInside];
     return but;
 }
-
 
 @end

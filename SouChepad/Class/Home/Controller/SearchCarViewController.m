@@ -49,18 +49,27 @@ static NSString *seconCellID = @"seconCell";
 //static NSString * const HeaderIdentifier = @"HeaderIdentifier";
 @implementation SearchCarViewController
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_limitView) {
+        [_limitView upUserData];
+    }
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     yushouOrzaishou = @"zaishou";
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitSearch:withDic:) name:@"userIDchange" object:nil];
     requstDic = [NSMutableDictionary dictionary];
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self addHeadToobar];
     if (nil == _limitView) {
         
         [self addLimitSearchView];
     }
+
 }
 
 - (void)addLimitSearchView
@@ -74,23 +83,42 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)limitSearch:(LimitSearchView *)limitSearchView withDic:(NSDictionary *)searchDic
 {
-    [requstDic removeAllObjects];
-    _page = 1;
-    if (_collectionView == nil) {
+    if (_limitView.alpha==0.0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [_limitView setAlpha:1];
+            //        [_limitView setCenter:self.view.center];
+            [_limitView setTransform:CGAffineTransformIdentity];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }else {
+        CGAffineTransform lation =  CGAffineTransformMakeTranslation(300, -350);
+        CGAffineTransform rotation = CGAffineTransformScale(lation, 0.15, 0.1);
         
-        [self addHeadToobar];
-        [self addCollectionView];
-    }
-    [requstDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
-    [requstDic setObject:@"15" forKey:@"pageSize"];
-    
-    if ([searchDic objectForKey:@"requirementBrandId"]) {
-    
-        [requstDic setObject:[searchDic objectForKey:@"requirementBrandId"] forKey:@"requirementBrandId"];
+        [UIView animateWithDuration:0.3 animations:^{
+            [_limitView setAlpha:0];
+            [_limitView setTransform:rotation];
+        } completion:^(BOOL finished) {
+            
+            [requstDic removeAllObjects];
+            _page = 1;
+            if (_collectionView == nil) {
+                
+                [self addCollectionView];
+            }
+            [requstDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
+            [requstDic setObject:@"15" forKey:@"pageSize"];
+            
+            if ([searchDic objectForKey:@"requirementBrandId"]) {
+                
+                [requstDic setObject:[searchDic objectForKey:@"requirementBrandId"] forKey:@"requirementBrandId"];
+                
+            }
+            [self refreshViewBeginRefreshing:_header];
+            
+        }];
         
     }
-    [self refreshViewBeginRefreshing:_header];
-    
 }
 
 
@@ -98,31 +126,34 @@ static NSString *seconCellID = @"seconCell";
 - (void)addHeadToobar
 {
 
-    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(700, 40, 20, 20)];
+    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(30, 45, 20, 20)];
     [xian setTextColor:[UIColor whiteColor]];
     [xian setText:@"显示预售车"];
     [xian setFont:[UIFont boldSystemFontOfSize:20]];
     [xian sizeToFit];
     [self.headBar addSubview:xian];
     
-    UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 40, 55, 30)];
+    UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 45, 55, 30)];
     [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
     [self.headBar addSubview:switchPresell];
     
-    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(30, 20, 160, 60)];
+    UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(700, 40, 160, 40)];
     [limitBut setTitle:@"更新客户需求" forState:UIControlStateNormal];
-    [limitBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+    [limitBut.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+    [limitBut.layer setCornerRadius:5.0];
+    [limitBut.layer setBorderWidth:2.0];
+    [limitBut.layer setBorderColor:[[UIColor whiteColor] CGColor]];
+    [limitBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //    [limitBut setImage:[UIImage imageNamed:@"xuqiushouji_78"] forState:UIControlStateNormal];
-    [limitBut setBackgroundColor:[UIColor whiteColor]];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:limitBut];
     
-    UILabel *biaoti = [[UILabel alloc] initWithFrame:CGRectMake(self.headBar.center.x-120, 40, 144, 30)];
-    [biaoti setText:@"需求车辆"];
-    [biaoti setTextAlignment:NSTextAlignmentCenter];
-    [biaoti setTextColor:[UIColor whiteColor]];
-    [biaoti setFont:[UIFont boldSystemFontOfSize:22]];
-    [self.headBar addSubview:biaoti];
+//    UILabel *biaoti = [[UILabel alloc] initWithFrame:CGRectMake(self.headBar.center.x-120, 40, 144, 30)];
+//    [biaoti setText:@"需求车辆"];
+//    [biaoti setTextAlignment:NSTextAlignmentCenter];
+//    [biaoti setTextColor:[UIColor whiteColor]];
+//    [biaoti setFont:[UIFont boldSystemFontOfSize:22]];
+//    [self.headBar addSubview:biaoti];
     
 }
 
@@ -140,11 +171,7 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)showLimitView
 {
-    [UIView animateWithDuration:0.25 animations:^{
-        [_limitView setCenter:self.view.center];
-    } completion:^(BOOL finished) {
-        
-    }];
+    [self limitSearch:_limitView withDic:nil];
     
 }
 
@@ -350,7 +377,6 @@ static NSString *seconCellID = @"seconCell";
 //    [headView setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
     switch (indexPath.section) {
         case 0:
-
             [headView.stateCarLabel setText:[NSString stringWithFormat:@"搜索车辆   %d/%@",jzCarArrayM?jzCarArrayM.count:0,[dataDic objectForKey:@"totalNumber"]?[dataDic objectForKey:@"totalNumber"]:@"0"]];
             break;
         case 1:
@@ -384,8 +410,6 @@ static NSString *seconCellID = @"seconCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
     CarDetailWebView *car = [[CarDetailWebView alloc] init];
     CarBaseModel *carmodel= nil;
     if (indexPath.section==0) {
@@ -408,10 +432,5 @@ static NSString *seconCellID = @"seconCell";
     
 }
 
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"userIDchange" object:nil];
-}
 
 @end

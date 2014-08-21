@@ -20,4 +20,7 @@
 @property (nonatomic, weak) SearchCarViewController *secrVC;
 @property (nonatomic, strong) UIButton *searchBut;
 @property (nonatomic, weak) id<LimitSearchViewDelegate>limitDelegate;
+
+- (void)upUserData;
+
 @end

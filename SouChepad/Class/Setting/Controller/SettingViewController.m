@@ -135,14 +135,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return 3;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
         [cell.textLabel setFont:[UIFont systemFontOfSize:22]];
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
@@ -150,8 +150,13 @@
     if (indexPath.row==0) {
         [cell.textLabel setText:@"个人资料"];
         
-    }else{
+    }else if (indexPath.row ==1) {
         [cell.textLabel setText:@"修改密码"];
+    }else {
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+        [cell.textLabel setText:@"版本更新"];
+        [cell.detailTextLabel setText:[NSString stringWithFormat:@"当前版本：V%@",localVersion]];
     }
     return cell;
 }
@@ -186,6 +191,34 @@
 
             
         }];
+    }else if (indexPath.row ==2){
+        [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
+            
+            NSDictionary *verDic = obj;
+            NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+            NSString *versID = [verDic objectForKey:@"versionNumber"];
+            NSString *refreshAddress = [verDic objectForKey:@"refreshAddress"];
+            if (![versID isEqualToString:localVersion])
+            {
+                if (refreshAddress&&[refreshAddress isKindOfClass:[NSString class]]) {
+                    if (![refreshAddress hasPrefix:@"http://"]) {
+                        refreshAddress = [NSString stringWithFormat:@"http://%@",refreshAddress];
+                    }
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:refreshAddress]];
+                }else {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://fir.im/athena"]];
+                }
+
+                
+            }else {
+            
+                [ProgressHUD showSuccess:@"当前已是最新版本"];
+            }
+            
+        } fail:^(id obj) {
+            
+        }];
+
     }
 
 
