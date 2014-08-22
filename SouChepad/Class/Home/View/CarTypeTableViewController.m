@@ -29,6 +29,7 @@
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationItem setTitle:@"车型车系选择"];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"仅选择品牌" style:UIBarButtonItemStyleBordered target:self action:@selector(onlyCarType:)];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     carCodeDic = [NSMutableDictionary dictionary];
     self.carTypeArray = [NSArray arrayWithContentsOfFile:KAllCarTypeData];
     self.carTableView = [[MultiTablesView alloc] initWithFrame:self.view.frame];

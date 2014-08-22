@@ -144,15 +144,15 @@
 				[self addSubview:tableView];
 				
 				// Add a Shadow to the table View
-				tableView.layer.shadowColor = [[UIColor blackColor] CGColor];
-				tableView.layer.shadowOffset = CGSizeMake(-2, 0);
-				tableView.layer.masksToBounds = NO;
-				tableView.layer.shadowRadius = 5.0;
-				tableView.layer.shadowOpacity = 0.4;
-				tableView.layer.shouldRasterize = YES;
-				tableView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-				UIBezierPath *path = [UIBezierPath bezierPathWithRect:tableView.bounds];
-				tableView.layer.shadowPath = path.CGPath;
+//				tableView.layer.shadowColor = [[UIColor blackColor] CGColor];
+//				tableView.layer.shadowOffset = CGSizeMake(-2, 0);
+//				tableView.layer.masksToBounds = NO;
+//				tableView.layer.shadowRadius = 5.0;
+//				tableView.layer.shadowOpacity = 0.4;
+//				tableView.layer.shouldRasterize = YES;
+//				tableView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+//				UIBezierPath *path = [UIBezierPath bezierPathWithRect:tableView.bounds];
+//				tableView.layer.shadowPath = path.CGPath;
 				[tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
 				[tableView setDelegate:self];
 				[tableView setDataSource:self];
@@ -177,15 +177,15 @@
 				[fixedTableHeaderView setFrame:CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, fixedTableHeaderView.frame.size.width, fixedTableHeaderView.frame.size.height)];
 				
 				// Add a Shadow to the fixed table header view
-				fixedTableHeaderView.layer.shadowColor = [[UIColor blackColor] CGColor];
-				fixedTableHeaderView.layer.shadowOffset = CGSizeMake(-2, 0);
-				fixedTableHeaderView.layer.masksToBounds = NO;
-				fixedTableHeaderView.layer.shadowRadius = 5.0;
-				fixedTableHeaderView.layer.shadowOpacity = 0.4;
-				fixedTableHeaderView.layer.shouldRasterize = YES;
-				fixedTableHeaderView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-				UIBezierPath *path = [UIBezierPath bezierPathWithRect:fixedTableHeaderView.bounds];
-				fixedTableHeaderView.layer.shadowPath = path.CGPath;
+//				fixedTableHeaderView.layer.shadowColor = [[UIColor blackColor] CGColor];
+//				fixedTableHeaderView.layer.shadowOffset = CGSizeMake(-2, 0);
+//				fixedTableHeaderView.layer.masksToBounds = NO;
+//				fixedTableHeaderView.layer.shadowRadius = 5.0;
+//				fixedTableHeaderView.layer.shadowOpacity = 0.4;
+//				fixedTableHeaderView.layer.shouldRasterize = YES;
+//				fixedTableHeaderView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+//				UIBezierPath *path = [UIBezierPath bezierPathWithRect:fixedTableHeaderView.bounds];
+//				fixedTableHeaderView.layer.shadowPath = path.CGPath;
 				
 				[self addSubview:fixedTableHeaderView];
 				[tableView setFixedTableHeaderView:fixedTableHeaderView];
@@ -208,6 +208,7 @@
 	UITableView *tableView = nil;
 	if (index >= 0 && index < [self.tableViews count]) {
 		tableView = [self.tableViews objectAtIndex:index];
+        [tableView setBackgroundColor:[UIColor whiteColor]];
 	}
 	return tableView;
 }
@@ -384,6 +385,7 @@
 	}
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView setBackgroundColor:[UIColor whiteColor]];
 	if ([self.delegate respondsToSelector:@selector(multiTablesView:level:didSelectRowAtIndexPath:)]) {
 		[self.delegate multiTablesView:self level:[self indexOfTableView:tableView] didSelectRowAtIndexPath:indexPath];
 	}

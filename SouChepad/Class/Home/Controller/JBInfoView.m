@@ -9,10 +9,12 @@
 #import "JBInfoView.h"
 #import "CityPickViewController.h"
 #import "DatePickViewController.h"
+#import "CarTypeTableViewController.h"
 #import "NSString+val.h"
 #import "ProgressHUD.h"
+#import "HZLocation.h"
 
-@interface JBInfoView ()<QRadioButtonDelegate,CitypickViewDelegate,DatePickerVCdelegate,UITextFieldDelegate>
+@interface JBInfoView ()<QRadioButtonDelegate,CitypickViewDelegate,DatePickerVCdelegate,UITextFieldDelegate,CarTypeTableViewDelegate>
 {
     UITableView *JBtableView;
     NSArray *array;
@@ -21,6 +23,8 @@
     UIPopoverController *popoVC;
     UIScrollView *scrollView;
     UIButton *haveCarTypeBut;
+    
+    HZLocation *guohudi;
 }
 @end
 
@@ -139,13 +143,12 @@
         [scrollView addSubview:self.guoHuTypeBut];
         self.guoHuwaiBut = [self QRbutWithFrame:CGRectMake(240, 340, 90, 60) andtitle:@"外迁" groupId:@"4"];
         [scrollView addSubview:self.guoHuwaiBut];
-        guohuCityBut = [self buttonChooes:CGRectMake(700, 355, 120, 30) andtitle:@"过户省市"];
+        guohuCityBut = [self buttonChooes:CGRectMake(600, 350, 250, 40) andtitle:@"过户省市"];
         [guohuCityBut addTarget:self action:@selector(chooseGuohuCity:) forControlEvents:UIControlEventTouchUpInside];
         [guohuCityBut setHidden:YES];
 #warning 过户**__*_*__*_*_*_*_*___*_*_*_*_*
         [scrollView addSubview:guohuCityBut];
-        
-        
+        guohudi = [[HZLocation alloc] init];
         
         self.fuKuanTypeBut = [self QRbutWithFrame:CGRectMake(150, 400, 90, 60) andtitle:@"全款" groupId:@"5"];
         [scrollView addSubview:self.fuKuanTypeBut];
@@ -167,7 +170,7 @@
         [scrollView addSubview:self.haveCarBut];
         self.haveNocarBut = [self QRbutWithFrame:CGRectMake(240, 520, 90, 60) andtitle:@"无" groupId:@"7"];
         [scrollView addSubview:self.haveNocarBut];
-        haveCarTypeBut = [self buttonChooes:CGRectMake(600, 520, 200, 30) andtitle:@""];
+        haveCarTypeBut = [self buttonChooes:CGRectMake(600, 530, 250, 40) andtitle:@"车型  车系"];
         [haveCarTypeBut setHidden:YES];
         [haveCarTypeBut addTarget:self action:@selector(showAllCarType:) forControlEvents:UIControlEventTouchUpInside];
         [scrollView addSubview:haveCarTypeBut];
@@ -195,7 +198,28 @@
 
 - (void)showAllCarType:(UIButton *)but
 {
+    CarTypeTableViewController *carTypeVC = [[CarTypeTableViewController alloc] init];
+    [carTypeVC setDelegate:self];
+    UINavigationController *carNav = [[UINavigationController alloc] initWithRootViewController:carTypeVC];
+    popoVC = [[UIPopoverController alloc] initWithContentViewController:carNav];
+    popoVC.popoverContentSize = CGSizeMake(540, 620);
+    [popoVC presentPopoverFromRect:but.frame inView:scrollView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     
+}
+
+- (void)carTypeTableView:(CarTypeTableViewController *)carTypetable selectCarDic:(NSDictionary *)selectCarDic
+{
+    self.cardBankCode = [selectCarDic objectForKey:@"brandCode"];
+    NSString *carName;
+    if ([selectCarDic objectForKey:@"seriesName"]) {
+        
+        carName = [NSString stringWithFormat:@"%@ %@",[selectCarDic objectForKey:@"brandName"],[selectCarDic objectForKey:@"seriesName"]];
+        self.carSerisCode = [selectCarDic objectForKey:@"seriesCode"];
+    }else{
+        carName = [NSString stringWithFormat:@"%@",[selectCarDic objectForKey:@"brandName"]];
+    }   
+    [haveCarTypeBut setTitle:carName forState:UIControlStateNormal];
+    [popoVC dismissPopoverAnimated:YES];
 }
 
 
@@ -231,7 +255,6 @@
     [self.phoneText3 setText:userVo.callPhone3];
     [self.phoneText4 setText:userVo.callPhone4];
     
-    
     if ([userVo.sex isEqualToString:@"man"]) {
         [self.manBut setChecked:YES];
     }else if ([userVo.sex isEqualToString:@"woman"]) {
@@ -265,6 +288,16 @@
         [self.guoHuTypeBut setChecked:YES];
     }else if ([userExtendM.insureType isEqualToString:@"outside_move"]){
         [self.guoHuwaiBut setChecked:YES];
+        NSString *guohu = @"过户省市";
+        if (userExtendM.insureCityName) {
+            guohu = [NSString stringWithFormat:@"%@  %@",userExtendM.insureProvinceName,userExtendM.insureCityName];
+            guohudi.stateCode = userExtendM.insureProvince;
+            guohudi.cityCode = userExtendM.insureCity;
+        }else if (userExtendM.insureProvinceName){
+            guohu = userExtendM.insureProvinceName;
+            guohudi.stateCode = userExtendM.insureProvince;
+        }
+        [guohuCityBut setTitle:guohu forState:UIControlStateNormal];
     }
     
     if ([userExtendM.payType isEqualToString:@"fullpay"]) {
@@ -277,12 +310,23 @@
         [self.haveCarBut setChecked:YES];
         [self.maicheNOBut setUserInteractionEnabled:YES];
         [self.maicheBut setUserInteractionEnabled:YES];
+        [haveCarTypeBut setHidden:NO];
+        NSString *carName = @"车型  车系";
+        if (userExtendM.seriesName) {
+            carName = [NSString stringWithFormat:@"%@  %@",userExtendM.brandName,userExtendM.seriesName];
+        }else if (userExtendM.brandName){
+            carName = userExtendM.brandName;
+        }
+        [haveCarTypeBut setTitle:carName forState:UIControlStateNormal];
+        
     }else if ([userExtendM.isHaveCar isEqualToString:@"0"]){
         [self.haveNocarBut setChecked:YES];
         [self.maicheBut setUserInteractionEnabled:NO];
         [self.maicheNOBut setUserInteractionEnabled:NO];
+        [haveCarTypeBut setHidden:YES];
     }
-
+    
+    
     if ([userExtendM.isSellCar isEqualToString:@"1"]) {
         [self.maicheBut setChecked:YES];
     }else if ([userExtendM.isSellCar isEqualToString:@"0"]){
@@ -296,16 +340,18 @@
 {
     CityPickViewController *cityPick = [[CityPickViewController alloc] init];
     [cityPick setDelegate:self];
+    [cityPick setHzLocat:guohudi];
     popoVC = [[UIPopoverController alloc] initWithContentViewController:cityPick];
-    popoVC.popoverContentSize = CGSizeMake(320, 260);
+    popoVC.popoverContentSize = CGSizeMake(450, 260);
     [popoVC presentPopoverFromRect:button.frame inView:scrollView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 
 #pragma mark - delegate
-- (void)cityPickView:(CityPickViewController *)cityPickVC state:(NSString *)state city:(NSString *)city
+- (void)cityPickView:(CityPickViewController *)cityPickVC HZlocation:(HZLocation *)hzLocation
 {
-    [guohuCityBut setTitle:[NSString stringWithFormat:@"%@ %@",state,city] forState:UIControlStateNormal];
+    guohudi = hzLocation;
+    [guohuCityBut setTitle:[NSString stringWithFormat:@"%@  %@",hzLocation.state,hzLocation.city] forState:UIControlStateNormal];
 }
 
 
@@ -341,12 +387,13 @@
         if ([radio.titleLabel.text isEqualToString:@"有"]) {
             [self.maicheBut setUserInteractionEnabled:YES];
             [self.maicheNOBut setUserInteractionEnabled:YES];
-            
+            [haveCarTypeBut setHidden:NO];
         }else {
             [self.maicheNOBut setUserInteractionEnabled:NO];
             [self.maicheBut setUserInteractionEnabled:NO];
             [self.maicheBut setChecked:NO];
             [self.maicheNOBut setChecked:NO];
+            [haveCarTypeBut setHidden:YES];
         }
     }
 }

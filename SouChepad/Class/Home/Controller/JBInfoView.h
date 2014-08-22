@@ -48,9 +48,9 @@
 @property (nonatomic, strong) QRadioButton *haveCarBut;
 @property (nonatomic, strong) QRadioButton *haveNocarBut;
 /** 车型 */
-@property (copy, nonatomic) NSString *cardBank;
+@property (copy, nonatomic) NSString *cardBankCode;
 /** 车系 */
-@property (copy, nonatomic) NSString *carSeris;
+@property (copy, nonatomic) NSString *carSerisCode;
 
 @property (nonatomic, strong) QRadioButton *maicheBut;
 @property (nonatomic, strong) QRadioButton *maicheNOBut;

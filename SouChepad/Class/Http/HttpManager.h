@@ -25,6 +25,8 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 获取各评价list
 + (void)getDictionarySuccess:(Success)success fail:(Fail)fail;
 
+#pragma mark - 获取所有省市城市
++ (void)getDictionaryByAllCityTypeAndLevel:(Success)success fail:(Fail)fail;
 
 
 #pragma mark - 销售登陆

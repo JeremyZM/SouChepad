@@ -70,7 +70,6 @@
         NSArray *keyArray = [dic allKeys];
         for (NSString *keyStr in keyArray) {
             if ([keyStr isEqualToString:@"errorMessage"]) return;
-            
             [[dic objectForKey:keyStr] writeToFile:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist",keyStr]] atomically:YES];
 
         }
@@ -79,6 +78,21 @@
         
     } reload:YES needHud:NO hudEnabled:NO];
 
+}
+
+
+#pragma mark - 获取所有省市城市
++ (void)getDictionaryByAllCityTypeAndLevel:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getDictionaryByTypeAndLevel.json" parameters:@{@"type":@"area",@"level":@"province",@"nextlevel":@"city"} success:^(MKNetworkOperation *obj) {
+        NSDictionary *allCity = [obj responseJSON];
+        NSArray *citysArray = [allCity objectForKey:@"items"];
+        [citysArray writeToFile:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"allCitys.plist"] atomically:YES];
+//        allCity writeToFile:<#(NSString *)#> atomically:<#(BOOL)#>
+        DLog(@"%@",[obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        
+    } reload:YES needHud:NO hudEnabled:NO];
 }
 
 
@@ -360,7 +374,6 @@
         fail([error localizedDescription]);
     } reload:YES needHud:YES hudEnabled:YES];
 }
-
 
 #pragma mark - 销售修改预约到店时间（填写沟通）
 + (void)requestUpdateReservationDateByUser:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail

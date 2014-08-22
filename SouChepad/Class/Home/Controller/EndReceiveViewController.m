@@ -12,7 +12,6 @@
 #import "ProgressHUD.h"
 #import "NSString+val.h"
 #import "GuoBieViewController.h"
-//#import "LiChengViewController.h"
 #import "PopoTableViewController.h"
 #import "BiaoQianView.h"
 
@@ -29,6 +28,8 @@
     UITextField *otherCauseTextF;
     NSString *leaveString;
     NSString *biaoqianString;
+    
+    UIButton *phoneNumBut;
 }
 @property (nonatomic, strong) UIScrollView *scorllView;
 @end
@@ -66,6 +67,7 @@
     [self.scorllView addSubview:nameTextF];
     phoneTextF = [[UITextField alloc] initWithFrame:CGRectMake(130, 60, 220, 60)];
     [phoneTextF setPlaceholder:@"请填写客户手机号"];
+    [phoneTextF setDelegate:self];
     [self.scorllView addSubview:phoneTextF];
     
     jibieBut = [[UITextField alloc] initWithFrame:CGRectMake(130, 120, 350, 60)];
@@ -95,15 +97,25 @@
     [self.scorllView addSubview:otherCauseTextF];
     
     
-    UILabel *messgeLabel = [[UILabel alloc]  initWithFrame:CGRectMake(20, 380, 200, 60)];
+    UILabel *messgeLabel = [[UILabel alloc]  initWithFrame:CGRectMake(20, 390, 150, 60)];
     [messgeLabel setText:@"自动发短信/微信"];
     [self.scorllView addSubview:messgeLabel];
-    messgeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(450, 390, 30, 30)];
-//    [messgeSwitch setOn:YES];
+    messgeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(450, 400, 30, 30)];
+    [messgeSwitch setOn:NO];
     [messgeSwitch addTarget:self action:@selector(sendMessgaChangde:) forControlEvents:UIControlEventValueChanged];
     [self.scorllView addSubview:messgeSwitch];
     
-    messgeTextView = [[UITextView alloc] initWithFrame:CGRectMake(20, 430, self.scorllView.bounds.size.width-40, 100)];
+    phoneNumBut = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(messgeLabel.frame)+20, 400, 200, 40)];
+    [phoneNumBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+    [phoneNumBut.layer setBorderColor:[[UIColor hexStringToColor:KBaseColo] CGColor]];
+    [phoneNumBut.layer setBorderWidth:1.0];
+    [phoneNumBut.layer setCornerRadius:8.0];
+    [self.scorllView addSubview:phoneNumBut];
+    [phoneNumBut setHidden:YES];
+    [phoneNumBut addTarget:self action:@selector(showUserPhone:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    messgeTextView = [[UITextView alloc] initWithFrame:CGRectMake(20, 450, self.scorllView.bounds.size.width-40, 100)];
     [messgeTextView setFont:KFont18];
     [messgeTextView.layer setCornerRadius:5.0];
     [messgeTextView.layer setBorderWidth:1.0];
@@ -111,6 +123,9 @@
     [messgeTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [messgeTextView setDelegate:self];
     [self.scorllView addSubview:messgeTextView];
+    [messgeTextView setUserInteractionEnabled:NO];
+    [messgeTextView setTextColor:[UIColor lightGrayColor]];
+    
     
     [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
@@ -126,21 +141,64 @@
         }else {
              messgeStr = [NSString stringWithFormat:@"您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
         }
-        if (userVOM.phone) {
-//            [messgeSwitch setOn:YES];
-            [self sendMessgaChangde:messgeSwitch];
-        }else
-        {
-            [messgeSwitch setOn:NO];
-            [self sendMessgaChangde:messgeSwitch];
-           
-        }
+        
         [messgeTextView setText:messgeStr];
         
     } fail:^(id obj) {
         
     }];
     
+}
+
+- (void)showUserPhone:(UIButton *)phoneBut
+{
+    NSMutableArray *phoneArray = [NSMutableArray array];
+    if (userVOM.phone) {
+        
+        [phoneArray addObject:userVOM.phone];
+    }
+    if (userVOM.callPhone1) {
+        [phoneArray addObject:userVOM.callPhone1];
+    }
+    if (userVOM.callPhone2) {
+        [phoneArray addObject:userVOM.callPhone2];
+    }
+    if (userVOM.callPhone3) {
+        [phoneArray addObject:userVOM.callPhone3];
+    }
+    if (userVOM.callPhone4) {
+        [phoneArray addObject:userVOM.callPhone4];
+    }
+    PopoTableViewController *phoneTVC = [[PopoTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    [phoneTVC setPopoTabelDelegate:self];
+    if (phoneArray.count==0) {
+        [phoneArray addObject:phoneTextF.text];
+    }
+    [phoneTVC setArray:phoneArray];
+    for (NSInteger i = 0; i<phoneArray.count; i++) {
+        if ([phoneBut.titleLabel.text isEqualToString:phoneArray[i]]) {
+            [phoneTVC setSelectRow:[NSString stringWithFormat:@"%d",i]];
+        }
+    }
+    //    [phoneTVC setSelectRow:phoneBut.titleLabel.text];
+    [phoneTVC setSortWayBtn:phoneBut];
+    popoController = [[UIPopoverController alloc] initWithContentViewController:phoneTVC];
+    CGRect frame = [self.view convertRect:phoneBut.frame fromView:phoneBut.superview];
+    popoController.popoverContentSize = CGSizeMake(400, 60*phoneArray.count+44);
+    [popoController presentPopoverFromRect:frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    
+}
+
+
+- (void)PopoTableViewController:(PopoTableViewController *)popoTableVC seleckChanged:(NSString *)seleckStr andseleckRow:(NSInteger)row andselectBtn:(UIButton *)selecBtn
+{
+    if (selecBtn == phoneNumBut) {
+        
+        [selecBtn setTitle:seleckStr forState:UIControlStateNormal];
+    }else {
+        [jibieBut setText:seleckStr];
+    }
+    [popoController dismissPopoverAnimated:YES];
 }
 
 
@@ -178,7 +236,6 @@
 }
 
 
-
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if (textField == otherCauseTextF) {
@@ -192,28 +249,40 @@
     if (textField == otherCauseTextF) {
        [self.scorllView setContentOffset:CGPointZero animated:YES];
         [textField resignFirstResponder];
+    } else if (textField == phoneTextF) {
+        [phoneNumBut setTitle:textField.text forState:UIControlStateNormal];
     }
 }
 
 - (void)sendMessgaChangde:(UISwitch*)messwitch
 {
-    if (messgeSwitch.isOn) {
-        [messgeTextView setTextColor:[UIColor blackColor]];
-        [messgeTextView setUserInteractionEnabled:YES];
+    if (phoneTextF.text.length>0) {
+        
+        if (messgeSwitch.isOn) {
+            [phoneNumBut setHidden:NO];
+            [phoneNumBut setTitle:phoneTextF.text forState:UIControlStateNormal];
+            [messgeTextView setTextColor:[UIColor blackColor]];
+            [messgeTextView setUserInteractionEnabled:YES];
+        }else {
+            [phoneNumBut setHidden:YES];
+            [messgeTextView setUserInteractionEnabled:NO];
+            [messgeTextView setTextColor:[UIColor lightGrayColor]];
+        }
     }else {
-        [messgeTextView setUserInteractionEnabled:NO];
-        [messgeTextView setTextColor:[UIColor lightGrayColor]];
+        [messwitch setOn:NO];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"该客户暂无手机号" message:@"请到个人信息添加" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil];
+        [alert show];
     }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    [self.scorllView setContentOffset:CGPointMake(0, 200) animated:YES];
+    [self.scorllView setContentOffset:CGPointMake(0, 240) animated:YES];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    [self.scorllView setContentOffset:CGPointMake(0, -44) animated:YES];
+    [self.scorllView setContentOffset:CGPointZero animated:YES];
 }
 
 - (void)cancelItemCilck
@@ -221,14 +290,6 @@
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
-}
-
-
-
-- (void)PopoTableViewController:(PopoTableViewController *)popoTableVC seleckChanged:(NSString *)seleckStr andseleckRow:(NSInteger)row andselectBtn:(UIButton *)selecBtn
-{
-    [jibieBut setText:seleckStr];
-    [popoController dismissPopoverAnimated:YES];
 }
 
 - (void)saveItemReceive
@@ -255,7 +316,7 @@
         
         if (messgeSwitch.isOn&&phoneTextF.text.length) {
             [requDic setObject:@"1" forKey:@"isSendSMS"];
-            [requDic setObject:phoneTextF.text forKey:@"phoneSMS"];
+            [requDic setObject:phoneNumBut.titleLabel.text forKey:@"phoneSMS"];
             [requDic setObject:messgeTextView.text forKey:@"messageSMS"];
         }
         

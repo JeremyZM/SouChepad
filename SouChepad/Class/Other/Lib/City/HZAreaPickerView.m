@@ -7,13 +7,10 @@
 //
 
 #import "HZAreaPickerView.h"
-#import <QuartzCore/QuartzCore.h>
-
-#define kDuration 0.3
 
 @interface HZAreaPickerView ()
 {
-    NSArray *provinces, *cities, *areas;
+    NSArray *provinces, *cities;
 }
 
 @end
@@ -21,7 +18,6 @@
 @implementation HZAreaPickerView
 
 @synthesize delegate=_delegate;
-@synthesize pickerStyle=_pickerStyle;
 @synthesize locate=_locate;
 @synthesize locatePicker = _locatePicker;
 
@@ -36,54 +32,54 @@
     return _locate;
 }
 
-- (id)initWithStyle:(HZAreaPickerStyle)pickerStyle delegate:(id<HZAreaPickerDelegate>)delegate
+- (id)initWithdelegate:(id<HZAreaPickerDelegate>)delegate HZlocation:(HZLocation *)locate
 {
     
     self = [[[NSBundle mainBundle] loadNibNamed:@"HZAreaPickerView" owner:self options:nil] objectAtIndex:0];
     if (self) {
         self.delegate = delegate;
-        self.pickerStyle = pickerStyle;
         self.locatePicker.dataSource = self;
         self.locatePicker.delegate = self;
         
+        _locate = locate;
         //加载数据
-        if (self.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
-            provinces = [[NSArray alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"area.plist" ofType:nil]];
-            cities = [[provinces objectAtIndex:0] objectForKey:@"cities"];
-            
-            self.locate.state = [[provinces objectAtIndex:0] objectForKey:@"state"];
-            self.locate.city = [[cities objectAtIndex:0] objectForKey:@"city"];
-            
-            areas = [[cities objectAtIndex:0] objectForKey:@"areas"];
-            if (areas.count > 0) {
-                self.locate.district = [areas objectAtIndex:0];
-            } else{
-                self.locate.district = @"";
+        provinces = [NSArray arrayWithContentsOfFile:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"allCitys.plist"]];
+        
+        for (NSInteger i = 0; i<provinces.count; i++) {
+            NSDictionary *provinDic = provinces[i];
+            if ([self.locate.stateCode isEqualToString:[provinDic objectForKey:@"code"]]) {
+                [self.locatePicker selectRow:i inComponent:0 animated:NO];
+                cities = [[provinces objectAtIndex:i] objectForKey:@"dic"];
+                break;
             }
-            
-        } else{
-            provinces = [[NSArray alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"city.plist" ofType:nil]];
-            cities = [[provinces objectAtIndex:0] objectForKey:@"cities"];
-            self.locate.state = [[provinces objectAtIndex:0] objectForKey:@"state"];
-            self.locate.city = [cities objectAtIndex:0];
         }
+        if (self.locate.stateCode== nil) {
+            cities = [[provinces objectAtIndex:0] objectForKey:@"dic"];
+        }
+        for (NSInteger j = 0; j <cities.count; j++) {
+            NSDictionary *citieDic = cities[j];
+            if ([self.locate.cityCode isEqualToString:[citieDic objectForKey:@"code"]]) {
+                [self.locatePicker selectRow:j inComponent:1 animated:NO];
+                break;
+            }
+        }
+                [self.locatePicker selectRow:3 inComponent:1 animated:NO];
+        
+//        self.locate.state = [[provinces objectAtIndex:0] objectForKey:@"name"];
+//        self.locate.stateCode = [[provinces objectAtIndex:0] objectForKey:@"code"];
+//        self.locate.city = [[cities objectAtIndex:0] objectForKey:@"name"];
+//        self.locate.cityCode = [[cities objectAtIndex:0] objectForKey:@"code"];
     }
         
     return self;
     
 }
 
-
-
 #pragma mark - PickerView lifecycle
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    if (self.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
-        return 3;
-    } else{
-        return 2;
-    }
+    return 2;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
@@ -95,11 +91,6 @@
         case 1:
             return [cities count];
             break;
-        case 2:
-            if (self.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
-                return [areas count];
-                break;
-            }
         default:
             return 0;
             break;
@@ -108,97 +99,38 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (self.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
-        switch (component) {
-            case 0:
-                return [[provinces objectAtIndex:row] objectForKey:@"state"];
-                break;
-            case 1:
-                return [[cities objectAtIndex:row] objectForKey:@"city"];
-                break;
-            case 2:
-                if ([areas count] > 0) {
-                    return [areas objectAtIndex:row];
-                    break;
-                }
-            default:
-                return  @"";
-                break;
-        }
-    } else{
-        switch (component) {
-            case 0:
-                return [[provinces objectAtIndex:row] objectForKey:@"state"];
-                break;
-            case 1:
-                return [cities objectAtIndex:row];
-                break;
-            default:
-                return @"";
-                break;
-        }
+    switch (component) {
+        case 0:
+            return [[provinces objectAtIndex:row] objectForKey:@"name"];
+            break;
+        case 1:
+            return [[cities objectAtIndex:row] objectForKey:@"name"];
+            break;
+        default:
+            return @"";
+            break;
     }
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    if (self.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
         switch (component) {
-            case 0:
-                cities = [[provinces objectAtIndex:row] objectForKey:@"cities"];
-                [self.locatePicker selectRow:0 inComponent:1 animated:YES];
-                [self.locatePicker reloadComponent:1];
-                
-                areas = [[cities objectAtIndex:0] objectForKey:@"areas"];
-                [self.locatePicker selectRow:0 inComponent:2 animated:YES];
-                [self.locatePicker reloadComponent:2];
-                
-                self.locate.state = [[provinces objectAtIndex:row] objectForKey:@"state"];
-                self.locate.city = [[cities objectAtIndex:0] objectForKey:@"city"];
-                if ([areas count] > 0) {
-                    self.locate.district = [areas objectAtIndex:0];
-                } else{
-                    self.locate.district = @"";
-                }
-                break;
-            case 1:
-                areas = [[cities objectAtIndex:row] objectForKey:@"areas"];
-                [self.locatePicker selectRow:0 inComponent:2 animated:YES];
-                [self.locatePicker reloadComponent:2];
-                
-                self.locate.city = [[cities objectAtIndex:row] objectForKey:@"city"];
-                if ([areas count] > 0) {
-                    self.locate.district = [areas objectAtIndex:0];
-                } else{
-                    self.locate.district = @"";
-                }
-                break;
-            case 2:
-                if ([areas count] > 0) {
-                    self.locate.district = [areas objectAtIndex:row];
-                } else{
-                    self.locate.district = @"";
-                }
-                break;
-            default:
-                break;
-        }
-    } else{
-        switch (component) {
-            case 0:
-                cities = [[provinces objectAtIndex:row] objectForKey:@"cities"];
-                [self.locatePicker selectRow:0 inComponent:1 animated:YES];
-                [self.locatePicker reloadComponent:1];
-                
-                self.locate.state = [[provinces objectAtIndex:row] objectForKey:@"state"];
-                self.locate.city = [cities objectAtIndex:0];
-                break;
-            case 1:
-                self.locate.city = [cities objectAtIndex:row];
-                break;
-            default:
-                break;
-        }
+        case 0:
+            cities = [[provinces objectAtIndex:row] objectForKey:@"dic"];
+            [self.locatePicker selectRow:0 inComponent:1 animated:YES];
+            [self.locatePicker reloadComponent:1];
+            
+            self.locate.state = [[provinces objectAtIndex:row] objectForKey:@"name"];
+            self.locate.stateCode = [[provinces objectAtIndex:row] objectForKey:@"code"];
+            self.locate.city = [[cities objectAtIndex:0] objectForKey:@"name"];
+            self.locate.cityCode = [[cities objectAtIndex:0] objectForKey:@"code"];
+            break;
+        case 1:
+            self.locate.city = [[cities objectAtIndex:row] objectForKey:@"name"];
+            self.locate.cityCode = [[cities objectAtIndex:row] objectForKey:@"code"];
+            break;
+        default:
+            break;
     }
     
     if([self.delegate respondsToSelector:@selector(pickerDidChaneStatus:)]) {

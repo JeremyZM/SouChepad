@@ -39,7 +39,6 @@
     } fail:^(id obj) {
         
     }];
-
     
     // 1.添加dock栏
     [self addDockView];
@@ -51,6 +50,13 @@
 - (void)getDictionaryByCars
 {
     [HttpManager getDictionaryByTypeAndLevel:@{@"type":@"car-subdivision",@"level":@"brand",@"nextlevel":@"series"} Success:^(id obj) {
+        
+    } fail:^(id obj) {
+        
+    }];
+    
+    // 获取全部城市
+    [HttpManager getDictionaryByAllCityTypeAndLevel:^(id obj) {
         
     } fail:^(id obj) {
         

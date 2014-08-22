@@ -24,10 +24,34 @@
     JBInfoView *_jbInfoView;
     NSDictionary *dataInfoDic;
     FuZhuInfoView *_fuzhuView;
+    
+    UIButton *saveUserInfoBut;
 }
 @end
 
 @implementation CustomPIMController
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self saveUserInfoClickt];
+
+    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+        dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
+        userVomodel = [dataInfoDic objectForKey:@"user"];
+        userExtendmodel = [dataInfoDic objectForKey:@"userExtend"];
+        if (userExtendmodel&&userVomodel) {
+            
+            // 添加基本信息view
+            [self addBasicInfoView];
+        }
+        
+    } fail:^(id obj) {
+        
+    }];
+
+}
 
 
 - (void)viewDidLoad
@@ -37,24 +61,6 @@
     // 1.添加toolbar
     [self addToolbar];
     
-    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-        dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
-        userVomodel = [dataInfoDic objectForKey:@"user"];
-        userExtendmodel = [dataInfoDic objectForKey:@"userExtend"];
-        if (userExtendmodel&&userVomodel) {
-            
-            // 添加基本信息view
-            [self addBasicInfoView];
-            UIButton *saveUserInfoBut = [[UIButton alloc] initWithFrame:CGRectMake(750, 35, 150, 40)];
-            [saveUserInfoBut setTitle:@"保存修改信息" forState:UIControlStateNormal];
-            [saveUserInfoBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [saveUserInfoBut addTarget:self action:@selector(saveUserInfoClickt) forControlEvents:UIControlEventTouchUpInside];
-            [self.headBar addSubview:saveUserInfoBut];
-        }
-        
-    } fail:^(id obj) {
-        
-    }];
 }
 
 - (void)saveUserInfoClickt
@@ -67,7 +73,36 @@
                 }
             }
         }
+    
         NSMutableDictionary *reqDic = [NSMutableDictionary dictionary];
+        if (_jbInfoView.phoneText1.text.length) {
+            if (![NSString phoneValidate:_jbInfoView.phoneText1.text]) return;
+            
+            [reqDic setObject:_jbInfoView.phoneText1.text forKey:@"callPhone1"];
+        }
+        if (_jbInfoView.phoneText2.text.length) {
+            if (![NSString phoneValidate:_jbInfoView.phoneText2.text]) return;
+            
+            [reqDic setObject:_jbInfoView.phoneText2.text forKey:@"callPhone2"];
+        }
+        if (_jbInfoView.phoneText3.text.length) {
+            if (![NSString phoneValidate:_jbInfoView.phoneText3.text]) return;
+            
+            [reqDic setObject:_jbInfoView.phoneText3.text forKey:@"callPhone3"];
+        }
+        if (_jbInfoView.phoneText4.text.length) {
+            if (![NSString phoneValidate:_jbInfoView.phoneText4.text]) return;
+            
+            [reqDic setObject:_jbInfoView.phoneText4.text forKey:@"callPhone4"];
+        }
+        
+        if (_jbInfoView.cardBankCode) {
+            [reqDic setObject:_jbInfoView.cardBankCode forKey:@"carBrand"];
+        }
+        if (_jbInfoView.carSerisCode) {
+            [reqDic setObject:_jbInfoView.carSerisCode forKey:@"carSeris"];
+        }
+
         [reqDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"userId"];
         [reqDic setObject:_jbInfoView.nameText.text forKey:@"name"];
         [reqDic setObject:_jbInfoView.beizhuTextF.text forKey:@"remark"];
@@ -142,11 +177,6 @@
             [reqDic setObject:@"0" forKey:@"isHaveCar"];
         }
 
-        [reqDic setObject:_jbInfoView.phoneText1.text forKey:@"callPhone1"];
-        [reqDic setObject:_jbInfoView.phoneText2.text forKey:@"callPhone2"];
-        [reqDic setObject:_jbInfoView.phoneText3.text forKey:@"callPhone3"];
-        [reqDic setObject:_jbInfoView.phoneText4.text forKey:@"callPhone4"];
-        
         if (!userVomodel.phone&&_jbInfoView.phoneText.text.length>0) {
             if (![NSString phoneValidate:_jbInfoView.phoneText.text]) return;
             [HttpManager requestUpdtaeUser:reqDic Success:^(id obj) {
@@ -222,14 +252,20 @@
 - (void)addBasicInfoView
 {
     [_fuzhuView removeFromSuperview];
+    if (saveUserInfoBut==nil) {
+        saveUserInfoBut = [[UIButton alloc] initWithFrame:CGRectMake(750, 35, 150, 40)];
+        [saveUserInfoBut setTitle:@"保存修改信息" forState:UIControlStateNormal];
+        [saveUserInfoBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveUserInfoBut addTarget:self action:@selector(saveUserInfoClickt) forControlEvents:UIControlEventTouchUpInside];
+        [self.headBar addSubview:saveUserInfoBut];
+    }
     if (_jbInfoView == nil) {
-        
         JBInfoView *jbInfo = [[JBInfoView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100)];
         [jbInfo setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         _jbInfoView = jbInfo;
-        [_jbInfoView setDataDic:dataInfoDic];
     }
     [self.view addSubview:_jbInfoView];
+    [_jbInfoView setDataDic:dataInfoDic];
 
 }
 

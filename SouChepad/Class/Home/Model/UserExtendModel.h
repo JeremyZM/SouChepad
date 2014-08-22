@@ -80,4 +80,16 @@
 @property (copy, nonatomic) NSString *seriesName;
 
 
+/** 过户省 code */
+@property (copy, nonatomic) NSString *insureProvince;
+/** 过户省 */
+@property (copy, nonatomic) NSString *insureProvinceName;
+
+/** 过户市code */
+@property (copy, nonatomic) NSString *insureCity;
+/** 过户市 */
+@property (copy, nonatomic) NSString *insureCityName;
+
+
+
 @end

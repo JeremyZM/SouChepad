@@ -218,7 +218,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 {
     if (to ==0) {
         CustomPIMController *old = self.childViewControllers[to];
-        [old saveUserInfoClickt];
+        [old viewDidAppear:YES];
         
         [self.navigationController popViewControllerAnimated:YES];
         

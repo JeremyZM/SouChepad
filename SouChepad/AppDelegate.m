@@ -44,7 +44,7 @@
         if (![versID isEqualToString:localVersion])
         {
             UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
-//            [createUserResponseAlert show];
+            [createUserResponseAlert show];
         }
         
     } fail:^(id obj) {
@@ -142,7 +142,7 @@
 
 // 注册token 失败
 -(void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error{
-    NSLog(@"注册失败，无法获取设备ID, 具体错误: %@", error);
+    DLog(@"注册失败，无法获取设备ID, 具体错误: %@", error);
 }
 
 // 搜到推送消息

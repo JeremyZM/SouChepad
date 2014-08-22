@@ -7,16 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HZLocation.h"
 @class CityPickViewController;
 
 @protocol CitypickViewDelegate <NSObject>
 
-- (void)cityPickView:(CityPickViewController*)cityPickVC state:(NSString*)state city:(NSString*)city;
+- (void)cityPickView:(CityPickViewController*)cityPickVC HZlocation:(HZLocation*)hzLocation;
 
 @end
 
 @interface CityPickViewController : UIViewController
 
 @property (nonatomic, weak) id<CitypickViewDelegate>delegate;
+@property (nonatomic, strong) HZLocation *hzLocat;
 
 @end

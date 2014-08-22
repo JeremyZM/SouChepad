@@ -21,16 +21,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCity delegate:self];
+    self.locatePicker = [[HZAreaPickerView alloc] initWithdelegate:self HZlocation:self.hzLocat];
     [self.locatePicker setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [self.locatePicker setFrame:CGRectMake(0, 30, 320, 260)];
     [self.view addSubview:self.locatePicker];
+    [self.locatePicker setFrame:CGRectMake(0, 30, 450, 260)];
 }
 
 - (void)pickerDidChaneStatus:(HZAreaPickerView *)picker
 {
-    if ([_delegate respondsToSelector:@selector(cityPickView:state:city:)]) {
-        [_delegate cityPickView:self state:picker.locate.state city:picker.locate.city];
+    if ([_delegate respondsToSelector:@selector(cityPickView:HZlocation:)]) {
+        [_delegate cityPickView:self HZlocation:picker.locate];
+//        [_delegate cityPickView:self state:picker.locate.state city:picker.locate.city];
     }
 //    [NSString stringWithFormat:@"%@ %@", picker.locate.state, picker.locate.city];
 }

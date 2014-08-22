@@ -10,12 +10,12 @@
 
 @implementation HZLocation
 
-@synthesize country = _country;
+//@synthesize country = _country;
 @synthesize state = _state;
 @synthesize city = _city;
-@synthesize district = _district;
-@synthesize street = _street;
-@synthesize latitude = _latitude;
-@synthesize longitude = _longitude;
+//@synthesize district = _district;
+//@synthesize street = _street;
+//@synthesize latitude = _latitude;
+//@synthesize longitude = _longitude;
 
 @end

@@ -104,6 +104,12 @@ fprintf(stderr, "-----------------------------------\n");                       
 #define KSeparatorColor @"#e6e6e6"
 
 /**
+ *  沙盒路径
+ */
+//#define KSandboxPath @"NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)"
+
+
+/**
  *  allListData.plist
  */
 #define KallListData [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"allListData.plist"]

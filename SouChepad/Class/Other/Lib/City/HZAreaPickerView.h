@@ -9,11 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "HZLocation.h"
 
-typedef enum {
-    HZAreaPickerWithStateAndCity,
-    HZAreaPickerWithStateAndCityAndDistrict
-} HZAreaPickerStyle;
-
 @class HZAreaPickerView;
 
 @protocol HZAreaPickerDelegate <NSObject>
@@ -28,9 +23,8 @@ typedef enum {
 @property (assign, nonatomic) id <HZAreaPickerDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UIPickerView *locatePicker;
 @property (strong, nonatomic) HZLocation *locate;
-@property (nonatomic) HZAreaPickerStyle pickerStyle;
 
-- (id)initWithStyle:(HZAreaPickerStyle)pickerStyle delegate:(id <HZAreaPickerDelegate>)delegate;
+- (id)initWithdelegate:(id <HZAreaPickerDelegate>)delegate  HZlocation:(HZLocation*)locate;
 - (void)showInView:(UIView *)view;
 - (void)cancelPicker;
 
