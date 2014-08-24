@@ -160,6 +160,14 @@
             [reqDic setObject:@"this_city" forKey:@"insureType"];
         }else if (_jbInfoView.guoHuwaiBut.checked){
             [reqDic setObject:@"outside_move" forKey:@"insureType"];
+            if (_jbInfoView.guohudi.stateCode) {
+                
+                [reqDic setObject:_jbInfoView.guohudi.stateCode forKey:@"insureProvince"];
+            }
+            if (_jbInfoView.guohudi.cityCode) {
+                
+                [reqDic setObject:_jbInfoView.guohudi.cityCode forKey:@"insureCity"];
+            }
         }
         if (_jbInfoView.fuKuanFenqi.checked) {
             [reqDic setObject:@"partpay" forKey:@"payType"];
