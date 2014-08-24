@@ -10,6 +10,7 @@
 #import "UserVOModel.h"
 #import "UserExtendModel.h"
 #import "QRadioButton.h"
+#import "HZLocation.h"
 
 @interface JBInfoView : UIView
 
@@ -35,6 +36,10 @@
 
 @property (nonatomic, strong) QRadioButton *guoHuTypeBut;
 @property (nonatomic, strong) QRadioButton *guoHuwaiBut;
+/** 过户省市 */
+@property (nonatomic, strong) HZLocation *guohudi;
+
+
 
 @property (nonatomic, strong) QRadioButton *fuKuanTypeBut;
 @property (nonatomic, strong) QRadioButton *fuKuanFenqi;

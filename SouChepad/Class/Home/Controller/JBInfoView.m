@@ -12,7 +12,6 @@
 #import "CarTypeTableViewController.h"
 #import "NSString+val.h"
 #import "ProgressHUD.h"
-#import "HZLocation.h"
 
 @interface JBInfoView ()<QRadioButtonDelegate,CitypickViewDelegate,DatePickerVCdelegate,UITextFieldDelegate,CarTypeTableViewDelegate>
 {
@@ -23,8 +22,6 @@
     UIPopoverController *popoVC;
     UIScrollView *scrollView;
     UIButton *haveCarTypeBut;
-    
-    HZLocation *guohudi;
 }
 @end
 
@@ -148,7 +145,7 @@
         [guohuCityBut setHidden:YES];
 #warning 过户**__*_*__*_*_*_*_*___*_*_*_*_*
         [scrollView addSubview:guohuCityBut];
-        guohudi = [[HZLocation alloc] init];
+        self.guohudi = [[HZLocation alloc] init];
         
         self.fuKuanTypeBut = [self QRbutWithFrame:CGRectMake(150, 400, 90, 60) andtitle:@"全款" groupId:@"5"];
         [scrollView addSubview:self.fuKuanTypeBut];
@@ -291,11 +288,13 @@
         NSString *guohu = @"过户省市";
         if (userExtendM.insureCityName) {
             guohu = [NSString stringWithFormat:@"%@  %@",userExtendM.insureProvinceName,userExtendM.insureCityName];
-            guohudi.stateCode = userExtendM.insureProvince;
-            guohudi.cityCode = userExtendM.insureCity;
+            self.guohudi.stateCode = userExtendM.insureProvince;
+            self.guohudi.state = userExtendM.insureProvinceName;
+            self.guohudi.cityCode = userExtendM.insureCity;
+            self.guohudi.city = userExtendM.insureCityName;
         }else if (userExtendM.insureProvinceName){
             guohu = userExtendM.insureProvinceName;
-            guohudi.stateCode = userExtendM.insureProvince;
+            self.guohudi.stateCode = userExtendM.insureProvince;
         }
         [guohuCityBut setTitle:guohu forState:UIControlStateNormal];
     }
@@ -340,7 +339,7 @@
 {
     CityPickViewController *cityPick = [[CityPickViewController alloc] init];
     [cityPick setDelegate:self];
-    [cityPick setHzLocat:guohudi];
+    [cityPick setHzLocat:self.guohudi];
     popoVC = [[UIPopoverController alloc] initWithContentViewController:cityPick];
     popoVC.popoverContentSize = CGSizeMake(450, 260);
     [popoVC presentPopoverFromRect:button.frame inView:scrollView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
@@ -350,7 +349,7 @@
 #pragma mark - delegate
 - (void)cityPickView:(CityPickViewController *)cityPickVC HZlocation:(HZLocation *)hzLocation
 {
-    guohudi = hzLocation;
+    self.guohudi = hzLocation;
     [guohuCityBut setTitle:[NSString stringWithFormat:@"%@  %@",hzLocation.state,hzLocation.city] forState:UIControlStateNormal];
 }
 
