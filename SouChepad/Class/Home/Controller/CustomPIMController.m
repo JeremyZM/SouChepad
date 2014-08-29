@@ -24,19 +24,33 @@
     JBInfoView *_jbInfoView;
     NSDictionary *dataInfoDic;
     FuZhuInfoView *_fuzhuView;
-    
+    UISegmentedControl *seg;
     UIButton *saveUserInfoBut;
 }
 @end
 
 @implementation CustomPIMController
 
-
-- (void)viewDidAppear:(BOOL)animated
+- (void)dealloc
 {
-    [super viewDidAppear:animated];
+    [MobClick endLogPageView:@"基本信息"];
     [self saveUserInfoClickt];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
+- (void)viewDidLoad
+{
+    [MobClick beginLogPageView:@"基本信息"];
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updataData) name:KUserImageChang object:nil];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    // 1.添加toolbar
+    [self addToolbar];
+    [self updataData];
+}
+
+- (void)updataData
+{
     [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
         userVomodel = [dataInfoDic objectForKey:@"user"];
@@ -54,15 +68,6 @@
 }
 
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    // 1.添加toolbar
-    [self addToolbar];
-    
-}
-
 - (void)saveUserInfoClickt
 {
     if (_jbInfoView) {
@@ -73,7 +78,7 @@
                 }
             }
         }
-    
+        
         NSMutableDictionary *reqDic = [NSMutableDictionary dictionary];
         if (_jbInfoView.phoneText1.text.length) {
             if (![NSString phoneValidate:_jbInfoView.phoneText1.text]) return;
@@ -226,20 +231,19 @@
 - (void)addToolbar
 {
     
-    UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息"]];
+    seg = [[UISegmentedControl alloc] initWithItems:@[@"基本信息",@"辅助信息"]];
     [seg setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
     [seg setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:19] forKey:NSFontAttributeName] forState:UIControlStateNormal];
     [seg setCenter:self.headBar.center];
     [seg addTarget:self action:@selector(segChanged:) forControlEvents:UIControlEventValueChanged];
     [seg setTintColor:[UIColor whiteColor]];
     [seg setBounds:CGRectMake(0, 0, 260, 40)];
-    [seg setSelectedSegmentIndex:0];
     [self.headBar addSubview:seg];
 }
 
-- (void)segChanged:(UISegmentedControl*)seg
+- (void)segChanged:(UISegmentedControl*)segment
 {
-    switch (seg.selectedSegmentIndex) {
+    switch (segment.selectedSegmentIndex) {
         case 0:
             // 添加基本信息view
             [self addBasicInfoView];
@@ -260,6 +264,7 @@
 - (void)addBasicInfoView
 {
     [_fuzhuView removeFromSuperview];
+    [seg setSelectedSegmentIndex:0];
     if (saveUserInfoBut==nil) {
         saveUserInfoBut = [[UIButton alloc] initWithFrame:CGRectMake(750, 35, 150, 40)];
         [saveUserInfoBut setTitle:@"保存修改信息" forState:UIControlStateNormal];

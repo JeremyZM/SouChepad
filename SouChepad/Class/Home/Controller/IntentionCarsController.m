@@ -47,6 +47,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick beginLogPageView:@"意向车辆"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(RefreshViewControlEventValueChanged) name:@"userIDchange" object:nil];
     [self addCollectionView];
     [self addToolbar];
@@ -79,20 +80,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)scanErWeiMaBut:(UIButton*)seanBut
 {
-    
-//    ZBarReaderViewController *reader = [ZBarReaderViewController new];
-//    reader.readerDelegate = self;
-//    ZBarImageScanner *scanner = reader.scanner;
-//    [scanner setSymbology: ZBAR_I25
-//                   config: ZBAR_CFG_ENABLE
-//                       to: 0];
-//    
-//    [self presentViewController:reader animated:YES completion:^{
-//        
-//        
-//    }];
-    
-#warning ZBar--------------
+    [MobClick event:KzbarClick attributes:@{@"sellName":KUserName}];
     ZBarController *zbarVC = [[ZBarController alloc] init];
     [zbarVC setDelegate:self];
     [self presentViewController:zbarVC animated:YES completion:^{
@@ -411,6 +399,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)dealloc
 {
+    [MobClick endLogPageView:@"意向车辆"];
     [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"userIDchange" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"update" object:nil];
 }

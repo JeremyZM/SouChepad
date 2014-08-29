@@ -226,9 +226,7 @@
         
         [dengjiVC setArray:arrayM];
         popoController = [[UIPopoverController alloc] initWithContentViewController:dengjiVC];
-        //    CGRect frame = [self convertRect:jibieB.frame fromView:jibieB.superview];
         popoController.popoverContentSize = CGSizeMake(480, 400);
-//        [popoController setDelegate:self];
         [popoController presentPopoverFromRect:jibieBut.frame inView:self.scorllView permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
         return NO;
     }
@@ -294,6 +292,7 @@
 
 - (void)saveItemReceive
 {
+    [MobClick event:KendReception attributes:@{@"sellName":KUserName}];
     leaveString = [NSString stringWithFormat:@"%@%@",biaoqianString,otherCauseTextF.text];
     if (leaveString.length>0&&jibieBut.text.length>0) {
         if (phoneTextF.text.length>0) {

@@ -88,6 +88,7 @@
 // 看车
 - (void)addLookCarRecord:(UIButton*)but
 {
+    [MobClick event:KlookCarClick attributes:@{@"sellName":KUserName}];
     LookCarRecordController *lookCarVC = [[LookCarRecordController alloc] init];
     [lookCarVC setCarID:self.carID];
     UINavigationController *lookNavVC = [[UINavigationController alloc] initWithRootViewController:lookCarVC];
@@ -100,7 +101,7 @@
 // 试驾
 - (void)addDriveCarRecord:(UIButton*)but
 {
-    
+    [MobClick event:KdriveCarClick attributes:@{@"sellName":KUserName}];
     NSString *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
     [HttpManager lastUserDriveCarByData:@{@"user":userID,@"carId":self.carID} Success:^(id obj) {
         UINavigationController *driveNavVC;
@@ -139,6 +140,7 @@
 
 - (void)showinfoCQI
 {
+    [MobClick event:KcarReportInfo attributes:@{@"sellName":KUserName}];
     CarCQIInfoController *carCQIVC = [[CarCQIInfoController alloc] init];
     carCQIVC.carID = self.carID;
     

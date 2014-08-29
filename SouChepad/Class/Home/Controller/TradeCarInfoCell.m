@@ -29,7 +29,7 @@
     // 搜车价
     [_souchePriceLabel setText:[NSString stringWithFormat:@"%@ 万",tradeCarInfoM.souchePrice]];
     // 上车时间
-    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"上牌：%@",tradeCarInfoM.firstLicensePlateDate]];
+    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"添加：%@",tradeCarInfoM.firstLicensePlateDate]];
     
     // 车辆等级
     if (tradeCarInfoM.level) {
@@ -69,7 +69,7 @@
     }
     
     // 车辆图片
-    [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,tradeCarInfoM.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [_carImage setImageWithURL:[NSURL URLWithString:tradeCarInfoM.image] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
     NSString*a = tradeCarInfoM.carStatus;
     DLog(@"------af-----------------%@",a);

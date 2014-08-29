@@ -298,7 +298,7 @@
             
             success([obj responseJSON]);
         }else{
-            [ProgressHUD showError:[dic objectForKey:@"succeedMessage"]];
+            [ProgressHUD showError:[dic objectForKey:@"errorMessage"]];
         }
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         DLog(@"%@",obj);

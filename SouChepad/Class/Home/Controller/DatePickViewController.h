@@ -17,6 +17,8 @@
 
 @interface DatePickViewController : UIViewController
 
+@property (nonatomic, strong) NSDate *minDate;
+@property (nonatomic, strong) NSDate *maxDate;
 @property (nonatomic, weak) id<DatePickerVCdelegate>delegate;
 
 @end

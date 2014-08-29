@@ -187,7 +187,7 @@
     [self.nameTextF setText:driveCarDataM.name];
     [self.phoneTextF setText:driveCarDataM.phone];
     [self.startMileTextF setText:driveCarDataM.mile];
-    [self.drivingLicenseImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,driveCarDataM.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [self.drivingLicenseImage setImageWithURL:[NSURL URLWithString:driveCarDataM.drivelicense] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
     if (driveCarDataM.drivelicense) {
         [driveDicData setObject:driveCarDataM.drivelicense forKey:@"drivelicense"];
     }
@@ -222,6 +222,7 @@
                 if ([_delegate respondsToSelector:@selector(driveCarBeginRecordController:)]) {
                     [_delegate driveCarBeginRecordController:self];
                 }
+                [[NSNotificationCenter defaultCenter] postNotificationName:KUserImageChang object:nil];
             }];
         } fail:^(id obj) {
             

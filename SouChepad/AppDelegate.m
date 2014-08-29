@@ -24,6 +24,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self adaptServerip];
+    
     // 注册推送
     [[PushManager manaer] registerPushNotificationWithOptions:launchOptions];
     
@@ -31,8 +32,8 @@
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 #warning  友盟统计-----------
-//    [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
-//    [MobClick setLogEnabled:YES];
+    [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:SENDDAILY   channelId:nil];
+    [MobClick setLogEnabled:YES];
     
     [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
         
@@ -51,11 +52,11 @@
         
     }];
     
-       DLog(@"%@--%@",[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName],[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
-    DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"httpServerIP"]);
     BOOL islog = !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]==nil) && !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD] == nil);
     
     if (islog) {
+        NSDictionary *dict = @{@"sellName" :KUserName};
+        [MobClick event:KopenApp attributes:dict];
         // 已经登陆
         MainViewController *mainVC = [[MainViewController alloc] init];
         [self.window setRootViewController:mainVC];

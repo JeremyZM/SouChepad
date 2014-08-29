@@ -28,9 +28,6 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 // 发布状态
 #define DLog(...)
-
-
-
 #endif
 
 //当前系统版本
@@ -38,7 +35,10 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 
 #define userDefaultsName @"userDefaultsName"  //登陆账号
+#define KUserName [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]
+
 #define userDefaultsPWD @"userDefaultsPWD"    // 登陆密码
+#define KUserPWD [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]
 
 
 // 文字的高度比例
@@ -60,24 +60,18 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 #define Khttp @"115.29.10.121:11080/soucheweb   122.224.68.242:8081/soucheweb  192.168.0.250:8088/soucheweb  115.29.10.121:13080/soucheweb "
 
-#define KImageBaseURL @"http://res.souche.com/"
+#define KUserImageChang @"UserImageChang"
 
-// 销售昵称
-#define KSellName @"sellName"
-// 邮箱
-#define KSellEmail @"sellEmail"
-// 电话
-#define KSellPhone @"sellPhone"
-// 地址
-#define KSellAddressName @"sellAddressName"
-// qq
-#define KSellQQ @"sellQQ"
+#define KSellName @"sellName" // 销售昵称
 
+#define KSellEmail @"sellEmail" // 邮箱
 
+#define KSellPhone @"sellPhone" // 电话
 
+#define KSellAddressName @"sellAddressName" // 地址
 
-#define KUserName [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]
-#define KUserPWD [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]
+#define KSellQQ @"sellQQ" // qq
+
 
 /**
  *   18号字体
@@ -166,4 +160,25 @@ fprintf(stderr, "-----------------------------------\n");                       
  */
 #define KvehicleType [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"vehicleType.plist"]
 
+
+/** ----------------------------------------友盟*/
+
+#define KaddCommunicate     @"addCommunicate"       ///  *  添加沟通记录
+#define KaddNewUser         @"addNewUser"               ///*  添加新客户
+#define KbeginReception     @"beginReception"       ///*  开始接待
+#define KendReception       @"endReception"           ///*  结束接待
+#define KopenApp            @"openApp"                     ///*  打开软件
+#define KopenUserInfo       @"openUserInfo"           ///*  打开客户详情
+#define KratingSort         @"ratingSort"               ///*  等级排序
+#define KsearchUser         @"searchUser"               ///*  搜索用户
+#define KcarReportInfo      @"carReportInfo"          ///  车辆质检报告
+#define KdemandChange       @"demandChange"          ///   需求分析修改
+#define KdriveCarClick      @"driveCarClick"         ///   试驾
+#define KlookCarClick       @"lookCarClick"          ///   看车
+#define KmyMessageClick     @"myMessageClick"        ///   我的消息查看
+#define KshowPresellCar     @"showPresellCar"        ///   需求分析显示预售车
+#define KuserPathInfo       @"userPathInfo"          ///   客户轨迹触发
+#define KzbarClick          @"zbarClick"             ///   扫描二维码
+
 #endif
+

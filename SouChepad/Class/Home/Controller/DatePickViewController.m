@@ -27,6 +27,13 @@
     [formate setDateFormat:@"yyyy-MM-dd"];
     [self.datepicker setDatePickerMode:UIDatePickerModeDate]; // 设置模式
     // 设置 时区
+    if (self.minDate) {
+        [self.datepicker setMinimumDate:self.minDate];
+    }
+    if (self.maxDate) {
+        [self.datepicker setMaximumDate:self.maxDate];
+    }
+    
     [self.datepicker setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
     [self.datepicker addTarget:self action:@selector(datePickerChinagd:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.datepicker];

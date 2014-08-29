@@ -214,6 +214,7 @@
         self.carSerisCode = [selectCarDic objectForKey:@"seriesCode"];
     }else{
         carName = [NSString stringWithFormat:@"%@",[selectCarDic objectForKey:@"brandName"]];
+        self.carSerisCode = nil;
     }   
     [haveCarTypeBut setTitle:carName forState:UIControlStateNormal];
     [popoVC dismissPopoverAnimated:YES];
@@ -311,6 +312,8 @@
         [self.maicheBut setUserInteractionEnabled:YES];
         [haveCarTypeBut setHidden:NO];
         NSString *carName = @"车型  车系";
+        self.cardBankCode = userExtendM.carBrand;
+        self.carSerisCode = userExtendM.carSeris;
         if (userExtendM.seriesName) {
             carName = [NSString stringWithFormat:@"%@  %@",userExtendM.brandName,userExtendM.seriesName];
         }else if (userExtendM.brandName){

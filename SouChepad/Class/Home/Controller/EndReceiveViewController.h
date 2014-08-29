@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UserReservationM.h"
+
 @class EndReceiveViewController;
 
 @protocol EndReceiveDelegate <NSObject>

@@ -57,10 +57,16 @@ static NSString *seconCellID = @"seconCell";
     }
 }
 
+- (void)dealloc
+{
+    [MobClick endLogPageView:@"需求分析"];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick beginLogPageView:@"需求分析"];
+    
     yushouOrzaishou = @"zaishou";
     requstDic = [NSMutableDictionary dictionary];
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -144,16 +150,9 @@ static NSString *seconCellID = @"seconCell";
     [limitBut.layer setBorderWidth:2.0];
     [limitBut.layer setBorderColor:[[UIColor whiteColor] CGColor]];
     [limitBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [limitBut setImage:[UIImage imageNamed:@"xuqiushouji_78"] forState:UIControlStateNormal];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:limitBut];
-    
-//    UILabel *biaoti = [[UILabel alloc] initWithFrame:CGRectMake(self.headBar.center.x-120, 40, 144, 30)];
-//    [biaoti setText:@"需求车辆"];
-//    [biaoti setTextAlignment:NSTextAlignmentCenter];
-//    [biaoti setTextColor:[UIColor whiteColor]];
-//    [biaoti setFont:[UIFont boldSystemFontOfSize:22]];
-//    [self.headBar addSubview:biaoti];
+
     
 }
 
@@ -161,6 +160,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)hideOrShowYushouCar:(UISwitch*)swit
 {
     if (swit.on) {
+        [MobClick event:KshowPresellCar attributes:@{@"sellName":KUserName}];
         yushouOrzaishou = @"zaishou-yushou";
     }else{
         yushouOrzaishou = @"zaishou";

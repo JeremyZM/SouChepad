@@ -37,6 +37,7 @@
 
 @implementation FuZhuInfoView
 
+
 - (id)initWithFrame:(CGRect)frame userVOModel:(UserVOModel*)userVo userExtendmodel:(UserExtendModel*)userExtendM
 {
     self = [super initWithFrame:frame];
@@ -72,7 +73,7 @@
         [cardIDup addGestureRecognizer:oneTap];
         [pickView addSubview:cardIDup];
         [cardIDup setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_60.png"]]];
-        [cardIDup setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardFront]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        [cardIDup setImageWithURL:[NSURL URLWithString:userExtendM.idcardFrontURL] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
         UILongPressGestureRecognizer *cardUPlongPressGesture = [[UILongPressGestureRecognizer alloc]
                                            initWithTarget:self
                                            action:@selector(handleLongPressGestures:)];
@@ -86,7 +87,7 @@
         [cardIDdown addGestureRecognizer:twoTap];
         [pickView addSubview:cardIDdown];
         [cardIDdown setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_62.png"]]];
-        [cardIDdown setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.idcardBack]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        [cardIDdown setImageWithURL:[NSURL URLWithString:userExtendM.idcardBackURL] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
         UILongPressGestureRecognizer *cardIDdownPressGesture = [[UILongPressGestureRecognizer alloc]
                                                                    initWithTarget:self
                                                                    action:@selector(handleLongPressGestures:)];
@@ -97,7 +98,7 @@
         [driveCard setTag:1024+3];
         [driveCard setUserInteractionEnabled:YES];
         [driveCard setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_64.png"]]];
-        [driveCard setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendM.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        [driveCard setImageWithURL:[NSURL URLWithString:userExtendM.drivelicenseURL] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
         UITapGestureRecognizer *driveTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(chooseImage:)];
         [driveCard addGestureRecognizer:driveTap];
         [pickView addSubview:driveCard];
@@ -108,7 +109,6 @@
         
         
         _alassets = [[ALAssetsLibrary alloc] init];
-        
     }
     return self;
 }
@@ -119,9 +119,9 @@
     userVoModel = [dataDic objectForKey:@"user"];
     userExtendModel = [dataDic objectForKey:@"userExtend"];
     [_fzInfoTable reloadData];
-    [cardIDup setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendModel.idcardFront]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
-    [cardIDdown setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendModel.idcardBack]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
-    [driveCard setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,userExtendModel.drivelicense]] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [cardIDup setImageWithURL:[NSURL URLWithString:userExtendModel.idcardFront] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [cardIDdown setImageWithURL:[NSURL URLWithString:userExtendModel.idcardBack] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [driveCard setImageWithURL:[NSURL URLWithString:userExtendModel.drivelicense] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
 }
 
 

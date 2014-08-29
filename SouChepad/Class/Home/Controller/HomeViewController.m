@@ -256,6 +256,7 @@ static NSString *nothing = @"暂无";
             if (![NSString phoneValidate:textField.text] ) return;
         }
          [HttpManager requestUpdtaeUser:@{@"userName":KUserName,@"phone":textField.text} Success:^(id obj) {
+             [MobClick event:KaddNewUser attributes:@{@"sellName":KUserName}];
              InfoMainController *infoMVC = [[InfoMainController alloc] init];
              UserReservationM *userReserM = [[UserReservationM alloc] init];
              userReserM.crmUserId = obj;
@@ -271,6 +272,7 @@ static NSString *nothing = @"暂无";
 
 - (void)toSearchUser
 {
+    [MobClick event:KsearchUser attributes:@{@"sellName":KUserName}];
     SearchVC *searchVC = [[SearchVC alloc] init];
 
     [self.navigationController pushViewController:searchVC animated:YES];
@@ -314,7 +316,7 @@ static NSString *nothing = @"暂无";
 #pragma mark - 筛选修改代理
 - (void)PopoTableViewController:(PopoTableViewController *)popoTableVC seleckChanged:(NSString *)seleckStr andseleckRow:(NSInteger)row andselectBtn:(UIButton *)selecBtn
 {
-    
+    [MobClick event:KratingSort attributes:@{@"screenType":seleckStr}];
     DLog(@"%@---%d",seleckStr,row);
     if (selecBtn.tag==nameBtnTag) {
         nameSelectRow = row;

@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-100, 100, 100)];
     [beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
     [beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
-    [beginBtn setTitle:@"开始接待" forState:UIControlStateNormal];
+    [beginBtn setTitle:@"客户到店" forState:UIControlStateNormal];
     [beginBtn setTitle:@"结束接待" forState:UIControlStateSelected];
     [beginBtn setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
     [beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
@@ -125,6 +125,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==1) {
+        [MobClick event:KbeginReception attributes:@{@"sellName":KUserName}];
         if (self.userInfoM.reservationId==nil || !self.userInfoM.reservationId) {
             [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
                 [beginBtn setSelected:YES];

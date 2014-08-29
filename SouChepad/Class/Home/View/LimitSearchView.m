@@ -107,6 +107,14 @@ static NSString *userDemandCellid = @"userDemandCellid";
     [chexingLabel setText:@"车型"];
     [self addSubview:chexingLabel];
     
+    UILabel *tishi = [[UILabel alloc] initWithFrame:CGRectMake(670, 685, 220, 50)];
+    [tishi setText:@"✺以上需求来源于客户在网站首页的提交，及坐席确认。"];
+    [tishi setFont:[UIFont systemFontOfSize:15]];
+    [tishi setTextColor:[UIColor lightGrayColor]];
+    [tishi setNumberOfLines:0];
+    [self addSubview:tishi];
+    
+    
     // 预算
     yushuanBut = [self addButtonFrame:CGRectMake(70, 45, 230, 30)];
     [yushuanBut setTag:2000];
@@ -186,16 +194,18 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 - (void)showAllPopoView:(UIButton*)button
 {
+    
+    [MobClick event:KdemandChange attributes:@{@"sellName":KUserName}];
     UIViewController *controller = nil;
     if (button == yushuanBut) {  // 预算
         NSMutableArray *array = [NSMutableArray array];
-        for (NSInteger i = 0; i <= 200; i++) {
+        for (NSInteger i = 0; i <= 100; i++) {
             NSString *str = [NSString stringWithFormat:@"%d",i];
             [array addObject:str];
         }
         
         NSMutableArray *endArray = [NSMutableArray array];
-        for (NSInteger i = 0; i <= 200; i++) {
+        for (NSInteger i = 0; i <= 100; i++) {
             NSString *str = [NSString stringWithFormat:@"%d",i];
             [endArray addObject:str];
         }
@@ -396,6 +406,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 {
     UICollectionViewCell *cell = nil;
     if (indexPath.row==0) {
+        [MobClick event:KdemandChange attributes:@{@"sellName":KUserName}];
         DemandAddCell *addDemandCell = [collectionView dequeueReusableCellWithReuseIdentifier:demandAddCellid forIndexPath:indexPath];
         cell = addDemandCell;
         [cell.contentView setBackgroundColor:[UIColor whiteColor]];

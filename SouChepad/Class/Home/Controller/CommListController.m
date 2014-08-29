@@ -27,10 +27,16 @@
 static NSString *CellIdentifier = @"communCell";
 @implementation CommListController
 
+- (void)dealloc
+{
+    [MobClick endLogPageView:@"沟通记录"];
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [MobClick beginLogPageView:@"沟通记录"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(RefreshViewControlEventValueChanged) name:@"userIDchange" object:nil];
     [self RefreshViewControlEventValueChanged];
     // 1.添加toolbar，添加tableview
@@ -83,6 +89,7 @@ static NSString *CellIdentifier = @"communCell";
 
 - (void)addOneCommun:(UIButton*)but
 {
+    [MobClick event:KaddCommunicate attributes:@{@"sellName":KUserName}];
     CommunAddVC *commAddVC = [[CommunAddVC alloc] init];
     [commAddVC setUserResM:self.userResM];
     [commAddVC setDelegate:self];

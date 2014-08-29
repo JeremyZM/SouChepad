@@ -45,15 +45,21 @@
 
 /** 行驶证 */
 @property (copy, nonatomic) NSString *drivelicense;
+/** <#Name#> */
+@property (copy, nonatomic) NSString *drivelicenseURL;
 
 /** <#Name#> */
 @property (copy, nonatomic) NSString *ID;
 
 /** 身份证反面 */
 @property (copy, nonatomic) NSString *idcardBack;
+/** <#Name#> */
+@property (copy, nonatomic) NSString *idcardBackURL;
 
 /** 身份证正面 */
 @property (copy, nonatomic) NSString *idcardFront;
+/** <#Name#> */
+@property (copy, nonatomic) NSString *idcardFrontURL;
 
 /** 外迁地 - 辅助购买信息 */
 @property (copy, nonatomic) NSString *insureAddr;

@@ -20,7 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [MobClick event:KuserPathInfo attributes:@{@"sellName":KUserName}];
     UIWebView *carWeb = [[UIWebView alloc] initWithFrame:self.view.bounds];
     [carWeb setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:carWeb];

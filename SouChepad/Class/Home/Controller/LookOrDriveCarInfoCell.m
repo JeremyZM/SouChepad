@@ -43,7 +43,7 @@
     // 搜车价
     [_souchePriceLabel setText:[NSString stringWithFormat:@"%@ 万",lookOrDriveCellM.souchePrice]];
     // 上车时间
-    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"上牌：%@",lookOrDriveCellM.firstLicensePlateDate]];
+    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"添加：%@",lookOrDriveCellM.firstLicensePlateDate]];
     
     // 车辆等级
     if (lookOrDriveCellM.level) {
@@ -85,7 +85,7 @@
     }
     
     // 车辆图片
-    [_carImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",KImageBaseURL,lookOrDriveCellM.image]] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [_carImage setImageWithURL:[NSURL URLWithString:lookOrDriveCellM.image] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
     [_labelLabel setText:lookOrDriveCellM.lookORdrive];
     

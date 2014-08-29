@@ -12,8 +12,9 @@
 #import "ProgressHUD.h"
 #import "UserVOModel.h"
 #import "PopoTableViewController.h"
+#import "DatePickViewController.h"
 
-@interface CommunAddVC () <ChangeTimePopoDelegate,UITextViewDelegate,PopoTableViewDelegate>
+@interface CommunAddVC () <ChangeTimePopoDelegate,UITextViewDelegate,PopoTableViewDelegate,DatePickerVCdelegate>
 {
     UIButton *timeBut;
     UIPopoverController *timePopoVC;
@@ -24,6 +25,8 @@
     UISwitch *messgeSwitch;
     UserVOModel *userVOM;
     UIButton *phoneNumBut;
+    
+    UIButton *huifangBut;
 }
 @property (nonatomic, strong) UIScrollView *scorllView;
 
@@ -53,7 +56,7 @@
     [neir setText:@"沟通内容"];
     [self.scorllView addSubview:neir];
     
-    content = [[UITextView alloc] initWithFrame:CGRectMake(20, neir.frame.origin.y+34, self.scorllView.bounds.size.width-40, 180)];
+    content = [[UITextView alloc] initWithFrame:CGRectMake(20, neir.frame.origin.y+34, self.scorllView.bounds.size.width-40, 80)];
     [content.layer setCornerRadius:10];
     [content setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [content.layer setBorderColor:[UIColor lightGrayColor].CGColor];
@@ -61,21 +64,41 @@
     [content.layer setBorderWidth:1.0];
     [self.scorllView addSubview:content];
     
-    UILabel *shij = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(content.frame)+20, 150, 44)];
+    UILabel *huif = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(content.frame)+40, 150, 24)];
+    [huif setText:@"我来回访"];
+    [self.scorllView addSubview:huif];
+    
+    UISwitch *huifangSw = [[UISwitch alloc] initWithFrame:CGRectMake(460,CGRectGetMaxY(content.frame)+30+5, 20, 20)];
+    [self.scorllView addSubview:huifangSw];
+    [huifangSw addTarget:self action:@selector(huifangTimeSw:) forControlEvents:UIControlEventValueChanged];
+    [huifangSw sizeToFit];
+    
+    huifangBut = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(huif.frame)+20, huif.frame.origin.y, 200, 40)];
+    
+    [huifangBut setTitle:@"请选择" forState:UIControlStateNormal];
+    [huifangBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+    [huifangBut.layer setBorderColor:[[UIColor hexStringToColor:KBaseColo] CGColor]];
+    [huifangBut.layer setBorderWidth:1.0];
+    [huifangBut.layer setCornerRadius:8.0];
+    [self.scorllView addSubview:huifangBut];
+    [huifangBut setHidden:YES];
+    [huifangBut addTarget:self action:@selector(showPopohuifangTime:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
+    UILabel *shij = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(huifangBut.frame)+30, 150, 44)];
     [shij setText:@"添加预约到店日期"];
 //    [shij setTextAlignment:NSTextAlignmentCenter];
     [self.scorllView addSubview:shij];
     
-    UISwitch *timeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(460,CGRectGetMaxY(content.frame)+20+5, 20, 20)];
+    UISwitch *timeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(460,CGRectGetMaxY(huifangBut.frame)+30+5, 20, 20)];
     [self.scorllView addSubview:timeSwitch];
     [timeSwitch addTarget:self action:@selector(addTimeSwitch:) forControlEvents:UIControlEventValueChanged];
     [timeSwitch sizeToFit];
     
 
     timeBut = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(shij.frame)+20, shij.frame.origin.y, 200, 40)];
-    //    NSDate *date = [NSDate date];
-//    NSDateFormatter *formatter = [[NSDateFormatter   alloc] init];
-//    [formatter  setDateFormat:@"yyyy-MM-dd"];
+
     [timeBut setTitle:@"请选择" forState:UIControlStateNormal];
     [timeBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
     [timeBut.layer setBorderColor:[[UIColor hexStringToColor:KBaseColo] CGColor]];
@@ -86,10 +109,10 @@
     [timeBut addTarget:self action:@selector(showPopoChangeTime:) forControlEvents:UIControlEventTouchUpInside];
     
     
-    UILabel *messgeLabel = [[UILabel alloc]  initWithFrame:CGRectMake(20, CGRectGetMaxY(timeBut.frame)+20, 150, 60)];
+    UILabel *messgeLabel = [[UILabel alloc]  initWithFrame:CGRectMake(20, CGRectGetMaxY(timeBut.frame)+30, 150, 60)];
     [messgeLabel setText:@"自动发短信/微信"];
     [self.scorllView addSubview:messgeLabel];
-    messgeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(460, CGRectGetMaxY(timeBut.frame)+30, 30, 30)];
+    messgeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(460, CGRectGetMaxY(timeBut.frame)+40, 30, 30)];
     [messgeSwitch setOn:NO];
     [messgeSwitch addTarget:self action:@selector(sendMessgaChangde:) forControlEvents:UIControlEventValueChanged];
     [self.scorllView addSubview:messgeSwitch];
@@ -136,6 +159,16 @@
     requesDic = [NSDictionary dictionary];
 }
 
+- (void)huifangTimeSw:(UISwitch*)swit
+{
+    if (swit.isOn) {
+        
+        [huifangBut setHidden:NO];
+        
+    }else{
+        [huifangBut setHidden:YES];
+    }
+}
 
 
 
@@ -154,7 +187,7 @@
 {
     if (textView == messgeTextView) {
         
-        [self.scorllView setContentOffset:CGPointMake(0, 200) animated:YES];
+        [self.scorllView setContentOffset:CGPointMake(0, 250) animated:YES];
     }
 }
 
@@ -226,6 +259,33 @@
 {
     [selecBtn setTitle:seleckStr forState:UIControlStateNormal];
     [timePopoVC dismissPopoverAnimated:YES];
+}
+
+
+- (void)showPopohuifangTime:(UIButton*)huifang
+{
+    DatePickViewController *huifagDatePick = [[DatePickViewController alloc] init];
+    [huifagDatePick setDelegate:self];
+    [huifagDatePick setMinDate:[NSDate date]];
+    [huifagDatePick setMaxDate:[NSDate dateWithTimeIntervalSinceNow:60*60*24*7]];
+    
+    UILabel *tishi = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 40)];
+    [tishi setTextAlignment:NSTextAlignmentCenter];
+    [tishi setText:@"选择范围一周内"];
+    [tishi setTextColor:[UIColor grayColor]];
+    [tishi setFont:[UIFont systemFontOfSize:20]];
+    [huifagDatePick.view addSubview:tishi];
+    
+    timePopoVC = [[UIPopoverController alloc] initWithContentViewController:huifagDatePick];
+    CGRect frame = [self.view convertRect:huifang.frame fromView:huifang.superview];
+    timePopoVC.popoverContentSize = CGSizeMake(320, 260);
+    [timePopoVC presentPopoverFromRect:frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    
+}
+
+- (void)datePickerVC:(DatePickViewController *)datePickVC dateStr:(NSString *)datestr
+{
+    [huifangBut setTitle:datestr forState:UIControlStateNormal];
 }
 
 - (void)showPopoChangeTime:(UIButton*)sender
