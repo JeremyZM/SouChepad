@@ -38,10 +38,7 @@
 //    [formate setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT+0800"]];
     [formate setDateFormat:@"yyyy-MM-dd"];
     NSDate *nowdate = [NSDate date];
-//    if (self.userResM.reservationDate) {
-//       nowdate = [formate dateFromString:self.userResM.reservationDate];
-//
-//    }
+
     [self.datepicker setDate:nowdate];
     [self.datepicker setMinimumDate:nowdate];
     

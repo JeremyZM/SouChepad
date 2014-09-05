@@ -13,6 +13,7 @@
 #import "UserVOModel.h"
 #import "PopoTableViewController.h"
 #import "DatePickViewController.h"
+#import "Date&String.h"
 
 @interface CommunAddVC () <ChangeTimePopoDelegate,UITextViewDelegate,PopoTableViewDelegate,DatePickerVCdelegate>
 {
@@ -27,6 +28,8 @@
     UIButton *phoneNumBut;
     
     UIButton *huifangBut;
+    UISwitch *huifangSw;
+    BOOL isHuifang;
 }
 @property (nonatomic, strong) UIScrollView *scorllView;
 
@@ -34,6 +37,40 @@
 
 
 @implementation CommunAddVC
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [HttpManager userCanVisit:@{@"salerId": KUserName,@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
+        if (![[dic objectForKey:@"date"] isKindOfClass:[NSNull class]]) {
+            isHuifang = YES;
+            [huifangSw setOn:YES];
+            [huifangBut setHidden:NO];
+            [huifangBut setTitle:[dic objectForKey:@"date"] forState:UIControlStateNormal];
+        }
+    } fail:^(id obj) {
+        
+    }];
+    
+    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+        NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
+        userVOM = [dataInfoDic objectForKey:@"user"];
+        
+        NSString *messgeStr;
+        if (userVOM.name) {
+            messgeStr = [NSString stringWithFormat:@"%@，您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+            
+        }else {
+            messgeStr = [NSString stringWithFormat:@"您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+        }
+        [messgeTextView setText:messgeStr];
+        
+    } fail:^(id obj) {
+        
+    }];
+
+}
 
 
 - (void)viewDidLoad
@@ -68,12 +105,13 @@
     [huif setText:@"我来回访"];
     [self.scorllView addSubview:huif];
     
-    UISwitch *huifangSw = [[UISwitch alloc] initWithFrame:CGRectMake(460,CGRectGetMaxY(content.frame)+30+5, 20, 20)];
+    huifangSw = [[UISwitch alloc] initWithFrame:CGRectMake(460,CGRectGetMaxY(content.frame)+30+5, 20, 20)];
     [self.scorllView addSubview:huifangSw];
     [huifangSw addTarget:self action:@selector(huifangTimeSw:) forControlEvents:UIControlEventValueChanged];
+    [huifangSw setOn:NO];
     [huifangSw sizeToFit];
     
-    huifangBut = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(huif.frame)+20, huif.frame.origin.y, 200, 40)];
+    huifangBut = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(huif.frame)+20, huif.frame.origin.y-10, 200, 40)];
     
     [huifangBut setTitle:@"请选择" forState:UIControlStateNormal];
     [huifangBut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
@@ -137,24 +175,6 @@
     [self.scorllView addSubview:messgeTextView];
     [messgeTextView setUserInteractionEnabled:NO];
     [messgeTextView setTextColor:[UIColor lightGrayColor]];
-    
-    
-    [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
-        NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
-        userVOM = [dataInfoDic objectForKey:@"user"];
-
-        NSString *messgeStr;
-        if (userVOM.name) {
-            messgeStr = [NSString stringWithFormat:@"%@，您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
-           
-        }else {
-             messgeStr = [NSString stringWithFormat:@"您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
-        }
-        [messgeTextView setText:messgeStr];
-        
-    } fail:^(id obj) {
-        
-    }];
     
     requesDic = [NSDictionary dictionary];
 }
@@ -268,6 +288,10 @@
     [huifagDatePick setDelegate:self];
     [huifagDatePick setMinDate:[NSDate date]];
     [huifagDatePick setMaxDate:[NSDate dateWithTimeIntervalSinceNow:60*60*24*7]];
+    NSDate *date = [Date_String dateFromString:huifang.titleLabel.text format:@"yyyy-MM-dd"];
+    if (date) {
+        [huifagDatePick setDatesele:date];
+    }
     
     UILabel *tishi = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 40)];
     [tishi setTextAlignment:NSTextAlignmentCenter];
@@ -331,7 +355,57 @@
 #pragma mark - 保存记录
 - (void)saveRecord:(UIBarButtonItem *)item
 {
-    if (content.text.length>0) {
+    if (!content.text.length>0) {
+        [ProgressHUD showError:@"请填写沟通内容"];
+        return;
+    }
+    if (isHuifang) {
+        [HttpManager closeVisit:@{@"salerId": KUserName,@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
+            if ([obj objectForKey:@"errorMessage"]) {
+                [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
+                return;
+            }else {
+                [self addOrUpdateVisit];
+            }
+        } fail:^(id obj) {
+            [ProgressHUD showError:@"保存失败"];
+            return ;
+        }];
+    }else{
+        [self addOrUpdateVisit];
+    }
+
+}
+
+- (void)addOrUpdateVisit
+{
+    if (huifangSw.on) {
+        NSDate *date = [Date_String dateFromString:huifangBut.titleLabel.text format:@"yyyy-MM-dd"];
+        if (!date) {
+            [ProgressHUD showError:@"请选择回访时间"];
+            return;
+        }else {
+            [HttpManager addOrUpdateVisit:@{@"salerId": KUserName,@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"date":huifangBut.titleLabel.text} Success:^(id obj) {
+                if ([obj objectForKey:@"errorMessage"]) {                         [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
+                    return ;
+                }else {
+                    [self addCommunUser:nil];
+                    [self addCommunUser:huifangBut.titleLabel.text];
+                    
+                }
+            } fail:^(id obj) {
+                [ProgressHUD showError:@"保存失败"];
+                return ;
+            }];
+        }
+    }else {
+        [self addCommunUser:nil];
+    }
+
+}
+
+- (void)addCommunUser:(NSString *)huifangStr
+{
         NSMutableDictionary *commDateDic = [NSMutableDictionary dictionary];
         [commDateDic removeAllObjects];
         
@@ -339,9 +413,13 @@
         [commDateDic setObject:KUserName forKey:@"userName"];
         [commDateDic setObject:content.text forKey:@"comment"];
         [commDateDic setObject:@"A" forKey:@"store"];
+        if (huifangStr) {
+            [commDateDic setObject:[NSString stringWithFormat:@"该客户%@前均由销售%@回访。",huifangStr,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName]] forKey:@"comment"];
+        }
+    
         if (!timeBut.hidden&&[requesDic objectForKey:@"reservationDate"]) {
-                [commDateDic setObject:[requesDic objectForKey:@"reservationDate"] forKey:@"reservationDate"];
-                [commDateDic setObject:[requesDic objectForKey:@"reservationTime"] forKey:@"reservationTime"];
+            [commDateDic setObject:[requesDic objectForKey:@"reservationDate"] forKey:@"reservationDate"];
+            [commDateDic setObject:[requesDic objectForKey:@"reservationTime"] forKey:@"reservationTime"];
             
         }
         
@@ -350,16 +428,9 @@
             [commDateDic setObject:phoneNumBut.titleLabel.text forKey:@"phoneSMS"];
             [commDateDic setObject:messgeTextView.text forKey:@"messageSMS"];
         }
-//        if ([requesDic allKeys].count) {
-//            
-//            commDateDic = @{@"user":self.userResM.crmUserId,@"reservationDate":[requesDic objectForKey:@"reservationDate"],@"reservationTime":[requesDic objectForKey:@"reservationTime"],@"userName":KUserName,@"comment":content.text,@"store":@"A"};
-//        }else
-//        {
-//            commDateDic = @{@"user":self.userResM.crmUserId,@"reservationDate":@"",@"reservationTime":@"",@"userName":KUserName,@"comment":content.text,@"store":@"A"};
-//            
-//        }
         
-        [HttpManager requestUpdateReservationDateByUser:commDateDic Success:^(id obj) {
+        [HttpManager requestUpdateReservationDateByUser:commDateDic Success:^(id obj){
+            
             if ([obj objectForKey:@"succeedMessage"]) {
                 if ([_delegate respondsToSelector:@selector(communAddVC:ReservationDateByUser:)]) {
                     [_delegate communAddVC:self ReservationDateByUser:commDateDic];
@@ -367,18 +438,14 @@
                 [self dismissViewControllerAnimated:YES completion:^{
                     
                 }];
-
-            }else
-            {
+            }else {
                 [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
             }
             
         } fail:^(id obj) {
             
         }];
-    }else {
-        [ProgressHUD showError:@"请填写沟通内容"];
-    }
+    
 }
 
 

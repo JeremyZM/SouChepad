@@ -10,7 +10,6 @@
 
 @class UserReservationM;
 @interface CustomPIMController : SCBasicController
-@property (nonatomic, strong) UserReservationM *userInfoM;
 
 - (void)saveUserInfoClickt;
 

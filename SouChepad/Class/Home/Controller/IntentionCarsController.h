@@ -8,7 +8,6 @@
 
 #import "SCBasicController.h"
 @class IntentionCarsController;
-@class UserReservationM;
 
 @protocol IntentionCarsControllerDelegat <NSObject>
 
@@ -17,7 +16,6 @@
 @end
 
 @interface IntentionCarsController : SCBasicController
-@property (nonatomic, strong) UserReservationM *userReserM;
 
 @property (nonatomic, weak) id <IntentionCarsControllerDelegat> deleget;
 @end

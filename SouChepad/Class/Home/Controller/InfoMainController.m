@@ -35,7 +35,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 @interface InfoMainController () <InfoDockDelegate,IntentionCarsControllerDelegat,TTCounterLabelDelegate,UIAlertViewDelegate,EndReceiveDelegate>
 {
     UIView *_contentView;
-    BeginBut *beginBtn;
 }
 @property (strong, nonatomic) TTCounterLabel *counterLabel;
 @end
@@ -47,7 +46,10 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[NSUserDefaults standardUserDefaults] setObject:self.userInfoM.crmUserId forKey:@"userID"];
+    if (self.userInfoM.crmUserId) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:self.userInfoM.crmUserId forKey:@"userID"];
+    }
     DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]);
     
     // 1.添加dock栏
@@ -66,16 +68,16 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     [userInfoDock setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:userInfoDock];
     
-    beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-100, 100, 100)];
-    [beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
-    [beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
-    [beginBtn setTitle:@"客户到店" forState:UIControlStateNormal];
-    [beginBtn setTitle:@"结束接待" forState:UIControlStateSelected];
-    [beginBtn setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
-    [beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [beginBtn addTarget:self action:@selector(startStopTapped:) forControlEvents:UIControlEventTouchUpInside];
+    self.beginBtn =[[BeginBut alloc] initWithFrame:CGRectMake(0, userInfoDock.bounds.size.height-100, 100, 100)];
+    [self.beginBtn setImage:[UIImage imageNamed:@"start_33"] forState:UIControlStateNormal];
+    [self.beginBtn setImage:[UIImage imageNamed:@"anniu_31"] forState:UIControlStateSelected];
+    [self.beginBtn setTitle:@"客户到店" forState:UIControlStateNormal];
+    [self.beginBtn setTitle:@"结束接待" forState:UIControlStateSelected];
+    [self.beginBtn setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+    [self.beginBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+    [self.beginBtn addTarget:self action:@selector(startStopTapped:) forControlEvents:UIControlEventTouchUpInside];
 //    [beginBtn setSelected:YES];
-    [userInfoDock addSubview:beginBtn];
+    [userInfoDock addSubview:self.beginBtn];
     
     
 //    self.counterLabel = [[TTCounterLabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(beginBtn.frame)+10,KInfoDockW, 30)];
@@ -86,7 +88,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 //    self.counterLabel.textColor = [UIColor redColor];
     [self.counterLabel updateApperance];
     if (self.inHand) {
-        [beginBtn setSelected:YES];
+        [self.beginBtn setSelected:YES];
         [self.counterLabel start];
     }
 
@@ -128,7 +130,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
         [MobClick event:KbeginReception attributes:@{@"sellName":KUserName}];
         if (self.userInfoM.reservationId==nil || !self.userInfoM.reservationId) {
             [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
-                [beginBtn setSelected:YES];
+                [self.beginBtn setSelected:YES];
                 [self.counterLabel start];
                 [self updateUIForState:kTTCounterRunning];
                 [ProgressHUD showSuccess:@""];
@@ -139,7 +141,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
         }else {
             [HttpManager requestUpdateBeginReservationById:@{@"reservationId":self.userInfoM.reservationId,@"userName":KUserName} Success:^(id obj) {
                 [self.counterLabel start];
-                [beginBtn setSelected:YES];
+                [self.beginBtn setSelected:YES];
                 [self updateUIForState:kTTCounterRunning];
                 [ProgressHUD showSuccess:@""];
             } fail:^(id obj) {
@@ -184,13 +186,12 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 - (void)addAllInfoChildViewControllers
 {
     CustomPIMController *customPIM = [[CustomPIMController alloc] init];
-    customPIM.userInfoM = self.userInfoM;
     [self addChildViewController:customPIM];
     
     IntentionCarsController *intentionCarsVC = [[IntentionCarsController alloc] init];
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:intentionCarsVC];
     [intentionCarsVC setDeleget:self];
-    intentionCarsVC.userReserM = self.userInfoM;
+
     [self addChildViewController:navVC];
     
     CommListController *commListVC = [[CommListController alloc] init];

@@ -232,4 +232,9 @@
 @property (copy, nonatomic) NSString *wirePhone;
 
 
+/** 回访时间 */
+@property (copy, nonatomic) NSString *visit_time;
+/** 客户id */
+@property (copy, nonatomic) NSString *userid;
+
 @end

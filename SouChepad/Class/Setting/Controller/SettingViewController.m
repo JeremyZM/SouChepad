@@ -122,6 +122,7 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellPhone];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellAddressName];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:KSellQQ];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KisExecutive];
         [self.view.window setRootViewController:[LogInViewController new]];
     }
 }

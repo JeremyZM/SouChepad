@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 @class UserReservationM;
+@class BeginBut;
 
 @interface InfoMainController : UIViewController
 @property (nonatomic, strong) UserReservationM *userInfoM;
 @property (nonatomic, assign) BOOL inHand;
+@property (nonatomic, strong)  BeginBut *beginBtn;
 @end

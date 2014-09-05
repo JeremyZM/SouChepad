@@ -32,7 +32,7 @@
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 #warning  友盟统计-----------
-    [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:SENDDAILY   channelId:nil];
+    [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
     [MobClick setLogEnabled:YES];
     
     [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {

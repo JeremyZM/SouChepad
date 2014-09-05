@@ -148,4 +148,17 @@ typedef void (^UploadProgress)(NSString *progress);
 
 // 上传图片，成功后返回dictionary
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail;
+
+#pragma mark - 查看某一个客户是否回访
++ (void)userCanVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 修改/添加回访日期
++ (void)addOrUpdateVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 查看所有需要回访客户
++ (void)getAllVistors:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
+#pragma mark - 关闭回访
++ (void)closeVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
+
 @end

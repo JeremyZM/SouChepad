@@ -37,6 +37,9 @@
     [self.datepicker setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]];
     [self.datepicker addTarget:self action:@selector(datePickerChinagd:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.datepicker];
+    if (self.datesele) {
+        [self.datepicker setDate:self.datesele];
+    }
 }
 
 - (void)datePickerChinagd:(UIDatePicker*)datepick

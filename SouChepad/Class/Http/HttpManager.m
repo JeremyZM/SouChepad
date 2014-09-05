@@ -954,8 +954,6 @@
             success([obj responseJSON]);
         }
 
-        
-
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         
     } reload:YES needHud:YES hudEnabled:YES];
@@ -1052,4 +1050,83 @@
     [[HttpService sharedService] enqueueOperation:op];
     
 }
+
+#pragma mark - 查看某一个客户是否回访
++ (void)userCanVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/canVisit.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 修改/添加回访日期
++ (void)addOrUpdateVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/addOrUpdateVisit.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 查看所有需要回访客户
++ (void)getAllVistors:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getVistorsBySaler.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:[obj responseJSON]];
+        NSArray *items = [dic objectForKey:@"items"];
+        NSMutableArray *itemsArrayM = [NSMutableArray arrayWithCapacity:items.count];
+        for (NSDictionary *itemDic in items) {
+            NSArray *keysArray = [itemDic allKeys];
+            for (NSInteger i = 0; i<keysArray.count; i++) {
+                if ([[itemDic objectForKey:keysArray[i]] isKindOfClass:[NSNull class]]) {
+
+                    
+                }
+            }
+            NSDictionary *userv = [itemDic objectForKey:@"user"];
+            UserVOModel *userVo = [[UserVOModel alloc] init];
+            if (![userv isKindOfClass:[NSNull class]]) {
+                
+                [userVo setKeyValues:userv];
+            }
+            if (![[itemDic objectForKey:@"visit_time"] isKindOfClass:[NSNull class]]) {
+                [userVo setVisit_time:[itemDic objectForKey:@"visit_time"]];
+            }
+            if (![[itemDic objectForKey:@"userid"] isKindOfClass:[NSNull class]]) {
+                
+                [userVo setUserid:[itemDic objectForKey:@"userid"]];
+            }
+            if (![[itemDic objectForKey:@"userStatusName"] isKindOfClass:[NSNull class]]) {
+                
+                [userVo setUserStatusName:[itemDic objectForKey:@"userStatusName"]];
+            }
+            [itemsArrayM addObject:userVo];
+        }
+        
+        success(itemsArrayM);
+        
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 关闭回访
++ (void)closeVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
+{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/closeVisit.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
+        DLog(@"%@",[obj responseJSON]);
+        success([obj responseJSON]);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+
 @end

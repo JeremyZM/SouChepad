@@ -20,6 +20,7 @@
 #import "ProgressHUD.h"
 #import "MJRefresh.h"
 #import "UsertoStore.h"
+#import "UserVOModel.h"
 
 @interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate,ChangeTimePopoDelegate,MJRefreshBaseViewDelegate>
 {
@@ -44,6 +45,7 @@
     NSInteger _page;
     
     NSString *totalNumber;
+    NSArray *huifangArray;
 }
 
 //@property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -74,8 +76,19 @@ static NSString *nothing = @"暂无";
             [_footer endRefreshing];
         }];
     }
-
+    
+    [HttpManager getAllVistors:@{@"salerId":KUserName} Success:^(id obj) {
+        huifangArray = [NSArray arrayWithArray:obj];
+        [table reloadData];
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    } fail:^(id obj) {
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    }];
 }
+
+
 
 - (void)viewDidLoad
 {
@@ -363,46 +376,61 @@ static NSString *nothing = @"暂无";
 - (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     CGRect rect =CGRectMake(0, 0, tableView.bounds.size.width, 60);
-    UIView *oneView = [[UIView alloc] initWithFrame:rect];
-    [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
-    
-    UIButton *oneLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
-    [oneLabel setTitle:[NSString stringWithFormat:@"今明预约 %d",userReserArray.count] forState:UIControlStateNormal];
-    [oneLabel.titleLabel setFont:KBoldFont18];
-    [oneLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
-    [oneLabel setImage:[UIImage imageNamed:@"tubiao_50"] forState:UIControlStateNormal];
-    [oneLabel setImageEdgeInsets:UIEdgeInsetsMake(0, -80, 0, 0)];
-    [oneLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
-    [oneView addSubview:oneLabel];
-    
-    
-    UIView *twoView = [[UIView alloc] initWithFrame:rect];
-    [twoView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
+    if (section==0) {
+        UIView *oneView = [[UIView alloc] initWithFrame:rect];
+        [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
+        
+        UIButton *oneLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
+        [oneLabel setTitle:[NSString stringWithFormat:@"今明预约 %d",userReserArray.count] forState:UIControlStateNormal];
+        [oneLabel.titleLabel setFont:KBoldFont18];
+        [oneLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+        [oneLabel setImage:[UIImage imageNamed:@"tubiao_50"] forState:UIControlStateNormal];
+        [oneLabel setImageEdgeInsets:UIEdgeInsetsMake(0, -80, 0, 0)];
+        [oneLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
+        [oneView addSubview:oneLabel];
+        return oneView;
+    }else if (section == 1){
+        UIView *oneView = [[UIView alloc] initWithFrame:rect];
+        [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
+        
+        UIButton *oneLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
+        [oneLabel setTitle:[NSString stringWithFormat:@"回访客户 %d",huifangArray.count] forState:UIControlStateNormal];
+        [oneLabel.titleLabel setFont:KBoldFont18];
+        [oneLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+        [oneLabel setImage:[UIImage imageNamed:@"tubiao_50"] forState:UIControlStateNormal];
+        [oneLabel setImageEdgeInsets:UIEdgeInsetsMake(0, -80, 0, 0)];
+        [oneLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
+        [oneView addSubview:oneLabel];
+        return oneView;
 
-    UIButton *twoLabel = [[UIButton alloc] initWithFrame:CGRectMake(60, 0, 200, 60)];
-    [twoLabel setTitle:[NSString stringWithFormat:@"全部客户 %d / %@",usertoStoreArray.count,totalNumber] forState:UIControlStateNormal];
-    [twoLabel.titleLabel setFont:KBoldFont18];
-    [twoLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
-    [twoLabel setImage:[UIImage imageNamed:@"tubiao_49"] forState:UIControlStateNormal];
-    [twoLabel setImageEdgeInsets:UIEdgeInsetsMake(0, -80, 0, 0)];
-    [twoLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
-
-    [twoView addSubview:twoLabel];
-    
-//    if (usertoStoreArray.count) {
+    }else if (section == 2){
+        UIView *twoView = [[UIView alloc] initWithFrame:rect];
+        [twoView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
+        
+        UIButton *twoLabel = [[UIButton alloc] initWithFrame:CGRectMake(60, 0, 200, 60)];
+        [twoLabel setTitle:[NSString stringWithFormat:@"全部客户 %d / %@",usertoStoreArray.count,totalNumber] forState:UIControlStateNormal];
+        [twoLabel.titleLabel setFont:KBoldFont18];
+        [twoLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+        [twoLabel setImage:[UIImage imageNamed:@"tubiao_49"] forState:UIControlStateNormal];
+        [twoLabel setImageEdgeInsets:UIEdgeInsetsMake(0, -80, 0, 0)];
+        [twoLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
+        
+        [twoView addSubview:twoLabel];
+        
+        //    if (usertoStoreArray.count) {
         //    ; // 等级筛选按钮
         UIButton *ratbut = [UIButton buttonWithType:UIButtonTypeCustom];
         [ratbut setFrame:CGRectMake(500, 20, 120, 30)];
         [ratbut setTitle:_seleckStr forState:UIControlStateNormal];
         [ratbut addTarget:self action:@selector(showpopoview:) forControlEvents:UIControlEventTouchUpInside];
         [ratbut setTag:ratBtnTag];
-//        [ratbut setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
+        //        [ratbut setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
         [ratbut setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
         [ratbut.layer setBorderWidth:1.0];
         [ratbut.layer setBorderColor:[[UIColor hexStringToColor:KBaseColo] CGColor]];
         [ratbut.layer setCornerRadius:5];
         [twoView addSubview:ratbut];
-    
+        
         //    ; // 时间筛选按钮
         UIButton *nameBut = [UIButton buttonWithType:UIButtonTypeCustom];
         [nameBut setTag:nameBtnTag];
@@ -415,22 +443,30 @@ static NSString *nothing = @"暂无";
         [nameBut.layer setCornerRadius:5];
         
         [twoView addSubview:nameBut];
-//    }
-    
-    
-    return section?twoView:oneView;
+        return twoView;
+    }
+    return nil;
 }
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return dataDic.allKeys.count;
+    
+    return dataDic.allKeys.count+1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return 10;
-    return section?usertoStoreArray.count:userReserArray.count;
+    if (section == 0) {
+        return userReserArray.count;
+    }else if (section == 1){
+        return huifangArray.count;
+    }else if (section == 2){
+        return usertoStoreArray.count;
+    }else {
+    
+        return 0;
+    }
 }
 
 - (CustomerListCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -459,7 +495,17 @@ static NSString *nothing = @"暂无";
         [cell.TimeUpdate setTag:(900+indexPath.row)];
         
     }else if (indexPath.section == 1){
-        
+        UserVOModel *userVo = huifangArray[indexPath.row];
+        [cell.NameCustomer setText:userVo.userName?userVo.userName:nothing];
+        [cell.SexCustomer setText:userVo.sexName?userVo.sexName:nothing];
+        [cell.PhoneCustomer setText:userVo.phone?userVo.phone:nothing];
+        [cell.GradeCustomer setText:userVo.userStatusName?userVo.userStatusName:nothing];
+        [cell.TimeUpdate setEnabled:NO];
+        [cell.TimeUpdate setUserInteractionEnabled:NO];
+        [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
+        [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"回访时间 %@",userVo.visit_time] forState:UIControlStateDisabled];
+
+    }else if (indexPath.section == 2){
         // 接待过的客户
         UserReservationM *usertoStore = usertoStoreArray[indexPath.row];
         [cell.NameCustomer setText:usertoStore.user?usertoStore.user:nothing];
@@ -470,7 +516,6 @@ static NSString *nothing = @"暂无";
         [cell.TimeUpdate setUserInteractionEnabled:NO];
         [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
         [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day?usertoStore.day:nothing] forState:UIControlStateDisabled];
-//        DLog(@"%@------%d",cell.TimeUpdate.titleLabel.text,indexPath.row);
     }
     return cell;
 }
@@ -518,7 +563,12 @@ static NSString *nothing = @"暂无";
         if ([userReserM.reservationStatus isEqualToString:@"inHand"]) {
             [infoMVC setInHand:YES];
         }
-    }else if (indexPath.section == 1){
+    }else if (indexPath.section==1){
+        UserReservationM *userReser = [[UserReservationM alloc] init];
+        UserVOModel *userVo = huifangArray[indexPath.row];
+        [userReser setCrmUserId:userVo.userid];
+        infoMVC.userInfoM = userReser;
+    } else if (indexPath.section == 2){
         infoMVC.userInfoM = usertoStoreArray[indexPath.row];
     }
     

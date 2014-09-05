@@ -168,8 +168,12 @@
             NSDictionary *isok = [NSDictionary dictionaryWithDictionary:obj];
             if ([isok objectForKey:@"login"]) {
                 if ([[isok objectForKey:@"login"] isEqualToString:@"true"]) {
-                    
                     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    if ([[isok objectForKey:@"isExecutive"] isEqualToString:@"true"]) {
+                        [userDefaults setObject:[isok objectForKey:@"isExecutive"] forKey:KisExecutive];
+                        
+                    }
+                    
                     [userDefaults setObject:nameTextField.text forKey:userDefaultsName];
                     [userDefaults setObject:PWDTextField.text forKey:userDefaultsPWD];
                     [userDefaults synchronize];

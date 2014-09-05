@@ -55,6 +55,7 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 #define KShowDockNotification @"ShowDockNotification"
 
+#define KisExecutive @"isExecutive"
 
 #define KHttpBaseURL  @"manage.souche.com"
 

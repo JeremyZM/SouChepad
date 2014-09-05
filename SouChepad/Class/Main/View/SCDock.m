@@ -38,16 +38,18 @@
     
     // 2.我的消息
     [self addOneTabTitle:@"我的消息" icon:@"tubiao_04" selectedIcon:@"tubiao_11" index:1];
-/*
-    // 3.我的车辆
-    [self addOneTabTitle:@"我的车辆" icon:@"tubiao_05" selectedIcon:@"tubiao_12" index:2];
-    
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:KisExecutive]) {
+        // 3.我的车辆
+        [self addOneTabTitle:@"回访报表" icon:@"tubiao_05" selectedIcon:@"tubiao_12" index:2];        
+    }
+ 
     // 4.工具
-    [self addOneTabTitle:@"服务工具" icon:@"tubiao_06" selectedIcon:@"tubiao_13" index:3];
+//    [self addOneTabTitle:@"服务工具" icon:@"tubiao_06" selectedIcon:@"tubiao_13" index:3];
     
-    [self addOneTabTitle:@"知识话术" icon:@"tubiao_07" selectedIcon:@"tubiao_14" index:4];
+//    [self addOneTabTitle:@"知识话术" icon:@"tubiao_07" selectedIcon:@"tubiao_14" index:4];
     
- */
     // 5.设置
     [self addOneTabTitle:@"设置" icon:@"tubiao_08" selectedIcon:@"tubiao_15" index:5];
     
