@@ -19,5 +19,7 @@
     #import "MobClick.h"
     #import "SCMacro.h"
     #import "HttpManager.h"
+    #import "ProgressHUD.h"
+    #import "UIImage+Utility.h"
 #endif
 
