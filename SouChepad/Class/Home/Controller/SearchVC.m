@@ -15,7 +15,7 @@
 #import "UserReservationM.h"
 #import "InfoMainController.h"
 
-@interface SearchVC () <UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface SearchVC () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 {
     UITableView *_tableView;
     NSDictionary *searchUserDic;
@@ -23,7 +23,7 @@
     NSArray *myself;
     NSArray *newUser;
     
-    UISearchBar *phoneSearch;
+    UITextField *searchField;
 }
 @end
 
@@ -45,50 +45,54 @@ static NSString *newUserCell = @"newUserCell";
     [headBar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [headBar setBackgroundColor:[UIColor hexStringToColor:KBaseColo]];
     [self.view addSubview:headBar];
+
+    UIView *searchBackView = [[UIView alloc] initWithFrame:CGRectMake(280, 40, 500, 40)];
+    searchBackView.backgroundColor = [UIColor whiteColor];
+    viewroundCorner(searchBackView, [UIColor whiteColor], 0, 5);
+    [headBar addSubview:searchBackView];
     
+    searchField = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 480, 40)];
+    [searchField becomeFirstResponder];
+    searchField.delegate = self;
+    searchField.placeholder = @"搜索客户手机号";
+    searchField.backgroundColor = [UIColor whiteColor];
+    [searchField setKeyboardType:UIKeyboardTypeNumberPad];
+    [searchBackView addSubview:searchField];
+
     
-    UISearchBar *searchBar = [[UISearchBar alloc] init];
-    phoneSearch = searchBar;
-    [searchBar setFrame:CGRectMake(280, 40, 500, 40)];
-//    [searchBar setText:@"13901075113"];
-    searchBar.delegate = self;
-    [searchBar setPlaceholder:@"搜索客户手机号"];
-    [searchBar becomeFirstResponder];
-    [searchBar setKeyboardType:UIKeyboardTypeNumberPad];
-    [searchBar setBarTintColor:[UIColor clearColor]];
-    searchBar.layer.borderWidth=0.5f;
-    searchBar.layer.borderColor=[[UIColor darkGrayColor] CGColor];
-    [searchBar setBarTintColor:[UIColor whiteColor]];
-    [searchBar.layer setMasksToBounds:YES];
-    [searchBar.layer setCornerRadius:8];
-    [headBar addSubview:searchBar];
-    [[UITextField appearance] setTintColor:[UIColor redColor]];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont systemFontOfSize:22]];
-    
-    
-    UIButton *backBut = [[UIButton alloc] initWithFrame:CGRectMake(20, searchBar.frame.origin.y, 80, 40)];
+    UIButton *backBut = [[UIButton alloc] initWithFrame:CGRectMake(20, searchBackView.frame.origin.y, 80, 40)];
     [backBut setImage:[UIImage imageNamed:@"tubiao_38"] forState:UIControlStateNormal];
     [backBut setTitle:@"返回" forState:UIControlStateNormal];
     [headBar addSubview:backBut];
     [backBut addTarget:self action:@selector(backk) forControlEvents:UIControlEventTouchUpInside];
-    
 }
 
 // 开始搜索
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    [searchBar resignFirstResponder];
-    if ([NSString phoneValidate:searchBar.text]) {
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    
+}
+
+#pragma mark -  UITextFieldDelegate
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    [self textFieldShouldReturn:textField];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    DLog(@"ok");
+    [textField resignFirstResponder];
+    
+    
+    if ([NSString phoneValidate:textField.text]) {
         
         searchUserDic = nil;
         myself = nil;
         otherSell = nil;
         newUser = nil;
         
-        [HttpManager requestSearchPhoneNumaber:@{@"contact":searchBar.text,@"userName":KUserName} Success:^(id obj) {
+        [HttpManager requestSearchPhoneNumaber:@{@"contact":textField.text,@"userName":KUserName} Success:^(id obj) {
             
             searchUserDic = [NSDictionary dictionaryWithDictionary:obj];
-
+            
             otherSell = [NSArray arrayWithArray:[searchUserDic objectForKey:@"1"]];
             myself = [NSArray arrayWithArray:[searchUserDic objectForKey:@"2"]];
             newUser = [NSArray arrayWithArray:[searchUserDic objectForKey:@"-1"]];
@@ -111,6 +115,8 @@ static NSString *newUserCell = @"newUserCell";
             
         }];
     }
+    
+    return YES;
 }
 
 
@@ -137,9 +143,9 @@ static NSString *nothing = @"暂无";
         cell = newCell;
         UserReservationM *userReserM = [newUser firstObject];
         
-        userReserM.crmUserId = phoneSearch.text;
+        userReserM.crmUserId = searchField.text;
         [newCell setUserRM:userReserM];
-        [newCell.PhoneLabel setText:phoneSearch.text];
+        [newCell.PhoneLabel setText:searchField.text];
         return newCell;
     }else if (indexPath.section==1){
         UserReservationM *userM = myself[indexPath.row];
@@ -147,6 +153,7 @@ static NSString *nothing = @"暂无";
         CustomerListCell *myUserCell = [tableView dequeueReusableCellWithIdentifier:myselfCell];
         [myUserCell setUserReserM:userM];
         cell = myUserCell;
+        myUserCell.TimeUpdate.hidden = YES;
         [myUserCell.NameCustomer setText:userM.user?userM.user:nothing];
         [myUserCell.SexCustomer setText:userM.sex?userM.sex:nothing];
         [myUserCell.PhoneCustomer setText:userM.phone?userM.phone:nothing];
@@ -162,9 +169,7 @@ static NSString *nothing = @"暂无";
         [otherCell.sellNameLabel setText:[NSString stringWithFormat:@"是%@的客户，请与之协商",userM.user?userM.user:nothing]];
         [otherCell setUserReserM:userM];
         return otherCell;
-    }
-
-    
+    }    
     return cell;
 }
 

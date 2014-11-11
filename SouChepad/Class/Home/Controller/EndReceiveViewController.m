@@ -16,6 +16,7 @@
 #import "BiaoQianView.h"
 #import "DatePickViewController.h"
 #import "Date&String.h"
+#import "AuthShopVO.h"
 
 
 @interface EndReceiveViewController () <UITextFieldDelegate,UITextViewDelegate,PopoTableViewDelegate,BiaoQianViewDelegate,UIPopoverControllerDelegate,DatePickerVCdelegate>
@@ -45,6 +46,11 @@
 {
     [super viewWillAppear:animated];
     
+    __block NSString *storeName = @"";
+    [HttpManager requestAuthShoInfoSuccess:^(id obj) {
+       storeName = ((AuthShopVO*)obj).name;
+    } fail:nil];
+    
     [HttpManager userCanVisit:@{@"salerId":KUserName,@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
         if (![[dic objectForKey:@"date"] isKindOfClass:[NSNull class]]) {
@@ -56,11 +62,6 @@
     } fail:^(id obj) {
         
     }];
-//    [HttpManager getAllVistors:@{@"salerId":KUserName} Success:^(id obj) {
-//        
-//    } fail:^(id obj) {
-//        
-//    }];
     
     [HttpManager requestUserInfoWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
         NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
@@ -70,11 +71,12 @@
         if (!(userVOM.userStatus||userVOM.userStatus==nil)) {
             [jibieBut setText:userVOM.userStatusName];
         }
-        NSString *messgeStr;
+        
+        NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:KSellName];
+        NSString *phone = [[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone];
+        NSString *messgeStr = FormatStr(@"您好：感谢您光顾%@，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的服务顾问%@：%@",storeName,name,phone);
         if (userVOM.name) {
-            messgeStr = [NSString stringWithFormat:@"%@您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
-        }else {
-            messgeStr = [NSString stringWithFormat:@"您好：感谢您光顾大搜车，接待中如有不周之处敬请谅解，今天和您聊的很开心，期待您的下次光临！您的搜车顾问%@：%@",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+            messgeStr = FormatStr(@"%@%@", userVOM.name, messgeStr);
         }
         
         [messgeTextView setText:messgeStr];

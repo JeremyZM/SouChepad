@@ -14,7 +14,7 @@
 #import "ProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "NSString+val.h"
-
+#import "UIImage+Utility.h"
 
 @interface DriveCarRecordController () <UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -187,7 +187,10 @@
     [self.nameTextF setText:driveCarDataM.name];
     [self.phoneTextF setText:driveCarDataM.phone];
     [self.startMileTextF setText:driveCarDataM.mile];
-    [self.drivingLicenseImage setImageWithURL:[NSURL URLWithString:driveCarDataM.drivelicense] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    
+    UIImage *img = [UIImage new];
+    [img setImageWithUrl:driveCarDataM.drivelicense scaleToSize:self.drivingLicenseImage.frame.size forImageView:self.drivingLicenseImage];
+    
     if (driveCarDataM.drivelicense) {
         [driveDicData setObject:driveCarDataM.drivelicense forKey:@"drivelicense"];
     }

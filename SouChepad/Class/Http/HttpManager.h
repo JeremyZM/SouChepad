@@ -18,10 +18,6 @@ typedef void (^UploadProgress)(NSString *progress);
 // 取消网络请求
 + (void)cancelRequest:(MKNetworkOperation*)operation;
 
-#pragma mark - 版本号更新
-+(void)getOrWriteVersionNumber:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
-
-
 #pragma mark - 获取各评价list
 + (void)getDictionarySuccess:(Success)success fail:(Fail)fail;
 
@@ -161,4 +157,20 @@ typedef void (^UploadProgress)(NSString *progress);
 #pragma mark - 关闭回访
 + (void)closeVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail;
 
+#pragma mark - 下订单
++(void)createOrderWith:(NSDictionary*)dic Success:(Success)success fail:(Fail)fail;
+#pragma mark - 订单详情
++ (void)requestOrderDetailWithOrderid:(NSString*)orderid success:(Success)success fail:(Fail)fail;
+#pragma mark - 完成订单
++(void)requestConfirmOrder:(NSDictionary*)dic success:(Success)success fail:(Fail)fail;
+#pragma mark - 获取商机
++ (void)requestBusinessInfoSuccess:(Success)success fail:(Fail)fail;
+#pragma mark - 删除商机
++ (void)requestDeleteBusinessWithid:(NSString*)businessId success:(Success)success fail:(Fail)fail;
+#pragma mark - 根据用户id获取用户最新的一条预约记录
++(void)requestLastUserReservationStoreWithId:(NSString*)userid success:(Success)success fail:(Fail)fail;
+#pragma mark - 获取授权店信息
++ (void)requestAuthShoInfoSuccess:(Success)success fail:(Fail)fail;
+#pragma mark - 通过微信url获取carid
++ (void)requestCaridWithWeixinURL:(NSString*)url success:(Success)success fail:(Fail)fail;
 @end

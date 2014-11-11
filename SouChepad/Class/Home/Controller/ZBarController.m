@@ -139,24 +139,14 @@ static AVCaptureVideoOrientation avOrientationForInterfaceOrientation(UIInterfac
     // 3. 设置界面显示扫描结果
     if (metadataObjects.count > 0) {
         AVMetadataMachineReadableCodeObject *objAV = metadataObjects[0];
-        if ([_delegate respondsToSelector:@selector(zBarController:didFinishPickingMediaWithInfo:)]) {
-            [_delegate zBarController:self didFinishPickingMediaWithInfo:@{@"dataString": objAV.stringValue}];
-        }
-        
-        
-//        // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
-//        [HttpManager getCarInVin:@{@"vin":objAV.stringValue} Success:^(id obj) {
-//            if (obj) {
-//                CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
-//                [carDetailVC setCarID:obj];
-//                [carDetailVC setDelegate:self];
-////                [self.view addSubview:carDetailVC.view];
-//                [self presentViewController:carDetailVC animated:YES completion:^{
-//                }];
-//            }
-//        } fail:^(id obj) {
-//            
-//        }];
+        // 将微信地址反向取回carid
+        [HttpManager requestCaridWithWeixinURL:objAV.stringValue success:^(id obj) {
+            if ([_delegate respondsToSelector:@selector(zBarController:didFinishPickingMediaWithInfo:)]) {
+                [_delegate zBarController:self didFinishPickingMediaWithInfo:@{@"dataString": (NSString*)obj}];
+            }
+        } fail:^(id obj) {
+            
+        }];
     }
 }
 

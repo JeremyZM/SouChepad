@@ -87,8 +87,7 @@ static NSString *CellIdentifier = @"communCell";
     [self.refreshControl beginRefreshing];
 }
 
-- (void)addOneCommun:(UIButton*)but
-{
+- (void)addOneCommun:(UIButton*)but{
     [MobClick event:KaddCommunicate attributes:@{@"sellName":KUserName}];
     CommunAddVC *commAddVC = [[CommunAddVC alloc] init];
     [commAddVC setUserResM:self.userResM];
@@ -96,9 +95,7 @@ static NSString *CellIdentifier = @"communCell";
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:commAddVC];
     [navVC setModalPresentationStyle:UIModalPresentationFormSheet];
 
-    [self presentViewController:navVC animated:YES completion:^{
-        
-    }];
+    [self presentViewController:navVC animated:YES completion:^{}];
 }
 
 - (void)RefreshViewControlEventValueChanged

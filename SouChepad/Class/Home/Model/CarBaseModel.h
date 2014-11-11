@@ -25,8 +25,11 @@
 /** 首次上牌时间 */
 @property (copy, nonatomic,readonly) NSString *firstLicensePlateDate;
 
+/** 下订单时间 **/
+@property (copy,nonatomic) NSString *day;
+
 /** 车辆图片 */
-@property (copy, nonatomic,readonly) NSString *image;
+@property (copy, nonatomic) NSString *image;
 
 /** 车辆状态 */
 @property (copy, nonatomic,readonly) NSString *carStatus;
@@ -42,5 +45,8 @@
 
 /** 看车or试驾 */
 @property (copy, nonatomic) NSString *lookORdrive;
+
+/** 订单号*/
+@property (copy, nonatomic) NSString *orderid;
 
 @end

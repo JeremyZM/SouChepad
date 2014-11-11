@@ -7,7 +7,6 @@
 //
 
 #import "FuZhuInfoView.h"
-#import "KeyboardTool.h"
 #import "SJAvatarBrowser.h"
 #import "ImageViewController.h"
 #import "ProgressHUD.h"
@@ -15,6 +14,7 @@
 #import "MBProgressHUD.h"
 #import "HttpManager.h"
 #import "ALAssetsLibrary+CustomPhotoAlbum.h"
+#import "UIImage+Utility.h"
 
 @interface FuZhuInfoView()<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -73,7 +73,10 @@
         [cardIDup addGestureRecognizer:oneTap];
         [pickView addSubview:cardIDup];
         [cardIDup setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_60.png"]]];
-        [cardIDup setImageWithURL:[NSURL URLWithString:userExtendM.idcardFrontURL] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        
+        UIImage *img = [UIImage new];
+        [img setImageWithUrl:userExtendM.idcardFront scaleToSize:cardIDup.frame.size forImageView:cardIDup];
+        
         UILongPressGestureRecognizer *cardUPlongPressGesture = [[UILongPressGestureRecognizer alloc]
                                            initWithTarget:self
                                            action:@selector(handleLongPressGestures:)];
@@ -87,7 +90,9 @@
         [cardIDdown addGestureRecognizer:twoTap];
         [pickView addSubview:cardIDdown];
         [cardIDdown setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_62.png"]]];
-        [cardIDdown setImageWithURL:[NSURL URLWithString:userExtendM.idcardBackURL] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        
+        [img setImageWithUrl:userExtendM.idcardBack scaleToSize:cardIDdown.frame.size forImageView:cardIDdown];
+        
         UILongPressGestureRecognizer *cardIDdownPressGesture = [[UILongPressGestureRecognizer alloc]
                                                                    initWithTarget:self
                                                                    action:@selector(handleLongPressGestures:)];
@@ -98,7 +103,9 @@
         [driveCard setTag:1024+3];
         [driveCard setUserInteractionEnabled:YES];
         [driveCard setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_64.png"]]];
-        [driveCard setImageWithURL:[NSURL URLWithString:userExtendM.drivelicenseURL] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+        
+        [img setImageWithUrl:userExtendM.drivelicense scaleToSize:driveCard.frame.size forImageView:driveCard];
+        
         UITapGestureRecognizer *driveTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(chooseImage:)];
         [driveCard addGestureRecognizer:driveTap];
         [pickView addSubview:driveCard];
@@ -119,9 +126,12 @@
     userVoModel = [dataDic objectForKey:@"user"];
     userExtendModel = [dataDic objectForKey:@"userExtend"];
     [_fzInfoTable reloadData];
-    [cardIDup setImageWithURL:[NSURL URLWithString:userExtendModel.idcardFront] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
-    [cardIDdown setImageWithURL:[NSURL URLWithString:userExtendModel.idcardBack] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
-    [driveCard setImageWithURL:[NSURL URLWithString:userExtendModel.drivelicense] placeholderImage:nil options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    
+    [[UIImage new] setImageWithUrl:userExtendModel.idcardFront scaleToSize:cardIDup.frame.size forImageView:cardIDup];
+    
+    [[UIImage new] setImageWithUrl:userExtendModel.idcardBack scaleToSize:cardIDdown.frame.size forImageView:cardIDdown];
+    
+    [[UIImage new] setImageWithUrl:userExtendModel.drivelicense scaleToSize:driveCard.frame.size forImageView:driveCard];
 }
 
 
@@ -170,8 +180,7 @@
         NSDictionary *pathDic = obj;
         DLog(@"%@",pathDic);
         if ([pathDic objectForKey:@"status"]) {
-            NSString *pathStr = [[pathDic objectForKey:@"path"] stringByReplacingOccurrencesOfString:@"http://res.souche.com/" withString:@""];
-//            [driveDicData setObject:pathStr forKey:@"drivelicense"];
+            NSString *pathStr = [pathDic objectForKey:@"path"];
             [self upImageDataURL:pathStr withHUD:hud];
             
         }else {

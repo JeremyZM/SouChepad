@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "CarBaseModel.h"
 
+@protocol CollectCarCellDelegate <NSObject>
+- (void)collectCarCell:(id)cell  shoukuanXiajiaButtonClicked:(UIButton*)button;
+@end
+
 @interface CollectCarCell : UICollectionViewCell
 
 /**
@@ -65,7 +69,15 @@
  */
 @property (weak, nonatomic) IBOutlet UILabel *firstLicensePlateDateLabel;
 
+/**
+ * 收款下架
+ */
+@property (weak, nonatomic) IBOutlet UIButton *shoukuanXiajia;
 
 @property (nonatomic, strong) CarBaseModel *carModel;
 
+@property (nonatomic, weak) id<CollectCarCellDelegate> delegate;
+
+// 隐藏收款下架按钮
+- (void)hiddenShoukuanXiajiaButton;
 @end

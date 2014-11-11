@@ -21,8 +21,10 @@
 #import "MJRefresh.h"
 #import "UsertoStore.h"
 #import "UserVOModel.h"
+#import "SwipeView.h"
+#import "BusinessCell.h"
 
-@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate,ChangeTimePopoDelegate,MJRefreshBaseViewDelegate>
+@interface HomeViewController () <UITableViewDelegate,UITableViewDataSource,PopoTableViewDelegate,UIAlertViewDelegate,ChangeTimePopoDelegate,MJRefreshBaseViewDelegate,BusinessCellDelegate>
 {
     UITableView *table;
     UIPopoverController *popoVC;
@@ -61,20 +63,7 @@ static NSString *nothing = @"暂无";
 {
     [super viewDidAppear:animated];
     if (table) {
-        
-        [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
-            if (obj) {
-                dataDic = [NSDictionary dictionaryWithDictionary:obj];
-                userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
-                [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
-                [table reloadData];
-            }
-            [_header endRefreshing];
-            [_footer endRefreshing];
-        } fail:^(id obj) {
-            [_header endRefreshing];
-            [_footer endRefreshing];
-        }];
+        [self startRefresh];
     }
     
     [HttpManager getAllVistors:@{@"salerId":KUserName} Success:^(id obj) {
@@ -97,7 +86,9 @@ static NSString *nothing = @"暂无";
     
     [self addHeadUI];
     [self addTableView];
-    
+ 
+    // 监听 添加 沟通记录完成，刷新页面
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefresh) name:@"didAddCommnunication" object:nil];
 }
 
 #pragma mark - 添加UI
@@ -135,8 +126,6 @@ static NSString *nothing = @"暂无";
     
 }
 
-
-
 - (void)addTableView
 {
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height-100) style:UITableViewStylePlain];
@@ -168,6 +157,22 @@ static NSString *nothing = @"暂无";
     _footer.scrollView = table;
 }
 
+#pragma mark - 网络请求
+- (void)startRefresh{
+    [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
+        if (obj) {
+            dataDic = [NSDictionary dictionaryWithDictionary:obj];
+            userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
+            [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
+        }
+        [self addOldDataRefreshIndex:[NSString stringWithFormat:@"%d",_page] searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
+        [_footer setHidden:NO];
+    } fail:^(id obj) {
+        [_header endRefreshing];
+        [_footer endRefreshing];
+    }];
+}
+
 #pragma mark - 刷新的代理方法
 /**
  *  当控件进入刷新状态的时候就会调用
@@ -179,31 +184,12 @@ static NSString *nothing = @"暂无";
    
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) { // 下拉
          _page = 1;
-        [HttpManager requestClientWithParamDic:@{@"userName":KUserName,@"type":@"saler"} Success:^(id obj) {
-            if (obj) {
-                dataDic = [NSDictionary dictionaryWithDictionary:obj];
-                userReserArray = [NSMutableArray arrayWithArray:[dataDic objectForKey:@"userreservationNew"]];
-                [icon setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName] forState:UIControlStateNormal];
-            }
-            [self addOldDataRefreshIndex:[NSString stringWithFormat:@"%d",_page] searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
-            [_footer setHidden:NO];
-        } fail:^(id obj) {
-            [_header endRefreshing];
-            [_footer endRefreshing];
-        }];
-        
+        [self startRefresh];
     }else { // 上拉加载更多
 //        _page++;
         [self addOldDataRefreshIndex:[NSString stringWithFormat:@"%d",_page] searchLevel:_seleckStr searchHavePhone:@"all" orderType:_namSeleckStr];
     }
 }
-
-- (void)refreshViewEndRefreshing:(MJRefreshBaseView *)refreshView
-{
-    NSLog(@"aa");
-}
-
-
 
 
 - (void)addOldDataRefreshIndex:(NSString *)indxet searchLevel:(NSString *)searchLevel searchHavePhone:(NSString *)isHavePhone orderType:(NSString *)orderType
@@ -376,12 +362,13 @@ static NSString *nothing = @"暂无";
 - (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     CGRect rect =CGRectMake(0, 0, tableView.bounds.size.width, 60);
-    if (section==0) {
+    if (section==0){
         UIView *oneView = [[UIView alloc] initWithFrame:rect];
         [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
         
         UIButton *oneLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
-        [oneLabel setTitle:[NSString stringWithFormat:@"今明预约 %d",userReserArray.count] forState:UIControlStateNormal];
+        oneLabel.tag = 998877665;
+        [oneLabel setTitle:[NSString stringWithFormat:@"商机 %d",0] forState:UIControlStateNormal];
         [oneLabel.titleLabel setFont:KBoldFont18];
         [oneLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
         [oneLabel setImage:[UIImage imageNamed:@"tubiao_50"] forState:UIControlStateNormal];
@@ -389,7 +376,20 @@ static NSString *nothing = @"暂无";
         [oneLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
         [oneView addSubview:oneLabel];
         return oneView;
-    }else if (section == 1){
+    }else if (section==1) {
+        UIView *oneView = [[UIView alloc] initWithFrame:rect];
+        [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
+        
+        UIButton *oneLabel = [[UIButton alloc] initWithFrame:CGRectMake(40, 0, 200, 60)];
+        [oneLabel setTitle:[NSString stringWithFormat:@"预约客户 %d",userReserArray.count] forState:UIControlStateNormal];
+        [oneLabel.titleLabel setFont:KBoldFont18];
+        [oneLabel setTitleColor:[UIColor hexStringToColor:KBaseColo] forState:UIControlStateNormal];
+        [oneLabel setImage:[UIImage imageNamed:@"tubiao_50"] forState:UIControlStateNormal];
+        [oneLabel setImageEdgeInsets:UIEdgeInsetsMake(0, -80, 0, 0)];
+        [oneLabel setTitleEdgeInsets:UIEdgeInsetsMake(0, -70, 0, 0)];
+        [oneView addSubview:oneLabel];
+        return oneView;
+    }else if (section == 2){
         UIView *oneView = [[UIView alloc] initWithFrame:rect];
         [oneView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
         
@@ -403,7 +403,7 @@ static NSString *nothing = @"暂无";
         [oneView addSubview:oneLabel];
         return oneView;
 
-    }else if (section == 2){
+    }else if (section == 3){
         UIView *twoView = [[UIView alloc] initWithFrame:rect];
         [twoView setBackgroundColor:[UIColor colorWithWhite:0.98 alpha:0.95]];
         
@@ -448,32 +448,42 @@ static NSString *nothing = @"暂无";
     return nil;
 }
 
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    
-    return dataDic.allKeys.count+1;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return dataDic.allKeys.count+2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
+        return 1;
+    }else if (section == 1) {
         return userReserArray.count;
-    }else if (section == 1){
-        return huifangArray.count;
     }else if (section == 2){
+        return huifangArray.count;
+    }else if (section == 3){
         return usertoStoreArray.count;
     }else {
-    
         return 0;
     }
 }
 
-- (CustomerListCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    CustomerListCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section ==0) {
-        
+        static NSString *businessCellId = @"businessCellId";
+        BusinessCell *cell = [tableView dequeueReusableCellWithIdentifier:businessCellId];
+        if (cell == nil) {
+            cell = [[BusinessCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:businessCellId];
+            cell.delegate = self;
+            cell.backgroundColor = [UIColor hexStringToColor:@"FAFAFA"];
+        }
+        [cell requestBusinessInfo];
+        return cell;
+    }else{
+        CustomerListCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[CustomerListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        if (indexPath.section ==1) {
         // 预约客户
         UserReservationM *userReserM = userReserArray[indexPath.row];
         [cell.NameCustomer setText:userReserM.user?userReserM.user:nothing];
@@ -494,7 +504,7 @@ static NSString *nothing = @"暂无";
         [cell.TimeUpdate addTarget:self action:@selector(changeTime:) forControlEvents:UIControlEventTouchUpInside];
         [cell.TimeUpdate setTag:(900+indexPath.row)];
         
-    }else if (indexPath.section == 1){
+    }else if (indexPath.section == 2){
         UserVOModel *userVo = huifangArray[indexPath.row];
         [cell.NameCustomer setText:userVo.userName?userVo.userName:nothing];
         [cell.SexCustomer setText:userVo.sexName?userVo.sexName:nothing];
@@ -505,7 +515,7 @@ static NSString *nothing = @"暂无";
         [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
         [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"回访时间 %@",userVo.visit_time] forState:UIControlStateDisabled];
 
-    }else if (indexPath.section == 2){
+    }else if (indexPath.section == 3){
         // 接待过的客户
         UserReservationM *usertoStore = usertoStoreArray[indexPath.row];
         [cell.NameCustomer setText:usertoStore.user?usertoStore.user:nothing];
@@ -517,7 +527,47 @@ static NSString *nothing = @"暂无";
         [cell.TimeUpdate setTitleColor:[UIColor blackColor] forState:UIControlStateDisabled];
         [cell.TimeUpdate setTitle:[NSString stringWithFormat:@"上次到店 %@",usertoStore.day?usertoStore.day:nothing] forState:UIControlStateDisabled];
     }
-    return cell;
+        return cell;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section==0) {
+
+    }else{
+        InfoMainController *infoMVC = [[InfoMainController alloc] init];
+        if (indexPath.section==1) {
+            UserReservationM *userReserM = userReserArray[indexPath.row];
+            infoMVC.userInfoM = userReserM;
+            if ([userReserM.reservationStatus isEqualToString:@"inHand"]) {
+                [infoMVC setInHand:YES];
+            }
+        }else if (indexPath.section==2){
+            UserReservationM *userReser = [[UserReservationM alloc] init];
+            UserVOModel *userVo = huifangArray[indexPath.row];
+            [userReser setCrmUserId:userVo.userid];
+            infoMVC.userInfoM = userReser;
+        } else if (indexPath.section == 3){
+            infoMVC.userInfoM = usertoStoreArray[indexPath.row];
+        }
+        
+        [self.navigationController pushViewController:infoMVC animated:YES];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 60;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return 350;
+    }
+    return 60.0;
 }
 
 
@@ -552,46 +602,16 @@ static NSString *nothing = @"暂无";
     }];
 }
 
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    InfoMainController *infoMVC = [[InfoMainController alloc] init];
-    if (indexPath.section==0) {
-        UserReservationM *userReserM = userReserArray[indexPath.row];
-        infoMVC.userInfoM = userReserM;
-        if ([userReserM.reservationStatus isEqualToString:@"inHand"]) {
-            [infoMVC setInHand:YES];
-        }
-    }else if (indexPath.section==1){
-        UserReservationM *userReser = [[UserReservationM alloc] init];
-        UserVOModel *userVo = huifangArray[indexPath.row];
-        [userReser setCrmUserId:userVo.userid];
-        infoMVC.userInfoM = userReser;
-    } else if (indexPath.section == 2){
-        infoMVC.userInfoM = usertoStoreArray[indexPath.row];
-    }
-    
-    [self.navigationController pushViewController:infoMVC animated:YES];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 60;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 60.0;
-}
-
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-
+#pragma mark - BusinessCellDelegate
+- (void)businessDidLoad:(NSString *)totalItem{
+    UIButton *label = (UIButton*)[table viewWithTag:998877665];
+    [label setTitle:[NSString stringWithFormat:@"商机 %@",totalItem] forState:UIControlStateNormal];
+}
 
 @end

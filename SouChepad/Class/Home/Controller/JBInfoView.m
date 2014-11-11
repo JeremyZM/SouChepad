@@ -31,13 +31,12 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-//        _userVo = userVo;
-//        _userExtendM = userExtendM;
         scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         [scrollView setContentSize:CGSizeMake(0, frame.size.height+50)];
         [self addSubview:scrollView];
-        array = @[@"姓名",@"手机",@"性别",@"级别"];
-        fuArray = @[@"指标",@"过户方式",@"付款方式",@"购车用途",@"拥有车辆",@"是否卖车",@"备注"];
+        array = @[@"姓名",@"备注",@"手机",@"性别",@"级别"];
+        fuArray = @[@"指标",@"过户方式",@"付款方式",@"购车用途",@"拥有车辆",@"是否卖车"];
+        // 画线
         for (NSInteger i = 0; i<array.count; i++) {
             UILabel *labe = [[UILabel alloc] initWithFrame:CGRectMake(40, 10+i*60, 60, 60)];
             [labe setFont:KFont18];
@@ -60,21 +59,21 @@
             [scrollView addSubview:lineR];
         }
         for (NSInteger j= 0; j<fuArray.count; j++) {
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 280+j*60, 100, 60)];
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 340+j*60, 100, 60)];
             [label setFont:KFont18];
             [label setText:fuArray[j]];
             [scrollView addSubview:label];
             
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20, 280+j*60, frame.size.width-40, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20, 340+j*60, frame.size.width-40, 1)];
             [lineView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
             [lineView setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
             [scrollView addSubview:lineView];
             
-            UIView *lineL = [[UIView alloc] initWithFrame:CGRectMake(20, 280+j*60, 1, 60)];
+            UIView *lineL = [[UIView alloc] initWithFrame:CGRectMake(20, 340+j*60, 1, 60)];
             [lineL setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
             [scrollView addSubview:lineL];
             
-            UIView *lineR = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width-20, 280+j*60, 1, 60)];
+            UIView *lineR = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width-20, 340+j*60, 1, 60)];
             [lineR setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleLeftMargin];
             [lineR setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
             [scrollView addSubview:lineR];
@@ -85,105 +84,106 @@
         [self.nameText setPlaceholder:@"填写名字"];
         [scrollView addSubview:self.nameText];
         
+        self.beizhuTextF = [[UITextField alloc] initWithFrame:CGRectMake(150, 80, 730, 40)];
+        [self.beizhuTextF setBorderStyle:UITextBorderStyleRoundedRect];
+        [self.beizhuTextF setPlaceholder:@"填写客户备注信息"];
         
-        self.phoneText = [self phoneTextFieldFrame:CGRectMake(150, 70, 130, 60) placeholder:@"填写主号码"];
+        [self.beizhuTextF setDelegate:self];
+        [scrollView addSubview:self.beizhuTextF];
+        
+        self.phoneText = [self phoneTextFieldFrame:CGRectMake(150, 130, 130, 60) placeholder:@"填写主号码"];
         [self.phoneText setLeftViewMode:UITextFieldViewModeNever];
         [scrollView addSubview:self.phoneText];
         
         
-        self.phoneText1 = [self phoneTextFieldFrame:CGRectMake(300, 70, 130, 60) placeholder:@"备用手机号1"];
+        self.phoneText1 = [self phoneTextFieldFrame:CGRectMake(300, 130, 130, 60) placeholder:@"备用手机号1"];
         [scrollView addSubview:self.phoneText1];
         
         
-        self.phoneText2 = [self phoneTextFieldFrame:CGRectMake(450, 70, 130, 60) placeholder:@"备用手机号2"];
+        self.phoneText2 = [self phoneTextFieldFrame:CGRectMake(450, 130, 130, 60) placeholder:@"备用手机号2"];
         [scrollView addSubview:self.phoneText2];
         
         
-        self.phoneText3 = [self phoneTextFieldFrame:CGRectMake(600, 70, 130, 60) placeholder:@"备用手机号3"];
+        self.phoneText3 = [self phoneTextFieldFrame:CGRectMake(600, 130, 130, 60) placeholder:@"备用手机号3"];
         [scrollView addSubview:self.phoneText3];
         
-        self.phoneText4 = [self phoneTextFieldFrame:CGRectMake(750, 70, 155, 60) placeholder:@"备用手机号4"];
+        self.phoneText4 = [self phoneTextFieldFrame:CGRectMake(750, 130, 155, 60) placeholder:@"备用手机号4"];
         [scrollView addSubview:self.phoneText4];
         
-        self.manBut = [self QRbutWithFrame:CGRectMake(150, 130, 60, 60) andtitle:@"男" groupId:@"1"];
+        self.manBut = [self QRbutWithFrame:CGRectMake(150, 190, 60, 60) andtitle:@"男" groupId:@"1"];
         [scrollView addSubview:self.manBut];
-        self.womanBut = [self QRbutWithFrame:CGRectMake(CGRectGetMaxX(self.manBut.frame)+30, 130, 60, 60) andtitle:@"女" groupId:@"1"];
+        self.womanBut = [self QRbutWithFrame:CGRectMake(CGRectGetMaxX(self.manBut.frame)+30, 190, 60, 60) andtitle:@"女" groupId:@"1"];
         [scrollView addSubview:self.womanBut];
         
-        
+        // 用户等级
         NSArray *aarray = [NSArray arrayWithContentsOfFile:KbuyerStatus];
         self.jibieButArray = [NSMutableArray arrayWithCapacity:aarray.count];
         for (NSInteger i = 0; i<aarray.count; i++) {
             NSDictionary *dataM = aarray[i];
             
-            QRadioButton *dengji = [self QRbutWithFrame:CGRectMake(150+i*90, 190, 90, 60) andtitle:[dataM objectForKey:@"name"] groupId:@"2"];
+            QRadioButton *dengji = [self QRbutWithFrame:CGRectMake(150+i*90, 250, 90, 60) andtitle:[dataM objectForKey:@"name"] groupId:@"2"];
             [scrollView addSubview:dengji];
             [self.jibieButArray addObject:dengji];
         }
-        UIView *lineview = [[UIView alloc] initWithFrame:CGRectMake(20, 250, frame.size.width-40, 1)];
+         
+        UIView *lineview = [[UIView alloc] initWithFrame:CGRectMake(20, 310, frame.size.width-40, 1)];
         [lineview setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [lineview setBackgroundColor:[UIColor hexStringToColor:KSeparatorColor]];
         [scrollView addSubview:lineview];
         
-        
-        self.zhibiaoBut = [self QRbutWithFrame:CGRectMake(150, 280, 90, 60) andtitle:@"有" groupId:@"3"];
+        // 指标
+        self.zhibiaoBut = [self QRbutWithFrame:CGRectMake(150, 340, 90, 60) andtitle:@"有" groupId:@"3"];
         [scrollView addSubview:self.zhibiaoBut];
-        self.zhibiaoNOBut = [self QRbutWithFrame:CGRectMake(240, 280, 90, 60) andtitle:@"无" groupId:@"3"];
+        self.zhibiaoNOBut = [self QRbutWithFrame:CGRectMake(240, 340, 90, 60) andtitle:@"无" groupId:@"3"];
         [scrollView addSubview:self.zhibiaoNOBut];
         
-       self.zhibiaoDateBut = [self buttonChooes:CGRectMake(700, 295, 120, 30) andtitle:@"过期时间"];
+       self.zhibiaoDateBut = [self buttonChooes:CGRectMake(700, 295+60, 120, 30) andtitle:@"过期时间"];
         [self.zhibiaoDateBut setHidden:YES];
         [self.zhibiaoDateBut addTarget:self action:@selector(chooseZhibiaoDate:) forControlEvents:UIControlEventTouchUpInside];
         [scrollView addSubview:self.zhibiaoDateBut];
         
-        self.guoHuTypeBut = [self QRbutWithFrame:CGRectMake(150, 340, 90, 60) andtitle:@"本市" groupId:@"4"];
+        self.guoHuTypeBut = [self QRbutWithFrame:CGRectMake(150, 340+60, 90, 60) andtitle:@"本市" groupId:@"4"];
         [scrollView addSubview:self.guoHuTypeBut];
-        self.guoHuwaiBut = [self QRbutWithFrame:CGRectMake(240, 340, 90, 60) andtitle:@"外迁" groupId:@"4"];
+        self.guoHuwaiBut = [self QRbutWithFrame:CGRectMake(240, 340+60, 90, 60) andtitle:@"外迁" groupId:@"4"];
         [scrollView addSubview:self.guoHuwaiBut];
-        guohuCityBut = [self buttonChooes:CGRectMake(600, 350, 250, 40) andtitle:@"过户省市"];
+        guohuCityBut = [self buttonChooes:CGRectMake(600, 350+60, 250, 40) andtitle:@"过户省市"];
         [guohuCityBut addTarget:self action:@selector(chooseGuohuCity:) forControlEvents:UIControlEventTouchUpInside];
         [guohuCityBut setHidden:YES];
-#warning 过户**__*_*__*_*_*_*_*___*_*_*_*_*
+
         [scrollView addSubview:guohuCityBut];
         self.guohudi = [[HZLocation alloc] init];
         
-        self.fuKuanTypeBut = [self QRbutWithFrame:CGRectMake(150, 400, 90, 60) andtitle:@"全款" groupId:@"5"];
+        self.fuKuanTypeBut = [self QRbutWithFrame:CGRectMake(150, 400+60, 90, 60) andtitle:@"全款" groupId:@"5"];
         [scrollView addSubview:self.fuKuanTypeBut];
-        self.fuKuanFenqi = [self QRbutWithFrame:CGRectMake(240, 400, 90, 60) andtitle:@"分期" groupId:@"5"];
+        self.fuKuanFenqi = [self QRbutWithFrame:CGRectMake(240, 400+60, 90, 60) andtitle:@"分期" groupId:@"5"];
         [scrollView addSubview:self.fuKuanFenqi];
 
         
-        self.yongtuBut = [self QRbutWithFrame:CGRectMake(150, 460, 110, 60) andtitle:@"新手练车" groupId:@"6"];
+        self.yongtuBut = [self QRbutWithFrame:CGRectMake(150, 460+60, 110, 60) andtitle:@"新手练车" groupId:@"6"];
         [scrollView addSubview:self.yongtuBut];
-        self.yongtujiaBut = [self QRbutWithFrame:CGRectMake(260, 460, 110, 60) andtitle:@"家用代步" groupId:@"6"];
+        self.yongtujiaBut = [self QRbutWithFrame:CGRectMake(260, 460+60, 110, 60) andtitle:@"家用代步" groupId:@"6"];
         [scrollView addSubview:self.yongtujiaBut];
-        self.yongtubiaoBut = [self QRbutWithFrame:CGRectMake(370, 460, 110, 60) andtitle:@"占标车" groupId:@"6"];
+        self.yongtubiaoBut = [self QRbutWithFrame:CGRectMake(370, 460+60, 110, 60) andtitle:@"占标车" groupId:@"6"];
         [scrollView addSubview:self.yongtubiaoBut];
-        self.yongtubuBut = [self QRbutWithFrame:CGRectMake(480, 460, 110, 60) andtitle:@"代步" groupId:@"6"];
+        self.yongtubuBut = [self QRbutWithFrame:CGRectMake(480, 460+60, 110, 60) andtitle:@"代步" groupId:@"6"];
         [scrollView addSubview:self.yongtubuBut];
         self.yongtuArray = @[self.yongtuBut,self.yongtubiaoBut,self.yongtujiaBut,self.yongtubuBut];
         
-        self.haveCarBut = [self QRbutWithFrame:CGRectMake(150, 520, 90, 60) andtitle:@"有" groupId:@"7"];
+        self.haveCarBut = [self QRbutWithFrame:CGRectMake(150, 520+60, 90, 60) andtitle:@"有" groupId:@"7"];
         [scrollView addSubview:self.haveCarBut];
-        self.haveNocarBut = [self QRbutWithFrame:CGRectMake(240, 520, 90, 60) andtitle:@"无" groupId:@"7"];
+        self.haveNocarBut = [self QRbutWithFrame:CGRectMake(240, 520+60, 90, 60) andtitle:@"无" groupId:@"7"];
         [scrollView addSubview:self.haveNocarBut];
-        haveCarTypeBut = [self buttonChooes:CGRectMake(600, 530, 250, 40) andtitle:@"车型  车系"];
+        haveCarTypeBut = [self buttonChooes:CGRectMake(600, 530, 250+60, 40) andtitle:@"车型  车系"];
         [haveCarTypeBut setHidden:YES];
         [haveCarTypeBut addTarget:self action:@selector(showAllCarType:) forControlEvents:UIControlEventTouchUpInside];
         [scrollView addSubview:haveCarTypeBut];
         
         
-        self.maicheBut = [self QRbutWithFrame:CGRectMake(150, 580, 90, 60) andtitle:@"是" groupId:@"8"];
+        self.maicheBut = [self QRbutWithFrame:CGRectMake(150, 580+60, 90, 60) andtitle:@"是" groupId:@"8"];
         [scrollView addSubview:self.maicheBut];
-        self.maicheNOBut = [self QRbutWithFrame:CGRectMake(240, 580, 90, 60) andtitle:@"否" groupId:@"8"];
+        self.maicheNOBut = [self QRbutWithFrame:CGRectMake(240, 580+60, 90, 60) andtitle:@"否" groupId:@"8"];
         [scrollView addSubview:self.maicheNOBut];
-        
-        self.beizhuTextF = [[UITextField alloc] initWithFrame:CGRectMake(150, 650, 730, 40)];
-        [self.beizhuTextF setBorderStyle:UITextBorderStyleRoundedRect];
-        [self.beizhuTextF setPlaceholder:@"填写客户备注信息"];
 
-        [self.beizhuTextF setDelegate:self];
-        [scrollView addSubview:self.beizhuTextF];
         
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(20, 700, frame.size.width-40, 1)];
         [line setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -248,6 +248,9 @@
    UserExtendModel *userExtendM = [dataDic objectForKey:@"userExtend"];
     [self.nameText setText:userVo.userName];
     [self.phoneText setText:userVo.phone];
+    if (strNoNull(userVo.phone).length > 0) {
+        self.phoneText.enabled = NO;
+    }
     [self.phoneText1 setText:userVo.callPhone1];
     [self.phoneText2 setText:userVo.callPhone2];
     [self.phoneText3 setText:userVo.callPhone3];

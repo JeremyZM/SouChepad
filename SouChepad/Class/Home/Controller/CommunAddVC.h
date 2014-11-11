@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UserReservationM.h"
 @class CommunAddVC;
+@class BusinessVO;
 
 @protocol CommunAddVCDelegate <NSObject>
 
@@ -18,8 +19,7 @@
 
 @interface CommunAddVC : UIViewController
 
+
 @property (nonatomic, strong) UserReservationM *userResM;
-
 @property (nonatomic, weak) id<CommunAddVCDelegate> delegate;
-
 @end

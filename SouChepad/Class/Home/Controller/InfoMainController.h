@@ -6,6 +6,12 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
+
+/**
+ *      用户页面，主要包括 个人信息，一些车辆，沟通记录，需求分析，客户轨迹
+ *
+ */
+
 #import <UIKit/UIKit.h>
 @class UserReservationM;
 @class BeginBut;

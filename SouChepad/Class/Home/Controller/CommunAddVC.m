@@ -14,6 +14,8 @@
 #import "PopoTableViewController.h"
 #import "DatePickViewController.h"
 #import "Date&String.h"
+#import "BusinessVO.h"
+#import "AuthShopVO.h"
 
 @interface CommunAddVC () <ChangeTimePopoDelegate,UITextViewDelegate,PopoTableViewDelegate,DatePickerVCdelegate>
 {
@@ -30,9 +32,10 @@
     UIButton *huifangBut;
     UISwitch *huifangSw;
     BOOL isHuifang;
+    
+    AuthShopVO *shopVO;
 }
 @property (nonatomic, strong) UIScrollView *scorllView;
-
 @end
 
 
@@ -57,12 +60,13 @@
         NSDictionary *dataInfoDic = [NSDictionary dictionaryWithDictionary:obj];
         userVOM = [dataInfoDic objectForKey:@"user"];
         
+        NSString *saler = [[NSUserDefaults standardUserDefaults] objectForKey:KSellName];
+        NSString *phone = [[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone];
+        NSString *baseMessage = FormatStr(@"您好：我是%@销售顾问%@，首先感谢您对的%@关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。地址：%@",shopVO.name,shopVO.name,saler,phone,shopVO.place);
+        
         NSString *messgeStr;
         if (userVOM.name) {
-            messgeStr = [NSString stringWithFormat:@"%@，您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",userVOM.name,[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
-            
-        }else {
-            messgeStr = [NSString stringWithFormat:@"您好：我是大搜车（北京门店）销售顾问%@，首先感谢您对大搜车的关注，从即日起，我很荣幸的成为您的贴身销售顾问，随时为您提供购车帮助。我的电话是%@。大搜车（北京门店的地址）：海淀区远大路1号，世纪金源购物中心东区北广场（西顶路火器营路口）。您可搭乘地铁10号线至长春桥站，A口出来后前行20米，再向西侧走200米即到。",[[NSUserDefaults standardUserDefaults] objectForKey:KSellName],[[NSUserDefaults standardUserDefaults] objectForKey:KSellPhone]];
+            messgeStr = [NSString stringWithFormat:@"%@，%@",userVOM.name,baseMessage];   
         }
         [messgeTextView setText:messgeStr];
         
@@ -83,6 +87,8 @@
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleBordered target:self action:@selector(saveRecord:)];
     
+    // 获取授权店信息
+    [self requestAuthShopInfo];
     
     self.scorllView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     [self.scorllView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -408,8 +414,11 @@
 {
         NSMutableDictionary *commDateDic = [NSMutableDictionary dictionary];
         [commDateDic removeAllObjects];
-        
-        [commDateDic setObject:[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"] forKey:@"user"];
+        NSString *userid = self.userResM.crmUserId;
+        if (strNoNull(userid).length == 0) {
+            userid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+        }
+        [commDateDic setObject:userid forKey:@"user"];
         [commDateDic setObject:KUserName forKey:@"userName"];
         [commDateDic setObject:content.text forKey:@"comment"];
         [commDateDic setObject:@"A" forKey:@"store"];
@@ -435,9 +444,9 @@
                 if ([_delegate respondsToSelector:@selector(communAddVC:ReservationDateByUser:)]) {
                     [_delegate communAddVC:self ReservationDateByUser:commDateDic];
                 }
-                [self dismissViewControllerAnimated:YES completion:^{
-                    
-                }];
+                [self dismissViewControllerAnimated:YES completion:^{}];
+                // 发消息，沟通记录添加完成
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"didAddCommnunication" object:nil];
             }else {
                 [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
             }
@@ -455,4 +464,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark -  网络请求
+// 获取授权店信息
+- (void)requestAuthShopInfo{
+    [HttpManager requestAuthShoInfoSuccess:^(id obj) {
+        shopVO = obj;
+    } fail:^(id obj) {}];
+}
 @end

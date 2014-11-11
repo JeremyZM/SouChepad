@@ -8,11 +8,10 @@
 
 #import "SettingViewController.h"
 #import "LogInViewController.h"
-#import "KeyboardTool.h"
 #import "HttpManager.h"
 #import "ProgressHUD.h"
 
-@interface SettingViewController () <UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,KeyboardToolDelegate,UITextFieldDelegate>
+@interface SettingViewController () <UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate,UITextFieldDelegate>
 {
     UITableView *settingTable;
     UIScrollView *detailView;
@@ -25,8 +24,6 @@
     UITextField *newPWDText;
     UITextField *confirmPWDText;
 }
-// 键盘工具自定义视图
-@property (weak, nonatomic) KeyboardTool *keyboardTool;
 
 // 建立所有文本输入控件的数组
 @property (strong, nonatomic) NSArray *textFiledArray;
@@ -46,15 +43,9 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    // 因此，在定义文本空间的助手视图之前，需要实例化keyboardTool视图
-    self.keyboardTool = [KeyboardTool keyboardTool];
-    [self.keyboardTool setToolDelegate:self];
-
-    
     UIButton *backBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 40, 80, 40)];
     [backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [backBtn setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:KSellName]  forState:UIControlStateNormal];
-//    [backBtn setBackgroundColor:[UIColor yellowColor]];
+    [backBtn setImage:[UIImage imageNamed:@"tubiao_36"] forState:UIControlStateNormal];
     [self.headBar addSubview:backBtn];
     [backBtn addTarget:self action:@selector(showDockCilck) forControlEvents:UIControlEventTouchUpInside];
     
@@ -136,7 +127,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 2;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -148,10 +139,11 @@
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     
-    if (indexPath.row==0) {
-        [cell.textLabel setText:@"个人资料"];
-        
-    }else if (indexPath.row ==1) {
+//    if (indexPath.row==0) {
+//        [cell.textLabel setText:@"个人资料"];
+//        
+//    }else
+        if (indexPath.row ==0) {
         [cell.textLabel setText:@"修改密码"];
     }else {
         [cell setAccessoryType:UITableViewCellAccessoryNone];
@@ -172,18 +164,19 @@
 {
     
     // 在双视图转场时，我们可以根据是否有父视图，来判断谁进谁出
-    
-    if (indexPath.row==0&&sellInfoView.superview==nil) {
-        // 说明subView1要转入
-        [UIView transitionFromView:changePWDView toView:sellInfoView duration:0.3f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
-            [titeLabel setText:@"个人资料"];
-            //        NSLog(@"转场完成");
-            // 每次转场后，会调整参与转场视图的父视图，因此，参与转场视图的属性，需要是强引用
-            // 转场之后，入场的视图会有两个强引用，一个是视图控制器，另一个是视图
-            
-        }];
-
-    } else if(indexPath.row == 1&&changePWDView.superview == nil) {
+//    
+//    if (indexPath.row==0&&sellInfoView.superview==nil) {
+//        // 说明subView1要转入
+//        [UIView transitionFromView:changePWDView toView:sellInfoView duration:0.3f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
+//            [titeLabel setText:@"个人资料"];
+//            //        NSLog(@"转场完成");
+//            // 每次转场后，会调整参与转场视图的父视图，因此，参与转场视图的属性，需要是强引用
+//            // 转场之后，入场的视图会有两个强引用，一个是视图控制器，另一个是视图
+//            
+//        }];
+//
+//    } else
+    if(indexPath.row == 0&&changePWDView.superview == nil) {
         // 说明subView2要转入
     
         [UIView transitionFromView:sellInfoView toView:changePWDView duration:0.3f options:UIViewAnimationOptionTransitionFlipFromLeft completion:^(BOOL finished) {
@@ -192,37 +185,9 @@
 
             
         }];
-    }else if (indexPath.row ==2){
-        [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
-            
-            NSDictionary *verDic = obj;
-            NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            NSString *versID = [verDic objectForKey:@"versionNumber"];
-            NSString *refreshAddress = [verDic objectForKey:@"refreshAddress"];
-            if (![versID isEqualToString:localVersion])
-            {
-                if (refreshAddress&&[refreshAddress isKindOfClass:[NSString class]]) {
-                    if (![refreshAddress hasPrefix:@"http://"]) {
-                        refreshAddress = [NSString stringWithFormat:@"http://%@",refreshAddress];
-                    }
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:refreshAddress]];
-                }else {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://fir.im/athena"]];
-                }
-
-                
-            }else {
-            
-                [ProgressHUD showSuccess:@"当前已是最新版本"];
-            }
-            
-        } fail:^(id obj) {
-            
-        }];
-
+    }else if (indexPath.row ==1){
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.pgyer.com/athena"]];
     }
-
-
 }
 
 
@@ -251,7 +216,6 @@
             [textF setAutocorrectionType:UITextAutocorrectionTypeNo];
             [textF.layer setCornerRadius:5.0];
             [textF setPlaceholder:[NSString stringWithFormat:@"请填写%@",sellInfoArray[i]]];
-            [textF setInputAccessoryView:self.keyboardTool];
             [sellInfoView addSubview:textF];
             
             [textArrayM addObject:textF];
@@ -420,21 +384,15 @@
     if (newPWDText.text.length>=6&&[newPWDText.text isEqualToString:confirmPWDText.text]) {
         
         [HttpManager updatePassword:@{@"userName":[[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName], @"oldPassword":oldPWDText.text, @"newPassword":newPWDText.text, @"confirmPassword":confirmPWDText.text} Success:^(id obj) {
-            if ([obj objectForKey:@"succeedMessage"]) {
                 [[NSUserDefaults standardUserDefaults] setObject:newPWDText.text forKey:userDefaultsPWD];
                 [ProgressHUD showSuccess:@"修改成功！"];
                 [oldPWDText setText:nil];
                 [newPWDText setText:nil];
                 [confirmPWDText setText:nil];
-            }else {
-                [ProgressHUD showError:[obj objectForKey:@"errorMessage"]];
-            }
         } fail:^(id obj) {
-            
         }];
     }else{
         [ProgressHUD showError:@"请填写完整，并密码不少于6位"];
-        
     }
     
 }
@@ -451,9 +409,7 @@
     self.selectedTextField = textField;
     NSUInteger index = [self.textFiledArray indexOfObject:textField];
     // 如果是数组中第一个文本框，禁用上一个按钮
-    self.keyboardTool.prevButton.enabled = (index != 0);
     // 如果是数组中最后一个文本框，禁用下一个按钮
-    self.keyboardTool.nextButton.enabled = (index != self.textFiledArray.count - 1);
     if (index) {
         [detailView setContentOffset:CGPointMake(0, index*25) animated:YES];
     }
@@ -463,33 +419,5 @@
 {
     [detailView setContentOffset:CGPointZero animated:YES];
 }
-
-
-#pragma mark 键盘助手视图代理方法
-- (void)keyboardTool:(KeyboardTool *)keyboard buttonType:(KeyboardToolButtonType)buttonType
-{
-    /**
-     上一个&下一个文本控件的切换
-     */
-    if (kKeyboardToolButtonDone == buttonType) {
-        // 关闭键盘
-        [self.view endEditing:YES];
-    } else {
-        // 1. 获取当前选中的文本控件
-        // 2. 获取当前空间在数组中的索引
-        NSUInteger index = [self.textFiledArray indexOfObject:self.selectedTextField];
-        if (kKeyboardToolButtonNext == buttonType) {
-            index++;
-        } else {
-            index--;
-        }
-        
-        UITextField *textField = self.textFiledArray[index];
-        
-        [textField becomeFirstResponder];
-    }
-}
-
-
 
 @end

@@ -129,20 +129,7 @@ static NSString *seconCellID = @"seconCell";
 
 
 
-- (void)addHeadToobar
-{
-
-    UILabel *xian = [[UILabel alloc] initWithFrame:CGRectMake(30, 45, 20, 20)];
-    [xian setTextColor:[UIColor whiteColor]];
-    [xian setText:@"显示预售车"];
-    [xian setFont:[UIFont boldSystemFontOfSize:20]];
-    [xian sizeToFit];
-    [self.headBar addSubview:xian];
-    
-    UISwitch *switchPresell = [[UISwitch alloc] initWithFrame:CGRectMake(CGRectGetMaxX(xian.frame)+10, 45, 55, 30)];
-    [switchPresell addTarget:self action:@selector(hideOrShowYushouCar:) forControlEvents:UIControlEventValueChanged];
-    [self.headBar addSubview:switchPresell];
-    
+- (void)addHeadToobar{
     UIButton *limitBut = [[UIButton alloc] initWithFrame:CGRectMake(700, 40, 160, 40)];
     [limitBut setTitle:@"更新客户需求" forState:UIControlStateNormal];
     [limitBut.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
@@ -152,88 +139,13 @@ static NSString *seconCellID = @"seconCell";
     [limitBut setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [limitBut addTarget:self action:@selector(showLimitView) forControlEvents:UIControlEventTouchUpInside];
     [self.headBar addSubview:limitBut];
-
-    
-}
-
-#pragma mark - 显示预售车
-- (void)hideOrShowYushouCar:(UISwitch*)swit
-{
-    if (swit.on) {
-        [MobClick event:KshowPresellCar attributes:@{@"sellName":KUserName}];
-        yushouOrzaishou = @"zaishou-yushou";
-    }else{
-        yushouOrzaishou = @"zaishou";
-    }
-    [self refreshViewBeginRefreshing:_header];
 }
 
 
 - (void)showLimitView
 {
     [self limitSearch:_limitView withDic:nil];
-    
 }
-
-
-#pragma mark --  拖拽视图
-
-////开始拖拽视图
-//
-//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//
-//{
-//    
-//    contentOffsetY = scrollView.contentOffset.y;
-//    
-//}
-//
-//// 滚动时调用此方法(手指离开屏幕后)
-//
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//
-//{
-//    
-//    newContentOffsetY = scrollView.contentOffset.y;
-//    
-//    CGRect frame = self.headBar.frame;
-//    
-//    if (scrollView.dragging) {  // 拖拽
-//        
-//        
-//        if ((scrollView.contentOffset.y - contentOffsetY) > 5.0f) {  // 向上拖拽
-//            
-//            if (self.headBar.frame.origin.y == 0) {
-//            
-//                frame.origin.y -= self.headBar.frame.size.height;
-//            }
-//            
-//                  } else if ((contentOffsetY - scrollView.contentOffset.y) > 5.0f) {   // 向下拖拽
-//            
-//            if (self.headBar.frame.origin.y!=0) {
-//                frame.origin.y+= self.headBar.frame.size.height;
-//            }
-//            
-//        }
-//    }
-//    [UIView animateWithDuration:0.25 animations:^{
-//
-//        [self.headBar setFrame:frame];
-//    } completion:^(BOOL finished) {
-//        
-//    }];
-//    
-//}
-//
-//// 完成拖拽(滚动停止时调用此方法，手指离开屏幕前)
-//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-//
-//{
-//    oldContentOffsetY = scrollView.contentOffset.y;
-//}
-
-
-
 
 - (void)addCollectionView
 {
@@ -282,7 +194,7 @@ static NSString *seconCellID = @"seconCell";
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
 
- [requstDic setObject:yushouOrzaishou forKey:@"type"];
+     [requstDic setObject:yushouOrzaishou forKey:@"type"];
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) { // 下拉
         _page = 1;
         [requstDic setObject:[NSString stringWithFormat:@"%d",_page] forKey:@"index"];
@@ -404,6 +316,7 @@ static NSString *seconCellID = @"seconCell";
     }else if (indexPath.section ==1){
         [cell setCarModel:mhCarArrayM[indexPath.row]];
     }
+    [cell hiddenShoukuanXiajiaButton];
     return cell;
 }
 

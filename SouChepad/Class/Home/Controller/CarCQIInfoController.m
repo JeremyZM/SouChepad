@@ -28,7 +28,7 @@
     [self.view addSubview:infoCQIView];
     [infoCQIView setDelegate:self];
     
-    NSString *url = [NSString stringWithFormat:@"http://manage.souche.com/pages/sellipad/preview-report.html?carId=%@&source=sellipad&s=0000s0yP9HIpTyEPnBglffYM2R2:18a1kacdt",self.carID];
+    NSString *url = FormatStr(@"http://www.souche.com/pages/choosecarpage/car-new-report.html?carId=%@",self.carID);
     NSString *encodedString=[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *weburl = [NSURL URLWithString:encodedString];
     [infoCQIView loadRequest:[NSURLRequest requestWithURL:weburl]];

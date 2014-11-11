@@ -6,6 +6,8 @@
 //  Copyright (c) 2014年 souche. All rights reserved.
 //
 
+// 沟通记录
+
 #import "SCBasicController.h"
 
 @class UserReservationM;

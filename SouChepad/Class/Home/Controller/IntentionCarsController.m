@@ -20,9 +20,10 @@
 #import "CarDetailWebView.h"
 #import "LookOrDriveCarInfoModel.h"
 #import "OverDriveCarController.h"
+#import "CarOrderVC.h"
 
 
-@interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate,ZBarControllerDelegate>
+@interface IntentionCarsController () <UICollectionViewDataSource,UICollectionViewDelegate,ZBarControllerDelegate,CollectCarCellDelegate,CarOrderVCDelegate>
 {
     UICollectionView *_collectionView;
     NSDictionary *intentionCars;    // 所有意向车辆
@@ -59,7 +60,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)addToolbar
 {
-    UISegmentedControl *orderSegmented = [[UISegmentedControl alloc] initWithItems:@[@"成交车辆",@"试驾看车",@"预约车辆",@"收藏车辆"]];
+    UISegmentedControl *orderSegmented = [[UISegmentedControl alloc] initWithItems:@[@"成交车辆",@"预约车辆",@"其他行为"]];
     _orderSegmented = orderSegmented;
     [orderSegmented setTintColor:[UIColor whiteColor]];
     [orderSegmented setTitleTextAttributes:[NSDictionary dictionaryWithObject:[UIFont systemFontOfSize:19] forKey:NSFontAttributeName] forState:UIControlStateNormal];
@@ -90,21 +91,20 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (void)zBarController:(ZBarController *)zbarVC didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSArray *components = [[info objectForKey:@"dataString"] componentsSeparatedByString:@"?"];
-    for (NSString *str in components) {
-        NSArray *comArray = [str componentsSeparatedByString:@"&"];
-        for (NSString *carid in comArray) {
-            if ([carid hasPrefix:@"carId"]) {
-                [zbarVC dismissViewControllerAnimated:YES completion:^{
-                    CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
-                    [carDetailVC setCarID:[carid substringFromIndex:6]];
-                    [self presentViewController:carDetailVC animated:YES completion:^{
-                    
-                        }];
-                }];
-            }
-        }
-    }
+    NSString *carid = DicValueForKey(info, nil, @"dataString");
+    [zbarVC dismissViewControllerAnimated:YES completion:^{
+        CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
+        [carDetailVC setCarID:carid];
+        [self presentViewController:carDetailVC animated:YES completion:^{}];
+    }];
+//    NSArray *components = [[info objectForKey:@"dataString"] componentsSeparatedByString:@"?"];
+//    for (NSString *str in components) {
+//        NSArray *comArray = [str componentsSeparatedByString:@"&"];
+//        for (NSString *carid in comArray) {
+//            if ([carid hasPrefix:@"carId"]) {
+//            }
+//        }
+//    }
 
 }
 
@@ -115,55 +115,6 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
         [picker removeFromParentViewController];
     }];
 }
-
-
-//- (void) imagePickerController: (UIImagePickerController*) reader
-// didFinishPickingMediaWithInfo: (NSDictionary*) info
-//{
-//    id<NSFastEnumeration> results =
-//    [info objectForKey: ZBarReaderControllerResults];
-//    ZBarSymbol *symbol = nil;
-//    for(symbol in results)
-//        break;
-//    
-//    NSArray *components = [symbol.data componentsSeparatedByString:@"?"];
-//    for (NSString *str in components) {
-//        NSArray *comArray = [str componentsSeparatedByString:@"&"];
-//        for (NSString *carid in comArray) {
-//            if ([carid hasPrefix:@"carId"]) {
-//                [reader dismissViewControllerAnimated:YES completion:^{
-//                    CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
-//                    [carDetailVC setCarID:[carid substringFromIndex:6]];
-//                    [self presentViewController:carDetailVC animated:YES completion:^{
-//                        
-//                    }];
-//                }];
-//                
-//            }
-//        }
-//    }
-
-    
-//    
-//    [HttpManager getCarInVin:@{@"vin":symbol.data} Success:^(id obj) {
-//        if (obj) {
-////            carID = obj;
-//            [reader dismissViewControllerAnimated:YES completion:^{
-//                // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
-//                CarDetailWebView *carDetailVC = [[CarDetailWebView alloc] init];
-//                [carDetailVC setCarID:obj];
-//                //                [carDetailVC setDelegate:self];
-//                //                [self.view addSubview:carDetailVC.view];
-//                [self presentViewController:carDetailVC animated:YES completion:^{
-//                }];
-//                
-//            }];
-//
-//        }
-//    } fail:^(id obj) {
-//        
-//    }];
-//}
 
 
 - (void)addCollectionView
@@ -210,14 +161,13 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
         [HttpManager requestUserIntentionWithParamDic:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]} Success:^(id obj) {
             intentionCars = [NSDictionary dictionaryWithDictionary:obj];
             tradesCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"trades"]];
-            driveCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"drive"]];
+            driveCars = nil;//[NSArray arrayWithArray:[intentionCars objectForKey:@"drive"]];
             readyseeCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"readyseecar"]];
             collectCars = [NSArray arrayWithArray:[intentionCars objectForKey:@"collect"]];
             [_collectionView reloadData];
             [_orderSegmented setTitle:[NSString stringWithFormat:@"成交车辆 %d",tradesCars.count] forSegmentAtIndex:0];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"试驾看车 %d",driveCars.count] forSegmentAtIndex:1];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"预约车辆 %d",readyseeCars.count] forSegmentAtIndex:2];
-            [_orderSegmented setTitle:[NSString stringWithFormat:@"收藏车辆 %d",collectCars.count] forSegmentAtIndex:3];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"预约车辆 %d",readyseeCars.count] forSegmentAtIndex:1];
+            [_orderSegmented setTitle:[NSString stringWithFormat:@"其他行为 %d",collectCars.count] forSegmentAtIndex:2];
             [self.refreshControl endRefreshing];
         } fail:^(id obj) {
             [self.refreshControl endRefreshing];
@@ -233,13 +183,10 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
             [headView.stateCarLabel setText:[NSString stringWithFormat:@"成交车辆%d",tradesCars.count]];
             break;
         case 1:
-            [headView.stateCarLabel setText:[NSString stringWithFormat:@"试驾看车%d",driveCars.count]];
-            break;
-        case 2:
             [headView.stateCarLabel setText:[NSString stringWithFormat:@"预约车辆%d",readyseeCars.count]];
             break;
-        case 3:
-            [headView.stateCarLabel setText:[NSString stringWithFormat:@"收藏车辆%d",collectCars.count]];
+        case 2:
+            [headView.stateCarLabel setText:[NSString stringWithFormat:@"其他行为%d",collectCars.count]];
             break;
         default:
             break;
@@ -254,7 +201,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 {
     NSIndexPath *index  = [NSIndexPath indexPathForItem:0 inSection:Seg.selectedSegmentIndex];
     
-    if ((Seg.selectedSegmentIndex==0&&tradesCars.count)||(Seg.selectedSegmentIndex==1&&driveCars.count)||(Seg.selectedSegmentIndex==2&&readyseeCars.count)||(Seg.selectedSegmentIndex==3&&collectCars.count)) {
+    if ((Seg.selectedSegmentIndex==0&&tradesCars.count)||(Seg.selectedSegmentIndex==1&&readyseeCars.count)||(Seg.selectedSegmentIndex==2&&collectCars.count)) {
         [_collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
     }
     
@@ -263,7 +210,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 4;
+    return 3;
 }
 
 #pragma mark - 代理方法
@@ -275,12 +222,9 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
             i = tradesCars.count;
             break;
         case 1:
-            i = driveCars.count;
-            break;
-        case 2:
             i = readyseeCars.count;
             break;
-        case 3:
+        case 2:
             i = collectCars.count;
             break;
     }
@@ -291,7 +235,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGSize size = CGSizeMake(875 , 286);
-    if (indexPath.section==2||indexPath.section == 3) {
+    if (indexPath.section==1||indexPath.section == 2) {
         size = CGSizeMake(278, 286);
     }
     return size;
@@ -303,37 +247,40 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
     UICollectionViewCell *cell = nil;
     
     if (indexPath.section==0) {
+        // 成交车辆
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:TradeCarInfoCellid forIndexPath:indexPath];
         TradeCarInfoCell *tradeCarCell = (TradeCarInfoCell*)cell;
         [tradeCarCell setTradeCarInfoM:tradesCars[indexPath.row]];
         [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
     }else if (indexPath.section == 1){
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:LookOrDriveCarInfoCellid forIndexPath:indexPath];
-        LookOrDriveCarInfoCell *lookOrDriveCell = (LookOrDriveCarInfoCell*)cell;
-        LookOrDriveCarInfoModel *lookOrDriveM = driveCars[indexPath.row];
-        [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
-        if ([lookOrDriveM.isDriveCar isEqualToString:@"1"]) {
-            [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KBaseColo].CGColor];
-        }
-        [lookOrDriveCell.endDriveBut setTag:(333+indexPath.row)];
-        [lookOrDriveCell.endDriveBut addTarget:self action:@selector(endDrvie:) forControlEvents:UIControlEventTouchUpInside];
-        [lookOrDriveCell setLookOrDriveCellM:lookOrDriveM];
-    }else if (indexPath.section == 2){
+        // 预约车辆
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
         CollectCarCell *collectCell = (CollectCarCell*)cell;
+        collectCell.delegate = self;
         [collectCell setCarModel:readyseeCars[indexPath.row]];
         [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
     }else {
+        // 搜藏车辆
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectCarCellid forIndexPath:indexPath];
         CollectCarCell *collectCell = (CollectCarCell*)cell;
         [collectCell setCarModel:collectCars[indexPath.row]];
         [cell.contentView.layer setBorderColor:[UIColor hexStringToColor:KSeparatorColor].CGColor];
+        [collectCell hiddenShoukuanXiajiaButton];
     }
     
     [cell.contentView.layer setBorderWidth:1.0];
     [cell.contentView.layer setCornerRadius:2.0];
     
     return cell;
+}
+
+#pragma mark - CollectCarCellDelegate
+- (void)collectCarCell:(id)cell shoukuanXiajiaButtonClicked:(UIButton *)button{
+    CollectCarCell *carCell = cell;
+    CarOrderVC *vc = [[CarOrderVC alloc] initWithCarModel:carCell.carModel];
+    vc.delegate = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:^{}];
 }
 
 #pragma mark - 结束接待
@@ -359,6 +306,11 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
     }];
 }
 
+#pragma mark - CarOrderVCDelegate 订单完成
+- (void)orderDidComplete{
+    [self RefreshViewControlEventValueChanged];
+}
+
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -367,8 +319,6 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
         
         carmodel = tradesCars[indexPath.row];
     }else if (indexPath.section == 1){
-        carmodel = driveCars[indexPath.row];
-    }else if (indexPath.section == 2){
         carmodel = readyseeCars[indexPath.row];
     }else {
         carmodel = collectCars[indexPath.row];
@@ -376,6 +326,7 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
     CarDetailWebView *car = [[CarDetailWebView alloc] init];
     [car setCarID:carmodel.carId];
+    car.carBaseModel = carmodel;
     if ([carmodel.carStatus isEqualToString:@"在售"]) {
         [car setCarStatusType:CarStatusTypeSelling];
     }else if ([carmodel.carStatus isEqualToString:@"预售"]){
@@ -390,28 +341,11 @@ static NSString *LookOrDriveCarInfoCellid = @"LookOrDriveCarInfoCellid";
 
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-
-}
-
-
 - (void)dealloc
 {
     [MobClick endLogPageView:@"意向车辆"];
     [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"userIDchange" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:nil name:@"update" object:nil];
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

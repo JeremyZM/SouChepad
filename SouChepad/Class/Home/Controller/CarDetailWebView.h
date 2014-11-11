@@ -14,12 +14,14 @@ typedef enum {
 
 
 #import "SCBasicController.h"
+@class CarBaseModel;
 
 @interface CarDetailWebView : SCBasicController
 
 
 /** 车辆ID */
 @property (copy, nonatomic) NSString *carID;
+@property (nonatomic,strong) CarBaseModel *carBaseModel;
 
 /**
  *  是否预售车辆

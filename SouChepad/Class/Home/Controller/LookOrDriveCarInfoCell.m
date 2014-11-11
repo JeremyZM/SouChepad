@@ -85,7 +85,8 @@
     }
     
     // 车辆图片
-    [_carImage setImageWithURL:[NSURL URLWithString:lookOrDriveCellM.image] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [[UIImage new] setImageWithUrl:lookOrDriveCellM.image scaleToSize:_carImage.frame.size forImageView:_carImage];
+    [_carImage setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
     [_labelLabel setText:lookOrDriveCellM.lookORdrive];
     

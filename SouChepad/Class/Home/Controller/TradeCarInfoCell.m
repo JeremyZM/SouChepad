@@ -10,6 +10,11 @@
 #import "TradeCarInfoModel.h"
 #import "UIImageView+WebCache.h"
 
+@interface TradeCarInfoCell(){
+}
+
+@end
+
 @implementation TradeCarInfoCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -29,7 +34,8 @@
     // 搜车价
     [_souchePriceLabel setText:[NSString stringWithFormat:@"%@ 万",tradeCarInfoM.souchePrice]];
     // 上车时间
-    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"添加：%@",tradeCarInfoM.firstLicensePlateDate]];
+    NSString *time = strNoNull(tradeCarInfoM.day).length == 0 ? strNoNull(tradeCarInfoM.firstLicensePlateDate) : tradeCarInfoM.day;
+    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"添加：%@",time]];
     
     // 车辆等级
     if (tradeCarInfoM.level) {
@@ -69,10 +75,8 @@
     }
     
     // 车辆图片
-    [_carImage setImageWithURL:[NSURL URLWithString:tradeCarInfoM.image] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
-    
-    NSString*a = tradeCarInfoM.carStatus;
-    DLog(@"------af-----------------%@",a);
+    [[UIImage new] setImageWithUrl:tradeCarInfoM.image scaleToSize:_carImage.frame.size forImageView:_carImage];
+    [_carImage setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
     
     [_lineLabel setText:[NSString stringWithFormat:@"(搜车价 %@万)",tradeCarInfoM.souchePrice]];
     [_lineLabel sizeToFit];
@@ -87,15 +91,9 @@
     
     // 成交价
     [_tradePriceLabel setText:[NSString stringWithFormat:@"%@万",tradeCarInfoM.tradePrice]];
-    // 过户地
-    [_transferToLabel setText:tradeCarInfoM.transferTo];
     // 交易进度
     [_tradeStatusLabel setText:tradeCarInfoM.tradeStatus];
     // 详细信息
-    [_infoLabel setText:[NSString stringWithFormat:@"成交于 %@   销售 %@    坐席 %@",tradeCarInfoM.day,tradeCarInfoM.tradeSell,tradeCarInfoM.tradeCC]];
-
-    
+    [_infoLabel setText:[NSString stringWithFormat:@"成交于 %@   销售 %@",tradeCarInfoM.day,strNoNull(tradeCarInfoM.tradeSell)]];
 }
-
-
 @end

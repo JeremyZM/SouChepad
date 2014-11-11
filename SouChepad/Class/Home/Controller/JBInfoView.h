@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) NSDictionary *dataDic;
 @property (nonatomic, strong) UserVOModel *userVo;
+
 @property (nonatomic, strong) UserExtendModel *userExtendM;
 
 @property (nonatomic, strong) UITextField *nameText;

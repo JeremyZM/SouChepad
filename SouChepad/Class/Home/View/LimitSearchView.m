@@ -58,7 +58,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
     return self;
 }
 
-
+// 获取用户的过滤条件，关注的品牌车型，所有车辆
 - (void)upUserData
 {
     basicRequstDicM = [NSMutableDictionary dictionary];
@@ -69,7 +69,8 @@ static NSString *userDemandCellid = @"userDemandCellid";
         reqDeleteBrandArray = [NSArray arrayWithArray:[obj objectForKey:@"requireBrandsDelete"]];
         reqInfoModel = [dataDic objectForKey:@"requireInfo"];
         
-        [self.searchBut setTitle:[NSString stringWithFormat:@"场馆内共%@辆车",[dataDic objectForKey:@"number"]] forState:UIControlStateNormal];
+//        [self.searchBut setTitle:[NSString stringWithFormat:@"场馆内共%@辆车",[dataDic objectForKey:@"number"]] forState:UIControlStateNormal];
+        [self.searchBut setTitle:@"场馆内辆车" forState:UIControlStateNormal];
         [deleteCarBut setTitle:[NSString stringWithFormat:@"%d",reqDeleteBrandArray.count] forState:UIControlStateNormal];
         [self setViewData];
         
@@ -79,9 +80,7 @@ static NSString *userDemandCellid = @"userDemandCellid";
 
 }
 
-- (void)addUI
-{
-
+- (void)addUI{
     UILabel *yushuanLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, 60, 40)];
     [yushuanLabel setText:@"预算"];
     [yushuanLabel setFont:[UIFont systemFontOfSize:20]];
@@ -99,10 +98,11 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
     UILabel *guobieLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 100, 60, 40)];
     [guobieLabel setText:@"国别"];
+    guobieLabel.hidden = YES;
     [guobieLabel setFont:[UIFont systemFontOfSize:20]];
     [self addSubview:guobieLabel];
     
-    UILabel *chexingLabel = [[UILabel alloc] initWithFrame:CGRectMake(320, 100, 60, 40)];
+    UILabel *chexingLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 100, 60, 40)];
     [chexingLabel setFont:[UIFont systemFontOfSize:20]];
     [chexingLabel setText:@"车型"];
     [self addSubview:chexingLabel];
@@ -131,10 +131,11 @@ static NSString *userDemandCellid = @"userDemandCellid";
     
     // 国别
     guobieBut = [self addButtonFrame:CGRectMake(70, 105, 230, 30)];
+    guobieBut.hidden = YES;
     [self addSubview:guobieBut];
     
     // 车型
-    chexingBut = [self addButtonFrame:CGRectMake(370, 105, 230, 30)];
+    chexingBut = [self addButtonFrame:CGRectMake(70, 105, 230, 30)];
     [self addSubview:chexingBut];
     
     

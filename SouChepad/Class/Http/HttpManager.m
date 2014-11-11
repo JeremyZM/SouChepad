@@ -28,6 +28,9 @@
 #import "UserOperationRecordVO.h"
 #import "DriveCarLastData.h"
 #import "MyMessage.h"
+#import "BusinessVO.h"
+#import "AuthShopVO.h"
+#import "CarOrderVO.h"
 
 @implementation HttpManager
 
@@ -37,18 +40,6 @@
     [operation cancel];
 }
 
-
-#pragma mark - 版本号更新
-+(void)getOrWriteVersionNumber:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
-{
-    [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getVersionNumber.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        DLog(@"%@",[obj responseJSON]);
-        success([obj responseJSON]);
-    } fail:^(MKNetworkOperation *obj, NSError *error) {
-        
-    } reload:YES needHud:NO hudEnabled:NO];
-
-}
 
 
 #pragma mark - 获取各评价list
@@ -133,12 +124,12 @@
                 [sellInfoM setKeyValues:sellDic];
             }
             
-            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.name forKey:KSellName];
+            [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.nickName forKey:KSellName];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.email forKey:KSellEmail];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.phone forKey:KSellPhone];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.address forKey:KSellAddressName];
             [[NSUserDefaults standardUserDefaults] setObject:sellInfoM.qq forKey:KSellQQ];
-            
+            [UserDefaults synchronize];
             
         NSMutableArray *reserArrayM = [NSMutableArray array];
             
@@ -302,6 +293,7 @@
         }
     } fail:^(MKNetworkOperation *obj, NSError *error) {
         DLog(@"%@",obj);
+        fail(nil);
     } reload:YES needHud:YES hudEnabled:YES];
 
 }
@@ -314,7 +306,7 @@
         DLog(@"%@",[obj responseJSON]);
         success([obj responseJSON]);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
-        
+        fail(nil);
     } reload:YES needHud:YES hudEnabled:YES];
 }
 
@@ -414,48 +406,7 @@
 {
     [[HttpService sharedService]
     requestWithApi:@"pages/sellManageAction/getUserCar.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        DLog(@"%@",[obj responseJSON]);
         NSDictionary *dicCars = [obj responseJSON];
-        // 搜藏车辆
-        NSArray *collect = [NSArray arrayWithArray:[dicCars objectForKey:@"collect"]];
-        NSMutableArray *collectCars = [NSMutableArray arrayWithCapacity:collect.count];
-        for (NSDictionary *collectDic in collect) {
-            CarBaseModel *collectCarM = [[CarBaseModel alloc] init];
-            [collectCarM setKeyValues:collectDic];
-            [collectCarM setLookORdrive:@"收藏"];
-            [collectCars addObject:collectCarM];
-        }
-        // 预约车辆
-        NSArray *readyseecar = [NSArray arrayWithArray:[dicCars objectForKey:@"readyseecar"]];
-        NSMutableArray *readyseeCars = [NSMutableArray arrayWithCapacity:readyseecar.count];
-        for (NSDictionary *readyseecarDic in readyseecar) {
-            CarBaseModel *readyseeCarM = [[CarBaseModel alloc] init];
-            [readyseeCarM setKeyValues:readyseecarDic];
-            [readyseeCarM setLookORdrive:@"预约"];
-            [readyseeCars addObject:readyseeCarM];
-        }
-        
-        // 试驾 看车
-        NSArray *drive = [NSArray arrayWithArray:[dicCars objectForKey:@"drive"]];
-        NSArray *lookcar = [NSArray arrayWithArray:[dicCars objectForKey:@"lookcar"]];
-        NSMutableArray *driveCars = [NSMutableArray arrayWithCapacity:(readyseecar.count+lookcar.count)];
-        for (NSDictionary *driveDic in drive) {
-            LookOrDriveCarInfoModel *driveCarM = [[LookOrDriveCarInfoModel alloc] init];
-            [driveCarM setKeyValues:driveDic];
-            if ([driveCarM.isDriveCar isEqualToString:@"1"]) {
-                [driveCarM setLookORdrive:@"试驾中..."];
-            }else {
-                [driveCarM setLookORdrive:@"已试驾"];
-            }
-            [driveCars addObject:driveCarM];
-        }
-        for (NSDictionary *lookcarDic in lookcar) {
-            LookOrDriveCarInfoModel *lookCarM = [[LookOrDriveCarInfoModel alloc] init];
-            [lookCarM setKeyValues:lookcarDic];
-            [lookCarM setLookORdrive:@"看车"];
-            [driveCars addObject:lookCarM];
-        }
-        
         // 成交车辆
         NSArray *trades = [NSArray arrayWithArray:[dicCars objectForKey:@"trades"]];
         NSMutableArray *tradesCars = [NSMutableArray arrayWithCapacity:trades.count];
@@ -465,7 +416,42 @@
             [tradesCarMs setLookORdrive:@"成交"];
             [tradesCars addObject:tradesCarMs];
         }
-        NSDictionary *intentionCars = @{@"collect":collectCars,@"readyseecar":readyseeCars,@"drive":driveCars,@"trades":tradesCars};
+
+        // 搜藏车辆
+        NSArray *collect = [NSArray arrayWithArray:[dicCars objectForKey:@"collect"]];
+        NSMutableArray *collectCars = [NSMutableArray arrayWithCapacity:collect.count];
+        for (NSDictionary *collectDic in collect) {
+            BOOL needAdd = YES;//标记是否需要加入搜藏数组
+            // 过滤成交车辆
+            for (TradeCarInfoModel *trade in tradesCars) {
+                if ([trade.carId isEqualToString:DicValueForKey(collectDic, nil, @"carId")]) {
+                    needAdd = NO;
+                    break;
+                }
+            }
+            // 不需要加入搜藏数组
+            if (needAdd == NO) {
+                continue;
+            }
+            
+            CarBaseModel *collectCarM = [[CarBaseModel alloc] init];
+            [collectCarM setKeyValues:collectDic];
+            collectCarM.image =  DicValueForKey(collectDic, nil, @"imageURL");
+            [collectCarM setLookORdrive:DicValueForKey(collectDic, @"预约", @"source")];
+            [collectCars addObject:collectCarM];
+        }
+        // 预约车辆
+        NSArray *readyseecar = [NSArray arrayWithArray:DicValueForKey(dicCars, nil, @"readyseecar")];
+        NSMutableArray *readyseeCars = [NSMutableArray arrayWithCapacity:readyseecar.count];
+        for (NSDictionary *readyseecarDic in readyseecar) {
+            CarBaseModel *readyseeCarM = [[CarBaseModel alloc] init];
+            [readyseeCarM setKeyValues:readyseecarDic];
+            readyseeCarM.image =  DicValueForKey(readyseecarDic, nil, @"imageURL");
+            [readyseeCarM setLookORdrive:@"预约"];
+            [readyseeCars addObject:readyseeCarM];
+        }
+        
+        NSDictionary *intentionCars = @{@"collect":collectCars,@"readyseecar":readyseeCars,@"trades":tradesCars};
         
         success(intentionCars);
     } fail:^(MKNetworkOperation *obj, NSError *error) {
@@ -479,8 +465,6 @@
 + (void)requestUserRequirementInfo:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/getUserRequirementInfo.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
-        
-//        DLog(@"%@",[obj responseJSON]);
         DLog(@"%@",[obj responseJSON]);
         NSDictionary *objDic = [obj responseJSON];
         if ([objDic objectForKey:@"errorMessage"]) {
@@ -558,10 +542,12 @@
 + (void)queryUserRequirementInfoCarZJ:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
     NSString *api = nil;
+    // 按品牌查找
     if ([paramDic objectForKey:@"requirementBrandId"]) {
-        api = @"/pages/sellManageAction/queryUserRequirementBrandCarJZ.json";
+        api = @"/pages/sellManageAction/queryUserRequirementBrandCar.json";
     }else{
-        api = @"/pages/sellManageAction/queryUserRequirementInfoCarJZ.json";
+        // 查找所有
+        api = @"/pages/sellManageAction/queryUserRequirementInfoCar.json";
     }
     [[HttpService sharedService] requestWithApi:api parameters:paramDic success:^(MKNetworkOperation *obj) {
         NSMutableDictionary *dicobj = [NSMutableDictionary dictionaryWithDictionary:[obj responseJSON]];
@@ -570,12 +556,13 @@
             return;
         }
         
-        NSArray *carArray = [dicobj objectForKey:@"jz"];
+        NSArray *carArray = [dicobj objectForKey:@"items"];
         NSMutableArray *carArrayM = [NSMutableArray array];
         if (carArray.count) {
             for (NSDictionary *carDic in carArray) {
                 CarBaseModel *carModel = [[CarBaseModel alloc] init];
                 [carModel setKeyValues:carDic];
+                [carModel setImage:DicValueForKey(carDic, nil, @"imageURL")];
                 [carArrayM addObject:carModel];
             }
         }
@@ -591,7 +578,7 @@
 }
 
 
-#pragma mark - 匹配模糊车辆
+#pragma mark - 需求分析，匹配车辆
 + (void)queryUserRequirementInfoCarMH:(NSDictionary *)paramDic Success:(Success)success fail:(Fail)fail
 {
     NSString *api = nil;
@@ -612,6 +599,7 @@
         for (NSDictionary *mhCarDic in dataArray) {
             CarBaseModel *carM = [[CarBaseModel alloc] init];
             [carM setKeyValues:mhCarDic];
+            [carM setImage:DicValueForKey(mhCarDic, nil, @"imageURL")];
             [mhCarArrayM addObject:carM];
         }
         success(mhCarArrayM);
@@ -966,6 +954,7 @@
     [[HttpService sharedService] requestWithApi:@"/pages/sellManageAction/updateSellerData.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
         DLog(@"%@",[obj responseJSON]);
         success([obj responseJSON]);
+        [ProgressHUD showSuccess:@""];
     } fail:^(MKNetworkOperation *obj, NSError *error) {
 
     } reload:YES needHud:YES hudEnabled:YES];
@@ -1016,7 +1005,7 @@
 
 // 上传测试
 + (void)requestUploadImage:(UIImage *)image imageIndex:(int)index success:(Success)success uploadProgress:(UploadProgress)uploadProgress fail:(Fail)fail{
-    NSString *path = @"pages/app/yushou/carAction/uploadImage.upload";
+    NSString *path = @"pages/carUpImageAction/uploadImage.upload";
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setObject:[NSString stringWithFormat:@"%d", index] forKey:@"pic"];
     
@@ -1063,7 +1052,7 @@
     } reload:YES needHud:YES hudEnabled:NO];
 }
 
-#pragma mark - 修改/添加回访日期
+#pragma mark - 修改/添加沟通回访日期
 + (void)addOrUpdateVisit:(NSDictionary*)paramDic Success:(Success)success fail:(Fail)fail
 {
     [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/addOrUpdateVisit.json" parameters:paramDic success:^(MKNetworkOperation *obj) {
@@ -1128,5 +1117,117 @@
     } reload:YES needHud:YES hudEnabled:NO];
 }
 
+#pragma mark - 下订单
++ (void)createOrderWith:(NSDictionary *)dic Success:(Success)success fail:(Fail)fail{
+    // [keyStr isEqualToString:@"errorMessage"]
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/createOrder.json" parameters:dic success:^(MKNetworkOperation *obj) {
+        [ProgressHUD showSuccess:@"下订单成功"];
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
 
+#pragma mark - 订单详情
++ (void)requestOrderDetailWithOrderid:(NSString*)orderid success:(Success)success fail:(Fail)fail{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/orderDetail.json" parameters:@{@"orderid": orderid} success:^(MKNetworkOperation *obj) {
+        DLog(@"order detail:%@", obj.responseJSON);
+        NSDictionary *dic = obj.responseJSON;
+        if (dic == nil || [dic isKindOfClass:[NSNull class]]) {
+            success(nil);
+        }else{
+            CarOrderVO *vo = [CarOrderVO new];
+            [vo setKeyValues:dic];
+            success(vo);
+        }
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 完成订单
++(void)requestConfirmOrder:(NSDictionary*)dic success:(Success)success fail:(Fail)fail{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/confirmOrder.json" parameters:dic success:^(MKNetworkOperation *obj) {
+        [ProgressHUD showSuccess:@"订单完成"];
+        success(nil);
+    } fail:^(MKNetworkOperation *obj, NSError *error) {
+        fail(error);
+    } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 获取商机
++ (void)requestBusinessInfoSuccess:(Success)success fail:(Fail)fail{
+    [[HttpService sharedService] requestWithApi:@"pages/salerBusinessAction/querySellBusinessOnIpad.json"
+                                     parameters:NULL
+                                        success:^(MKNetworkOperation *obj) {
+                                            NSMutableArray *array = [NSMutableArray array];
+                                            for (NSDictionary *dic in [[obj responseJSON] objectForKey:@"items"]) {
+                                                BusinessVO *vo = [BusinessVO new];
+                                                [vo setKeyValues:[dic objectForKey:@"crmUserSellBusinessVO"]];
+                                                vo.tags = [dic objectForKey:@"tagsName"];
+                                                [array addObject:vo];
+                                            }
+                                            success(array);
+                                        } fail:^(MKNetworkOperation *obj, NSError *error) {
+                                            fail(error);
+                                        } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 删除商机
++ (void)requestDeleteBusinessWithid:(NSString*)businessId success:(Success)success fail:(Fail)fail{
+    [[HttpService sharedService] requestWithApi:@"pages/salerBusinessAction/deleteSellBusiness.json"
+                                     parameters:@{@"SellBusinessId": businessId}
+                                        success:^(MKNetworkOperation *obj) {
+                                            success(nil);
+                                        } fail:^(MKNetworkOperation *obj, NSError *error) {
+                                            fail(error);
+                                        } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 根据用户id获取用户最新的一条预约记录
++(void)requestLastUserReservationStoreWithId:(NSString*)userid success:(Success)success fail:(Fail)fail{
+    [[HttpService sharedService] requestWithApi:@"pages/sellManageAction/getUserLastUserReservationStore.json"
+                                     parameters:@{@"userid": userid}
+                                        success:^(MKNetworkOperation *obj) {
+                                            UserReservationM *vo = [UserReservationM new];
+                                            [vo setKeyValues:obj.responseJSON];
+                                            success(obj);
+                                        } fail:^(MKNetworkOperation *obj, NSError *error) {
+                                            fail(error);
+                                        } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 获取授权店信息
++ (void)requestAuthShoInfoSuccess:(Success)success fail:(Fail)fail{
+    [[HttpService sharedService] requestWithApi:@"pages/paikeAction/getAuthShopInfo.json"
+                                     parameters:nil
+                                        success:^(MKNetworkOperation *obj) {
+                                            AuthShopVO *vo = [AuthShopVO new];
+                                            [vo setKeyValues:obj.responseJSON];
+                                            success(vo);
+                                        } fail:^(MKNetworkOperation *obj, NSError *error) {
+                                            fail(error);
+                                        } reload:YES needHud:YES hudEnabled:NO];
+}
+
+#pragma mark - 通过微信url获取carid
++ (void)requestCaridWithWeixinURL:(NSString*)url success:(Success)success fail:(Fail)fail{
+    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:@"wx.souche.com"];
+    NSDictionary *dic = @{@"url": url};
+    NSString *api = @"api/qrcode/getCarId.do";
+    MKNetworkOperation *operation = [engine operationWithPath:api
+                                                       params:dic httpMethod:@"POST"];
+    [operation addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        NSString *messeage  = DicValueForKey(completedOperation.responseJSON, nil, @"msg");
+        if ([messeage isEqualToString:@"OK"]) {
+            NSString *carid = DicValueForKey(completedOperation.responseJSON, nil, @"carId");
+            success(carid);
+        }else{
+            [ProgressHUD showError:messeage];
+        }
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        [ProgressHUD showError:FormatStr(@"%@",error)];
+    }];
+    [[HttpService sharedService] formatUrlAndParameters:dic path:api];
+    [engine enqueueOperation:operation forceReload:NO];
+}
 @end

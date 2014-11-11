@@ -9,7 +9,7 @@
 #import "CollectCarCell.h"
 #import "UIImageView+WebCache.h"
 #import "UIImageView+LK.h"
-
+#import "UIImage+Utility.h"
 
 
 
@@ -33,7 +33,8 @@
     // 搜车价
     [_souchePriceLabel setText:[NSString stringWithFormat:@"%@ 万",carModel.souchePrice]];
     // 上车时间
-    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"添加：%@",carModel.firstLicensePlateDate]];
+    NSString *date = strNoNull(carModel.day).length == 0 ? strNoNull(carModel.firstLicensePlateDate) : strNoNull(carModel.day);
+    [_firstLicensePlateDateLabel setText:[NSString stringWithFormat:@"添加：%@", date]];
     
     // 车辆等级
     if (carModel.level) {
@@ -43,6 +44,7 @@
     }
     
 //    DLog(@"%@",carModel.carStatus);
+    [_shoukuanXiajia setHidden:NO];
     // 车辆状态
     if ([carModel.carStatus isEqualToString:@"在售"]) {
         [_carStatusImage setHidden:YES];
@@ -58,13 +60,16 @@
         
     }else {
         [_carStatusImage setHidden:NO];
+        [_shoukuanXiajia setHidden:YES];
         [_carNameLable setTextColor:[UIColor lightGrayColor]];
         [_souchePriceLabel setTextColor:[UIColor lightGrayColor]];
         [_carStatusImage setImage:[UIImage imageNamed:@"done_04"]];
     }
     
     // 车辆图片
-    [_carImage setImageWithURL:[NSURL URLWithString:carModel.image] placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    [_carImage setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"loading_03"] options:SDWebImageLowPriority|SDWebImageRetryFailed];
+    UIImage *img = [UIImage new];
+    [img setImageWithUrl:carModel.image scaleToSize:_carImage.frame.size forImageView:_carImage];
     
     // 降价
     [self.downPriceImage setImage:[UIImage imageNamed:@"标准车辆卡片小图标_18"]];
@@ -83,4 +88,15 @@
     [_labelLabel setText:carModel.lookORdrive];
 }
 
+// * 收款下架
+- (IBAction)shoukuanXiajiaAction:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(collectCarCell:shoukuanXiajiaButtonClicked:)]) {
+        [self.delegate collectCarCell:self shoukuanXiajiaButtonClicked:(UIButton*)sender];
+    }
+}
+
+// 隐藏收款下架按钮
+- (void)hiddenShoukuanXiajiaButton{
+    _shoukuanXiajia.hidden = YES;
+}
 @end

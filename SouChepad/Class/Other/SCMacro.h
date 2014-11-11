@@ -38,6 +38,9 @@
 // NSNumber to string
 #define NSNumberToStr(D)    FormatStr(@"%@",D)
 
+// int to String
+#define intToStr(D)    FormatStr(@"%@",D)
+
 // userdefaults
 #define UserDefaults [NSUserDefaults standardUserDefaults]
 

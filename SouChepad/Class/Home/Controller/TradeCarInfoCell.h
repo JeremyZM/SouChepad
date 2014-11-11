@@ -72,11 +72,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *tradePriceLabel;
 
 /**
- *  过户地
- */
-@property (weak, nonatomic) IBOutlet UILabel *transferToLabel;
-
-/**
  *  交易状态
  */
 @property (weak, nonatomic) IBOutlet UILabel *tradeStatusLabel;

@@ -29,7 +29,7 @@
         
     [self.colorsLabel setText:requireBrandM.colorsName];
     
-    [self.countLabel setText:[NSString stringWithFormat:@"(%@)",requireBrandM.countCar]];
+//    [self.countLabel setText:[NSString stringWithFormat:@"(%@)",requireBrandM.countCar]];
     
     [self.displacementLabel setText:requireBrandM.displacementName];
         

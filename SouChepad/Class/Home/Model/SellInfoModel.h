@@ -10,8 +10,9 @@
 
 @interface SellInfoModel : NSObject
 
+@property (copy,nonatomic) NSString *id;
 /** 昵称 */
-@property (copy, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *nickName;
 
 /** 邮箱 */
 @property (copy, nonatomic) NSString *email;

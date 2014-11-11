@@ -46,19 +46,28 @@ static HttpService * engine;
     
     MKNetworkOperation *operation = [engine operationWithPath:api params:parameter httpMethod:@"POST"];
     [operation addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-
+        
         // 请求成功后隐藏hud
         if (needHud) {
             if (hudEnabled) {
-                
                 [SCHudManager hiddenHud];
             }else{
-                
                 [ProgressHUD dismiss];
             }
         }
         
-    successBlock(completedOperation);
+        NSString *error = [[completedOperation responseJSON] objectForKey:@"errorMessage"];
+        if (error == NULL) {
+            successBlock(completedOperation);
+        }else{
+            if ([@"100" isEqualToString:error]) {
+                [ProgressHUD showError:@"登录过期,请重新登录"];
+            }else{
+                [ProgressHUD showError:error];
+            }
+            DLog(@"error:%@", error);
+        }
+
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
 
         
@@ -100,7 +109,7 @@ static HttpService * engine;
         NSString *value = [parameters objectForKey:key];
         paraString = FormatStr(@"%@%@=%@%@",paraString,key,value, ++index == keyArray.count ? @"" : @"&");
     }
-    NSString *api = FormatStr(@"====\n%@/%@?%@\n=======", KHttpBaseURL,path, paraString);
+    NSString *api = FormatStr(@"====\n%@/%@?%@\n=======", [UserDefaults objectForKey:@"httpServerIP"],path, paraString);
     DLog(@"api:%@", api);
 }
 

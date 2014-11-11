@@ -9,6 +9,10 @@
 #import "CarBaseModel.h"
 
 @interface TradeCarInfoModel : CarBaseModel
+
+/** 订单编号 */
+@property (copy, nonatomic) NSString *orderNumber;
+
 /** 过户信息ID */
 @property (copy, nonatomic) NSString *tradeId;
 

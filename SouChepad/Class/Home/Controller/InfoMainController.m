@@ -47,7 +47,6 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 {
     [super viewDidLoad];
     if (self.userInfoM.crmUserId) {
-        
         [[NSUserDefaults standardUserDefaults] setObject:self.userInfoM.crmUserId forKey:@"userID"];
     }
     DLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]);
@@ -129,23 +128,30 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     if (buttonIndex==1) {
         [MobClick event:KbeginReception attributes:@{@"sellName":KUserName}];
         if (self.userInfoM.reservationId==nil || !self.userInfoM.reservationId) {
+            self.beginBtn.enabled = NO;
             [HttpManager requestUpdateBeginReservationByUser:@{@"user":[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],@"userName":KUserName} Success:^(id obj) {
                 [self.beginBtn setSelected:YES];
                 [self.counterLabel start];
                 [self updateUIForState:kTTCounterRunning];
                 [ProgressHUD showSuccess:@""];
-            } fail:^(id obj) {
                 
+                self.beginBtn.enabled = YES;
+            } fail:^(id obj) {
+                self.beginBtn.enabled = YES;
             }];
             
         }else {
+            self.beginBtn.enabled = NO;
+            
             [HttpManager requestUpdateBeginReservationById:@{@"reservationId":self.userInfoM.reservationId,@"userName":KUserName} Success:^(id obj) {
                 [self.counterLabel start];
                 [self.beginBtn setSelected:YES];
                 [self updateUIForState:kTTCounterRunning];
                 [ProgressHUD showSuccess:@""];
-            } fail:^(id obj) {
                 
+                self.beginBtn.enabled = YES;
+            } fail:^(id obj) {
+                self.beginBtn.enabled = YES;
             }];
         }
     }
@@ -185,15 +191,18 @@ typedef NS_ENUM(NSInteger, kTTCounter){
 
 - (void)addAllInfoChildViewControllers
 {
+    // 个人信息vc
     CustomPIMController *customPIM = [[CustomPIMController alloc] init];
     [self addChildViewController:customPIM];
-    
+
+    // 意向车龄vc
     IntentionCarsController *intentionCarsVC = [[IntentionCarsController alloc] init];
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:intentionCarsVC];
     [intentionCarsVC setDeleget:self];
 
     [self addChildViewController:navVC];
     
+    // 沟通记录vc
     CommListController *commListVC = [[CommListController alloc] init];
     commListVC.userResM = self.userInfoM;
     [self addChildViewController:commListVC];
@@ -202,6 +211,7 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     SearchCarViewController *searchCarVC = [[SearchCarViewController alloc] init];
     [self addChildViewController:searchCarVC];
     
+    // 客户轨迹
     CarDetailBasicWebController *carDetailWeb = [[CarDetailBasicWebController alloc] init];
     NSString *crmid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
     
@@ -239,28 +249,4 @@ typedef NS_ENUM(NSInteger, kTTCounter){
     }
 
 }
-
-- (void)intentionCarsController:(IntentionCarsController *)controller carID:(NSString *)carid
-{
-
-}
-
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

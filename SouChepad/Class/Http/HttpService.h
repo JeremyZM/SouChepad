@@ -31,4 +31,6 @@ typedef void (^FailBlock) (MKNetworkOperation *obj,NSError *error);
 //
 //
 - (MKNetworkOperation*)requestUploadFile:(NSData*)data api:(NSString*)api paras:(NSMutableDictionary*)paras;
+
+- (void)formatUrlAndParameters:(NSDictionary*)parameters path:(NSString*)path;
 @end
