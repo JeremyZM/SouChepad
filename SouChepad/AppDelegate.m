@@ -11,6 +11,7 @@
 #import "MainViewController.h"
 #import "HttpManager.h"
 #import "PushManager.h"
+#import "IQKeyboardManager.h"
 
 @interface AppDelegate()
 {
@@ -24,36 +25,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self adaptServerip];
-    
+    //键盘管理
+    [self initKeyboardManager];
     // 注册推送
     [[PushManager manaer] registerPushNotificationWithOptions:launchOptions];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-#warning  友盟统计-----------
+
     [MobClick startWithAppkey:@"53d1b05856240b994d00c6fe" reportPolicy:REALTIME   channelId:nil];
     [MobClick setLogEnabled:YES];
     
-    [HttpManager getOrWriteVersionNumber:nil Success:^(id obj) {
-        
-        NSDictionary *verDic = obj;
-        NSString *localVersion =[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-        NSString *versID = [verDic objectForKey:@"versionNumber"];
-        NSString *commentInfo = [verDic objectForKey:@"comment"];
-        _refreshAddress = [verDic objectForKey:@"refreshAddress"];
-        if (![versID isEqualToString:localVersion])
-        {
-            UIAlertView *createUserResponseAlert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本V%@！！",versID] message:commentInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"立即更新", nil];
-            [createUserResponseAlert show];
-        }
-        
-    } fail:^(id obj) {
-        
-    }];
-    
     BOOL islog = !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName]==nil) && !([[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD] == nil);
-    
+    DLog(@"%@,%@", [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsName], [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsPWD]);
     if (islog) {
         NSDictionary *dict = @{@"sellName" :KUserName};
         [MobClick event:KopenApp attributes:dict];
@@ -102,6 +87,25 @@
     }
 }
 
+
+// 键盘管理
+- (void)initKeyboardManager{
+    //Enabling keyboard manager
+    [[IQKeyboardManager sharedManager] setEnable:YES];
+    
+    [[IQKeyboardManager sharedManager] setKeyboardDistanceFromTextField:15];
+	//Enabling autoToolbar behaviour. If It is set to NO. You have to manually create UIToolbar for keyboard.
+	[[IQKeyboardManager sharedManager] setEnableAutoToolbar:YES];
+    
+	//Setting toolbar behavious to IQAutoToolbarBySubviews. Set it to IQAutoToolbarByTag to manage previous/next according to UITextField's tag property in increasing order.
+	[[IQKeyboardManager sharedManager] setToolbarManageBehaviour:IQAutoToolbarBySubviews];
+    
+    //Resign textField if touched outside of UITextField/UITextView.
+    [[IQKeyboardManager sharedManager] setShouldResignOnTouchOutside:YES];
+    
+    //Giving permission to modify TextView's frame
+    [[IQKeyboardManager sharedManager] setCanAdjustTextView:YES];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

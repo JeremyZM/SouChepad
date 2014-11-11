@@ -57,7 +57,7 @@ fprintf(stderr, "-----------------------------------\n");                       
 
 #define KisExecutive @"isExecutive"
 
-#define KHttpBaseURL  @"manage.souche.com"
+#define KHttpBaseURL  @"shop.souche.com"
 
 #define Khttp @"115.29.10.121:11080/soucheweb   122.224.68.242:8081/soucheweb  192.168.0.250:8088/soucheweb  115.29.10.121:13080/soucheweb "
 
